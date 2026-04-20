@@ -31,9 +31,7 @@ public class GoalHandler : MonoBehaviour
 
     [Header("Audio")]
     public AudioSource audioSource;
-    public AudioClip defPuckSound;
-    public AudioClip goldPuckSound;
-    private AudioClip puckSound;
+    public AudioClip puckSound;
     public AudioClip StartGameSound;
 
     [Header("Effects")]
@@ -60,15 +58,7 @@ public class GoalHandler : MonoBehaviour
     }
 
     void Start()
-    {
-        switch(PlayerPrefs.GetString("CurrentSkin")) {
-            case "GoldSkin":
-                puckSound = goldPuckSound;
-                break;
-            default:
-                puckSound = defPuckSound;
-                break; 
-        }           
+    {         
         timer.TimerStart();
         audioSource.PlayOneShot(StartGameSound);
         howManyGoals = PlayerPrefs.GetInt("Goals");
@@ -145,7 +135,10 @@ public class GoalHandler : MonoBehaviour
             var newParticles = Instantiate(particlePrefab, contact.point, rotation);
             newParticles.GetComponent<ParticleSystem>().Play();
         }
-        audioSource.PlayOneShot(puckSound);
+        if(!(collision.gameObject.name.Equals("Player1") || collision.gameObject.name.Equals("Player2")))
+        {
+            audioSource.PlayOneShot(puckSound);
+        }
     }
 
     public void ResetPosition()
