@@ -1,0 +1,21 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 94f26570548eac8418cc32b85d134ab0, type: 3}
+  m_Name: GoldSkinPl2
+  m_EditorClassIdentifier: Assembly-CSharp::SkinData
+  skinName: GoldSkinPl2
+  skinGuiName: "\u0417\u043E\u043B\u043E\u0442\u043E\u0439"
+  sprite: {fileID: 21300000, guid: 1cd1955ab9f142e4db690337366b3dca, type: 3}
+  particles: {fileID: 7871815180265863228, guid: 224f375812f8b684381d7f76307fc87c, type: 3}
+  sound: {fileID: 8300000, guid: 04f800c59f5811449a44209ad929295b, type: 3}
+  rarity: 6
+  price: 300

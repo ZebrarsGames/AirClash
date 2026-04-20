@@ -14,8 +14,9 @@ public class PlayersController : MonoBehaviour, IBeginDragHandler, IDragHandler,
     public GameObject bubbleParticles;
     public GameObject goldParticles;
     private Color particleColor;
-    private bool isParticleSkin = false;
     private GameObject particles;
+    public AudioSource audioSource;
+    private AudioClip puckSound;
 
     void Start()
     {
@@ -28,47 +29,8 @@ public class PlayersController : MonoBehaviour, IBeginDragHandler, IDragHandler,
         float volume = PlayerPrefs.GetFloat("MusicVolume", 0.5f);
         AudioListener.volume = volume;
         if(PlayerPrefs.GetString("CurrentSkin") == "") PlayerPrefs.SetString("CurrentSkin", "DefSkin");
-        if(gameObject.name.Equals("Player1")) GetComponent<SpriteRenderer>().sprite = Resources.Load<Sprite>(PlayerPrefs.GetString("CurrentSkin"));
-        else if(gameObject.name.Equals("Player2")) GetComponent<SpriteRenderer>().sprite = Resources.Load<Sprite>(PlayerPrefs.GetString("CurrentSkin") + "Pl2");
-        switch(PlayerPrefs.GetString("CurrentSkin")) {
-            case "ParticleSkin":
-                isParticleSkin = true;
-                particles = particleSkin;
-                break;
-            case "BubbleSkin":
-                isParticleSkin = true;
-                particles = bubbleParticles;
-                break;  
-            case "GoldSkin":
-                isParticleSkin = true;
-                particles = goldParticles;
-                break;      
-            default:
-                isParticleSkin = false;
-                break;    
-        }
-        if(isParticleSkin)
-        {
-            var ps = particles.GetComponent<ParticleSystem>();
-            var psMain = ps.main;
-            particles.gameObject.SetActive(true);
-            if(PlayerPrefs.GetString("CurrentSkin") == "GoldSkin")
-            {
-                psMain.startColor = Color.white;
-            } else
-            {
-                if(gameObject.name.Equals("Player2") && ColorUtility.TryParseHtmlString("#ff6a6a", out particleColor))
-                {
-                    psMain.startColor = particleColor;
-                } else if(gameObject.name.Equals("Player1") && ColorUtility.TryParseHtmlString("#9abaf5", out particleColor))
-                {
-                    psMain.startColor = particleColor;
-                }
-            }
-            var newParticles = Instantiate(particles, GetComponent<Transform>());
-            newParticles.gameObject.SetActive(true);
-            newParticles.GetComponent<ParticleSystem>().Play();
-        }
+        SkinData currentSkin = Resources.Load<SkinData>(PlayerPrefs.GetString("CurrentSkin"));
+        ApplySkin(currentSkin);
     }
 
     public void OnBeginDrag(PointerEventData eventData)
@@ -105,6 +67,47 @@ public class PlayersController : MonoBehaviour, IBeginDragHandler, IDragHandler,
     public void OnEndDrag(PointerEventData eventData)
     {
         isDragging = false;
+    }
+
+    private void OnCollisionEnter2D(Collision2D other) {
+        if(other.gameObject.name.Equals("Puck"))
+        {
+            audioSource.PlayOneShot(puckSound);
+        }
+    }
+
+    public void ApplySkin(SkinData skin)
+    {
+        if(gameObject.name.Equals("Player1")) {
+            skin = Resources.Load<SkinData>(PlayerPrefs.GetString("CurrentSkin"));
+        } 
+        else if(gameObject.name.Equals("Player2")) {
+            skin = Resources.Load<SkinData>(PlayerPrefs.GetString("CurrentSkin") + "Pl2");
+        }
+        GetComponent<SpriteRenderer>().sprite = skin.sprite;
+        puckSound = skin.sound;
+        if(skin.particles != null) { 
+            particles = skin.particles;
+            var ps = particles.GetComponent<ParticleSystem>();
+            var psMain = ps.main;
+            particles.gameObject.SetActive(true);
+            if(skin.name == "GoldSkin")
+            {
+                psMain.startColor = Color.white;
+            } else
+            {
+                if(gameObject.name.Equals("Player2") && ColorUtility.TryParseHtmlString("#ff6a6a", out particleColor))
+                {
+                    psMain.startColor = particleColor;
+                } else if(gameObject.name.Equals("Player1") && ColorUtility.TryParseHtmlString("#9abaf5", out particleColor))
+                {
+                    psMain.startColor = particleColor;
+                }
+            }
+            var newParticles = Instantiate(particles, GetComponent<Transform>());
+            newParticles.gameObject.SetActive(true);
+            newParticles.GetComponent<ParticleSystem>().Play(); 
+        }
     }
 
 }
