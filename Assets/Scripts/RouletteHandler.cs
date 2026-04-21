@@ -2,20 +2,25 @@ using UnityEngine;
 using UnityEngine.UI;
 using System.Collections;
 using DG.Tweening;
+using System.Threading.Tasks;
 
 public class RouletteHandler : MonoBehaviour
 {
     public RouletteItemData[] rouletteItems;
-    public Image[] rouletteImages;
+    public RouletteCell[] rouletteCells;
     [SerializeField] GameObject roulettePanel;
     [SerializeField] Button stopRouletteBtn;
+    [SerializeField] Text awardText;
+    public Transform centerMarker; 
     public void StartRoulette()
     {
-        for(int i = 0; i < rouletteImages.Length; i++)
+        for(int i = 0; i < rouletteCells.Length; i++)
         {
-            rouletteImages[i].sprite = rouletteItems[Random.Range(0, rouletteItems.Length)].itemSprite;
+            int randomIndex = Random.Range(0, rouletteItems.Length);
+            rouletteCells[i].SetData(rouletteItems[randomIndex]);
         }
         stopRouletteBtn.interactable = false;
+        awardText.gameObject.SetActive(false);
         roulettePanel.SetActive(true);
         Debug.Log("Рулетка начата!");
         SpinRoulette();
@@ -32,28 +37,52 @@ public class RouletteHandler : MonoBehaviour
     IEnumerator MoveRouletteItems()
     {
         int totalSteps = Random.Range(40, 100);
-        
         for (int step = 0; step < totalSteps; step++)
         {
-            float delay = 0.05f + (step / (float)totalSteps) * 0.2f;
+            float delay = Mathf.Lerp(0.05f, 0.3f, (float)step / totalSteps);
             yield return new WaitForSeconds(delay);
 
-
-            for (int i = 0; i < rouletteImages.Length - 1; i++)
+            // Сдвигаем данные всех ячеек
+            for (int i = 0; i < rouletteCells.Length - 1; i++)
             {
-                rouletteImages[i].sprite = rouletteImages[i + 1].sprite;
-                
-                rouletteImages[i].rectTransform.DOPunchAnchorPos(new Vector2(0, 10), 0.05f);
+                rouletteCells[i].SetData(rouletteCells[i + 1].currentData);
             }
 
-            rouletteImages[rouletteImages.Length - 1].sprite = rouletteItems[Random.Range(0, rouletteItems.Length)].itemSprite;
+            // Последней ячейке даем новые случайные данные
+            rouletteCells[rouletteCells.Length - 1].SetData(rouletteItems[Random.Range(0, rouletteItems.Length)]);
         }
-        yield return new WaitForSeconds(0.6f);
+        yield return new WaitForSeconds(0.7f);
         stopRouletteBtn.interactable = true;
     }
 
     public void StopRoulette()
     {
-        roulettePanel.SetActive(false);
+        StartCoroutine(GetReward());
+    }
+
+    IEnumerator GetReward()
+    {
+        RouletteCell bestCell = null;
+        float minDistance = float.MaxValue;
+
+        foreach (var cell in rouletteCells)
+        {
+            float dist = Vector3.Distance(cell.transform.position, centerMarker.position);
+            if (dist < minDistance)
+            {
+                minDistance = dist;
+                bestCell = cell;
+            }
+        }
+
+        if (bestCell != null && bestCell.currentData != null)
+        {
+            awardText.gameObject.SetActive(true);
+            awardText.text = "ВЫИГРЫШ: " + bestCell.currentData.typeOfAward;
+            yield return new WaitForSeconds(1.3f);
+            awardText.gameObject.SetActive(false);
+            roulettePanel.SetActive(false);
+        }
+        
     }
 }
