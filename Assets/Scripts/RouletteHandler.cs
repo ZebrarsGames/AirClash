@@ -2,8 +2,6 @@ using UnityEngine;
 using UnityEngine.UI;
 using System.Collections;
 using DG.Tweening;
-using System.Threading.Tasks;
-using Unity.VisualScripting;
 
 public class RouletteHandler : MonoBehaviour
 {
@@ -28,11 +26,14 @@ public class RouletteHandler : MonoBehaviour
         stopRouletteBtn.interactable = false;
         awardText.gameObject.SetActive(false);
         roulettePanel.SetActive(true);
-        SpinRoulette();
+        roulettePanel.GetComponent<CanvasGroup>().alpha = 0;
+        roulettePanel.GetComponent<CanvasGroup>().DOFade(1f, 1f);
+        StartCoroutine(SpinRoulette());
     }
 
-    public void SpinRoulette()
+    IEnumerator SpinRoulette()
     {
+        yield return new WaitForSeconds(1.5f);
         StartCoroutine(MoveRouletteItems());
     }
 
@@ -123,6 +124,9 @@ public class RouletteHandler : MonoBehaviour
                     break;   
             }
             yield return new WaitForSeconds(1.3f);
+            roulettePanel.GetComponent<CanvasGroup>().alpha = 1f;
+            roulettePanel.GetComponent<CanvasGroup>().DOFade(0f, 1f);
+            yield return new WaitForSeconds(1.2f);
             awardText.gameObject.SetActive(false);
             roulettePanel.SetActive(false);
         }
