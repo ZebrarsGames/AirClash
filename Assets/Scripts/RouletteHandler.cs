@@ -3,18 +3,21 @@ using UnityEngine.UI;
 using System.Collections;
 using DG.Tweening;
 using System.Threading.Tasks;
+using Unity.VisualScripting;
 
 public class RouletteHandler : MonoBehaviour
 {
     [SerializeField] private RouletteItemData[] rouletteItems;
     [SerializeField] private RouletteCell[] rouletteCells;
-    [SerializeField] private SkinData[] skins;
+    [SerializeField] private SkinItem[] skins;
     [SerializeField] private GameObject roulettePanel;
     [SerializeField] private Button stopRouletteBtn;
     [SerializeField] private Text awardText;
     [SerializeField] private Transform centerMarker; 
     [SerializeField] private AudioSource audioSource;
     [SerializeField] private AudioClip rouletteSound;
+    [SerializeField] private MoneyHandler moneyHandler;
+    [SerializeField] private Text moneyText;
     public void StartRoulette()
     {
         for(int i = 0; i < rouletteCells.Length; i++)
@@ -38,6 +41,7 @@ public class RouletteHandler : MonoBehaviour
         int totalSteps = Random.Range(40, 100);
         for (int step = 0; step < totalSteps; step++)
         {
+            if (this == null || !gameObject.activeInHierarchy) yield break;
             audioSource.PlayOneShot(rouletteSound);
             float delay = Mathf.Lerp(0.05f, 0.2f, (float)step / totalSteps);
             yield return new WaitForSeconds(delay);
@@ -70,6 +74,7 @@ public class RouletteHandler : MonoBehaviour
 
     IEnumerator GetReward()
     {
+        stopRouletteBtn.interactable = false;
         RouletteCell bestCell = null;
         float minDistance = float.MaxValue;
 
@@ -89,14 +94,27 @@ public class RouletteHandler : MonoBehaviour
             switch(bestCell.currentData.typeOfAward)
             {
                 case "Money":
-                    awardText.text = "ВЫИГРЫШ: " + bestCell.currentData.award + " денег";
+                    awardText.text = "ВЫИГРЫШ: " + bestCell.currentData.award + " монет";
+                    moneyHandler.AddMoney(bestCell.currentData.award);
+                    moneyText.text = "Деньги " + moneyHandler.GetMoney();
                     break;
                 case "Skin":
                     foreach(var i in skins)
                     {
                         if(i.skinName == bestCell.currentData.skinAward)
                         {
-                            awardText.text = "ВЫИГРЫШ: " + i.skinGuiName;
+                            if(i.isBuy)
+                            {
+                                awardText.text = "ВЫИГРЫШ: " + i.skinPrice + " (скин уже куплен)";
+                                moneyHandler.AddMoney(i.skinPrice);
+                                moneyText.text = "Деньги " + moneyHandler.GetMoney();
+                            } else
+                            {
+                                awardText.text = "ВЫИГРЫШ: " + i.guiSkinName;
+                                i.isBuy = true;
+                                i.checkmark.gameObject.SetActive(true);
+                            }
+                            break;
                         }
                     } 
                     break;

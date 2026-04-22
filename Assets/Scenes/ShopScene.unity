@@ -150,6 +150,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SkinItem
   skinName: GoldSkin
+  guiSkinName: 
   skinPrice: 300
   shop: {fileID: 1424683351}
   isBuy: 0
@@ -960,6 +961,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SkinItem
   skinName: FanSkin
+  guiSkinName: 
   skinPrice: 170
   shop: {fileID: 1424683351}
   isBuy: 0
@@ -1634,6 +1636,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SkinItem
   skinName: ParticleSkin
+  guiSkinName: 
   skinPrice: 220
   shop: {fileID: 1424683351}
   isBuy: 0
@@ -2314,6 +2317,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SkinItem
   skinName: SkullSkin
+  guiSkinName: 
   skinPrice: 50
   shop: {fileID: 1424683351}
   isBuy: 0
@@ -3460,6 +3464,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SkinItem
   skinName: FootballSkin
+  guiSkinName: 
   skinPrice: 100
   shop: {fileID: 1424683351}
   isBuy: 0
@@ -4019,6 +4024,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SkinItem
   skinName: DefSkin
+  guiSkinName: 
   skinPrice: 0
   shop: {fileID: 1424683351}
   isBuy: 1
@@ -4360,6 +4366,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SkinItem
   skinName: InvertSkin
+  guiSkinName: 
   skinPrice: 10
   shop: {fileID: 1424683351}
   isBuy: 0
@@ -4432,6 +4439,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SkinItem
   skinName: CapybaraSkin
+  guiSkinName: 
   skinPrice: 150
   shop: {fileID: 1424683351}
   isBuy: 0
@@ -5529,6 +5537,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SkinItem
   skinName: ZombieSkin
+  guiSkinName: 
   skinPrice: 70
   shop: {fileID: 1424683351}
   isBuy: 0
@@ -7468,6 +7477,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SkinItem
   skinName: BubbleSkin
+  guiSkinName: 
   skinPrice: 250
   shop: {fileID: 1424683351}
   isBuy: 0
@@ -8412,6 +8422,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SkinItem
   skinName: DevSkin
+  guiSkinName: 
   skinPrice: 5
   shop: {fileID: 1424683351}
   isBuy: 0
@@ -9231,12 +9242,19 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 0a33ee0a1bd9b8b4cabf13401b6fc992, type: 2}
   - {fileID: 11400000, guid: 127a96ec0dee1a5409a8e969419eafe7, type: 2}
   - {fileID: 11400000, guid: aabab3cb42286fa428eb4ce07fe7c7e8, type: 2}
+  - {fileID: 11400000, guid: 57b724a01649d08479786a14c6dfdecb, type: 2}
   - {fileID: 11400000, guid: 4b26e58006d2ff943943a501bff97271, type: 2}
+  - {fileID: 11400000, guid: 3cd4db006f832744997ba6db7e2e2f24, type: 2}
+  - {fileID: 11400000, guid: a5897641b691ab64191c2117d4f6bead, type: 2}
+  - {fileID: 11400000, guid: 11ef4510def47aa44b158a7a32e131bd, type: 2}
+  - {fileID: 11400000, guid: 4255103a57e0b1242be81d5627570a46, type: 2}
+  - {fileID: 11400000, guid: dd1a5e41ebe7f7a4388e3512f0a7268f, type: 2}
+  - {fileID: 11400000, guid: 51256bb02d725ca46b109911e654d436, type: 2}
+  - {fileID: 11400000, guid: c9ad76ee4febca3488549dbf05a9f45b, type: 2}
+  - {fileID: 11400000, guid: f08fe483a6affc94392c23a6881c0eef, type: 2}
   - {fileID: 11400000, guid: 99512a730287f7647b2eb470fa9baa5d, type: 2}
   - {fileID: 11400000, guid: 7c1c21e9339dc8246b3439b321b01dbd, type: 2}
-  - {fileID: 11400000, guid: 978e731409df3e7448d4ebd3661c76ef, type: 2}
   - {fileID: 11400000, guid: 459337c69bda26849a0276a2405b7bc6, type: 2}
-  - {fileID: 11400000, guid: 4ac87595d59016841a60399e931b580b, type: 2}
   rouletteCells:
   - {fileID: 1934601676}
   - {fileID: 1197070900}
@@ -9246,25 +9264,17 @@ MonoBehaviour:
   - {fileID: 1173089436}
   - {fileID: 577656881}
   skins:
-  - {fileID: 11400000, guid: 3b8c06d38a76a3c469bb2beb50969120, type: 2}
-  - {fileID: 11400000, guid: d99f0a1243c435541857abf251dee2e0, type: 2}
-  - {fileID: 11400000, guid: 10fb62a82050c2a49b14cc09a0bb0ea7, type: 2}
-  - {fileID: 11400000, guid: 43585148a288b4a4c9963f6f416c26d0, type: 2}
-  - {fileID: 11400000, guid: ecb50581d25cb3f46a2332be25d961e2, type: 2}
-  - {fileID: 11400000, guid: b56c74bd8d939784cbe3eb2192d20dc6, type: 2}
-  - {fileID: 11400000, guid: 8a5a04d0144edb3419f85a98953de2d5, type: 2}
-  - {fileID: 11400000, guid: 49a7d74d9601c3145bd287817742fa41, type: 2}
-  - {fileID: 11400000, guid: 708e9b3de7539c445b23d3fa8e0ece36, type: 2}
-  - {fileID: 11400000, guid: d0cc925aa832df74cb169766251fcf5c, type: 2}
-  - {fileID: 11400000, guid: 1ab27d6b48363cd4f8bf7bf8b362f8b1, type: 2}
-  - {fileID: 11400000, guid: 86e2bb3653ce4f5469240b5e88276064, type: 2}
-  - {fileID: 11400000, guid: 3c790f16ea7ee9343bf99af92bb5ef98, type: 2}
+  - {fileID: 1460898979}
+  - {fileID: 636421480}
+  - {fileID: 1958000399}
   roulettePanel: {fileID: 1606526472}
   stopRouletteBtn: {fileID: 1257328499}
   awardText: {fileID: 1767230389}
   centerMarker: {fileID: 570744026}
   audioSource: {fileID: 1190845891}
   rouletteSound: {fileID: 8300000, guid: 85f49420785ed204485d5cb13b73979f, type: 3}
+  moneyHandler: {fileID: 2065031118}
+  moneyText: {fileID: 1813086268}
 --- !u!1 &1608040687
 GameObject:
   m_ObjectHideFlags: 0
@@ -9907,6 +9917,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SkinItem
   skinName: PixelSkin
+  guiSkinName: 
   skinPrice: 30
   shop: {fileID: 1424683351}
   isBuy: 0
@@ -11241,6 +11252,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SkinItem
   skinName: CoolSkin
+  guiSkinName: 
   skinPrice: 20
   shop: {fileID: 1424683351}
   isBuy: 0

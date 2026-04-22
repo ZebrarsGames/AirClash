@@ -5,6 +5,7 @@ using UnityEngine.UI;
 public class SkinItem : MonoBehaviour
 {
     public string skinName;
+    public string guiSkinName;
     public int skinPrice;
     public ShopHandler shop;
     public bool isBuy;
@@ -19,6 +20,7 @@ public class SkinItem : MonoBehaviour
     {
         skinName = skinData.skinName;
         skinPrice = skinData.price;
+        guiSkinName = skinData.skinGuiName;
         priceText.text = skinPrice.ToString();
         skinNameText.text = skinData.skinGuiName.ToString();
         skinImage.sprite = skinData.sprite;
