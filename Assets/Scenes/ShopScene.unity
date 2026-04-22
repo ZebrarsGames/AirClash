@@ -734,6 +734,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::RouletteCell
   icon: {fileID: 2111506590}
   currentData: {fileID: 0}
+  rectTransform: {fileID: 0}
 --- !u!1 &161139192
 GameObject:
   m_ObjectHideFlags: 0
@@ -2876,6 +2877,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::RouletteCell
   icon: {fileID: 1925157881}
   currentData: {fileID: 0}
+  rectTransform: {fileID: 0}
 --- !u!1 &462204443
 GameObject:
   m_ObjectHideFlags: 0
@@ -3961,6 +3963,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::RouletteCell
   icon: {fileID: 2090503904}
   currentData: {fileID: 0}
+  rectTransform: {fileID: 0}
 --- !u!1 &582807001
 GameObject:
   m_ObjectHideFlags: 0
@@ -5338,6 +5341,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::RouletteCell
   icon: {fileID: 1041646779}
   currentData: {fileID: 0}
+  rectTransform: {fileID: 0}
 --- !u!1 &869832659
 GameObject:
   m_ObjectHideFlags: 0
@@ -6731,6 +6735,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::RouletteCell
   icon: {fileID: 1995422840}
   currentData: {fileID: 0}
+  rectTransform: {fileID: 0}
 --- !u!1 &1185220528
 GameObject:
   m_ObjectHideFlags: 0
@@ -7179,6 +7184,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::RouletteCell
   icon: {fileID: 1032492107}
   currentData: {fileID: 0}
+  rectTransform: {fileID: 0}
 --- !u!1 &1229785881
 GameObject:
   m_ObjectHideFlags: 0
@@ -9239,10 +9245,26 @@ MonoBehaviour:
   - {fileID: 156278275}
   - {fileID: 1173089436}
   - {fileID: 577656881}
+  skins:
+  - {fileID: 11400000, guid: 3b8c06d38a76a3c469bb2beb50969120, type: 2}
+  - {fileID: 11400000, guid: d99f0a1243c435541857abf251dee2e0, type: 2}
+  - {fileID: 11400000, guid: 10fb62a82050c2a49b14cc09a0bb0ea7, type: 2}
+  - {fileID: 11400000, guid: 43585148a288b4a4c9963f6f416c26d0, type: 2}
+  - {fileID: 11400000, guid: ecb50581d25cb3f46a2332be25d961e2, type: 2}
+  - {fileID: 11400000, guid: b56c74bd8d939784cbe3eb2192d20dc6, type: 2}
+  - {fileID: 11400000, guid: 8a5a04d0144edb3419f85a98953de2d5, type: 2}
+  - {fileID: 11400000, guid: 49a7d74d9601c3145bd287817742fa41, type: 2}
+  - {fileID: 11400000, guid: 708e9b3de7539c445b23d3fa8e0ece36, type: 2}
+  - {fileID: 11400000, guid: d0cc925aa832df74cb169766251fcf5c, type: 2}
+  - {fileID: 11400000, guid: 1ab27d6b48363cd4f8bf7bf8b362f8b1, type: 2}
+  - {fileID: 11400000, guid: 86e2bb3653ce4f5469240b5e88276064, type: 2}
+  - {fileID: 11400000, guid: 3c790f16ea7ee9343bf99af92bb5ef98, type: 2}
   roulettePanel: {fileID: 1606526472}
   stopRouletteBtn: {fileID: 1257328499}
   awardText: {fileID: 1767230389}
   centerMarker: {fileID: 570744026}
+  audioSource: {fileID: 1190845891}
+  rouletteSound: {fileID: 8300000, guid: 85f49420785ed204485d5cb13b73979f, type: 3}
 --- !u!1 &1608040687
 GameObject:
   m_ObjectHideFlags: 0
@@ -11068,6 +11090,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::RouletteCell
   icon: {fileID: 49720649}
   currentData: {fileID: 0}
+  rectTransform: {fileID: 0}
 --- !u!1 &1952033897
 GameObject:
   m_ObjectHideFlags: 0

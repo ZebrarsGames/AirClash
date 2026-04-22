@@ -10,9 +10,9 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 17f75593b2bdd2342aa91a336b103a0f, type: 3}
-  m_Name: Money10
+  m_Name: Money40
   m_EditorClassIdentifier: Assembly-CSharp::RouletteItemData
   typeOfAward: Money
-  award: 10
+  award: 40
   skinAward: 
-  itemSprite: {fileID: 21300000, guid: 3daf81cc98429b6478e730674e47518d, type: 3}
+  itemSprite: {fileID: 21300000, guid: 47c06bee71274ed488747900bf1b4a19, type: 3}

@@ -15,4 +15,4 @@ MonoBehaviour:
   typeOfAward: Money
   award: 20
   skinAward: 
-  itemSprite: {fileID: 21300000, guid: e8408834d297c294dab81a8b32f9a7cd, type: 3}
+  itemSprite: {fileID: 21300000, guid: 57b041b7c28be2f4b8acddcb73b7b2ea, type: 3}
