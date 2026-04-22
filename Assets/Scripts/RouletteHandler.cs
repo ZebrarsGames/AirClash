@@ -6,12 +6,15 @@ using System.Threading.Tasks;
 
 public class RouletteHandler : MonoBehaviour
 {
-    public RouletteItemData[] rouletteItems;
-    public RouletteCell[] rouletteCells;
-    [SerializeField] GameObject roulettePanel;
-    [SerializeField] Button stopRouletteBtn;
-    [SerializeField] Text awardText;
-    public Transform centerMarker; 
+    [SerializeField] private RouletteItemData[] rouletteItems;
+    [SerializeField] private RouletteCell[] rouletteCells;
+    [SerializeField] private SkinData[] skins;
+    [SerializeField] private GameObject roulettePanel;
+    [SerializeField] private Button stopRouletteBtn;
+    [SerializeField] private Text awardText;
+    [SerializeField] private Transform centerMarker; 
+    [SerializeField] private AudioSource audioSource;
+    [SerializeField] private AudioClip rouletteSound;
     public void StartRoulette()
     {
         for(int i = 0; i < rouletteCells.Length; i++)
@@ -22,15 +25,11 @@ public class RouletteHandler : MonoBehaviour
         stopRouletteBtn.interactable = false;
         awardText.gameObject.SetActive(false);
         roulettePanel.SetActive(true);
-        Debug.Log("Рулетка начата!");
         SpinRoulette();
     }
 
     public void SpinRoulette()
     {
-        Debug.Log("Рулетка крутиться...");
-        int result = Random.Range(0, 37);
-        Debug.Log("Результат рулетки: " + result);
         StartCoroutine(MoveRouletteItems());
     }
 
@@ -39,7 +38,8 @@ public class RouletteHandler : MonoBehaviour
         int totalSteps = Random.Range(40, 100);
         for (int step = 0; step < totalSteps; step++)
         {
-            float delay = Mathf.Lerp(0.05f, 0.3f, (float)step / totalSteps);
+            audioSource.PlayOneShot(rouletteSound);
+            float delay = Mathf.Lerp(0.05f, 0.2f, (float)step / totalSteps);
             yield return new WaitForSeconds(delay);
 
             // Сдвигаем данные всех ячеек
@@ -50,6 +50,14 @@ public class RouletteHandler : MonoBehaviour
 
             // Последней ячейке даем новые случайные данные
             rouletteCells[rouletteCells.Length - 1].SetData(rouletteItems[Random.Range(0, rouletteItems.Length)]);
+
+            foreach (var cell in rouletteCells)
+            {
+                cell.rectTransform.DOComplete(); 
+                // Подпрыгивание через масштаб (увеличение на 10% и возврат)
+                cell.rectTransform.DOPunchScale(new Vector3(0.05f, 0.05f, 0.05f), 0.05f, 1, 0.5f);
+            }
+
         }
         yield return new WaitForSeconds(0.7f);
         stopRouletteBtn.interactable = true;
@@ -78,7 +86,24 @@ public class RouletteHandler : MonoBehaviour
         if (bestCell != null && bestCell.currentData != null)
         {
             awardText.gameObject.SetActive(true);
-            awardText.text = "ВЫИГРЫШ: " + bestCell.currentData.typeOfAward;
+            switch(bestCell.currentData.typeOfAward)
+            {
+                case "Money":
+                    awardText.text = "ВЫИГРЫШ: " + bestCell.currentData.award + " денег";
+                    break;
+                case "Skin":
+                    foreach(var i in skins)
+                    {
+                        if(i.skinName == bestCell.currentData.skinAward)
+                        {
+                            awardText.text = "ВЫИГРЫШ: " + i.skinGuiName;
+                        }
+                    } 
+                    break;
+                default:
+                    awardText.text = "Неправильный typeOFAward!";
+                    break;   
+            }
             yield return new WaitForSeconds(1.3f);
             awardText.gameObject.SetActive(false);
             roulettePanel.SetActive(false);
