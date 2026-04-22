@@ -10,9 +10,9 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 17f75593b2bdd2342aa91a336b103a0f, type: 3}
-  m_Name: Item2
+  m_Name: PixelSkin
   m_EditorClassIdentifier: Assembly-CSharp::RouletteItemData
-  typeOfAward: Test2
+  typeOfAward: Skin
   award: 0
-  skinAward: 
-  itemSprite: {fileID: 21300000, guid: 64ad704555496d24f912b2603c745883, type: 3}
+  skinAward: PixelSkin
+  itemSprite: {fileID: 21300000, guid: 50e9292e59c869d4cb8309b0352a8a43, type: 3}
