@@ -69,7 +69,6 @@ public class RouletteHandler : MonoBehaviour
             float delay = Mathf.Lerp(0.05f, 0.2f, (float)step / totalSteps);
             yield return new WaitForSeconds(delay);
 
-            // Сдвигаем данные всех ячеек
             for (int i = 0; i < rouletteCells.Length - 1; i++)
             {
                 rouletteCells[i].SetData(rouletteCells[i + 1].currentData);
@@ -106,7 +105,6 @@ public class RouletteHandler : MonoBehaviour
             foreach (var cell in rouletteCells)
             {
                 cell.rectTransform.DOComplete(); 
-                // Подпрыгивание через масштаб (увеличение на 10% и возврат)
                 cell.rectTransform.DOPunchScale(new Vector3(0.05f, 0.05f, 0.05f), 0.05f, 1, 0.5f);
             }
 
