@@ -16,19 +16,32 @@ public class RouletteHandler : MonoBehaviour
     [SerializeField] private AudioClip rouletteSound;
     [SerializeField] private MoneyHandler moneyHandler;
     [SerializeField] private Text moneyText;
+    [SerializeField] private AudioClip cancelSound;
+    [SerializeField] private AudioClip buySound;
+    public int rouletteCost;
     public void StartRoulette()
     {
-        for(int i = 0; i < rouletteCells.Length; i++)
+        if(moneyHandler.GetMoney() >= rouletteCost)
         {
-            int randomIndex = Random.Range(0, rouletteItems.Length);
-            rouletteCells[i].SetData(rouletteItems[randomIndex]);
+            audioSource.PlayOneShot(buySound);
+            moneyHandler.RemoveMoney(rouletteCost);
+            moneyText.text = "Деньги " + moneyHandler.GetMoney();
+            for(int i = 0; i < rouletteCells.Length; i++)
+            {
+                int randomIndex = Random.Range(0, rouletteItems.Length);
+                rouletteCells[i].SetData(rouletteItems[randomIndex]);
+            }
+            stopRouletteBtn.interactable = false;
+            awardText.gameObject.SetActive(false);
+            roulettePanel.SetActive(true);
+            roulettePanel.GetComponent<CanvasGroup>().alpha = 0;
+            roulettePanel.GetComponent<CanvasGroup>().DOFade(1f, 1f);
+            StartCoroutine(SpinRoulette());
+        } else
+        {
+            audioSource.PlayOneShot(cancelSound);
         }
-        stopRouletteBtn.interactable = false;
-        awardText.gameObject.SetActive(false);
-        roulettePanel.SetActive(true);
-        roulettePanel.GetComponent<CanvasGroup>().alpha = 0;
-        roulettePanel.GetComponent<CanvasGroup>().DOFade(1f, 1f);
-        StartCoroutine(SpinRoulette());
+        
     }
 
     IEnumerator SpinRoulette()
