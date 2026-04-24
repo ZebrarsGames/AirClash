@@ -2083,7 +2083,8 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: "\u0421\u0442\u0430\u0440\u0442 \u0440\u0443\u043B\u0435\u0442\u043A\u0438"
+  m_Text: "\u0421\u0442\u0430\u0440\u0442 \u0440\u0443\u043B\u0435\u0442\u043A\u0438
+    (35 \u043C\u043E\u043D\u0435\u0442)"
 --- !u!222 &287709758
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -9372,6 +9373,9 @@ MonoBehaviour:
   rouletteSound: {fileID: 8300000, guid: 85f49420785ed204485d5cb13b73979f, type: 3}
   moneyHandler: {fileID: 2065031118}
   moneyText: {fileID: 1813086268}
+  cancelSound: {fileID: 8300000, guid: 96a64f20e83e9374a8b6e6b9be262a82, type: 3}
+  buySound: {fileID: 8300000, guid: 45a6151c7ae761845a4e78d03c17b1d8, type: 3}
+  rouletteCost: 35
 --- !u!225 &1606526478
 CanvasGroup:
   m_ObjectHideFlags: 0
