@@ -14,6 +14,7 @@ public class ShopHandler : MonoBehaviour
     [SerializeField] private AudioClip buySound;
     [SerializeField] private SkinItem[] allSkins; 
     [SerializeField] private AchievementsHandler achievementsHandler;
+    [SerializeField] private GameObject surePanel;
 
     void Start()
     {
@@ -69,9 +70,19 @@ public class ShopHandler : MonoBehaviour
         moneyText.text = "Деньги " + Convert.ToString(moneyHandler.GetMoney());
     }
 
+    public void ShowSurePanel()
+    {
+        surePanel.SetActive(true);
+    }
+    public void HideSurePanel()
+    {
+        surePanel.SetActive(false);
+    }
+
     public void DeletePlayerPrefs()
     {
         PlayerPrefs.DeleteAll();
+        surePanel.SetActive(false);
     }
 
     public void PlusMoney(int money)
