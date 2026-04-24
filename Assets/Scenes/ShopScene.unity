@@ -9353,6 +9353,14 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 99512a730287f7647b2eb470fa9baa5d, type: 2}
   - {fileID: 11400000, guid: 7c1c21e9339dc8246b3439b321b01dbd, type: 2}
   - {fileID: 11400000, guid: 459337c69bda26849a0276a2405b7bc6, type: 2}
+  rareRouletteItems:
+  - {fileID: 11400000, guid: 08723dfd34be8b845b1a819157239bb8, type: 2}
+  - {fileID: 11400000, guid: deab340bf3e2de84ba1383df1de9d0c4, type: 2}
+  - {fileID: 11400000, guid: 60a91f36dfb4f0346bfcb539ba4f6c8a, type: 2}
+  - {fileID: 11400000, guid: 9ec973a37078d9648982b73bb06c2d52, type: 2}
+  veryRareRouletteItems:
+  - {fileID: 11400000, guid: 489b46bc838dc7742b85237e2a413f94, type: 2}
+  - {fileID: 11400000, guid: 026286c4a055db049ba0d1efe2f15935, type: 2}
   rouletteCells:
   - {fileID: 1934601676}
   - {fileID: 1197070900}
@@ -9365,6 +9373,20 @@ MonoBehaviour:
   - {fileID: 1460898979}
   - {fileID: 636421480}
   - {fileID: 1958000399}
+  - {fileID: 1754231608}
+  - {fileID: 347980174}
+  - {fileID: 891963108}
+  - {fileID: 529430796}
+  - {fileID: 1279554191}
+  - {fileID: 26406287}
+  rareSkins:
+  - {fileID: 1754231608}
+  - {fileID: 347980174}
+  - {fileID: 891963108}
+  - {fileID: 529430796}
+  veryRareSkins:
+  - {fileID: 1279554191}
+  - {fileID: 26406287}
   roulettePanel: {fileID: 1606526472}
   stopRouletteBtn: {fileID: 1257328499}
   awardText: {fileID: 1767230389}
