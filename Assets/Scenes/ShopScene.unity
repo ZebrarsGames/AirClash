@@ -149,17 +149,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c59cbdd58d8c2ad4abf2dffbd9bea8da, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SkinItem
+  skinData: {fileID: 11400000, guid: 49a7d74d9601c3145bd287817742fa41, type: 2}
   skinName: GoldSkin
   guiSkinName: 
   skinPrice: 300
-  shop: {fileID: 1424683351}
   isBuy: 0
-  checkmark: {fileID: 1533273092}
-  equipArrow: {fileID: 556913738}
-  skinData: {fileID: 11400000, guid: 49a7d74d9601c3145bd287817742fa41, type: 2}
+  shop: {fileID: 1424683351}
   skinNameText: {fileID: 1159027396}
   priceText: {fileID: 1439180349}
   skinImage: {fileID: 1789478980}
+  checkmark: {fileID: 1533273092}
+  equipArrow: {fileID: 556913738}
 --- !u!224 &26406288
 RectTransform:
   m_ObjectHideFlags: 0
@@ -961,17 +961,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c59cbdd58d8c2ad4abf2dffbd9bea8da, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SkinItem
+  skinData: {fileID: 11400000, guid: b56c74bd8d939784cbe3eb2192d20dc6, type: 2}
   skinName: FanSkin
   guiSkinName: 
   skinPrice: 170
-  shop: {fileID: 1424683351}
   isBuy: 0
-  checkmark: {fileID: 1670187116}
-  equipArrow: {fileID: 192592270}
-  skinData: {fileID: 11400000, guid: b56c74bd8d939784cbe3eb2192d20dc6, type: 2}
+  shop: {fileID: 1424683351}
   skinNameText: {fileID: 1411206441}
   priceText: {fileID: 172034902}
   skinImage: {fileID: 1608040690}
+  checkmark: {fileID: 1670187116}
+  equipArrow: {fileID: 192592270}
 --- !u!222 &183843059
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -1636,17 +1636,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c59cbdd58d8c2ad4abf2dffbd9bea8da, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SkinItem
+  skinData: {fileID: 11400000, guid: d0cc925aa832df74cb169766251fcf5c, type: 2}
   skinName: ParticleSkin
   guiSkinName: 
   skinPrice: 220
-  shop: {fileID: 1424683351}
   isBuy: 0
-  checkmark: {fileID: 1605044777}
-  equipArrow: {fileID: 1852802725}
-  skinData: {fileID: 11400000, guid: d0cc925aa832df74cb169766251fcf5c, type: 2}
+  shop: {fileID: 1424683351}
   skinNameText: {fileID: 531878188}
   priceText: {fileID: 1185220531}
   skinImage: {fileID: 407767608}
+  checkmark: {fileID: 1605044777}
+  equipArrow: {fileID: 1852802725}
 --- !u!222 &234555109
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -2413,17 +2413,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c59cbdd58d8c2ad4abf2dffbd9bea8da, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SkinItem
+  skinData: {fileID: 11400000, guid: 86e2bb3653ce4f5469240b5e88276064, type: 2}
   skinName: SkullSkin
   guiSkinName: 
   skinPrice: 50
-  shop: {fileID: 1424683351}
   isBuy: 0
-  checkmark: {fileID: 212438732}
-  equipArrow: {fileID: 860542784}
-  skinData: {fileID: 11400000, guid: 86e2bb3653ce4f5469240b5e88276064, type: 2}
+  shop: {fileID: 1424683351}
   skinNameText: {fileID: 1411570207}
   priceText: {fileID: 309312053}
   skinImage: {fileID: 869832662}
+  checkmark: {fileID: 212438732}
+  equipArrow: {fileID: 860542784}
 --- !u!222 &347980176
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -2458,18 +2458,18 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 402369436}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 287709756}
-  m_Father: {fileID: 1424683349}
+  m_Father: {fileID: 663067489}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 270, y: 100}
-  m_SizeDelta: {x: 430, y: 120}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 420, y: 130}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &402369438
 MonoBehaviour:
@@ -3561,17 +3561,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c59cbdd58d8c2ad4abf2dffbd9bea8da, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SkinItem
+  skinData: {fileID: 11400000, guid: 8a5a04d0144edb3419f85a98953de2d5, type: 2}
   skinName: FootballSkin
   guiSkinName: 
   skinPrice: 100
-  shop: {fileID: 1424683351}
   isBuy: 0
-  checkmark: {fileID: 1153431144}
-  equipArrow: {fileID: 1968236787}
-  skinData: {fileID: 11400000, guid: 8a5a04d0144edb3419f85a98953de2d5, type: 2}
+  shop: {fileID: 1424683351}
   skinNameText: {fileID: 607758128}
   priceText: {fileID: 402856667}
   skinImage: {fileID: 1425535947}
+  checkmark: {fileID: 1153431144}
+  equipArrow: {fileID: 1968236787}
 --- !u!222 &529430798
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -4122,17 +4122,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c59cbdd58d8c2ad4abf2dffbd9bea8da, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SkinItem
+  skinData: {fileID: 11400000, guid: 43585148a288b4a4c9963f6f416c26d0, type: 2}
   skinName: DefSkin
   guiSkinName: 
   skinPrice: 0
-  shop: {fileID: 1424683351}
   isBuy: 1
-  checkmark: {fileID: 1803494242}
-  equipArrow: {fileID: 111244745}
-  skinData: {fileID: 11400000, guid: 43585148a288b4a4c9963f6f416c26d0, type: 2}
+  shop: {fileID: 1424683351}
   skinNameText: {fileID: 810204310}
   priceText: {fileID: 480268607}
   skinImage: {fileID: 1846342696}
+  checkmark: {fileID: 1803494242}
+  equipArrow: {fileID: 111244745}
 --- !u!222 &582807005
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -4464,17 +4464,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c59cbdd58d8c2ad4abf2dffbd9bea8da, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SkinItem
+  skinData: {fileID: 11400000, guid: 708e9b3de7539c445b23d3fa8e0ece36, type: 2}
   skinName: InvertSkin
   guiSkinName: 
   skinPrice: 10
-  shop: {fileID: 1424683351}
   isBuy: 0
-  checkmark: {fileID: 1586595774}
-  equipArrow: {fileID: 1381138252}
-  skinData: {fileID: 11400000, guid: 708e9b3de7539c445b23d3fa8e0ece36, type: 2}
+  shop: {fileID: 1424683351}
   skinNameText: {fileID: 1469411875}
   priceText: {fileID: 1307156481}
   skinImage: {fileID: 462204446}
+  checkmark: {fileID: 1586595774}
+  equipArrow: {fileID: 1381138252}
 --- !u!222 &636421482
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -4537,17 +4537,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c59cbdd58d8c2ad4abf2dffbd9bea8da, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SkinItem
+  skinData: {fileID: 11400000, guid: d99f0a1243c435541857abf251dee2e0, type: 2}
   skinName: CapybaraSkin
   guiSkinName: 
   skinPrice: 150
-  shop: {fileID: 1424683351}
   isBuy: 0
-  checkmark: {fileID: 141336944}
-  equipArrow: {fileID: 296404790}
-  skinData: {fileID: 11400000, guid: d99f0a1243c435541857abf251dee2e0, type: 2}
+  shop: {fileID: 1424683351}
   skinNameText: {fileID: 1643902162}
   priceText: {fileID: 803261533}
   skinImage: {fileID: 217138161}
+  checkmark: {fileID: 141336944}
+  equipArrow: {fileID: 296404790}
 --- !u!222 &640617638
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -4556,7 +4556,7 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 640617635}
   m_CullTransparentMesh: 1
---- !u!1 &698952572
+--- !u!1 &663067488
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -4564,77 +4564,72 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 698952573}
-  - component: {fileID: 698952575}
-  - component: {fileID: 698952574}
+  - component: {fileID: 663067489}
+  - component: {fileID: 663067490}
+  - component: {fileID: 663067491}
   m_Layer: 5
-  m_Name: Text (Legacy)
+  m_Name: DownPanel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!224 &698952573
+--- !u!224 &663067489
 RectTransform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 698952572}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_GameObject: {fileID: 663067488}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 1118486734}
+  m_Children:
+  - {fileID: 402369437}
+  - {fileID: 1191270538}
+  - {fileID: 1527648705}
+  m_Father: {fileID: 1424683349}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
+  m_AnchorMin: {x: 0.5, y: 0}
+  m_AnchorMax: {x: 0.5, y: 0}
+  m_AnchoredPosition: {x: 0, y: 102.70001}
+  m_SizeDelta: {x: 2000, y: 130}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &698952574
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 698952572}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5f7201a12d95ffc409449d95f23cf332, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Text
-  m_Material: {fileID: 0}
-  m_Color: {r: 0.19607843, g: 0.19607843, b: 0.19607843, a: 1}
-  m_RaycastTarget: 1
-  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
-  m_Maskable: 1
-  m_OnCullStateChanged:
-    m_PersistentCalls:
-      m_Calls: []
-  m_FontData:
-    m_Font: {fileID: 12800000, guid: 3cfde06b1980b8445ad6b84a8ee6c36d, type: 3}
-    m_FontSize: 14
-    m_FontStyle: 0
-    m_BestFit: 1
-    m_MinSize: 10
-    m_MaxSize: 300
-    m_Alignment: 4
-    m_AlignByGeometry: 1
-    m_RichText: 1
-    m_HorizontalOverflow: 0
-    m_VerticalOverflow: 0
-    m_LineSpacing: 1
-  m_Text: "+100 \u0434\u0435\u043D\u0435\u0433"
---- !u!222 &698952575
+--- !u!222 &663067490
 CanvasRenderer:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 698952572}
+  m_GameObject: {fileID: 663067488}
   m_CullTransparentMesh: 1
+--- !u!114 &663067491
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 663067488}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 30649d3a9faa99c48a7b1166b86bf2a0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.HorizontalLayoutGroup
+  m_Padding:
+    m_Left: 0
+    m_Right: 0
+    m_Top: 0
+    m_Bottom: 0
+  m_ChildAlignment: 4
+  m_Spacing: -500
+  m_ChildForceExpandWidth: 1
+  m_ChildForceExpandHeight: 1
+  m_ChildControlWidth: 0
+  m_ChildControlHeight: 0
+  m_ChildScaleWidth: 0
+  m_ChildScaleHeight: 0
+  m_ReverseArrangement: 0
 --- !u!1 &715429209
 GameObject:
   m_ObjectHideFlags: 0
@@ -5809,17 +5804,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c59cbdd58d8c2ad4abf2dffbd9bea8da, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SkinItem
+  skinData: {fileID: 11400000, guid: 3c790f16ea7ee9343bf99af92bb5ef98, type: 2}
   skinName: ZombieSkin
   guiSkinName: 
   skinPrice: 70
-  shop: {fileID: 1424683351}
   isBuy: 0
-  checkmark: {fileID: 526087675}
-  equipArrow: {fileID: 715429211}
-  skinData: {fileID: 11400000, guid: 3c790f16ea7ee9343bf99af92bb5ef98, type: 2}
+  shop: {fileID: 1424683351}
   skinNameText: {fileID: 1897529736}
   priceText: {fileID: 1952033900}
   skinImage: {fileID: 489712899}
+  checkmark: {fileID: 526087675}
+  equipArrow: {fileID: 715429211}
 --- !u!222 &891963110
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -6681,139 +6676,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1102755248}
   m_CullTransparentMesh: 1
---- !u!1 &1118486733
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1118486734}
-  - component: {fileID: 1118486737}
-  - component: {fileID: 1118486736}
-  - component: {fileID: 1118486735}
-  m_Layer: 5
-  m_Name: Button
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!224 &1118486734
-RectTransform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1118486733}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children:
-  - {fileID: 698952573}
-  m_Father: {fileID: 1424683349}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 1, y: 0}
-  m_AnchorMax: {x: 1, y: 0}
-  m_AnchoredPosition: {x: -270, y: 100}
-  m_SizeDelta: {x: 430, y: 120}
-  m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &1118486735
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1118486733}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Button
-  m_Navigation:
-    m_Mode: 3
-    m_WrapAround: 0
-    m_SelectOnUp: {fileID: 0}
-    m_SelectOnDown: {fileID: 0}
-    m_SelectOnLeft: {fileID: 0}
-    m_SelectOnRight: {fileID: 0}
-  m_Transition: 1
-  m_Colors:
-    m_NormalColor: {r: 1, g: 1, b: 1, a: 1}
-    m_HighlightedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
-    m_PressedColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 1}
-    m_SelectedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
-    m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0.5019608}
-    m_ColorMultiplier: 1
-    m_FadeDuration: 0.1
-  m_SpriteState:
-    m_HighlightedSprite: {fileID: 0}
-    m_PressedSprite: {fileID: 0}
-    m_SelectedSprite: {fileID: 0}
-    m_DisabledSprite: {fileID: 0}
-  m_AnimationTriggers:
-    m_NormalTrigger: Normal
-    m_HighlightedTrigger: Highlighted
-    m_PressedTrigger: Pressed
-    m_SelectedTrigger: Selected
-    m_DisabledTrigger: Disabled
-  m_Interactable: 1
-  m_TargetGraphic: {fileID: 1118486736}
-  m_OnClick:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 1424683351}
-        m_TargetAssemblyTypeName: ShopHandler, Assembly-CSharp
-        m_MethodName: PlusMoney
-        m_Mode: 3
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 100
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
---- !u!114 &1118486736
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1118486733}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
-  m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_RaycastTarget: 1
-  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
-  m_Maskable: 1
-  m_OnCullStateChanged:
-    m_PersistentCalls:
-      m_Calls: []
-  m_Sprite: {fileID: 10905, guid: 0000000000000000f000000000000000, type: 0}
-  m_Type: 1
-  m_PreserveAspect: 0
-  m_FillCenter: 1
-  m_FillMethod: 4
-  m_FillAmount: 1
-  m_FillClockwise: 1
-  m_FillOrigin: 0
-  m_UseSpriteMesh: 0
-  m_PixelsPerUnitMultiplier: 1
---- !u!222 &1118486737
-CanvasRenderer:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1118486733}
-  m_CullTransparentMesh: 1
 --- !u!1 &1122160687
 GameObject:
   m_ObjectHideFlags: 0
@@ -7402,18 +7264,18 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1191270537}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1431558134}
-  m_Father: {fileID: 1424683349}
+  m_Father: {fileID: 663067489}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0}
-  m_AnchorMax: {x: 0.5, y: 0}
-  m_AnchoredPosition: {x: -246, y: 100}
-  m_SizeDelta: {x: 422.97, y: 127}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 420, y: 130}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1191270539
 MonoBehaviour:
@@ -7884,17 +7746,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c59cbdd58d8c2ad4abf2dffbd9bea8da, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SkinItem
+  skinData: {fileID: 11400000, guid: 3b8c06d38a76a3c469bb2beb50969120, type: 2}
   skinName: BubbleSkin
   guiSkinName: 
   skinPrice: 250
-  shop: {fileID: 1424683351}
   isBuy: 0
-  checkmark: {fileID: 1102755250}
-  equipArrow: {fileID: 539944511}
-  skinData: {fileID: 11400000, guid: 3b8c06d38a76a3c469bb2beb50969120, type: 2}
+  shop: {fileID: 1424683351}
   skinNameText: {fileID: 453796066}
   priceText: {fileID: 319583534}
   skinImage: {fileID: 252658622}
+  checkmark: {fileID: 1102755250}
+  equipArrow: {fileID: 539944511}
 --- !u!222 &1279554192
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -8412,11 +8274,8 @@ RectTransform:
   - {fileID: 505778679}
   - {fileID: 2065031121}
   - {fileID: 1697389059}
-  - {fileID: 1527648705}
-  - {fileID: 1191270538}
   - {fileID: 2112752282}
-  - {fileID: 1118486734}
-  - {fileID: 402369437}
+  - {fileID: 663067489}
   - {fileID: 1606526473}
   - {fileID: 570744026}
   - {fileID: 824279543}
@@ -8441,10 +8300,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::ShopHandler
   moneyHandler: {fileID: 2065031118}
   moneyText: {fileID: 1813086268}
-  audioSource: {fileID: 1190845891}
-  menuMusic: {fileID: 8300000, guid: 28aa2f1f0d3d6ce4fb156e38ed6c23f4, type: 3}
-  cancelSound: {fileID: 8300000, guid: 96a64f20e83e9374a8b6e6b9be262a82, type: 3}
-  buySound: {fileID: 8300000, guid: 45a6151c7ae761845a4e78d03c17b1d8, type: 3}
+  achievementsHandler: {fileID: 1029591086}
   allSkins:
   - {fileID: 582807003}
   - {fileID: 1460898979}
@@ -8459,8 +8315,11 @@ MonoBehaviour:
   - {fileID: 234555108}
   - {fileID: 1279554191}
   - {fileID: 26406287}
-  achievementsHandler: {fileID: 1029591086}
   surePanel: {fileID: 824279542}
+  audioSource: {fileID: 1190845891}
+  menuMusic: {fileID: 8300000, guid: 28aa2f1f0d3d6ce4fb156e38ed6c23f4, type: 3}
+  buySound: {fileID: 8300000, guid: 45a6151c7ae761845a4e78d03c17b1d8, type: 3}
+  cancelSound: {fileID: 8300000, guid: 96a64f20e83e9374a8b6e6b9be262a82, type: 3}
 --- !u!1 &1425535944
 GameObject:
   m_ObjectHideFlags: 0
@@ -8830,17 +8689,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c59cbdd58d8c2ad4abf2dffbd9bea8da, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SkinItem
+  skinData: {fileID: 11400000, guid: ecb50581d25cb3f46a2332be25d961e2, type: 2}
   skinName: DevSkin
   guiSkinName: 
   skinPrice: 5
-  shop: {fileID: 1424683351}
   isBuy: 0
-  checkmark: {fileID: 1122160689}
-  equipArrow: {fileID: 927248667}
-  skinData: {fileID: 11400000, guid: ecb50581d25cb3f46a2332be25d961e2, type: 2}
+  shop: {fileID: 1424683351}
   skinNameText: {fileID: 1555033929}
   priceText: {fileID: 773856377}
   skinImage: {fileID: 51785530}
+  checkmark: {fileID: 1122160689}
+  equipArrow: {fileID: 927248667}
 --- !u!1 &1465111189
 GameObject:
   m_ObjectHideFlags: 0
@@ -9282,18 +9141,18 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1527648704}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 588271363}
-  m_Father: {fileID: 1424683349}
+  m_Father: {fileID: 663067489}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0}
-  m_AnchorMax: {x: 0.5, y: 0}
-  m_AnchoredPosition: {x: 246, y: 100}
-  m_SizeDelta: {x: 422.97, y: 127}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 420, y: 130}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1527648706
 MonoBehaviour:
@@ -9904,14 +9763,6 @@ MonoBehaviour:
   veryRareRouletteItems:
   - {fileID: 11400000, guid: 489b46bc838dc7742b85237e2a413f94, type: 2}
   - {fileID: 11400000, guid: 026286c4a055db049ba0d1efe2f15935, type: 2}
-  rouletteCells:
-  - {fileID: 1934601676}
-  - {fileID: 1197070900}
-  - {fileID: 866425317}
-  - {fileID: 455876780}
-  - {fileID: 156278275}
-  - {fileID: 1173089436}
-  - {fileID: 577656881}
   skins:
   - {fileID: 1460898979}
   - {fileID: 636421480}
@@ -9922,17 +9773,24 @@ MonoBehaviour:
   - {fileID: 529430796}
   - {fileID: 1279554191}
   - {fileID: 26406287}
+  rouletteCells:
+  - {fileID: 1934601676}
+  - {fileID: 1197070900}
+  - {fileID: 866425317}
+  - {fileID: 455876780}
+  - {fileID: 156278275}
+  - {fileID: 1173089436}
+  - {fileID: 577656881}
   roulettePanel: {fileID: 1606526472}
+  centerMarker: {fileID: 570744026}
   stopRouletteBtn: {fileID: 1257328499}
   awardText: {fileID: 1767230389}
-  centerMarker: {fileID: 570744026}
-  audioSource: {fileID: 1190845891}
-  rouletteSound: {fileID: 8300000, guid: 85f49420785ed204485d5cb13b73979f, type: 3}
+  rouletteCost: 35
   moneyHandler: {fileID: 2065031118}
   moneyText: {fileID: 1813086268}
+  audioSource: {fileID: 1190845891}
+  rouletteSound: {fileID: 8300000, guid: 85f49420785ed204485d5cb13b73979f, type: 3}
   cancelSound: {fileID: 8300000, guid: 96a64f20e83e9374a8b6e6b9be262a82, type: 3}
-  buySound: {fileID: 8300000, guid: 45a6151c7ae761845a4e78d03c17b1d8, type: 3}
-  rouletteCost: 35
 --- !u!225 &1606526478
 CanvasGroup:
   m_ObjectHideFlags: 0
@@ -10586,17 +10444,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c59cbdd58d8c2ad4abf2dffbd9bea8da, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SkinItem
+  skinData: {fileID: 11400000, guid: 1ab27d6b48363cd4f8bf7bf8b362f8b1, type: 2}
   skinName: PixelSkin
   guiSkinName: 
   skinPrice: 30
-  shop: {fileID: 1424683351}
   isBuy: 0
-  checkmark: {fileID: 548605995}
-  equipArrow: {fileID: 783762821}
-  skinData: {fileID: 11400000, guid: 1ab27d6b48363cd4f8bf7bf8b362f8b1, type: 2}
+  shop: {fileID: 1424683351}
   skinNameText: {fileID: 591926744}
   priceText: {fileID: 1028391255}
   skinImage: {fileID: 197865816}
+  checkmark: {fileID: 548605995}
+  equipArrow: {fileID: 783762821}
 --- !u!222 &1754231610
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -12001,17 +11859,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c59cbdd58d8c2ad4abf2dffbd9bea8da, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SkinItem
+  skinData: {fileID: 11400000, guid: 10fb62a82050c2a49b14cc09a0bb0ea7, type: 2}
   skinName: CoolSkin
   guiSkinName: 
   skinPrice: 20
-  shop: {fileID: 1424683351}
   isBuy: 0
-  checkmark: {fileID: 836553831}
-  equipArrow: {fileID: 1548892102}
-  skinData: {fileID: 11400000, guid: 10fb62a82050c2a49b14cc09a0bb0ea7, type: 2}
+  shop: {fileID: 1424683351}
   skinNameText: {fileID: 1229785884}
   priceText: {fileID: 1708633722}
   skinImage: {fileID: 262006641}
+  checkmark: {fileID: 836553831}
+  equipArrow: {fileID: 1548892102}
 --- !u!222 &1958000401
 CanvasRenderer:
   m_ObjectHideFlags: 0
