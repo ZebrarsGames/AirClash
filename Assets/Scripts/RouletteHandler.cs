@@ -67,12 +67,36 @@ public class RouletteHandler : MonoBehaviour
             for (int i = 0; i < rouletteCells.Length - 1; i++)
             {
                 rouletteCells[i].SetData(rouletteCells[i + 1].currentData);
+                rouletteCells[i].cellBg.color = rouletteCells[i + 1].cellBg.color;
             }
             randKoof = Random.Range(0, 26);
-            if(randKoof >= 0 && randKoof <=15) rouletteCells[rouletteCells.Length - 1].SetData(rouletteItems[Random.Range(0, rouletteItems.Length)]);
-            else if(randKoof >= 16 && randKoof <=23) rouletteCells[rouletteCells.Length - 1].SetData(rareRouletteItems[Random.Range(0, rareRouletteItems.Length)]);
-            else if(randKoof >= 24) rouletteCells[rouletteCells.Length - 1].SetData(veryRareRouletteItems[Random.Range(0, veryRareRouletteItems.Length)]);
-
+            if (randKoof >= 0 && randKoof <= 15)
+            {
+                rouletteCells[rouletteCells.Length - 1].SetData(rouletteItems[Random.Range(0, rouletteItems.Length)]);
+                if (ColorUtility.TryParseHtmlString("#56A1CC", out Color cellColor))
+                {
+                    cellColor.a = 0.39f;
+                    rouletteCells[rouletteCells.Length - 1].cellBg.color = cellColor;
+                }
+            }
+            else if (randKoof >= 16 && randKoof <= 23)
+            {
+                rouletteCells[rouletteCells.Length - 1].SetData(rareRouletteItems[Random.Range(0, rareRouletteItems.Length)]);
+                if (ColorUtility.TryParseHtmlString("#ff00d4", out Color cellColor))
+                {
+                    cellColor.a = 0.39f;
+                    rouletteCells[rouletteCells.Length - 1].cellBg.color = cellColor;
+                }
+            }
+            else if (randKoof >= 24)
+            {
+                rouletteCells[rouletteCells.Length - 1].SetData(veryRareRouletteItems[Random.Range(0, veryRareRouletteItems.Length)]);
+                if (ColorUtility.TryParseHtmlString("#FF0000", out Color cellColor))
+                {
+                    cellColor.a = 0.39f;
+                    rouletteCells[rouletteCells.Length - 1].cellBg.color = cellColor;
+                }
+            }
             foreach (var cell in rouletteCells)
             {
                 cell.rectTransform.DOComplete(); 
