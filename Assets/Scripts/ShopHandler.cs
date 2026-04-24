@@ -6,15 +6,21 @@ using UnityEngine.UI;
 
 public class ShopHandler : MonoBehaviour
 {
+    [Header("Economy and Progress")]
     [SerializeField] private MoneyHandler moneyHandler;
     [SerializeField] private Text moneyText;
+    [SerializeField] private AchievementsHandler achievementsHandler;
+
+    [Header("Shop and Skins")]
+    [SerializeField] private SkinItem[] allSkins;
+    [SerializeField] private GameObject surePanel;
+
+    [Header("Audio")]
     [SerializeField] private AudioSource audioSource;
     [SerializeField] private AudioClip menuMusic;
-    [SerializeField] private AudioClip cancelSound;
     [SerializeField] private AudioClip buySound;
-    [SerializeField] private SkinItem[] allSkins; 
-    [SerializeField] private AchievementsHandler achievementsHandler;
-    [SerializeField] private GameObject surePanel;
+    [SerializeField] private AudioClip cancelSound;
+
 
     void Start()
     {

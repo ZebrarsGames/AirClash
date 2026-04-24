@@ -3,20 +3,31 @@ using UnityEngine.EventSystems;
 
 public class PlayersController : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler
 {
-    private Vector3 offset;
-    private Rigidbody2D rb;
-    private Camera cam;
+    [Header("Movement")]
+    public float minX;
+    public float maxX;
+    public float minY;
+    public float maxY;
+    [SerializeField] private TimerScr timer;
 
-    public float minX, maxX, minY, maxY;
-    [SerializeField] private TimerScr timer;    private Vector2 targetPos;
-    private bool isDragging = false;
+    [Header("Particles")]
     public GameObject particleSkin;
     public GameObject bubbleParticles;
     public GameObject goldParticles;
+
+    [Header("Audio")]
+    public AudioSource audioSource;
+    [SerializeField] private AudioClip puckSound;
+
+    [Header("Internal variables")]
+    private Rigidbody2D rb;
+    private Camera cam;
+    private Vector3 offset;
+    private Vector2 targetPos;
+    private bool isDragging = false;
     private Color particleColor;
     private GameObject particles;
-    public AudioSource audioSource;
-    private AudioClip puckSound;
+
 
     void Start()
     {

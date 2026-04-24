@@ -4,17 +4,25 @@ using UnityEngine.UI;
 
 public class SkinItem : MonoBehaviour
 {
+    [Header("Skin Data")]
+    [SerializeField] private SkinData skinData;
     public string skinName;
     public string guiSkinName;
     public int skinPrice;
-    public ShopHandler shop;
+
+    [Header("Status")]
     public bool isBuy;
-    public Image checkmark;
-    public Image equipArrow;
-    [SerializeField] private SkinData skinData;
+    public ShopHandler shop;
+
+    [Header("UI")]
     [SerializeField] private Text skinNameText;
     [SerializeField] private Text priceText;
     [SerializeField] private Image skinImage;
+
+    [Header("Selection indicators")]
+    public Image checkmark;
+    public Image equipArrow;
+
 
     void Start()
     {

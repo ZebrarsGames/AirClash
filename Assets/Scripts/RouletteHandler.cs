@@ -5,22 +5,30 @@ using DG.Tweening;
 
 public class RouletteHandler : MonoBehaviour
 {
-    [SerializeField] private RouletteItemData[] rouletteItems;
-    [SerializeField] private RouletteItemData[] rareRouletteItems;
-    [SerializeField] private RouletteItemData[] veryRareRouletteItems;
-    [SerializeField] private RouletteCell[] rouletteCells;
-    [SerializeField] private SkinItem[] skins;
-    [SerializeField] private GameObject roulettePanel;
-    [SerializeField] private Button stopRouletteBtn;
-    [SerializeField] private Text awardText;
-    [SerializeField] private Transform centerMarker; 
-    [SerializeField] private AudioSource audioSource;
-    [SerializeField] private AudioClip rouletteSound;
-    [SerializeField] private MoneyHandler moneyHandler;
-    [SerializeField] private Text moneyText;
-    [SerializeField] private AudioClip cancelSound;
-    [SerializeField] private AudioClip buySound;
-    public int rouletteCost;
+        [Header("Arrays")]
+        [SerializeField] private RouletteItemData[] rouletteItems;
+        [SerializeField] private RouletteItemData[] rareRouletteItems;
+        [SerializeField] private RouletteItemData[] veryRareRouletteItems;
+        [SerializeField] private SkinItem[] skins;
+
+        [Header("Components of Roulette")]
+        [SerializeField] private RouletteCell[] rouletteCells;
+        [SerializeField] private GameObject roulettePanel;
+        [SerializeField] private Transform centerMarker;
+        [SerializeField] private Button stopRouletteBtn;
+        [SerializeField] private Text awardText;
+
+        [Header("Economy")]
+        public int rouletteCost;
+        [SerializeField] private MoneyHandler moneyHandler;
+        [SerializeField] private Text moneyText;
+
+        [Header("Sounds Effects")]
+        [SerializeField] private AudioSource audioSource;
+        [SerializeField] private AudioClip rouletteSound;
+        [SerializeField] private AudioClip cancelSound;
+        [SerializeField] private AudioClip buySound;
+
     public void StartRoulette()
     {
         if(moneyHandler.GetMoney() >= rouletteCost)

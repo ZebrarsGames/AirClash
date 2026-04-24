@@ -3,17 +3,29 @@ using UnityEngine;
 public class BotsAI : MonoBehaviour
 {
 
+    [Header("Object links")]
     public GameObject bot;
     public Transform puck;
-    public float moveSpeed;
-    public float minX, maxX, minY, maxY;
-    private Rigidbody2D botRb;
-    [SerializeField] private TimerScr timer;
-    [SerializeField] private Vector2 botStartPos;
     [SerializeField] private GoalHandler goalHandler;
-    private int score1, score2 = 0;
+    [SerializeField] private TimerScr timer;
+
+    [Header("Movement settings")]
+    public float moveSpeed;
+    public Vector3 PuckKoof; // Коэффициент слежения за шайбой
+    [SerializeField] private Vector2 botStartPos;
     private float baseSpeed;
-    [SerializeField] private Vector3 PuckKoof;
+
+    [Header("AI Boundary")]
+    public float minX;
+    public float maxX;
+    public float minY;
+    public float maxY;
+
+    [Header("Technical components")]
+    private Rigidbody2D botRb;
+    private int score1 = 0;
+    private int score2 = 0;
+
 
     void Start()
     {
