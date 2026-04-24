@@ -27,13 +27,11 @@ public class RouletteHandler : MonoBehaviour
         [SerializeField] private AudioSource audioSource;
         [SerializeField] private AudioClip rouletteSound;
         [SerializeField] private AudioClip cancelSound;
-        [SerializeField] private AudioClip buySound;
 
     public void StartRoulette()
     {
         if(moneyHandler.GetMoney() >= rouletteCost)
         {
-            audioSource.PlayOneShot(buySound);
             moneyHandler.RemoveMoney(rouletteCost);
             moneyText.text = "Деньги " + moneyHandler.GetMoney();
             for(int i = 0; i < rouletteCells.Length; i++)
@@ -177,7 +175,7 @@ public class RouletteHandler : MonoBehaviour
             yield return new WaitForSeconds(1.3f);
             roulettePanel.GetComponent<CanvasGroup>().alpha = 1f;
             roulettePanel.GetComponent<CanvasGroup>().DOFade(0f, 1f);
-            yield return new WaitForSeconds(1.2f);
+            yield return new WaitForSeconds(1f);
             awardText.gameObject.SetActive(false);
             roulettePanel.SetActive(false);
         }
