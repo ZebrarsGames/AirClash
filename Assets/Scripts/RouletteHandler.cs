@@ -119,7 +119,7 @@ public class RouletteHandler : MonoBehaviour
                         {
                             if(i.isBuy)
                             {
-                                awardText.text = "ВЫИГРЫШ: " + i.skinPrice + " (скин уже куплен)";
+                                awardText.text = "ВЫИГРЫШ: " + i.skinPrice + " монет (скин уже куплен)";
                                 moneyHandler.AddMoney(i.skinPrice);
                                 moneyText.text = "Деньги " + moneyHandler.GetMoney();
                             } else
