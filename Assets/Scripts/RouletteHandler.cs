@@ -6,6 +6,8 @@ using DG.Tweening;
 public class RouletteHandler : MonoBehaviour
 {
     [SerializeField] private RouletteItemData[] rouletteItems;
+    [SerializeField] private RouletteItemData[] rareRouletteItems;
+    [SerializeField] private RouletteItemData[] veryRareRouletteItems;
     [SerializeField] private RouletteCell[] rouletteCells;
     [SerializeField] private SkinItem[] skins;
     [SerializeField] private GameObject roulettePanel;
@@ -53,6 +55,7 @@ public class RouletteHandler : MonoBehaviour
     IEnumerator MoveRouletteItems()
     {
         int totalSteps = Random.Range(40, 100);
+        int randKoof = 0;
         for (int step = 0; step < totalSteps; step++)
         {
             if (this == null || !gameObject.activeInHierarchy) yield break;
@@ -65,9 +68,10 @@ public class RouletteHandler : MonoBehaviour
             {
                 rouletteCells[i].SetData(rouletteCells[i + 1].currentData);
             }
-
-            // Последней ячейке даем новые случайные данные
-            rouletteCells[rouletteCells.Length - 1].SetData(rouletteItems[Random.Range(0, rouletteItems.Length)]);
+            randKoof = Random.Range(0, 26);
+            if(randKoof >= 0 && randKoof <=15) rouletteCells[rouletteCells.Length - 1].SetData(rouletteItems[Random.Range(0, rouletteItems.Length)]);
+            else if(randKoof >= 16 && randKoof <=23) rouletteCells[rouletteCells.Length - 1].SetData(rareRouletteItems[Random.Range(0, rareRouletteItems.Length)]);
+            else if(randKoof >= 24) rouletteCells[rouletteCells.Length - 1].SetData(veryRareRouletteItems[Random.Range(0, veryRareRouletteItems.Length)]);
 
             foreach (var cell in rouletteCells)
             {
@@ -127,6 +131,8 @@ public class RouletteHandler : MonoBehaviour
                                 awardText.text = "ВЫИГРЫШ: " + i.guiSkinName;
                                 i.isBuy = true;
                                 i.checkmark.gameObject.SetActive(true);
+                                PlayerPrefs.SetInt(i.skinName, 1);
+                                PlayerPrefs.Save();
                             }
                             break;
                         }
