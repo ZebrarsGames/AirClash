@@ -87,7 +87,13 @@ public class ShopHandler : MonoBehaviour
 
     public void DeletePlayerPrefs()
     {
+        int fps = PlayerPrefs.GetInt("FPS");
+        float musicVoulme = PlayerPrefs.GetFloat("MusicVolume");
         PlayerPrefs.DeleteAll();
+        PlayerPrefs.SetInt("FPS", fps);
+        Application.targetFrameRate = fps;
+        PlayerPrefs.SetFloat("MusicVolume", musicVoulme);
+        PlayerPrefs.Save();
         surePanel.SetActive(false);
     }
 
