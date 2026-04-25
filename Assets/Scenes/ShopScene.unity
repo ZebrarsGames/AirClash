@@ -9791,6 +9791,7 @@ MonoBehaviour:
   audioSource: {fileID: 1190845891}
   rouletteSound: {fileID: 8300000, guid: 85f49420785ed204485d5cb13b73979f, type: 3}
   cancelSound: {fileID: 8300000, guid: 96a64f20e83e9374a8b6e6b9be262a82, type: 3}
+  endSound: {fileID: 8300000, guid: 4e1b57aa2bad8fc4e933d842cc64b672, type: 3}
 --- !u!225 &1606526478
 CanvasGroup:
   m_ObjectHideFlags: 0
