@@ -27,6 +27,7 @@ public class RouletteHandler : MonoBehaviour
         [SerializeField] private AudioSource audioSource;
         [SerializeField] private AudioClip rouletteSound;
         [SerializeField] private AudioClip cancelSound;
+        [SerializeField] private AudioClip endSound;
 
     public void StartRoulette()
     {
@@ -120,6 +121,7 @@ public class RouletteHandler : MonoBehaviour
 
     IEnumerator GetReward()
     {
+        audioSource.PlayOneShot(endSound);
         stopRouletteBtn.interactable = false;
         RouletteCell bestCell = null;
         float minDistance = float.MaxValue;
