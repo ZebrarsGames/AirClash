@@ -5,34 +5,38 @@ using DG.Tweening;
 
 public class RouletteHandler : MonoBehaviour
 {
-        [Header("Arrays")]
-        [SerializeField] private RouletteItemData[] rouletteItems;
-        [SerializeField] private RouletteItemData[] rareRouletteItems;
-        [SerializeField] private RouletteItemData[] veryRareRouletteItems;
-        [SerializeField] private SkinItem[] skins;
+    [Header("Arrays")]
+    [SerializeField] private RouletteItemData[] rouletteItems;
+    [SerializeField] private RouletteItemData[] rareRouletteItems;
+    [SerializeField] private RouletteItemData[] veryRareRouletteItems;
+    [SerializeField] private SkinItem[] skins;
 
-        [Header("Components of Roulette")]
-        [SerializeField] private RouletteCell[] rouletteCells;
-        [SerializeField] private GameObject roulettePanel;
-        [SerializeField] private Transform centerMarker;
-        [SerializeField] private Button stopRouletteBtn;
-        [SerializeField] private Text awardText;
+    [Header("Components of Roulette")]
+    [SerializeField] private RouletteCell[] rouletteCells;
+    [SerializeField] private GameObject roulettePanel;
+    [SerializeField] private Transform centerMarker;
+    [SerializeField] private Button stopRouletteBtn;
+    [SerializeField] private Text awardText;
 
-        [Header("Economy")]
-        public int rouletteCost;
-        [SerializeField] private MoneyHandler moneyHandler;
-        [SerializeField] private Text moneyText;
+    [Header("Economy")]
+    public int rouletteCost;
+    [SerializeField] private MoneyHandler moneyHandler;
+    [SerializeField] private Text moneyText;
 
-        [Header("Sounds Effects")]
-        [SerializeField] private AudioSource audioSource;
-        [SerializeField] private AudioClip rouletteSound;
-        [SerializeField] private AudioClip cancelSound;
-        [SerializeField] private AudioClip endSound;
+    [Header("Sounds Effects")]
+    [SerializeField] private AudioSource audioSource;
+    [SerializeField] private AudioClip rouletteSound;
+    [SerializeField] private AudioClip cancelSound;
+    [SerializeField] private AudioClip endSound;
+    
+    [Header("Scripts")]
+    [SerializeField] private AchievementsHandler achievementsHandler;
 
     public void StartRoulette()
     {
         if(moneyHandler.GetMoney() >= rouletteCost)
         {
+            achievementsHandler.UpdateProgress("ludoman", 1);
             moneyHandler.RemoveMoney(rouletteCost);
             moneyText.text = "Деньги " + moneyHandler.GetMoney();
             for(int i = 0; i < rouletteCells.Length; i++)
@@ -142,6 +146,7 @@ public class RouletteHandler : MonoBehaviour
             switch(bestCell.currentData.typeOfAward)
             {
                 case "Money":
+                    if(bestCell.currentData.award == 67) achievementsHandler.UpdateProgress("six_seven", 1);
                     awardText.text = "ВЫИГРЫШ: " + bestCell.currentData.award + " монет";
                     moneyHandler.AddMoney(bestCell.currentData.award);
                     moneyText.text = "Деньги " + moneyHandler.GetMoney();
@@ -159,6 +164,7 @@ public class RouletteHandler : MonoBehaviour
                             } else
                             {
                                 awardText.text = "ВЫИГРЫШ: " + i.guiSkinName;
+                                if(i.skinName.Equals("GoldSkin")) achievementsHandler.UpdateProgress("lucky", 1);
                                 i.isBuy = true;
                                 i.checkmark.gameObject.SetActive(true);
                                 PlayerPrefs.SetInt(i.skinName, 1);
