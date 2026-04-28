@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 
 public class AchievementsHandler : MonoBehaviour
@@ -39,6 +38,10 @@ public class AchievementsHandler : MonoBehaviour
         achievements.Add("seriously", new Achievement {Title = "Серьёзно?", Target = 1, Award = 1});
         achievements.Add("large_wardrobe", new Achievement {Title = "Большой гардероб", Target = 12, Award = 40});
         achievements.Add("own_goal", new Achievement {Title = "Автогол", Target = 2, Award = 5});
+        // Ачивки для рулетки
+        achievements.Add("ludoman", new Achievement {Title = "Лудоман", Target = 15, Award = 35});
+        achievements.Add("lucky", new Achievement {Title = "Везунчик", Target = 1, Award = 50});
+        achievements.Add("six_seven", new Achievement {Title = "Сикс севен", Target = 3, Award = 50});
         LoadAchievements();
     }
 
