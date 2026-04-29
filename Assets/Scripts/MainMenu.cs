@@ -22,7 +22,6 @@ public class MainMenu : MonoBehaviour
     [SerializeField] private Text moneyText;
     [SerializeField] private Slider goalsSlider;
     [SerializeField] private Text goalsText;
-    [SerializeField] private Text xpText;
     [Header("Scripts")]
     [SerializeField] private MoneyHandler moneyHandler;
     [SerializeField] private CoinMover coinMover;
@@ -40,7 +39,6 @@ public class MainMenu : MonoBehaviour
         audioSource.Play();
         rectTransform = mainMenuText.GetComponent<RectTransform>();
         moneyText.text = "Деньги " + Convert.ToString(PlayerPrefs.GetInt("Money"));
-        xpText.text = xpHandler.GetXP().ToString();
         if(PlayerPrefs.GetInt("isAfterGame") == 0)
         {
             PlayerPrefs.SetInt("HowMoneyAdds", 0);
