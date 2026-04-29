@@ -13,6 +13,7 @@ public class MainMenu : MonoBehaviour
     [SerializeField] private GameObject achievementsPanel;
     [SerializeField] private GameObject gamemodesPanel;
     [SerializeField] private GameObject userGamemodePanel;
+    [SerializeField] private GameObject xpPanel;
     [Header("Audio")]
     [SerializeField] private AudioSource audioSource;
     [SerializeField] private AudioClip menuMusic;
@@ -149,6 +150,7 @@ public class MainMenu : MonoBehaviour
         achievementsPanel.SetActive(false);
         gamemodesPanel.SetActive(false);
         userGamemodePanel.SetActive(false);
+        xpPanel.SetActive(false);
     }
 
     public void VeryEasyMode()
@@ -198,6 +200,10 @@ public class MainMenu : MonoBehaviour
     public void OpenAchievements()
     {
         achievementsPanel.SetActive(true);
+    }
+    public void OpenXpPanel()
+    {
+        xpPanel.SetActive(true);
     }
     public void OpenUserGamemode()
     {
