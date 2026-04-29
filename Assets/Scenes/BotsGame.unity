@@ -812,6 +812,7 @@ MonoBehaviour:
   bubbleParticles: {fileID: 7871815180265863228, guid: 819d6f27244ec794cb74893e0673f613, type: 3}
   goldParticles: {fileID: 7871815180265863228, guid: 224f375812f8b684381d7f76307fc87c, type: 3}
   audioSource: {fileID: 2094474884}
+  puckSound: {fileID: 0}
 --- !u!1 &254366891
 GameObject:
   m_ObjectHideFlags: 0
@@ -1888,6 +1889,7 @@ MonoBehaviour:
   howMoneyAdd: 0
   howMoneyAddAsLose: 0
   achievementsHandler: {fileID: 1636014922}
+  xpHandler: {fileID: 1740135151}
 --- !u!4 &793148557
 Transform:
   m_ObjectHideFlags: 0
@@ -2594,15 +2596,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::BotsAI
   bot: {fileID: 932977366}
   puck: {fileID: 1030355671}
+  goalHandler: {fileID: 793148556}
+  timer: {fileID: 236193934}
   moveSpeed: 20
+  PuckKoof: {x: 0.5, y: 0, z: 0}
+  botStartPos: {x: -6.5, y: 0}
   minX: -6.65
   maxX: -0.5
   minY: -4.05
   maxY: 4.05
-  timer: {fileID: 236193934}
-  botStartPos: {x: -6.5, y: 0}
-  goalHandler: {fileID: 793148556}
-  PuckKoof: {x: 0.5, y: 0, z: 0}
 --- !u!1 &1030355666
 GameObject:
   m_ObjectHideFlags: 0
@@ -4327,6 +4329,50 @@ SpriteRenderer:
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
   m_SpriteSortPoint: 0
+--- !u!1 &1740135150
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1740135152}
+  - component: {fileID: 1740135151}
+  m_Layer: 0
+  m_Name: XpHandler
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1740135151
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1740135150}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e3d8ab15c05c4934f8218dd74c86de48, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::XpHandler
+--- !u!4 &1740135152
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1740135150}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1787099811
 GameObject:
   m_ObjectHideFlags: 0
@@ -4791,3 +4837,4 @@ SceneRoots:
   - {fileID: 1636014923}
   - {fileID: 1353554834}
   - {fileID: 1807308756}
+  - {fileID: 1740135152}
