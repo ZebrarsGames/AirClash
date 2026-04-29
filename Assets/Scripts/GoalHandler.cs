@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 public class GoalHandler : MonoBehaviour
 {
-        [Header("UI Elements")]
+    [Header("UI Elements")]
     public Text scoreText1;
     public Text scoreText2;
     [SerializeField] private Text goalText;
@@ -44,6 +44,9 @@ public class GoalHandler : MonoBehaviour
     [SerializeField] private int howMoneyAdd;
     [SerializeField] private int howMoneyAddAsLose;
     [SerializeField] private AchievementsHandler achievementsHandler;
+
+    [Header("Xp Logic")]
+    [SerializeField] private XpHandler xpHandler;
 
 
     void Awake()
@@ -102,11 +105,13 @@ public class GoalHandler : MonoBehaviour
             if(score2 >= howManyGoals)
             {
                 if(score2 == 10) achievementsHandler.UpdateProgress("ten", 10);
+                xpHandler.AddXp(50);
                 Win();
             } else
             {
                 if(SceneManager.GetActiveScene().name == "BotsGame")
                 {
+                    xpHandler.AddXp(5);
                     UpdateAchievements();
                     botsAI.Fury();
                     ResetPosition();
