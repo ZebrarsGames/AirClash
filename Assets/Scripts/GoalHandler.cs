@@ -1,5 +1,4 @@
 using System;
-using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -11,6 +10,7 @@ public class GoalHandler : MonoBehaviour
     public Text scoreText2;
     [SerializeField] private Text goalText;
     [SerializeField] private GameObject goalTextCanvas;
+    [SerializeField] private GameObject endSreenPanel;
 
     [Header("Players & Puck")]
     [SerializeField] private GameObject player1;
@@ -26,8 +26,9 @@ public class GoalHandler : MonoBehaviour
     [Header("Game Logic & Scoring")]
     public int score1 = 0;
     public int score2 = 0;
-    private int howManyGoals;
+    public int howManyGoals;
     [SerializeField] private TimerScr timer;
+    [SerializeField] private EndScreen endScreen;
     private string lastCollision;
 
     [Header("Audio")]
@@ -42,8 +43,8 @@ public class GoalHandler : MonoBehaviour
 
     [Header("Economy & Achievements")]
     public MoneyHandler moneyHandler;
-    [SerializeField] private int howMoneyAdd;
-    [SerializeField] private int howMoneyAddAsLose;
+    private int howMoneyAdd;
+    private int howMoneyAddAsLose;
     [SerializeField] private AchievementsHandler achievementsHandler;
 
     [Header("Xp Logic")]
@@ -213,9 +214,8 @@ public class GoalHandler : MonoBehaviour
             PlayerPrefs.Save();
         }
         goalTextCanvas.SetActive(true);
-        if(score1 >= howManyGoals) goalText.text = "Игрок 1 выиграл!";  
-        else if(score2 >= howManyGoals) goalText.text = "Игрок 2 выиграл!";  
-        Invoke("LoadMainMenu", 4f);
+        endSreenPanel.SetActive(true);
+        endScreen.StartEndScreen();
     }
     public void Lose()
     {
@@ -229,9 +229,7 @@ public class GoalHandler : MonoBehaviour
             PlayerPrefs.Save();
         }
         goalTextCanvas.SetActive(true);
-        if(score1 >= howManyGoals) goalText.text = "Игрок 1 выиграл!";  
-        else if(score2 >= howManyGoals) goalText.text = "Игрок 2 выиграл!";  
-        Invoke("LoadMainMenu", 4f);
+        endScreen.StartEndScreen();
     }
     public void LoadMainMenu()
     {

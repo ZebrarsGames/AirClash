@@ -22,6 +22,7 @@ public class MainMenu : MonoBehaviour
     [SerializeField] private Text moneyText;
     [SerializeField] private Slider goalsSlider;
     [SerializeField] private Text goalsText;
+    [SerializeField] private Transform targetCoinPosition;
     [Header("Scripts")]
     [SerializeField] private MoneyHandler moneyHandler;
     [SerializeField] private CoinMover coinMover;
@@ -220,7 +221,7 @@ public class MainMenu : MonoBehaviour
 
     public void AddMoney(int amount)
     {
-        coinMover.AddCoins(new Vector3(0, 0, 0), amount);
+        coinMover.AddCoins(new Vector3(0, 0, 0), amount, targetCoinPosition);
     }
     public void SetGamemode(int howManyGoals)
     {
