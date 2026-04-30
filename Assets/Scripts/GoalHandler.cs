@@ -77,7 +77,7 @@ public class GoalHandler : MonoBehaviour
     {
         if (collision.gameObject.CompareTag("GoalTrigger1"))
         {
-            if(lastCollision == "Player1") achievementsHandler.UpdateProgress("own_goal", 1);
+            if(lastCollision == "Player1" && SceneManager.GetActiveScene().name.Equals("BotsGame")) achievementsHandler.UpdateProgress("own_goal", 1);
             score1++;
             scoreText1.text = score1.ToString(); 
             if(score1 >= howManyGoals)
