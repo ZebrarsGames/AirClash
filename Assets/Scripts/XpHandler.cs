@@ -6,6 +6,7 @@ public class XpHandler : MonoBehaviour
     private int xpToNextLevel = 100;
     private int level = 1;
     public int GetXP() => currentXP;
+    public int GetXpToNextLevel() => xpToNextLevel;
     public int GetLevel() => level;
 
     void Start()

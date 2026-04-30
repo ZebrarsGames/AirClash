@@ -5807,7 +5807,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
   m_Material: {fileID: 0}
-  m_Color: {r: 0.54509807, g: 0.60784316, b: 0.9568628, a: 1}
+  m_Color: {r: 0, g: 0.73684204, b: 1, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -9555,7 +9555,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 2147483647
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &954353173
 RectTransform:
   m_ObjectHideFlags: 0
@@ -9645,6 +9645,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::XpUiScr
   xpSlider: {fileID: 2058283404}
   xpHandler: {fileID: 695791783}
+  currentXpText: {fileID: 1897716477}
+  currentLvlText: {fileID: 758442123}
+  nextLvlText: {fileID: 3564644}
 --- !u!1 &957298102
 GameObject:
   m_ObjectHideFlags: 0
@@ -11922,7 +11925,7 @@ RectTransform:
   m_Father: {fileID: 1858453287}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 10, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
@@ -11939,19 +11942,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
   m_Material: {fileID: 0}
-  m_Color: {r: 0.5707547, g: 0.6343686, b: 1, a: 1}
+  m_Color: {r: 0.22459061, g: 0.77189046, b: 0.9716981, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 1468d6796ff5f134ea38480304cd87d0, type: 3}
-  m_Type: 3
+  m_Sprite: {fileID: 10905, guid: 0000000000000000f000000000000000, type: 0}
+  m_Type: 1
   m_PreserveAspect: 0
   m_FillCenter: 1
   m_FillMethod: 0
-  m_FillAmount: 0
+  m_FillAmount: 0.449
   m_FillClockwise: 1
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
@@ -13310,7 +13313,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 1}
   m_AnchorMax: {x: 0.5, y: 1}
-  m_AnchoredPosition: {x: 0, y: -44}
+  m_AnchoredPosition: {x: 0, y: -32}
   m_SizeDelta: {x: 432.65, y: 103.29001}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1177486860
@@ -21760,8 +21763,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0.25}
   m_AnchorMax: {x: 1, y: 0.75}
-  m_AnchoredPosition: {x: -5, y: 0}
-  m_SizeDelta: {x: -20, y: 0}
+  m_AnchoredPosition: {x: 0.19700623, y: 0}
+  m_SizeDelta: {x: -9.607, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &1860169866
 GameObject:
