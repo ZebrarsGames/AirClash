@@ -28,12 +28,12 @@ public class CoinMover : MonoBehaviour
         UpdateUI();
     }
 
-    public void AddCoins(Vector3 spawnPosition, int amount, Transform _targetPosition)
+    public void AddCoins(Vector3 spawnPosition, int amount)
     {
-        StartCoroutine(AnimateCoins(spawnPosition, amount, _targetPosition));
+        StartCoroutine(AnimateCoins(spawnPosition, amount));
     }
 
-    private IEnumerator AnimateCoins(Vector3 spawnPosition, int amount, Transform _targetPosition)
+    private IEnumerator AnimateCoins(Vector3 spawnPosition, int amount)
     {
         moneyHandler.AddMoney(amount);
         for (int i = 0; i < amount; i++)
@@ -48,7 +48,7 @@ public class CoinMover : MonoBehaviour
             coin.transform.DOMove(spawnPosition + (Vector3)Random.insideUnitCircle * 6f, 0.2f);
 
             // 2. Летим к цели через небольшую паузу
-            coin.transform.DOMove(_targetPosition.position, duration)
+            coin.transform.DOMove(targetPosition.position, duration)
                 .SetDelay(0.2f)
                 .SetEase(Ease.InBack) // Эффект рывка в конце
                 .OnComplete(() => {
@@ -58,7 +58,7 @@ public class CoinMover : MonoBehaviour
                     PlayCoinSound();
                     
                     // Анимация пульсации счетчика
-                    _targetPosition.DOScale(1.2f, 0.1f).OnComplete(() => _targetPosition.DOScale(1f, 0.1f));
+                    targetPosition.DOScale(1.2f, 0.1f).OnComplete(() => targetPosition.DOScale(1f, 0.1f));
                     
                     Destroy(coin);
                 });

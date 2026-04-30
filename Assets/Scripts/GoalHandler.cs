@@ -43,7 +43,7 @@ public class GoalHandler : MonoBehaviour
 
     [Header("Economy & Achievements")]
     public MoneyHandler moneyHandler;
-    private int howMoneyAdd;
+    public int howMoneyAdd;
     private int howMoneyAddAsLose;
     [SerializeField] private AchievementsHandler achievementsHandler;
 
