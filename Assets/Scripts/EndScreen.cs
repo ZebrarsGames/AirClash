@@ -12,7 +12,6 @@ public class EndScreen : MonoBehaviour
     [SerializeField] private XpHandler xpHandler;
     [SerializeField] private GoalHandler goalHandler;
     [SerializeField] private MoneyHandler moneyHandler;
-    [SerializeField] private CoinMover coinMover;
     public void StartEndScreen()
     {
         if(SceneManager.GetActiveScene().name.Equals("BotsGame"))
@@ -22,7 +21,6 @@ public class EndScreen : MonoBehaviour
             xpProgressbar.value = xpHandler.GetXPProgress();
             xpText.text = xpHandler.GetXP().ToString();
             moneyText.text = moneyHandler.GetMoney().ToString();
-            coinMover.AddCoins(new Vector3(0, 0, 0), PlayerPrefs.GetInt("HowMoneyAdds"), moneyText.gameObject.transform);
         } else
         {
             if(goalHandler.score1 >= goalHandler.howManyGoals) loseOrWinText.text = "Игрок 1 выиграл!";
