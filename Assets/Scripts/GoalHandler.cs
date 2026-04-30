@@ -1,4 +1,5 @@
 using System;
+using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -47,6 +48,9 @@ public class GoalHandler : MonoBehaviour
 
     [Header("Xp Logic")]
     [SerializeField] private XpHandler xpHandler;
+    private int howManyXpAddAsWin;
+    private int howManyXpAddForGoal;
+    private int howManyXpAddAsLose;
 
 
     void Awake()
@@ -66,6 +70,9 @@ public class GoalHandler : MonoBehaviour
         audioSource.PlayOneShot(StartGameSound);
         howManyGoals = PlayerPrefs.GetInt("Goals");
         howMoneyAdd = PlayerPrefs.GetInt("HowMoneyAdd") * Mathf.Max(1, Convert.ToInt32(howManyGoals / 1.5f));
+        howManyXpAddForGoal = PlayerPrefs.GetInt("HowManyAddXp");
+        howManyXpAddAsWin = PlayerPrefs.GetInt("HowManyAddXp") * Mathf.Max(1, Convert.ToInt32(howManyGoals / 1.5f));
+        howManyXpAddAsLose = PlayerPrefs.GetInt("HowManyAddXp") / Mathf.Max(1, Convert.ToInt32(howManyGoals / 2.0f));
         howMoneyAddAsLose = PlayerPrefs.GetInt("HowMoneyAddAsLose");  
         if (!ColorUtility.TryParseHtmlString("#30C7FE", out wallParticleColor))
         {
@@ -105,13 +112,12 @@ public class GoalHandler : MonoBehaviour
             if(score2 >= howManyGoals)
             {
                 if(score2 == 10) achievementsHandler.UpdateProgress("ten", 10);
-                xpHandler.AddXp(50);
                 Win();
             } else
             {
                 if(SceneManager.GetActiveScene().name == "BotsGame")
                 {
-                    xpHandler.AddXp(5);
+                    xpHandler.AddXp(howManyXpAddForGoal);
                     UpdateAchievements();
                     botsAI.Fury();
                     ResetPosition();
@@ -181,6 +187,7 @@ public class GoalHandler : MonoBehaviour
     {
         if(SceneManager.GetActiveScene().name == "BotsGame")
         {
+            xpHandler.AddXp(howManyXpAddAsWin);
             UpdateAchievements();
             switch(PlayerPrefs.GetFloat("Difficulty"))
             {
@@ -214,6 +221,7 @@ public class GoalHandler : MonoBehaviour
     {
         if(SceneManager.GetActiveScene().name == "BotsGame")
         {
+            xpHandler.AddXp(howManyXpAddAsLose);
             if(PlayerPrefs.GetFloat("Difficulty") == 7.5f) achievementsHandler.UpdateProgress("seriously", 1);
             PlayerPrefs.SetInt("Money", moneyHandler.GetMoney());
             PlayerPrefs.SetInt("HowMoneyAdds", howMoneyAddAsLose);
