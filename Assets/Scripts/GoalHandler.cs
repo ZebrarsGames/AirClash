@@ -75,6 +75,7 @@ public class GoalHandler : MonoBehaviour
         howManyXpAddAsWin = PlayerPrefs.GetInt("HowManyAddXp") * Mathf.Max(1, Convert.ToInt32(howManyGoals / 1.5f));
         howManyXpAddAsLose = PlayerPrefs.GetInt("HowManyAddXp") / Mathf.Max(1, Convert.ToInt32(howManyGoals / 2.0f));
         howMoneyAddAsLose = PlayerPrefs.GetInt("HowMoneyAddAsLose");  
+        endSreenPanel.SetActive(false);
         if (!ColorUtility.TryParseHtmlString("#30C7FE", out wallParticleColor))
         {
             wallParticleColor = Color.white;
@@ -233,6 +234,8 @@ public class GoalHandler : MonoBehaviour
     }
     public void LoadMainMenu()
     {
+        endSreenPanel.SetActive(false);
+        PlayerPrefs.Save();
         SceneManager.LoadScene("MainMenu");
     }
     public void UpdateAchievements()

@@ -7,7 +7,6 @@ public class EndScreen : MonoBehaviour
     [SerializeField] private Text loseOrWinText;
     [SerializeField] private Text earnedMoneyText;
     [SerializeField] private GoalHandler goalHandler;
-    [SerializeField] private MoneyHandler moneyHandler;
     public void StartEndScreen()
     {
         if(SceneManager.GetActiveScene().name.Equals("BotsGame"))
