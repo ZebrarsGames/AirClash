@@ -1,4 +1,5 @@
 using System;
+using DG.Tweening;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -217,6 +218,8 @@ public class GoalHandler : MonoBehaviour
         goalTextCanvas.SetActive(true);
         endSreenPanel.SetActive(true);
         endScreen.StartEndScreen();
+        endSreenPanel.GetComponent<CanvasGroup>().alpha = 0;
+        endSreenPanel.GetComponent<CanvasGroup>().DOFade(1f, 0.5f);
     }
     public void Lose()
     {
