@@ -1,3 +1,5 @@
+using System.Collections;
+using DG.Tweening;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -9,6 +11,8 @@ public class XpUiScr : MonoBehaviour
     [SerializeField] private Text currentXpText;
     [SerializeField] private Text currentLvlText;
     [SerializeField] private Text nextLvlText;
+    [SerializeField] private CanvasGroup canvasGroup;
+    [SerializeField] private GameObject panel;
     void Start()
     {
         if(SceneManager.GetActiveScene().name.Equals("BotsGame") || SceneManager.GetActiveScene().name.Equals("GameScene"))
@@ -40,6 +44,19 @@ public class XpUiScr : MonoBehaviour
         currentXpText.text = xpHandler.GetOldXP().ToString() + " / " + xpHandler.GetXpToNextLevel().ToString() + " XP";
         currentLvlText.text = xpHandler.GetLevel().ToString();
         nextLvlText.text = (xpHandler.GetLevel() + 1).ToString();
+    }
+
+    public void LevelUpAnimStart()
+    {
+        StartCoroutine(LevelUpAnim());
+    }
+
+    IEnumerator LevelUpAnim()
+    {
+        yield return new WaitForSeconds(1.4f);
+        panel.transform.DOScale(1.5f, 0.4f).OnComplete(() => panel.transform.DOScale(1.0f, 0.2f));
+        canvasGroup.DOFade(1.0f, 0.4f).OnComplete(() => canvasGroup.DOFade(0f, 0.2f));
+        SetProgress(xpHandler.GetXPProgress());
     }
 }
 
