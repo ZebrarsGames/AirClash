@@ -7,6 +7,7 @@ public class CoinMover : MonoBehaviour
 {
     [Header("UI References")]
     [SerializeField] private GameObject coinPrefab;
+    [SerializeField] private GameObject xpPrefab;
     [SerializeField] private Transform targetPosition;
     [SerializeField] private Text coinText;
     [SerializeField] private Transform canvasParent;
@@ -17,6 +18,8 @@ public class CoinMover : MonoBehaviour
     [SerializeField] private AudioClip coinSound;
     [Header("Scripts")]
     [SerializeField] private MoneyHandler moneyHandler;
+    [SerializeField] private XpUiScr xpUiScr;
+    [SerializeField] private XpHandler xpHandler;
     
     private AudioSource audioSource;
     private int currentCoinsCount = 0;
@@ -25,12 +28,16 @@ public class CoinMover : MonoBehaviour
     {
         currentCoinsCount = moneyHandler.GetMoney();
         audioSource = gameObject.AddComponent<AudioSource>();
-        UpdateUI();
     }
 
     public void AddCoins(Vector3 spawnPosition, int amount)
     {
         StartCoroutine(AnimateCoins(spawnPosition, amount));
+    }
+
+    public void AddXp(Vector3 spawnPosition, int amount, int startValue)
+    {
+        StartCoroutine(AnimateXP(spawnPosition, amount, startValue));
     }
 
     private IEnumerator AnimateCoins(Vector3 spawnPosition, int amount)
@@ -67,6 +74,37 @@ public class CoinMover : MonoBehaviour
         }
     }
 
+    private IEnumerator AnimateXP(Vector3 spawnPosition, int amount, int startValue)
+    {
+        yield return new WaitForSeconds(0.7f);
+
+        for (int i = 1; i <= amount; i++) 
+        {
+            GameObject xp = Instantiate(xpPrefab, canvasParent);
+            xp.transform.position = spawnPosition;
+            
+            // Значение конкретно для этой летящей монетки
+            int valueForThisCoin = startValue + i; 
+
+            xp.transform.localScale = Vector3.zero;
+            xp.transform.DOScale(1f, 0.2f);
+            xp.transform.DOMove(spawnPosition + (Vector3)Random.insideUnitCircle * 6f, 0.2f);
+
+            xp.transform.DOMove(targetPosition.position, duration)
+                .SetDelay(0.2f)
+                .SetEase(Ease.InBack)
+                .OnComplete(() => {
+                    PlayCoinSound();
+                    // visualValue теперь точно не обгонит реальность
+                    xpUiScr.SetProgress(xpHandler.GetXPProgress(valueForThisCoin), valueForThisCoin);
+                    
+                    targetPosition.DOScale(1.1f, 0.1f).OnComplete(() => targetPosition.DOScale(1f, 0.1f));
+                    Destroy(xp);
+                });
+
+            yield return new WaitForSeconds(delayBetween);
+        }
+    }
     void UpdateUI()
     {
         coinText.text = "Деньги " + currentCoinsCount.ToString();

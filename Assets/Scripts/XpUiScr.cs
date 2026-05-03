@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class XpUiScr : MonoBehaviour
@@ -10,15 +11,35 @@ public class XpUiScr : MonoBehaviour
     [SerializeField] private Text nextLvlText;
     void Start()
     {
-        SetProgress(xpHandler.GetXPProgress());
-        currentXpText.text = xpHandler.GetXP().ToString() + " / " + xpHandler.GetXpToNextLevel().ToString() + " XP";
-        currentLvlText.text = xpHandler.GetLevel().ToString();
-        nextLvlText.text = (xpHandler.GetLevel() + 1).ToString();
+        if(SceneManager.GetActiveScene().name.Equals("BotsGame") || SceneManager.GetActiveScene().name.Equals("GameScene"))
+        {
+            SetOldProgress(xpHandler.GetOldXPProgress());
+        } else
+        {
+            SetProgress(xpHandler.GetXPProgress());
+        }
     }
 
     public void SetProgress(float progress)
     {
         xpSlider.value = progress;
+        currentXpText.text = xpHandler.GetXP().ToString() + " / " + xpHandler.GetXpToNextLevel().ToString() + " XP";
+        currentLvlText.text = xpHandler.GetLevel().ToString();
+        nextLvlText.text = (xpHandler.GetLevel() + 1).ToString();
+    }
+    public void SetProgress(float progress, int currentXP)
+    {
+        xpSlider.value = progress;
+        currentXpText.text = currentXP.ToString() + " / " + xpHandler.GetXpToNextLevel().ToString() + " XP";
+        currentLvlText.text = xpHandler.GetLevel().ToString();
+        nextLvlText.text = (xpHandler.GetLevel() + 1).ToString();
+    }
+    public void SetOldProgress(float progress)
+    {
+        xpSlider.value = progress;
+        currentXpText.text = xpHandler.GetOldXP().ToString() + " / " + xpHandler.GetXpToNextLevel().ToString() + " XP";
+        currentLvlText.text = xpHandler.GetLevel().ToString();
+        nextLvlText.text = (xpHandler.GetLevel() + 1).ToString();
     }
 }
 
