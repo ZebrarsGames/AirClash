@@ -13,6 +13,8 @@ public class XpUiScr : MonoBehaviour
     [SerializeField] private Text nextLvlText;
     [SerializeField] private CanvasGroup canvasGroup;
     [SerializeField] private GameObject panel;
+    [SerializeField] private AudioSource audioSource;
+    [SerializeField] private AudioClip levelUpSound;
     void Start()
     {
         if(SceneManager.GetActiveScene().name.Equals("BotsGame") || SceneManager.GetActiveScene().name.Equals("GameScene"))
@@ -53,7 +55,8 @@ public class XpUiScr : MonoBehaviour
 
     IEnumerator LevelUpAnim()
     {
-        yield return new WaitForSeconds(1.4f);
+        yield return new WaitForSeconds(1.1f);
+        audioSource.PlayOneShot(levelUpSound);
         panel.transform.DOScale(1.5f, 0.4f).OnComplete(() => panel.transform.DOScale(1.0f, 0.2f));
         canvasGroup.DOFade(1.0f, 0.4f).OnComplete(() => canvasGroup.DOFade(0f, 0.2f));
         SetProgress(xpHandler.GetXPProgress());
