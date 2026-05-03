@@ -53,6 +53,7 @@ public class GoalHandler : MonoBehaviour
     private int howManyXpAddAsWin;
     private int howManyXpAddForGoal;
     private int howManyXpAddAsLose;
+    private int totalXpEarned;
 
 
     void Awake()
@@ -67,7 +68,9 @@ public class GoalHandler : MonoBehaviour
     }
 
     void Start()
-    {         
+    {      
+        totalXpEarned = 0;
+        xpHandler.ResetOldXp();   
         timer.TimerStart();
         audioSource.PlayOneShot(StartGameSound);
         howManyGoals = PlayerPrefs.GetInt("Goals");
@@ -120,7 +123,7 @@ public class GoalHandler : MonoBehaviour
             {
                 if(SceneManager.GetActiveScene().name == "BotsGame")
                 {
-                    xpHandler.AddXp(howManyXpAddForGoal);
+                    totalXpEarned += howManyXpAddForGoal;
                     UpdateAchievements();
                     botsAI.Fury();
                     ResetPosition();
@@ -188,9 +191,15 @@ public class GoalHandler : MonoBehaviour
 
     public void Win()
     {
+        int xpBeforeWin = xpHandler.GetXP(); 
         if(SceneManager.GetActiveScene().name == "BotsGame")
         {
+            int xpBefore = xpHandler.GetXP(); // СТАРТ: 204
             xpHandler.AddXp(howManyXpAddAsWin);
+            int xpAfter = xpHandler.GetXP();  // ФИНИШ: 211
+            
+            int actuallyEarned = xpAfter - xpBefore; // Ровно 7
+            endScreen.StartEndScreen(actuallyEarned, xpBefore); 
             UpdateAchievements();
             switch(PlayerPrefs.GetFloat("Difficulty"))
             {
@@ -217,15 +226,16 @@ public class GoalHandler : MonoBehaviour
         }
         goalTextCanvas.SetActive(true);
         endSreenPanel.SetActive(true);
-        endScreen.StartEndScreen();
         endSreenPanel.GetComponent<CanvasGroup>().alpha = 0;
         endSreenPanel.GetComponent<CanvasGroup>().DOFade(1f, 0.5f);
     }
     public void Lose()
     {
+        int xpBeforeWin = xpHandler.GetXP();
         if(SceneManager.GetActiveScene().name == "BotsGame")
         {
             xpHandler.AddXp(howManyXpAddAsLose);
+            totalXpEarned += howManyXpAddAsLose;
             if(PlayerPrefs.GetFloat("Difficulty") == 7.5f) achievementsHandler.UpdateProgress("seriously", 1);
             PlayerPrefs.SetInt("Money", moneyHandler.GetMoney());
             PlayerPrefs.SetInt("HowMoneyAdds", howMoneyAddAsLose);
@@ -233,7 +243,10 @@ public class GoalHandler : MonoBehaviour
             PlayerPrefs.Save();
         }
         goalTextCanvas.SetActive(true);
-        endScreen.StartEndScreen();
+        endSreenPanel.SetActive(true);
+        endScreen.StartEndScreen(totalXpEarned, xpBeforeWin);
+        endSreenPanel.GetComponent<CanvasGroup>().alpha = 0;
+        endSreenPanel.GetComponent<CanvasGroup>().DOFade(1f, 0.5f);
     }
     public void LoadMainMenu()
     {

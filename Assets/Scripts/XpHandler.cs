@@ -1,11 +1,14 @@
+using UnityEditor;
 using UnityEngine;
 
 public class XpHandler : MonoBehaviour
 {
     private int currentXP = 0;
+    private int oldXp = 0;
     private int xpToNextLevel = 100;
     private int level = 1;
     public int GetXP() => currentXP;
+    public int GetOldXP() => oldXp;
     public int GetXpToNextLevel() => xpToNextLevel;
     public int GetLevel() => level;
 
@@ -19,6 +22,7 @@ public class XpHandler : MonoBehaviour
 
     public void AddXp(int amount)
     {
+        oldXp = currentXP;
         currentXP += amount;
         if(currentXP >= xpToNextLevel)
         {
@@ -42,6 +46,21 @@ public class XpHandler : MonoBehaviour
         return (float)currentXP / xpToNextLevel;
     }
 
+    public float GetOldXPProgress()
+    {
+        return (float)oldXp / xpToNextLevel;
+    }
+
+    public float GetXPProgress(int _currentXP, int _xpToNextLevel)
+    {
+        return (float)_currentXP / _xpToNextLevel;
+    }
+
+    public float GetXPProgress(int _currentXP)
+    {
+        return (float)_currentXP / xpToNextLevel;
+    }
+
     private void Save()
     {
         PlayerPrefs.SetInt("CurrentXp", currentXP);
@@ -55,4 +74,9 @@ public class XpHandler : MonoBehaviour
         Debug.Log("Current Xp: " + currentXP);
         Debug.Log("Current level: " + level);
     }
+    public void ResetOldXp() 
+    {
+        oldXp = currentXP; 
+    }
+
 }

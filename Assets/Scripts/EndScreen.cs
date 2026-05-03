@@ -7,13 +7,15 @@ public class EndScreen : MonoBehaviour
     [SerializeField] private Text loseOrWinText;
     [SerializeField] private Text earnedMoneyText;
     [SerializeField] private GoalHandler goalHandler;
-    public void StartEndScreen()
+    [SerializeField] private CoinMover coinMover;
+    public void StartEndScreen(int howManyXpEarned, int xpBeforeWin)
     {
         if(SceneManager.GetActiveScene().name.Equals("BotsGame"))
         {
             if(goalHandler.score1 >= goalHandler.howManyGoals) loseOrWinText.text = "Поражение!";
             else if(goalHandler.score2 >= goalHandler.howManyGoals) loseOrWinText.text = "Победа!";
             earnedMoneyText.text = "Заработанные деньги: " + goalHandler.howMoneyAdd;
+            coinMover.AddXp(Vector3.zero, howManyXpEarned, xpBeforeWin);
         } else
         {
             if(goalHandler.score1 >= goalHandler.howManyGoals) loseOrWinText.text = "Игрок 1 выиграл!";
