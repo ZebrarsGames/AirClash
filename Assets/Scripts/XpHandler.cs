@@ -1,5 +1,5 @@
-using UnityEditor;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class XpHandler : MonoBehaviour
 {
@@ -7,6 +7,7 @@ public class XpHandler : MonoBehaviour
     private int oldXp = 0;
     private int xpToNextLevel = 100;
     private int level = 1;
+    public UnityEvent onLevelUp; 
     public int GetXP() => currentXP;
     public int GetOldXP() => oldXp;
     public int GetXpToNextLevel() => xpToNextLevel;
@@ -35,6 +36,7 @@ public class XpHandler : MonoBehaviour
 
     private void LevelUp()
     {
+        onLevelUp.Invoke();
         level++;
         xpToNextLevel += 50;
         Save();
