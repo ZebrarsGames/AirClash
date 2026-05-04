@@ -15,14 +15,24 @@ public class XpUiScr : MonoBehaviour
     [SerializeField] private GameObject panel;
     [SerializeField] private AudioSource audioSource;
     [SerializeField] private AudioClip levelUpSound;
+    [SerializeField] private Text awardForNextLevel;
     void Start()
     {
         if(SceneManager.GetActiveScene().name.Equals("BotsGame"))
         {
             SetOldProgress(xpHandler.GetOldXPProgress());
+        } else if(SceneManager.GetActiveScene().name.Equals("GameScene"))
+        {
+            SetProgress(xpHandler.GetXPProgress());
         } else
         {
             SetProgress(xpHandler.GetXPProgress());
+            switch(xpHandler.GetAwardForNextLevel().TypeOfAward)
+            {
+                case "Money":
+                    awardForNextLevel.text = "Награда за следующий уровень: " + xpHandler.GetAwardForNextLevel().Award + " монет";
+                    break;
+            }
         }
     }
 
