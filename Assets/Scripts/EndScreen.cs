@@ -29,7 +29,7 @@ public class EndScreen : MonoBehaviour
 
     IEnumerator UpdateText()
     {
-        for(int i = 0; i <= 3; i++)
+        for(int i = 0; i <= 2; i++)
         {
             earnedMoneyText.text = "Заработанные деньги: Считаем.";
             yield return new WaitForSeconds(0.3f);
