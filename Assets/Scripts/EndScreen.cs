@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -17,10 +18,11 @@ public class EndScreen : MonoBehaviour
             else if(goalHandler.score2 >= goalHandler.howManyGoals) loseOrWinText.text = "Победа!";
             coinMover.AddXp(Vector3.zero, howManyXpEarned, xpBeforeWin);
             StartCoroutine(UpdateText());
-        } else
+        } else if(SceneManager.GetActiveScene().name.Equals("GameScene"))
         {
             if(goalHandler.score1 >= goalHandler.howManyGoals) loseOrWinText.text = "Игрок 1 выиграл!";
             else if(goalHandler.score2 >= goalHandler.howManyGoals) loseOrWinText.text = "Игрок 2 выиграл!";
+            earnedMoneyText.text = "Заработанные деньги: 0";
         }
         
     }
