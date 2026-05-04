@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -20,6 +21,8 @@ public class XpHandler : MonoBehaviour
         public string SkinAward;
         public int RequiredLevel;
     }
+
+    private Dictionary<string, XpAward> xpAwards = new Dictionary<string, XpAward>();
 
     void Start()
     {
