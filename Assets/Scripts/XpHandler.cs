@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
@@ -44,6 +45,10 @@ public class XpHandler : MonoBehaviour
         xpAwards.Add("AwardFor9Level", new XpAward { TypeOfAward = "Money", Award = 170, RequiredLevel = 9 });
         xpAwards.Add("AwardFor10Level", new XpAward { TypeOfAward = "Money", Award = 200, RequiredLevel = 10 });
         // xpAwards.Add("AwardFor10LevelSkin", new XpAward { TypeOfAward = "Money", SkinAward = "SkinFor10Level", RequiredLevel = 10 });
+        for(int i = 11; i <= 30; i++)
+        {
+            xpAwards.Add("AwardFor" + i + "Level", new XpAward { TypeOfAward = "Money", Award = i*15, RequiredLevel = i });
+        }
     }
 
     public void AddXp(int amount)
