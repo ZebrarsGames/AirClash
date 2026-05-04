@@ -194,11 +194,11 @@ public class GoalHandler : MonoBehaviour
         int xpBeforeWin = xpHandler.GetXP(); 
         if(SceneManager.GetActiveScene().name == "BotsGame")
         {
-            int xpBefore = xpHandler.GetXP(); // СТАРТ: 204
+            int xpBefore = xpHandler.GetXP();
             xpHandler.AddXp(howManyXpAddAsWin);
-            int xpAfter = xpHandler.GetXP();  // ФИНИШ: 211
+            int xpAfter = xpHandler.GetXP();
             
-            int actuallyEarned = xpAfter - xpBefore; // Ровно 7
+            int actuallyEarned = xpAfter - xpBefore;
             endScreen.StartEndScreen(actuallyEarned, xpBefore); 
             UpdateAchievements();
             switch(PlayerPrefs.GetFloat("Difficulty"))
@@ -223,6 +223,10 @@ public class GoalHandler : MonoBehaviour
             PlayerPrefs.SetInt("HowMoneyAdds", PlayerPrefs.GetInt("HowMoneyAdds") + howMoneyAdd);
             PlayerPrefs.SetInt("isAfterGame", 1);
             PlayerPrefs.Save();
+        } else
+        {
+            int xpBefore = xpHandler.GetXP();
+            endScreen.StartEndScreen(0, xpBefore);
         }
         goalTextCanvas.SetActive(true);
         endSreenPanel.SetActive(true);
@@ -234,8 +238,12 @@ public class GoalHandler : MonoBehaviour
         int xpBeforeWin = xpHandler.GetXP();
         if(SceneManager.GetActiveScene().name == "BotsGame")
         {
+            int xpBefore = xpHandler.GetXP();
             xpHandler.AddXp(howManyXpAddAsLose);
-            totalXpEarned += howManyXpAddAsLose;
+            int xpAfter = xpHandler.GetXP();
+            
+            int actuallyEarned = xpAfter - xpBefore;
+            endScreen.StartEndScreen(actuallyEarned, xpBefore); 
             if(PlayerPrefs.GetFloat("Difficulty") == 7.5f) achievementsHandler.UpdateProgress("seriously", 1);
             PlayerPrefs.SetInt("Money", moneyHandler.GetMoney());
             PlayerPrefs.SetInt("HowMoneyAdds", howMoneyAddAsLose);
@@ -244,7 +252,6 @@ public class GoalHandler : MonoBehaviour
         }
         goalTextCanvas.SetActive(true);
         endSreenPanel.SetActive(true);
-        endScreen.StartEndScreen(totalXpEarned, xpBeforeWin);
         endSreenPanel.GetComponent<CanvasGroup>().alpha = 0;
         endSreenPanel.GetComponent<CanvasGroup>().DOFade(1f, 0.5f);
     }
