@@ -17,7 +17,7 @@ public class XpUiScr : MonoBehaviour
     [SerializeField] private AudioClip levelUpSound;
     void Start()
     {
-        if(SceneManager.GetActiveScene().name.Equals("BotsGame") || SceneManager.GetActiveScene().name.Equals("GameScene"))
+        if(SceneManager.GetActiveScene().name.Equals("BotsGame"))
         {
             SetOldProgress(xpHandler.GetOldXPProgress());
         } else
