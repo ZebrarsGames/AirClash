@@ -30,6 +30,20 @@ public class XpHandler : MonoBehaviour
         level = PlayerPrefs.GetInt("XpLevel", 1);
         xpToNextLevel = PlayerPrefs.GetInt("XpToNextLevel", 100);
         Log();
+
+        xpAwards.Add("AwardFor1Level", new XpAward { TypeOfAward = "Money", Award = 10, RequiredLevel = 1 });
+        xpAwards.Add("AwardFor2Level", new XpAward { TypeOfAward = "Money", Award = 15, RequiredLevel = 2 });
+        xpAwards.Add("AwardFor3Level", new XpAward { TypeOfAward = "Money", Award = 20, RequiredLevel = 3 });
+        // xpAwards.Add("AwardFor3LevelSkin", new XpAward { TypeOfAward = "Skin", SkinAward = "SkinFor3Level", RequiredLevel = 3 });
+        xpAwards.Add("AwardFor4Level", new XpAward { TypeOfAward = "Money", Award = 40, RequiredLevel = 4 });
+        xpAwards.Add("AwardFor5Level", new XpAward { TypeOfAward = "Money", Award = 50, RequiredLevel = 5 });
+        // xpAwards.Add("AwardFor5LevelSkin", new XpAward { TypeOfAward = "Skin", SkinAward = "SkinFor5Level", RequiredLevel = 5 });
+        xpAwards.Add("AwardFor6Level", new XpAward { TypeOfAward = "Money", Award = 70, RequiredLevel = 6 });
+        xpAwards.Add("AwardFor7Level", new XpAward { TypeOfAward = "Money", Award = 100, RequiredLevel = 7 });
+        xpAwards.Add("AwardFor8Level", new XpAward { TypeOfAward = "Money", Award = 150, RequiredLevel = 8 });
+        xpAwards.Add("AwardFor9Level", new XpAward { TypeOfAward = "Money", Award = 170, RequiredLevel = 9 });
+        xpAwards.Add("AwardFor10Level", new XpAward { TypeOfAward = "Money", Award = 200, RequiredLevel = 10 });
+        // xpAwards.Add("AwardFor10LevelSkin", new XpAward { TypeOfAward = "Money", SkinAward = "SkinFor10Level", RequiredLevel = 10 });
     }
 
     public void AddXp(int amount)
@@ -50,6 +64,20 @@ public class XpHandler : MonoBehaviour
         onLevelUp.Invoke();
         level++;
         xpToNextLevel += 50;
+        foreach(var pair in xpAwards)
+        {
+            XpAward xpAward = pair.Value;
+            if(xpAward.RequiredLevel == level)
+            {
+                switch(xpAward.TypeOfAward)
+                {
+                    case "Money":
+                        PlayerPrefs.SetInt("HowMoneyAdds", PlayerPrefs.GetInt("HowMoneyAdds") + xpAward.Award);
+                        PlayerPrefs.Save();
+                        break;
+                }
+            }
+        }
         Save();
         Log();
     }
