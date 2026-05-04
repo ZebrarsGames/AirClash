@@ -13,6 +13,14 @@ public class XpHandler : MonoBehaviour
     public int GetXpToNextLevel() => xpToNextLevel;
     public int GetLevel() => level;
 
+    public class XpAward
+    {
+        public string TypeOfAward;
+        public int Award;
+        public string SkinAward;
+        public int RequiredLevel;
+    }
+
     void Start()
     {
         currentXP = PlayerPrefs.GetInt("CurrentXp", 0);
