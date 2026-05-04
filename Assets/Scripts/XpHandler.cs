@@ -124,5 +124,10 @@ public class XpHandler : MonoBehaviour
     {
         oldXp = currentXP; 
     }
+    
+    public XpAward GetAwardForNextLevel()
+    {
+        return xpAwards[$"AwardFor{level + 1}Level"];
+    }
 
 }
