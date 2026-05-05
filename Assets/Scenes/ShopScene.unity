@@ -9018,6 +9018,53 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1486290088}
   m_CullTransparentMesh: 1
+--- !u!1 &1512294404
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1512294406}
+  - component: {fileID: 1512294405}
+  m_Layer: 0
+  m_Name: XpHandler
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1512294405
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1512294404}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e3d8ab15c05c4934f8218dd74c86de48, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::XpHandler
+  onLevelUp:
+    m_PersistentCalls:
+      m_Calls: []
+--- !u!4 &1512294406
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1512294404}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1525201673
 GameObject:
   m_ObjectHideFlags: 0
@@ -9755,14 +9802,21 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 99512a730287f7647b2eb470fa9baa5d, type: 2}
   - {fileID: 11400000, guid: 7c1c21e9339dc8246b3439b321b01dbd, type: 2}
   - {fileID: 11400000, guid: 459337c69bda26849a0276a2405b7bc6, type: 2}
+  - {fileID: 11400000, guid: 3b4f94aaa8ba22745b1ebb978237b5fe, type: 2}
+  - {fileID: 11400000, guid: fb6d7912281ce604abf242ecf409e93f, type: 2}
+  - {fileID: 11400000, guid: 17e3fc0c790a5a24c90a6b0eee00273a, type: 2}
+  - {fileID: 11400000, guid: fed312f93b059f64fa1939ffb8ab2f05, type: 2}
+  - {fileID: 11400000, guid: 779a752f1e5005345b1e4cec98cc48b8, type: 2}
   rareRouletteItems:
   - {fileID: 11400000, guid: 08723dfd34be8b845b1a819157239bb8, type: 2}
   - {fileID: 11400000, guid: deab340bf3e2de84ba1383df1de9d0c4, type: 2}
   - {fileID: 11400000, guid: 60a91f36dfb4f0346bfcb539ba4f6c8a, type: 2}
   - {fileID: 11400000, guid: 9ec973a37078d9648982b73bb06c2d52, type: 2}
+  - {fileID: 11400000, guid: 75bd5589ea26abc42808268ce5770fa6, type: 2}
   veryRareRouletteItems:
   - {fileID: 11400000, guid: 489b46bc838dc7742b85237e2a413f94, type: 2}
   - {fileID: 11400000, guid: 026286c4a055db049ba0d1efe2f15935, type: 2}
+  - {fileID: 11400000, guid: 1cf3caeb5a1866a47a521d4b59d85fa8, type: 2}
   skins:
   - {fileID: 1460898979}
   - {fileID: 636421480}
@@ -9793,6 +9847,7 @@ MonoBehaviour:
   cancelSound: {fileID: 8300000, guid: 96a64f20e83e9374a8b6e6b9be262a82, type: 3}
   endSound: {fileID: 8300000, guid: 4e1b57aa2bad8fc4e933d842cc64b672, type: 3}
   achievementsHandler: {fileID: 1029591086}
+  xpHandler: {fileID: 1512294405}
 --- !u!225 &1606526478
 CanvasGroup:
   m_ObjectHideFlags: 0
@@ -12465,3 +12520,4 @@ SceneRoots:
   - {fileID: 1190845892}
   - {fileID: 1029591087}
   - {fileID: 1358771902}
+  - {fileID: 1512294406}
