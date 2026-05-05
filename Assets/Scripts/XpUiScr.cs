@@ -27,11 +27,12 @@ public class XpUiScr : MonoBehaviour
         } else
         {
             SetProgress(xpHandler.GetXPProgress());
-            switch(xpHandler.GetAwardForNextLevel().TypeOfAward)
+            if(xpHandler.GetSkinAwardForNextLevel() != null)
             {
-                case "Money":
-                    awardForNextLevel.text = "Награда за следующий уровень: " + xpHandler.GetAwardForNextLevel().Award + " монет";
-                    break;
+                awardForNextLevel.text = "Награда за следующий уровень: " + xpHandler.GetMoneyAwardForNextLevel().Award + " монет и скин " + xpHandler.GetSkinAwardForNextLevel().GuiSkinName ;
+            } else
+            {
+                awardForNextLevel.text = "Награда за следующий уровень: " + xpHandler.GetMoneyAwardForNextLevel().Award + " монет";
             }
         }
     }

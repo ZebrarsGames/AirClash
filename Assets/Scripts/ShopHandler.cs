@@ -69,6 +69,11 @@ public class ShopHandler : MonoBehaviour
         }
     }
 
+    public void PlayCancelSound()
+    {
+        audioSource.PlayOneShot(cancelSound);
+    }
+
 
     public void RemoveAllMoney()
     {
