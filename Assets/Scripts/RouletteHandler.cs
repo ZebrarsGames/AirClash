@@ -31,6 +31,7 @@ public class RouletteHandler : MonoBehaviour
     
     [Header("Scripts")]
     [SerializeField] private AchievementsHandler achievementsHandler;
+    [SerializeField] private XpHandler xpHandler;
 
     public void StartRoulette()
     {
@@ -174,6 +175,10 @@ public class RouletteHandler : MonoBehaviour
                         }
                     } 
                     break;
+                case "Xp":
+                    xpHandler.AddXp(bestCell.currentData.award);
+                    awardText.text = "ВЫИГРЫШ: " + bestCell.currentData.award + " XP";
+                    break;    
                 default:
                     awardText.text = "Неправильный typeOFAward!";
                     break;   
