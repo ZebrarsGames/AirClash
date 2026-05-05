@@ -20,6 +20,7 @@ public class XpHandler : MonoBehaviour
         public string TypeOfAward;
         public int Award;
         public string SkinAward;
+        public string GuiSkinName;
         public int RequiredLevel;
     }
 
@@ -35,16 +36,16 @@ public class XpHandler : MonoBehaviour
         xpAwards.Add("AwardFor1Level", new XpAward { TypeOfAward = "Money", Award = 10, RequiredLevel = 1 });
         xpAwards.Add("AwardFor2Level", new XpAward { TypeOfAward = "Money", Award = 15, RequiredLevel = 2 });
         xpAwards.Add("AwardFor3Level", new XpAward { TypeOfAward = "Money", Award = 20, RequiredLevel = 3 });
-        // xpAwards.Add("AwardFor3LevelSkin", new XpAward { TypeOfAward = "Skin", SkinAward = "SkinFor3Level", RequiredLevel = 3 });
+        xpAwards.Add("AwardFor3LevelSkin", new XpAward { TypeOfAward = "Skin", SkinAward = "WoodSkin", GuiSkinName = "Дерево", RequiredLevel = 3 });
         xpAwards.Add("AwardFor4Level", new XpAward { TypeOfAward = "Money", Award = 40, RequiredLevel = 4 });
         xpAwards.Add("AwardFor5Level", new XpAward { TypeOfAward = "Money", Award = 50, RequiredLevel = 5 });
-        // xpAwards.Add("AwardFor5LevelSkin", new XpAward { TypeOfAward = "Skin", SkinAward = "SkinFor5Level", RequiredLevel = 5 });
+        xpAwards.Add("AwardFor5LevelSkin", new XpAward { TypeOfAward = "Skin", SkinAward = "IceSkin", GuiSkinName = "Лёд", RequiredLevel = 5 });
         xpAwards.Add("AwardFor6Level", new XpAward { TypeOfAward = "Money", Award = 70, RequiredLevel = 6 });
         xpAwards.Add("AwardFor7Level", new XpAward { TypeOfAward = "Money", Award = 100, RequiredLevel = 7 });
         xpAwards.Add("AwardFor8Level", new XpAward { TypeOfAward = "Money", Award = 150, RequiredLevel = 8 });
         xpAwards.Add("AwardFor9Level", new XpAward { TypeOfAward = "Money", Award = 170, RequiredLevel = 9 });
         xpAwards.Add("AwardFor10Level", new XpAward { TypeOfAward = "Money", Award = 200, RequiredLevel = 10 });
-        // xpAwards.Add("AwardFor10LevelSkin", new XpAward { TypeOfAward = "Money", SkinAward = "SkinFor10Level", RequiredLevel = 10 });
+        xpAwards.Add("AwardFor10LevelSkin", new XpAward { TypeOfAward = "Skin", SkinAward = "FireSkin", GuiSkinName = "Огонь", RequiredLevel = 10 });
         for(int i = 11; i <= 30; i++)
         {
             xpAwards.Add("AwardFor" + i + "Level", new XpAward { TypeOfAward = "Money", Award = i*15, RequiredLevel = i });
@@ -80,6 +81,10 @@ public class XpHandler : MonoBehaviour
                         PlayerPrefs.SetInt("HowMoneyAdds", PlayerPrefs.GetInt("HowMoneyAdds") + xpAward.Award);
                         PlayerPrefs.Save();
                         break;
+                    case "Skin" :
+                        PlayerPrefs.SetInt(xpAward.SkinAward, 1);
+                        PlayerPrefs.Save();
+                        break;   
                 }
             }
         }
@@ -125,9 +130,15 @@ public class XpHandler : MonoBehaviour
         oldXp = currentXP; 
     }
     
-    public XpAward GetAwardForNextLevel()
+    public XpAward GetMoneyAwardForNextLevel()
     {
         return xpAwards[$"AwardFor{level + 1}Level"];
+    }
+
+    public XpAward GetSkinAwardForNextLevel()
+    {
+        xpAwards.TryGetValue($"AwardFor{level + 1}LevelSkin", out var award);
+        return award;
     }
 
 }

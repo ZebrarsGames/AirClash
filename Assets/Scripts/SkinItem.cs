@@ -12,6 +12,7 @@ public class SkinItem : MonoBehaviour
 
     [Header("Status")]
     public bool isBuy;
+    public bool isCanBuy;
     public ShopHandler shop;
 
     [Header("UI")]
@@ -29,47 +30,59 @@ public class SkinItem : MonoBehaviour
         skinName = skinData.skinName;
         skinPrice = skinData.price;
         guiSkinName = skinData.skinGuiName;
-        priceText.text = skinPrice.ToString();
         skinNameText.text = skinData.skinGuiName.ToString();
         skinImage.sprite = skinData.sprite;
         switch(skinData.rarity)
         {
             case 1:
+                isCanBuy = true;
                 if(ColorUtility.TryParseHtmlString("#FFFFFF", out Color DefColor))
                 {
                     skinNameText.color = DefColor;
                 }
                 break;
             case 2:
+                isCanBuy = true;
                 if(ColorUtility.TryParseHtmlString("#B9C24B", out Color RareColor))
                 {
                     skinNameText.color = RareColor;
                 }
                 break;
             case 3:
+                isCanBuy = true;
                 if(ColorUtility.TryParseHtmlString("#90E0EF", out Color SuperRareColor))
                 {
                     skinNameText.color = SuperRareColor;
                 }
                 break;
             case 4:
+                isCanBuy = true;
                 if(ColorUtility.TryParseHtmlString("#A99AD3", out Color EpicColor))
                 {
                     skinNameText.color = EpicColor;
                 }
                 break;
             case 5:
+                isCanBuy = true;
                 if(ColorUtility.TryParseHtmlString("#F94449", out Color MythicColor))
                 {
                     skinNameText.color = MythicColor;
                 }
                 break;
             case 6:
+                isCanBuy = true;
                 if(ColorUtility.TryParseHtmlString("#FFE747", out Color LegendaryColor))
                 {
                     skinNameText.color = LegendaryColor;
                 }
                 break;    
+            case 7:
+                isCanBuy = false;
+                if(ColorUtility.TryParseHtmlString("#0004ff", out Color XpColor))
+                {
+                    skinNameText.color = XpColor;
+                }
+                break;   
             default:
                 break;
         }
@@ -78,11 +91,15 @@ public class SkinItem : MonoBehaviour
             isBuy = true;
             checkmark.gameObject.SetActive(true);
         }
+        if(isCanBuy)
+        {
+            priceText.text = skinPrice.ToString();
+        }
     }
 
     public void OnClickBuy() 
     {
-        if(!isBuy)
+        if(!isBuy && isCanBuy)
         {
             isBuy = shop.BuySkin(skinName, skinPrice);      
             if(isBuy) 
@@ -91,9 +108,12 @@ public class SkinItem : MonoBehaviour
                 shop.EquipSkin(skinName);
             }
         } 
-        else
+        else if(isBuy)
         {
             shop.EquipSkin(skinName);
+        } else if(!isCanBuy)
+        {
+            shop.PlayCancelSound();
         }
     }  
 
