@@ -46,7 +46,7 @@ public class AchievementsHandler : MonoBehaviour
         achievements.Add("first_steps", new Achievement {Title = "Первые шаги", Target = 1, Award = 20});
         achievements.Add("regular_player", new Achievement {Title = "Постоянный игрок", Target = 3, Award = 50});
         achievements.Add("thunderstorm_game", new Achievement {Title = "Гроза игры", Target = 7, Award = 70});
-        achievements.Add("game_legend", new Achievement {Title = "Легенда игры", Target = 13, Award = 150});
+        achievements.Add("game_legend", new Achievement {Title = "Легенда игры", Target = 10, Award = 150});
         LoadAchievements();
     }
 
