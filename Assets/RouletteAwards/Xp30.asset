@@ -15,4 +15,4 @@ MonoBehaviour:
   typeOfAward: Xp
   award: 30
   skinAward: 
-  itemSprite: {fileID: 21300000, guid: 42344b989c1ac0e47a1dc838423ba582, type: 3}
+  itemSprite: {fileID: 21300000, guid: 00ade7c97054ac64a901e8c89a905196, type: 3}
