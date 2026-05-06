@@ -123,13 +123,13 @@ public class BotsAI : MonoBehaviour
 
         if(score2 - score1 >= 3 && score2 - score1 < 5)
         {
-            moveSpeed = baseSpeed * 1.5f;
+            moveSpeed = baseSpeed * 1.2f;
         } else if(score2 - score1 >= 5 && score2 - score1 < 7)
         {
-            moveSpeed = baseSpeed * 2f;
+            moveSpeed = baseSpeed * 1.5f;
         } else if(score2 - score1 >= 7)
         {
-            moveSpeed = baseSpeed * 3f;
+            moveSpeed = baseSpeed * 2f;
         }
     }
     public void EasyMode()
