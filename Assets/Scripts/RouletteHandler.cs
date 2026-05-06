@@ -164,6 +164,7 @@ public class RouletteHandler : MonoBehaviour
                                 moneyText.text = "Деньги " + moneyHandler.GetMoney();
                             } else
                             {
+                                achievementsHandler.UpdateProgress("large_wardrobe", 1);
                                 awardText.text = "ВЫИГРЫШ: " + i.guiSkinName;
                                 if(i.skinName.Equals("GoldSkin")) achievementsHandler.UpdateProgress("lucky", 1);
                                 i.isBuy = true;
