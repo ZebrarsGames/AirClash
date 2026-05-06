@@ -1,5 +1,5 @@
-using System;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -10,6 +10,7 @@ public class XpHandler : MonoBehaviour
     private int xpToNextLevel = 100;
     private int level = 1;
     public UnityEvent onLevelUp; 
+    [SerializeField] private AchievementsHandler achievementsHandler;
     public int GetXP() => currentXP;
     public int GetOldXP() => oldXp;
     public int GetXpToNextLevel() => xpToNextLevel;
@@ -82,6 +83,7 @@ public class XpHandler : MonoBehaviour
                         PlayerPrefs.Save();
                         break;
                     case "Skin" :
+                        achievementsHandler.UpdateProgress("large_wardrobe", 1);
                         PlayerPrefs.SetInt(xpAward.SkinAward, 1);
                         PlayerPrefs.Save();
                         break;   

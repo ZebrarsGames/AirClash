@@ -1681,6 +1681,7 @@ MonoBehaviour:
   panel: {fileID: 0}
   audioSource: {fileID: 0}
   levelUpSound: {fileID: 0}
+  awardForNextLevel: {fileID: 0}
 --- !u!225 &483962702
 CanvasGroup:
   m_ObjectHideFlags: 0
@@ -4397,6 +4398,7 @@ MonoBehaviour:
   panel: {fileID: 1730743486}
   audioSource: {fileID: 2094474884}
   levelUpSound: {fileID: 8300000, guid: 1fa01e474b998e34d94aaafaae7cc3e6, type: 3}
+  awardForNextLevel: {fileID: 0}
 --- !u!4 &1286145900
 Transform:
   m_ObjectHideFlags: 0
@@ -5933,6 +5935,7 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+  achievementsHandler: {fileID: 1636014922}
 --- !u!4 &1740135152
 Transform:
   m_ObjectHideFlags: 0
