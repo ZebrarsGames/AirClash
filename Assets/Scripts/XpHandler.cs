@@ -71,6 +71,7 @@ public class XpHandler : MonoBehaviour
         onLevelUp.Invoke();
         level++;
         xpToNextLevel += 50;
+        UpdateAchievements();
         foreach(var pair in xpAwards)
         {
             XpAward xpAward = pair.Value;
@@ -143,4 +144,11 @@ public class XpHandler : MonoBehaviour
         return award;
     }
 
+    private void UpdateAchievements()
+    {
+        achievementsHandler.UpdateProgress("first_steps", 1);
+        achievementsHandler.UpdateProgress("regular_player", 1);
+        achievementsHandler.UpdateProgress("thunderstorm_game", 1);
+        achievementsHandler.UpdateProgress("game_legend", 1);
+    }
 }
