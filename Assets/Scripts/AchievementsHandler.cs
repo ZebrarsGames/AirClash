@@ -36,7 +36,7 @@ public class AchievementsHandler : MonoBehaviour
         // Ачивки от подписчиков
         achievements.Add("ten", new Achievement {Title = "Десятка", Target = 10, Award = 10});
         achievements.Add("seriously", new Achievement {Title = "Серьёзно?", Target = 1, Award = 1});
-        achievements.Add("large_wardrobe", new Achievement {Title = "Большой гардероб", Target = 12, Award = 40});
+        achievements.Add("large_wardrobe", new Achievement {Title = "Большой гардероб", Target = 15, Award = 40});
         achievements.Add("own_goal", new Achievement {Title = "Автогол", Target = 2, Award = 5});
         // Ачивки для рулетки
         achievements.Add("ludoman", new Achievement {Title = "Лудоман", Target = 15, Award = 35});

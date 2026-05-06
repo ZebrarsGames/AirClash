@@ -7191,6 +7191,7 @@ MonoBehaviour:
   onLevelUp:
     m_PersistentCalls:
       m_Calls: []
+  achievementsHandler: {fileID: 180572474}
 --- !u!4 &695791784
 Transform:
   m_ObjectHideFlags: 0
