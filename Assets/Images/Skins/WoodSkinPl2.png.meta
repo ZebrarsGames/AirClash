@@ -116,10 +116,10 @@ TextureImporter:
       name: WoodSkinPl2_0
       rect:
         serializedVersion: 2
-        x: 89
-        y: 101
-        width: 1858
-        height: 1846
+        x: 0
+        y: 8
+        width: 2040
+        height: 2032
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}

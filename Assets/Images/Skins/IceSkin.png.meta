@@ -116,10 +116,10 @@ TextureImporter:
       name: IceSkin_0
       rect:
         serializedVersion: 2
-        x: 50
-        y: 50
-        width: 1941
-        height: 1954
+        x: 11
+        y: 11
+        width: 2026
+        height: 2026
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}

@@ -116,10 +116,10 @@ TextureImporter:
       name: FireSkin_0
       rect:
         serializedVersion: 2
-        x: 17
-        y: 11
-        width: 1986
-        height: 2020
+        x: 0
+        y: 0
+        width: 2032
+        height: 2045
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
