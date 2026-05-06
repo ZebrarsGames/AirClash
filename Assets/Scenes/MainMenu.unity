@@ -5610,7 +5610,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: b3e34e86b37e09143a57189f26e95214, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 3b770cd9ec561964e9648866a468365f, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -5950,7 +5950,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: b3e34e86b37e09143a57189f26e95214, type: 3}
+  m_Sprite: {fileID: 21300000, guid: ff5de6e37bca0a2419b3ffd48e592529, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -10390,7 +10390,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: b3e34e86b37e09143a57189f26e95214, type: 3}
+  m_Sprite: {fileID: 21300000, guid: a971ef62677978c45ae9c313303ed1e6, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -14301,7 +14301,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: "\u041F\u043E\u043B\u0443\u0447\u0438\u0442\u0435 \u0442\u0440\u0435\u0442\u0438\u0439
+  m_Text: "\u041F\u043E\u043B\u0443\u0447\u0438\u0442\u0435 \u043F\u044F\u0442\u044B\u0439
     \u0443\u0440\u043E\u0432\u0435\u043D\u044C XP"
 --- !u!222 &1163099786
 CanvasRenderer:
@@ -22925,7 +22925,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: b3e34e86b37e09143a57189f26e95214, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 0ca4fb5bb56959f46ab453de7fa84eaf, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -26193,7 +26193,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: "\u041F\u043E\u043B\u0443\u0447\u0438\u0442\u0435 \u043F\u0435\u0440\u0432\u044B\u0439
+  m_Text: "\u041F\u043E\u043B\u0443\u0447\u0438\u0442\u0435 \u0432\u0442\u043E\u0440\u043E\u0439
     \u0443\u0440\u043E\u0432\u0435\u043D\u044C XP"
 --- !u!222 &2059497825
 CanvasRenderer:
