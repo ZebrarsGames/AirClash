@@ -179,6 +179,7 @@ public class MainMenu : MonoBehaviour
 
     public void QuitGame()
     {
+        PlayerPrefs.SetFloat("Music", 0);
         Application.Quit();
     }
 
