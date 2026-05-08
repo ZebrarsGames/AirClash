@@ -44,12 +44,15 @@ public class MainMenu : MonoBehaviour
         if(PlayerPrefs.GetInt("isAfterGame") == 0)
         {
             PlayerPrefs.SetInt("HowMoneyAdds", 0);
+            PlayerPrefs.SetInt("HowXpAdds", 0);
             PlayerPrefs.SetInt("isAfterGame", 0);
             PlayerPrefs.Save();    
         } else
         {
             AddMoney(PlayerPrefs.GetInt("HowMoneyAdds"));
             PlayerPrefs.SetInt("isAfterGame", 0);
+            PlayerPrefs.SetInt("HowMoneyAdds", 0);
+            PlayerPrefs.SetInt("HowXpAdds", 0);
             PlayerPrefs.Save();
         }
     }

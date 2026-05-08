@@ -184,6 +184,7 @@ public class GoalHandler : MonoBehaviour
         scoreText1.text = "0";
         scoreText2.text = "0";
         PlayerPrefs.SetInt("HowMoneyAdds", 0);
+        PlayerPrefs.SetInt("HowXpAdds", 0);
         PlayerPrefs.Save();
         ResetPosition();
         audioSource.PlayOneShot(StartGameSound);
@@ -192,11 +193,10 @@ public class GoalHandler : MonoBehaviour
 
     public void Win()
     {
-        int xpBeforeWin = xpHandler.GetXP(); 
         if(SceneManager.GetActiveScene().name == "BotsGame")
         {
             int xpBefore = xpHandler.GetXP();
-            xpHandler.AddXp(howManyXpAddAsWin);
+            xpHandler.AddXp(howManyXpAddAsWin + PlayerPrefs.GetInt("HowXpAdds"));
             int xpAfter = xpHandler.GetXP();
             
             int actuallyEarned = xpAfter - xpBefore;
@@ -236,18 +236,17 @@ public class GoalHandler : MonoBehaviour
     }
     public void Lose()
     {
-        int xpBeforeWin = xpHandler.GetXP();
         if(SceneManager.GetActiveScene().name == "BotsGame")
         {
             int xpBefore = xpHandler.GetXP();
-            xpHandler.AddXp(howManyXpAddAsLose);
+            xpHandler.AddXp(howManyXpAddAsLose + PlayerPrefs.GetInt("HowXpAdds"));
             int xpAfter = xpHandler.GetXP();
             
             int actuallyEarned = xpAfter - xpBefore;
             endScreen.StartEndScreen(actuallyEarned, xpBefore); 
             if(PlayerPrefs.GetFloat("Difficulty") == 7.5f) achievementsHandler.UpdateProgress("seriously", 1);
             PlayerPrefs.SetInt("Money", moneyHandler.GetMoney());
-            PlayerPrefs.SetInt("HowMoneyAdds", howMoneyAddAsLose);
+            PlayerPrefs.SetInt("HowMoneyAdds", PlayerPrefs.GetInt("HowMoneyAdds") + howMoneyAddAsLose);
             PlayerPrefs.SetInt("isAfterGame", 1);
             PlayerPrefs.Save();
         }
