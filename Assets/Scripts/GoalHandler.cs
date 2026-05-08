@@ -117,12 +117,13 @@ public class GoalHandler : MonoBehaviour
             scoreText2.text = score2.ToString(); 
             if(score2 >= howManyGoals)
             {
-                if(score2 == 10) achievementsHandler.UpdateProgress("ten", 10);
+                if(score2 >= 10) achievementsHandler.UpdateProgress("ten", 10);
                 Win();
             } else
             {
                 if(SceneManager.GetActiveScene().name == "BotsGame")
                 {
+                    if(score2 >= 10) achievementsHandler.UpdateProgress("ten", 10);
                     totalXpEarned += howManyXpAddForGoal;
                     UpdateAchievements();
                     botsAI.Fury();
