@@ -37,6 +37,8 @@ public class MainMenu : MonoBehaviour
         audioSource.loop = true;
         audioSource.time = PlayerPrefs.GetFloat("Music");
         audioSource.Play();
+        Application.targetFrameRate = PlayerPrefs.GetInt("FPS", 60);
+        audioSource.volume = PlayerPrefs.GetFloat("MusicVolume", 1.0f);
         rectTransform = mainMenuText.GetComponent<RectTransform>();
         moneyText.text = "Деньги " + Convert.ToString(PlayerPrefs.GetInt("Money"));
         if(PlayerPrefs.GetInt("isAfterGame") == 0)
