@@ -37,6 +37,7 @@ public class RouletteHandler : MonoBehaviour
     {
         if(moneyHandler.GetMoney() >= rouletteCost)
         {
+            roulettePanel.SetActive(true);
             achievementsHandler.UpdateProgress("ludoman", 1);
             moneyHandler.RemoveMoney(rouletteCost);
             moneyText.text = "Деньги " + moneyHandler.GetMoney();
@@ -44,10 +45,14 @@ public class RouletteHandler : MonoBehaviour
             {
                 int randomIndex = Random.Range(0, rouletteItems.Length);
                 rouletteCells[i].SetData(rouletteItems[randomIndex]);
+                if (ColorUtility.TryParseHtmlString("#56A1CC", out Color cellColor))
+                {
+                    cellColor.a = 0.39f;
+                    rouletteCells[i].cellBg.color = cellColor;
+                }
             }
             stopRouletteBtn.interactable = false;
             awardText.gameObject.SetActive(false);
-            roulettePanel.SetActive(true);
             roulettePanel.GetComponent<CanvasGroup>().alpha = 0;
             roulettePanel.GetComponent<CanvasGroup>().DOFade(1f, 1f);
             StartCoroutine(SpinRoulette());
