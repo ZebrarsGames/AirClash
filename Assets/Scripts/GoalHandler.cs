@@ -77,7 +77,7 @@ public class GoalHandler : MonoBehaviour
         howMoneyAdd = PlayerPrefs.GetInt("HowMoneyAdd") * Mathf.Max(1, Convert.ToInt32(howManyGoals / 1.5f));
         howManyXpAddForGoal = PlayerPrefs.GetInt("HowManyAddXp");
         howManyXpAddAsWin = PlayerPrefs.GetInt("HowManyAddXp") * Mathf.Max(1, Convert.ToInt32(howManyGoals / 1.5f));
-        howManyXpAddAsLose = PlayerPrefs.GetInt("HowManyAddXp") / Mathf.Max(1, Convert.ToInt32(howManyGoals / 2.0f));
+        howManyXpAddAsLose = 1;
         howMoneyAddAsLose = PlayerPrefs.GetInt("HowMoneyAddAsLose");  
         endSreenPanel.SetActive(false);
         if (!ColorUtility.TryParseHtmlString("#30C7FE", out wallParticleColor))
