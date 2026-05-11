@@ -252,10 +252,17 @@ public class RouletteHandler : MonoBehaviour
 
     public void CloseChoiceRoulettePanel()
     {
+        StartCoroutine(CloseChoiceRoulettePanelAnim());
+    }
+    IEnumerator CloseChoiceRoulettePanelAnim()
+    {
+        choiceRoulettePanel.GetComponent<CanvasGroup>().DOFade(0.0f, 0.2f);
+        yield return new WaitForSeconds(0.3f);
         choiceRoulettePanel.SetActive(false);
     }
     public void OpenChoiceRoulettePanel()
     {
         choiceRoulettePanel.SetActive(true);
+        choiceRoulettePanel.GetComponent<CanvasGroup>().DOFade(1.0f, 0.2f);
     }
 }
