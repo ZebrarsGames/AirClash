@@ -39,10 +39,10 @@ public class RouletteHandler : MonoBehaviour
         switch(typeOfRoulette)
             {
                 case "Common":
-                    rouletteCost = 35;
+                    rouletteCost = 25;
                     break;
                 case "Epic":
-                    rouletteCost = 60;
+                    rouletteCost = 50;
                     break;
                 case "Legendary":
                     rouletteCost = 100;
