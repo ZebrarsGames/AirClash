@@ -36,6 +36,21 @@ public class RouletteHandler : MonoBehaviour
 
     public void StartRoulette(string typeOfRoulette)
     {
+        switch(typeOfRoulette)
+            {
+                case "Common":
+                    rouletteCost = 35;
+                    break;
+                case "Epic":
+                    rouletteCost = 60;
+                    break;
+                case "Legendary":
+                    rouletteCost = 100;
+                    break;
+                default:
+                    Debug.Log("Неправильный typeOfRoulette! (" + typeOfRoulette + ")");
+                    break;
+            }
         if(moneyHandler.GetMoney() >= rouletteCost)
         {
             roulettePanel.SetActive(true);
@@ -54,25 +69,23 @@ public class RouletteHandler : MonoBehaviour
             awardText.gameObject.SetActive(false);
             roulettePanel.GetComponent<CanvasGroup>().alpha = 0;
             roulettePanel.GetComponent<CanvasGroup>().DOFade(1f, 1f);
+            moneyHandler.RemoveMoney(rouletteCost);
+            moneyText.text = "Деньги " + moneyHandler.GetMoney();
             switch(typeOfRoulette)
             {
                 case "Common":
-                    moneyHandler.RemoveMoney(rouletteCost);
                     StartCoroutine(SpinCommonRoulette());
                     break;
                 case "Epic":
-                    moneyHandler.RemoveMoney(rouletteCost);
                     StartCoroutine(SpinEpicRoulette());
                     break;
                 case "Legendary":
-                    moneyHandler.RemoveMoney(rouletteCost);
                     StartCoroutine(SpinLegendaryRoulette());
                     break;
                 default:
                     Debug.Log("Неправильный typeOfRoulette! (" + typeOfRoulette + ")");
                     break;
             }
-            moneyText.text = "Деньги " + moneyHandler.GetMoney();
         } else
         {
             audioSource.PlayOneShot(cancelSound);
