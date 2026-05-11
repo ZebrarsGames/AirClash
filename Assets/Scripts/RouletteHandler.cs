@@ -14,6 +14,7 @@ public class RouletteHandler : MonoBehaviour
     [Header("Components of Roulette")]
     [SerializeField] private RouletteCell[] rouletteCells;
     [SerializeField] private GameObject roulettePanel;
+    [SerializeField] private GameObject choiceRoulettePanel;
     [SerializeField] private Transform centerMarker;
     [SerializeField] private Button stopRouletteBtn;
     [SerializeField] private Text awardText;
@@ -33,14 +34,12 @@ public class RouletteHandler : MonoBehaviour
     [SerializeField] private AchievementsHandler achievementsHandler;
     [SerializeField] private XpHandler xpHandler;
 
-    public void StartRoulette()
+    public void StartRoulette(string typeOfRoulette)
     {
         if(moneyHandler.GetMoney() >= rouletteCost)
         {
             roulettePanel.SetActive(true);
             achievementsHandler.UpdateProgress("ludoman", 1);
-            moneyHandler.RemoveMoney(rouletteCost);
-            moneyText.text = "Деньги " + moneyHandler.GetMoney();
             for(int i = 0; i < rouletteCells.Length; i++)
             {
                 int randomIndex = Random.Range(0, rouletteItems.Length);
@@ -55,7 +54,25 @@ public class RouletteHandler : MonoBehaviour
             awardText.gameObject.SetActive(false);
             roulettePanel.GetComponent<CanvasGroup>().alpha = 0;
             roulettePanel.GetComponent<CanvasGroup>().DOFade(1f, 1f);
-            StartCoroutine(SpinRoulette());
+            switch(typeOfRoulette)
+            {
+                case "Common":
+                    moneyHandler.RemoveMoney(rouletteCost);
+                    StartCoroutine(SpinCommonRoulette());
+                    break;
+                case "Epic":
+                    moneyHandler.RemoveMoney(rouletteCost);
+                    StartCoroutine(SpinEpicRoulette());
+                    break;
+                case "Legendary":
+                    moneyHandler.RemoveMoney(rouletteCost);
+                    StartCoroutine(SpinLegendaryRoulette());
+                    break;
+                default:
+                    Debug.Log("Неправильный typeOfRoulette! (" + typeOfRoulette + ")");
+                    break;
+            }
+            moneyText.text = "Деньги " + moneyHandler.GetMoney();
         } else
         {
             audioSource.PlayOneShot(cancelSound);
@@ -63,13 +80,23 @@ public class RouletteHandler : MonoBehaviour
         
     }
 
-    IEnumerator SpinRoulette()
+    IEnumerator SpinCommonRoulette()
     {
         yield return new WaitForSeconds(1.5f);
-        StartCoroutine(MoveRouletteItems());
+        StartCoroutine(MoveRouletteItems("Common"));
+    }
+    IEnumerator SpinEpicRoulette()
+    {
+        yield return new WaitForSeconds(1.5f);
+        StartCoroutine(MoveRouletteItems("Epic"));
+    }
+    IEnumerator SpinLegendaryRoulette()
+    {
+        yield return new WaitForSeconds(1.5f);
+        StartCoroutine(MoveRouletteItems("Legendary"));
     }
 
-    IEnumerator MoveRouletteItems()
+    IEnumerator MoveRouletteItems(string typeOfRoulette)
     {
         int totalSteps = Random.Range(40, 100);
         int randKoof = 0;
@@ -85,7 +112,18 @@ public class RouletteHandler : MonoBehaviour
                 rouletteCells[i].SetData(rouletteCells[i + 1].currentData);
                 rouletteCells[i].cellBg.color = rouletteCells[i + 1].cellBg.color;
             }
-            randKoof = Random.Range(0, 26);
+            switch(typeOfRoulette)
+            {
+                case "Common":
+                    randKoof = Random.Range(0, 17);
+                    break;
+                case "Epic":
+                    randKoof = Random.Range(13, 24);
+                    break;
+                case "Legendary":
+                    randKoof = Random.Range(22, 28);
+                    break;
+            }
             if (randKoof >= 0 && randKoof <= 15)
             {
                 rouletteCells[rouletteCells.Length - 1].SetData(rouletteItems[Random.Range(0, rouletteItems.Length)]);
@@ -197,5 +235,14 @@ public class RouletteHandler : MonoBehaviour
             roulettePanel.SetActive(false);
         }
         
+    }
+
+    public void CloseChoiceRoulettePanel()
+    {
+        choiceRoulettePanel.SetActive(false);
+    }
+    public void OpenChoiceRoulettePanel()
+    {
+        choiceRoulettePanel.SetActive(true);
     }
 }
