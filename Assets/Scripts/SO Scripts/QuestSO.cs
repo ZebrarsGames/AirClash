@@ -1,12 +1,19 @@
 using UnityEngine;
 
+
+public enum AwardType
+{
+    Money,
+    Xp,
+    Skin
+}
 [CreateAssetMenu(menuName = "Common Quest")]
 public class QuestSO : ScriptableObject
 {
     public string QuestId;
     public string QuestName;
     public string Description;
-    public string TypeOfAward;
+    public AwardType AwardType;
     public int Award;
     public int Target;
 }
