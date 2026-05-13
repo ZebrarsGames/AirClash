@@ -3,9 +3,15 @@ using UnityEngine;
 public static class QuestSaveSystem
 {
     private const string CompletedSuffix = "_completed";
-    public static void SaveProgress(string questId, int progress)
+    public static void SetProgress(string questId, int progress)
     {
         PlayerPrefs.SetInt(questId, progress);
+        PlayerPrefs.Save();
+    }
+    public static void PlusProgress(string questId, int progress)
+    {
+        int oldProgress = PlayerPrefs.GetInt(questId, 0);
+        PlayerPrefs.SetInt(questId, oldProgress + progress);
         PlayerPrefs.Save();
     }
     public static int GetProgress(string questId)
