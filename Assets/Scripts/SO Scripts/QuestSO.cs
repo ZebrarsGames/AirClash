@@ -1,5 +1,6 @@
 using UnityEngine;
 
+[CreateAssetMenu(menuName = "Common Quest")]
 public class QuestSO : ScriptableObject
 {
     public string QuestName;
