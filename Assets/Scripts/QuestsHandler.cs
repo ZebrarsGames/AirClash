@@ -12,10 +12,11 @@ public class QuestsHandler : MonoBehaviour
     {
         for(int i = 0; i < commonQuests.Length; i++)
         {
-            if(commonQuests[i].QuestName.Equals(questId))
+            if(commonQuests[i].QuestId.Equals(questId))
             {
                 QuestSO currentQuest = commonQuests[i];
                 QuestSaveSystem.PlusProgress(currentQuest.QuestId, amount);
+                Debug.Log("Прогресс стал больше");
                 if(QuestSaveSystem.GetProgress(currentQuest.QuestId) >= currentQuest.Target)
                 {
                     QuestSaveSystem.SetCompleted(currentQuest.QuestId);
@@ -28,7 +29,7 @@ public class QuestsHandler : MonoBehaviour
     {
         for(int i = 0; i < commonQuests.Length; i++)
         {
-            if(commonQuests[i].QuestName.Equals(questId))
+            if(commonQuests[i].QuestId.Equals(questId))
             {
                 QuestSO currentQuest = commonQuests[i];
                 switch(currentQuest.AwardType)
@@ -43,6 +44,7 @@ public class QuestsHandler : MonoBehaviour
                         Debug.Log("Данная награда в разработке!");
                         break;     
                 }
+                Debug.Log("Награда выдана!");
             }
         }
     }
