@@ -48,4 +48,28 @@ public class QuestsHandler : MonoBehaviour
             }
         }
     }
+    public string GetQuestName(string questId)
+    {
+        for(int i = 0; i < commonQuests.Length; i++)
+        {
+            if(commonQuests[i].QuestId.Equals(questId))
+            {
+                return commonQuests[i].QuestName;
+            }
+        }
+        
+        return null;
+    }
+    public string GetQuestDescription(string questId)
+    {
+        for(int i = 0; i < commonQuests.Length; i++)
+        {
+            if(commonQuests[i].QuestId.Equals(questId))
+            {
+                return commonQuests[i].Description;
+            }
+        }
+        
+        return null;
+    }
 }
