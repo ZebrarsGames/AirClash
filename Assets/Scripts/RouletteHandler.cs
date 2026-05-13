@@ -55,15 +55,47 @@ public class RouletteHandler : MonoBehaviour
         {
             roulettePanel.SetActive(true);
             achievementsHandler.UpdateProgress("ludoman", 1);
-            for(int i = 0; i < rouletteCells.Length; i++)
+            switch(typeOfRoulette)
             {
-                int randomIndex = Random.Range(0, rouletteItems.Length);
-                rouletteCells[i].SetData(rouletteItems[randomIndex]);
-                if (ColorUtility.TryParseHtmlString("#56A1CC", out Color cellColor))
-                {
-                    cellColor.a = 0.39f;
-                    rouletteCells[i].cellBg.color = cellColor;
-                }
+                case "Common":
+                    for(int i = 0; i < rouletteCells.Length; i++)
+                    {
+                        int randomIndex = Random.Range(0, rouletteItems.Length);
+                        rouletteCells[i].SetData(rouletteItems[randomIndex]);
+                        if (ColorUtility.TryParseHtmlString("#56A1CC", out Color cellColor))
+                        {
+                            cellColor.a = 0.39f;
+                            rouletteCells[i].cellBg.color = cellColor;
+                        }
+                    }
+                    break;
+                case "Epic":
+                    for(int i = 0; i < rouletteCells.Length; i++)
+                    {
+                        int randomIndex = Random.Range(0, rareRouletteItems.Length);
+                        rouletteCells[i].SetData(rareRouletteItems[randomIndex]);
+                        if (ColorUtility.TryParseHtmlString("#ff00d4", out Color cellColor))
+                        {
+                            cellColor.a = 0.39f;
+                            rouletteCells[i].cellBg.color = cellColor;
+                        }
+                    }
+                    break;
+                case "Legendary":
+                    for(int i = 0; i < rouletteCells.Length; i++)
+                    {
+                        int randomIndex = Random.Range(0, veryRareRouletteItems.Length);
+                        rouletteCells[i].SetData(veryRareRouletteItems[randomIndex]);
+                        if (ColorUtility.TryParseHtmlString("#FF0000", out Color cellColor))
+                        {
+                            cellColor.a = 0.39f;
+                            rouletteCells[i].cellBg.color = cellColor;
+                        }
+                    }
+                    break;
+                default:
+                    Debug.Log("Неправильный typeOfRoulette! (" + typeOfRoulette + ")");
+                    break;
             }
             stopRouletteBtn.interactable = false;
             awardText.gameObject.SetActive(false);
