@@ -26,6 +26,7 @@ public class MainMenu : MonoBehaviour
     [SerializeField] private MoneyHandler moneyHandler;
     [SerializeField] private CoinMover coinMover;
     [SerializeField] private XpHandler xpHandler;
+    [SerializeField] private QuestsHandler questsHandler; 
     [Header("Floats")]
     public float rotationSpeed = 10f;
     private RectTransform rectTransform;
