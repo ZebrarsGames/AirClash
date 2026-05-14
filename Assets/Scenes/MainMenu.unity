@@ -1461,9 +1461,9 @@ RectTransform:
   m_Father: {fileID: 296149362}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
+  m_SizeDelta: {x: -17, y: 0}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &82347874
 MonoBehaviour:
@@ -4564,7 +4564,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 2147483647
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &373390341
 RectTransform:
   m_ObjectHideFlags: 0
@@ -4748,7 +4748,7 @@ GameObject:
   - component: {fileID: 400955628}
   - component: {fileID: 400955627}
   m_Layer: 5
-  m_Name: AchievementName
+  m_Name: QuestName
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -6540,7 +6540,7 @@ GameObject:
   - component: {fileID: 562148436}
   - component: {fileID: 562148435}
   m_Layer: 5
-  m_Name: AchievementDescription
+  m_Name: QuestDescription
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -6826,7 +6826,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0.5}
   m_AnchorMax: {x: 0, y: 0.5}
-  m_AnchoredPosition: {x: 58.6, y: 0}
+  m_AnchoredPosition: {x: 58.600006, y: 0}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &590573510
@@ -9473,7 +9473,7 @@ GameObject:
   - component: {fileID: 789780641}
   - component: {fileID: 789780640}
   m_Layer: 5
-  m_Name: AchievementLogo
+  m_Name: QuestLogo
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -11908,8 +11908,8 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 611722658}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
+  m_AnchorMin: {x: 0, y: 0.50195813}
+  m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 20, y: 20}
   m_Pivot: {x: 0.5, y: 0.5}
@@ -23478,10 +23478,10 @@ RectTransform:
   - {fileID: 590573509}
   m_Father: {fileID: 471676780}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 719.98, y: 0}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 383.915, y: -393.24}
+  m_SizeDelta: {x: 719.98, y: 766.48}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1736376039
 MonoBehaviour:
@@ -23533,6 +23533,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 519cf3531cd870742a00ed413e852f26, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::QuestItem
+  questId: 
+  questNameText: {fileID: 400955628}
+  questDescriptionText: {fileID: 562148436}
+  targetText: {fileID: 1963123274}
+  completeArrow: {fileID: 590573508}
+  questLogo: {fileID: 789780640}
+  questsHandler: {fileID: 140701919}
 --- !u!1 &1740195673
 GameObject:
   m_ObjectHideFlags: 0
@@ -26567,7 +26574,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 0.5}
   m_AnchorMax: {x: 1, y: 0.5}
-  m_AnchoredPosition: {x: -74.7, y: 0}
+  m_AnchoredPosition: {x: -74.70001, y: 0}
   m_SizeDelta: {x: 135, y: 60}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1963123273
