@@ -16,7 +16,8 @@ MonoBehaviour:
   QuestName: "\u041F\u043B\u0430\u043D\u0435\u0442\u0430 \u043C\u043E\u043D\u0435\u0442"
   Description: "\u0417\u0430\u0440\u0430\u0431\u043E\u0442\u0430\u0439\u0442\u0435
     1000 \u043C\u043E\u043D\u0435\u0442"
-  AwardType: 1
-  Award: 500
+  AwardType: 2
+  Award: 0
+  SkinAward: QuestSkin
   Target: 1000
   QuestLogo: {fileID: 21300000, guid: 064ca924cf06fe645b74199f1638e2d4, type: 3}

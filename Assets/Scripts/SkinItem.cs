@@ -86,7 +86,7 @@ public class SkinItem : MonoBehaviour
             default:
                 break;
         }
-        if(PlayerPrefs.GetInt(skinName) == 1)
+        if(PlayerPrefs.GetInt(skinName, 0) == 1)
         {
             isBuy = true;
             checkmark.gameObject.SetActive(true);

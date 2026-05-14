@@ -15,6 +15,7 @@ public class QuestSO : ScriptableObject
     public string Description;
     public AwardType AwardType;
     public int Award;
+    public string SkinAward;
     public int Target;
     public Sprite QuestLogo;
 }
