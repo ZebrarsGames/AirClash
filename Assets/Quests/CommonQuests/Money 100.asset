@@ -10,12 +10,13 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: a4b244351641e7a43975e1d55ba4745d, type: 3}
-  m_Name: TestQuest
+  m_Name: Money 100
   m_EditorClassIdentifier: Assembly-CSharp::QuestSO
-  QuestId: test
-  QuestName: "\u0422\u0435\u0441\u0442\u043E\u0432\u044B\u0439 \u043A\u0432\u0435\u0441\u0442"
-  Description: "\u0421\u044B\u0433\u0440\u0430\u0439 2 \u043C\u0430\u0442\u0447\u0430"
+  QuestId: money100
+  QuestName: "\u041A\u043E\u0448\u0435\u043B\u0451\u043A \u043C\u043E\u043D\u0435\u0442"
+  Description: "\u0417\u0430\u0440\u0430\u0431\u043E\u0442\u0430\u0439\u0442\u0435
+    100 \u043C\u043E\u043D\u0435\u0442"
   AwardType: 1
-  Award: 20
-  Target: 2
+  Award: 100
+  Target: 100
   QuestLogo: {fileID: 21300000, guid: 064ca924cf06fe645b74199f1638e2d4, type: 3}
