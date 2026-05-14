@@ -42,7 +42,7 @@ public class MainMenu : MonoBehaviour
         Application.targetFrameRate = PlayerPrefs.GetInt("FPS", 60);
         audioSource.volume = PlayerPrefs.GetFloat("MusicVolume", 1.0f);
         rectTransform = mainMenuText.GetComponent<RectTransform>();
-        moneyText.text = "Деньги " + Convert.ToString(PlayerPrefs.GetInt("Money"));
+        moneyText.text = "Деньги " + moneyHandler.GetMoney();
         if(PlayerPrefs.GetInt("isAfterGame") == 0)
         {
             PlayerPrefs.SetInt("HowMoneyAdds", 0);
@@ -52,6 +52,7 @@ public class MainMenu : MonoBehaviour
         } else
         {
             AddMoney(PlayerPrefs.GetInt("HowMoneyAdds"));
+            UpdateQuests(PlayerPrefs.GetInt("HowMoneyAdds"));
             PlayerPrefs.SetInt("isAfterGame", 0);
             PlayerPrefs.SetInt("HowMoneyAdds", 0);
             PlayerPrefs.SetInt("HowXpAdds", 0);
@@ -251,5 +252,14 @@ public class MainMenu : MonoBehaviour
     public void OnGoalsSliderChanged()
     {
         goalsText.text = Convert.ToString(Convert.ToInt32(goalsSlider.value));
+    }
+    private void UpdateQuests(int amount)
+    {
+        questsHandler.UpdateQuestProgress("money10", amount);
+        questsHandler.UpdateQuestProgress("money50", amount);
+        questsHandler.UpdateQuestProgress("money100", amount);
+        questsHandler.UpdateQuestProgress("money300", amount);
+        questsHandler.UpdateQuestProgress("money700", amount);
+        questsHandler.UpdateQuestProgress("money1000", amount);
     }
 }
