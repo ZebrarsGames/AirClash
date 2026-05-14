@@ -13,10 +13,11 @@ MonoBehaviour:
   m_Name: Money 300
   m_EditorClassIdentifier: Assembly-CSharp::QuestSO
   QuestId: money300
-  QuestName: "\u041C\u0435\u0448\u043E\u043A \u043C\u043E\u043D\u0435\u0442"
+  QuestName: "\u0411\u0430\u043D\u043A \u043C\u043E\u043D\u0435\u0442"
   Description: "\u0417\u0430\u0440\u0430\u0431\u043E\u0442\u0430\u0439\u0442\u0435
     300 \u043C\u043E\u043D\u0435\u0442"
   AwardType: 1
-  Award: 300
+  Award: 400
+  SkinAward: 
   Target: 300
   QuestLogo: {fileID: 21300000, guid: 064ca924cf06fe645b74199f1638e2d4, type: 3}
