@@ -57,7 +57,6 @@ public class QuestsHandler : MonoBehaviour
                 return commonQuests[i].QuestName;
             }
         }
-        
         return null;
     }
     public string GetQuestDescription(string questId)
@@ -69,7 +68,32 @@ public class QuestsHandler : MonoBehaviour
                 return commonQuests[i].Description;
             }
         }
-        
+        return null;
+    }
+    public int GetQuestTarget(string questId)
+    {
+        for(int i = 0; i < commonQuests.Length; i++)
+        {
+            if(commonQuests[i].QuestId.Equals(questId))
+            {
+                return commonQuests[i].Target;
+            }
+        }
+        return 0;
+    }
+    public int GetQuestProgress(string questId)
+    {
+        return QuestSaveSystem.GetProgress(questId);
+    }
+    public Sprite GetQuestIcon(string questId)
+    {
+        for(int i = 0; i < commonQuests.Length; i++)
+        {
+            if(commonQuests[i].QuestId.Equals(questId))
+            {
+                return commonQuests[i].QuestLogo;
+            }
+        }
         return null;
     }
 }
