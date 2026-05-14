@@ -2472,6 +2472,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 2fcb37fdc360014468e67aa9ef7cc006, type: 2}
   moneyHandler: {fileID: 1114898952}
   xpHandler: {fileID: 695791783}
+  achievementsHandler: {fileID: 180572474}
 --- !u!4 &140701920
 Transform:
   m_ObjectHideFlags: 0
@@ -25685,7 +25686,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 383.915, y: -68.03999}
+  m_AnchoredPosition: {x: 383.915, y: -68.03998}
   m_SizeDelta: {x: 719.98, y: 116.079994}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1736376039

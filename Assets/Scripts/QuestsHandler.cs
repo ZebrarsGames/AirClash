@@ -7,6 +7,7 @@ public class QuestsHandler : MonoBehaviour
     [Header("Scripts")]
     [SerializeField] private MoneyHandler moneyHandler;
     [SerializeField] private XpHandler xpHandler;
+    [SerializeField] private AchievementsHandler achievementsHandler;
 
     public void UpdateQuestProgress(string questId, int amount)
     {
@@ -16,13 +17,11 @@ public class QuestsHandler : MonoBehaviour
             {
                 QuestSO currentQuest = commonQuests[i];
                 if(QuestSaveSystem.GetIsCompleted(currentQuest.QuestId)) return;
+                QuestSaveSystem.PlusProgress(currentQuest.QuestId, amount);
                 if(amount > currentQuest.Target) 
                 { 
                     QuestSaveSystem.SetProgress(currentQuest.QuestId, currentQuest.Target);
-                    QuestSaveSystem.SetCompleted(currentQuest.QuestId);
-                    return;
                 }
-                QuestSaveSystem.PlusProgress(currentQuest.QuestId, amount);
                 Debug.Log("Прогресс у " + questId +  " стал больше на " + amount);
                 if(QuestSaveSystem.GetProgress(currentQuest.QuestId) >= currentQuest.Target)
                 {
@@ -48,7 +47,9 @@ public class QuestsHandler : MonoBehaviour
                         xpHandler.AddXp(currentQuest.Award);
                         break;   
                     case AwardType.Skin:
-                        Debug.Log("Данная награда в разработке!");
+                        achievementsHandler.UpdateProgress("large_wardrobe", 1);
+                        PlayerPrefs.SetInt(currentQuest.SkinAward, 1);
+                        PlayerPrefs.Save();
                         break;     
                 }
                 Debug.Log("Награда за " + questId + " выдана!");
