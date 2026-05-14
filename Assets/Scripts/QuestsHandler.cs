@@ -16,7 +16,7 @@ public class QuestsHandler : MonoBehaviour
             {
                 QuestSO currentQuest = commonQuests[i];
                 QuestSaveSystem.PlusProgress(currentQuest.QuestId, amount);
-                Debug.Log("Прогресс стал больше");
+                Debug.Log("Прогресс у " + questId +  "стал больше на " + amount);
                 if(QuestSaveSystem.GetProgress(currentQuest.QuestId) >= currentQuest.Target)
                 {
                     QuestSaveSystem.SetCompleted(currentQuest.QuestId);
@@ -44,7 +44,7 @@ public class QuestsHandler : MonoBehaviour
                         Debug.Log("Данная награда в разработке!");
                         break;     
                 }
-                Debug.Log("Награда выдана!");
+                Debug.Log("Награда за " + questId + " выдана!");
             }
         }
     }
