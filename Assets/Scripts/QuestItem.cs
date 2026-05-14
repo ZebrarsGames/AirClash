@@ -18,7 +18,7 @@ public class QuestItem : MonoBehaviour
     {
         questNameText.text = questsHandler.GetQuestName(questId);
         questDescriptionText.text = questsHandler.GetQuestDescription(questId);
-        targetText.text = questsHandler.GetQuestProgress(questId) + " / " + questsHandler.GetQuestTarget(questId);
+        targetText.text = questsHandler.GetQuestProgress(questId) + "/" + questsHandler.GetQuestTarget(questId);
         questLogo.sprite = questsHandler.GetQuestIcon(questId);
         completeArrow.SetActive(QuestSaveSystem.GetIsCompleted(questId));
     }
