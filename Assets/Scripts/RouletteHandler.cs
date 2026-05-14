@@ -33,6 +33,7 @@ public class RouletteHandler : MonoBehaviour
     [Header("Scripts")]
     [SerializeField] private AchievementsHandler achievementsHandler;
     [SerializeField] private XpHandler xpHandler;
+    [SerializeField] private QuestsHandler questsHandler;
 
     public void StartRoulette(string typeOfRoulette)
     {
@@ -238,6 +239,7 @@ public class RouletteHandler : MonoBehaviour
                     if(bestCell.currentData.award == 67) achievementsHandler.UpdateProgress("six_seven", 1);
                     awardText.text = "ВЫИГРЫШ: " + bestCell.currentData.award + " монет";
                     moneyHandler.AddMoney(bestCell.currentData.award);
+                    UpdateQuests(bestCell.currentData.award);
                     moneyText.text = "Деньги " + moneyHandler.GetMoney();
                     break;
                 case "Skin":
@@ -249,6 +251,7 @@ public class RouletteHandler : MonoBehaviour
                             {
                                 awardText.text = "ВЫИГРЫШ: " + i.skinPrice + " монет (скин уже куплен)";
                                 moneyHandler.AddMoney(i.skinPrice);
+                                UpdateQuests(i.skinPrice);
                                 moneyText.text = "Деньги " + moneyHandler.GetMoney();
                             } else
                             {
@@ -296,5 +299,14 @@ public class RouletteHandler : MonoBehaviour
     {
         choiceRoulettePanel.SetActive(true);
         choiceRoulettePanel.GetComponent<CanvasGroup>().DOFade(1.0f, 0.2f);
+    }
+    private void UpdateQuests(int amount)
+    {
+        questsHandler.UpdateQuestProgress("money10", amount);
+        questsHandler.UpdateQuestProgress("money50", amount);
+        questsHandler.UpdateQuestProgress("money100", amount);
+        questsHandler.UpdateQuestProgress("money300", amount);
+        questsHandler.UpdateQuestProgress("money700", amount);
+        questsHandler.UpdateQuestProgress("money1000", amount);
     }
 }
