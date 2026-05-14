@@ -305,8 +305,8 @@ public class RouletteHandler : MonoBehaviour
         questsHandler.UpdateQuestProgress("money10", amount);
         questsHandler.UpdateQuestProgress("money50", amount);
         questsHandler.UpdateQuestProgress("money100", amount);
+        questsHandler.UpdateQuestProgress("money200", amount);
         questsHandler.UpdateQuestProgress("money300", amount);
-        questsHandler.UpdateQuestProgress("money700", amount);
-        questsHandler.UpdateQuestProgress("money1000", amount);
+        questsHandler.UpdateQuestProgress("money500", amount);
     }
 }

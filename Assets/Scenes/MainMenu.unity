@@ -4251,7 +4251,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 519cf3531cd870742a00ed413e852f26, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::QuestItem
-  questId: money1000
+  questId: money500
   questNameText: {fileID: 1248308648}
   questDescriptionText: {fileID: 1816907390}
   targetText: {fileID: 2108025157}
@@ -23232,7 +23232,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 519cf3531cd870742a00ed413e852f26, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::QuestItem
-  questId: money300
+  questId: money200
   questNameText: {fileID: 918642991}
   questDescriptionText: {fileID: 1562418123}
   targetText: {fileID: 679450039}
@@ -29461,7 +29461,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 519cf3531cd870742a00ed413e852f26, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::QuestItem
-  questId: money700
+  questId: money300
   questNameText: {fileID: 1831611288}
   questDescriptionText: {fileID: 866921929}
   targetText: {fileID: 1465788903}
