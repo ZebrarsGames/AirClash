@@ -14,6 +14,7 @@ public class MainMenu : MonoBehaviour
     [SerializeField] private GameObject gamemodesPanel;
     [SerializeField] private GameObject userGamemodePanel;
     [SerializeField] private GameObject xpPanel;
+    [SerializeField] private GameObject questPanel;
     [Header("Audio")]
     [SerializeField] private AudioSource audioSource;
     [SerializeField] private AudioClip menuMusic;
@@ -160,6 +161,7 @@ public class MainMenu : MonoBehaviour
         gamemodesPanel.SetActive(false);
         userGamemodePanel.SetActive(false);
         xpPanel.SetActive(false);
+        questPanel.SetActive(false);
     }
 
     public void VeryEasyMode()
@@ -215,6 +217,10 @@ public class MainMenu : MonoBehaviour
     public void OpenXpPanel()
     {
         xpPanel.SetActive(true);
+    }
+    public void OpenQuestPanel()
+    {
+        questPanel.SetActive(true);
     }
     public void OpenUserGamemode()
     {
