@@ -15,8 +15,15 @@ public class QuestsHandler : MonoBehaviour
             if(commonQuests[i].QuestId.Equals(questId))
             {
                 QuestSO currentQuest = commonQuests[i];
+                if(QuestSaveSystem.GetIsCompleted(currentQuest.QuestId)) return;
+                if(amount > currentQuest.Target) 
+                { 
+                    QuestSaveSystem.SetProgress(currentQuest.QuestId, currentQuest.Target);
+                    QuestSaveSystem.SetCompleted(currentQuest.QuestId);
+                    return;
+                }
                 QuestSaveSystem.PlusProgress(currentQuest.QuestId, amount);
-                Debug.Log("Прогресс у " + questId +  "стал больше на " + amount);
+                Debug.Log("Прогресс у " + questId +  " стал больше на " + amount);
                 if(QuestSaveSystem.GetProgress(currentQuest.QuestId) >= currentQuest.Target)
                 {
                     QuestSaveSystem.SetCompleted(currentQuest.QuestId);
