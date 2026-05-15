@@ -18,5 +18,6 @@ MonoBehaviour:
     100 \u043C\u043E\u043D\u0435\u0442"
   AwardType: 1
   Award: 100
+  SkinAward: 
   Target: 100
-  QuestLogo: {fileID: 21300000, guid: 064ca924cf06fe645b74199f1638e2d4, type: 3}
+  QuestLogo: {fileID: 21300000, guid: fea7161651b327d4ca73881e3732a940, type: 3}

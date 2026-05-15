@@ -20,4 +20,4 @@ MonoBehaviour:
   Award: 400
   SkinAward: 
   Target: 300
-  QuestLogo: {fileID: 21300000, guid: 064ca924cf06fe645b74199f1638e2d4, type: 3}
+  QuestLogo: {fileID: 21300000, guid: 94e420f56e15dd146ab89c4fc8b801d4, type: 3}
