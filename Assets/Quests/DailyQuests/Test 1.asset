@@ -19,5 +19,5 @@ MonoBehaviour:
   AwardType: 0
   Award: 20
   SkinAward: 
-  Target: 5
+  Target: 2
   QuestLogo: {fileID: 21300000, guid: f8520931070bc3d46ae689e1620a3c0d, type: 3}
