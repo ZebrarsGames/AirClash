@@ -17,5 +17,6 @@ public class DailyQuestItem : MonoBehaviour
         questDescriptionText.text = quest.Description;
         questLogo.sprite = quest.QuestLogo;
         questId = quest.QuestId;
+        targetText.text = QuestSaveSystem.GetProgress(questId) + "/" + quest.Target;
     }
 }
