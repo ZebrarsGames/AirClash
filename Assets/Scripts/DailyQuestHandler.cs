@@ -13,6 +13,10 @@ public class DailyQuestHandler : MonoBehaviour
     {
         CheckQuestAvailability();
     }
+    void FixedUpdate()
+    {
+        UpdateTimer();
+    }
     private void CheckQuestAvailability() {
         if (!PlayerPrefs.HasKey(LastQuestTimeKey))
         {
@@ -20,11 +24,9 @@ public class DailyQuestHandler : MonoBehaviour
             return;
         }
 
-        // Получаем время последнего получения
         string lastClaimedStr = PlayerPrefs.GetString(LastQuestTimeKey);
         DateTime lastClaimedTime = DateTime.Parse(lastClaimedStr);
         
-        // Вычисляем, сколько времени прошло
         TimeSpan timePassed = DateTime.Now - lastClaimedTime;
 
         if (timePassed.TotalHours >= RewardIntervalHours)
@@ -42,11 +44,15 @@ public class DailyQuestHandler : MonoBehaviour
     }
     private void UpdateTimer()
     {
-        string lastClaimedStr = PlayerPrefs.GetString(LastQuestTimeKey, DateTime.MinValue.ToString());
-        DateTime nextClaimTime = DateTime.Parse(lastClaimedStr).AddHours(RewardIntervalHours);
-        TimeSpan timeLeft = nextClaimTime - DateTime.Now;
-        // Форматируем вывод в вид ЧЧ:ММ:СС
-        statusText.text = string.Format("До следующей награды: {0:D2}:{1:D2}:{2:D2}", 
-        timeLeft.Hours, timeLeft.Minutes, timeLeft.Seconds);
+        DateTime now = DateTime.Now;
+        
+        DateTime nextMidnight = now.Date.AddDays(1);
+        
+        TimeSpan timeLeft = nextMidnight - now;
+
+        statusText.text = string.Format("До обновления квестов: {0:D2}:{1:D2}:{2:D2}", 
+            (int)timeLeft.TotalHours, 
+            timeLeft.Minutes, 
+            timeLeft.Seconds);
     }
 }
