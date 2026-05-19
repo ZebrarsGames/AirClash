@@ -6,7 +6,10 @@ public class DailyQuestHandler : MonoBehaviour
 {
     [SerializeField] private DailyQuestSO[] quests;
     [SerializeField] private DailyQuestItem[] dailyQuestItems;
+    private DailyQuestSO[] todayPool = new DailyQuestSO[3];
     [SerializeField] private Text statusText;
+    [SerializeField] private MoneyHandler moneyHandler;
+    [SerializeField] private XpHandler xpHandler;
     
     private const string NextMidnightTimeKey = "NextMidnightSave";
     private const string QuestIdsKey = "SavedQuestIds"; 
@@ -51,6 +54,7 @@ public class DailyQuestHandler : MonoBehaviour
             int rand = UnityEngine.Random.Range(0, quests.Length);
             dailyQuestItems[i].SetData(quests[rand]);
             savedIds[i] = rand;
+            todayPool[i] = quests[rand];
         }
 
         string idsString = string.Join(",", savedIds);
@@ -79,6 +83,62 @@ public class DailyQuestHandler : MonoBehaviour
                 }
             }
         }
+    }
+    public void UpdateQuestProgress(string questId, int amount)
+    {
+        if(IsTodayHasQuest(questId))
+        {
+            for(int i = 0; i < quests.Length; i++)
+            {  
+                if(quests[i].QuestId.Equals(questId))
+                {
+                    DailyQuestSO currentQuest = quests[i];
+                    if(QuestSaveSystem.GetIsCompleted(currentQuest.QuestId)) return;
+                    QuestSaveSystem.PlusProgress(currentQuest.QuestId, amount);
+                    if(amount > currentQuest.Target) 
+                    { 
+                        QuestSaveSystem.SetProgress(currentQuest.QuestId, currentQuest.Target);
+                    }
+                    Debug.Log("Прогресс у " + questId +  " стал больше на " + amount);
+                    if(QuestSaveSystem.GetProgress(currentQuest.QuestId) >= currentQuest.Target)
+                    {
+                        QuestSaveSystem.SetCompleted(currentQuest.QuestId);
+                        GiveAward(currentQuest.QuestId);
+                    }
+                }
+            }
+        }
+    }
+    public void GiveAward(string questId)
+    {
+        for(int i = 0; i < quests.Length; i++)
+        {
+            if(quests[i].QuestId.Equals(questId))
+            {
+                DailyQuestSO currentQuest = quests[i];
+                switch(currentQuest.AwardType)
+                {
+                    case AwardType.Money:
+                        moneyHandler.AddMoney(currentQuest.Award);
+                        break;
+                    case AwardType.Xp:
+                        xpHandler.AddXp(currentQuest.Award);
+                        break;     
+                }
+                Debug.Log("Награда за " + questId + " выдана!");
+            }
+        }
+    }
+    public bool IsTodayHasQuest(string questId)
+    {
+        for(int i = 0; i < todayPool.Length; i++)
+        {
+            if(todayPool[i].QuestId.Equals(questId))
+            {
+                return true;
+            }
+        }
+        return false;
     }
 
     private void UpdateTimer()

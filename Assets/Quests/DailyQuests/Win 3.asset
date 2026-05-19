@@ -10,14 +10,13 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: cda6015e8d440f44fbf5335c9f1ee1a2, type: 3}
-  m_Name: Test 2
+  m_Name: Win 3
   m_EditorClassIdentifier: Assembly-CSharp::DailyQuestSO
-  QuestId: test3
-  QuestName: "\u0422\u0435\u0441\u0442\u043E\u0432\u044B\u0439 \u0435\u0436\u0435\u0434\u043D\u0435\u0432\u043D\u0438\u043A
-    3"
-  Description: "\u0412\u044B\u0439\u0433\u0440\u0430\u0439 3 \u043C\u0430\u0442\u0447\u0430"
-  AwardType: 0
-  Award: 20
+  QuestId: win_3_matches
+  QuestName: "\u041F\u043E\u0431\u0435\u0434\u0438\u0442\u0435\u043B\u044C"
+  Description: "\u0412\u044B\u0439\u0433\u0440\u0430\u0439\u0442\u0435 3 \u043C\u0430\u0442\u0447\u0430"
+  AwardType: 1
+  Award: 50
   SkinAward: 
   Target: 3
   QuestLogo: {fileID: 21300000, guid: f8520931070bc3d46ae689e1620a3c0d, type: 3}
