@@ -2491,7 +2491,8 @@ MonoBehaviour:
   endSound: {fileID: 8300000, guid: 4e1b57aa2bad8fc4e933d842cc64b672, type: 3}
   achievementsHandler: {fileID: 1029591086}
   xpHandler: {fileID: 1512294405}
-  questsHandler: {fileID: 0}
+  questsHandler: {fileID: 1899276047}
+  dailyQuestHandler: {fileID: 0}
 --- !u!4 &302607432
 Transform:
   m_ObjectHideFlags: 0
@@ -15878,6 +15879,60 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2011718669}
   m_CullTransparentMesh: 1
+--- !u!1 &2030816081
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2030816083}
+  - component: {fileID: 2030816082}
+  m_Layer: 0
+  m_Name: DailyQuestHandler
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &2030816082
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2030816081}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c33a9bcf5d24521418b0c44f9b1631c6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::DailyQuestHandler
+  quests:
+  - {fileID: 11400000, guid: d38255f5f3cbef24b91ce3d7f3be7e56, type: 2}
+  - {fileID: 11400000, guid: 869b07a3f57637a448065dacd9efe2b2, type: 2}
+  - {fileID: 11400000, guid: 25bf1b718fd73104d992ec10dea0ce88, type: 2}
+  - {fileID: 11400000, guid: 715a9a75097ea08468bc29456ce6dc01, type: 2}
+  - {fileID: 11400000, guid: b1f0b4bb8fb8b444481538bf1f49f206, type: 2}
+  dailyQuestItems: []
+  statusText: {fileID: 0}
+  moneyHandler: {fileID: 2065031118}
+  xpHandler: {fileID: 1512294405}
+--- !u!4 &2030816083
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2030816081}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2057147824
 GameObject:
   m_ObjectHideFlags: 0
@@ -16328,3 +16383,4 @@ SceneRoots:
   - {fileID: 1512294406}
   - {fileID: 302607432}
   - {fileID: 1899276048}
+  - {fileID: 2030816083}

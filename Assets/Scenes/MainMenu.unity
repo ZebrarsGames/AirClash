@@ -27538,7 +27538,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::DailyQuestHandler
   quests:
+  - {fileID: 11400000, guid: 869b07a3f57637a448065dacd9efe2b2, type: 2}
   - {fileID: 11400000, guid: 25bf1b718fd73104d992ec10dea0ce88, type: 2}
+  - {fileID: 11400000, guid: 715a9a75097ea08468bc29456ce6dc01, type: 2}
   - {fileID: 11400000, guid: d38255f5f3cbef24b91ce3d7f3be7e56, type: 2}
   - {fileID: 11400000, guid: b1f0b4bb8fb8b444481538bf1f49f206, type: 2}
   dailyQuestItems:
@@ -30930,6 +30932,7 @@ MonoBehaviour:
   coinMover: {fileID: 1016994372}
   xpHandler: {fileID: 695791783}
   questsHandler: {fileID: 140701919}
+  dailyQuestHandler: {fileID: 1735674029}
   rotationSpeed: 10
 --- !u!1 &1912893293
 GameObject:

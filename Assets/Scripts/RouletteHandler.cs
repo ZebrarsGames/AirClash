@@ -34,6 +34,7 @@ public class RouletteHandler : MonoBehaviour
     [SerializeField] private AchievementsHandler achievementsHandler;
     [SerializeField] private XpHandler xpHandler;
     [SerializeField] private QuestsHandler questsHandler;
+    [SerializeField] private DailyQuestHandler dailyQuestHandler;
 
     public void StartRoulette(string typeOfRoulette)
     {
@@ -308,5 +309,6 @@ public class RouletteHandler : MonoBehaviour
         questsHandler.UpdateQuestProgress("money200", amount);
         questsHandler.UpdateQuestProgress("money300", amount);
         questsHandler.UpdateQuestProgress("money500", amount);
+        dailyQuestHandler.UpdateQuestProgress("money50", amount);
     }
 }

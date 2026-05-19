@@ -901,7 +901,7 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_MaskInteraction: 0
-  m_Sprite: {fileID: 21300000, guid: eb1cc204c1a55c9408f4bf596239a34e, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 7e7d1997b8744a241b88a3d3d4f56819, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -909,7 +909,7 @@ SpriteRenderer:
   m_Size: {x: 1, y: 1}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
-  m_WasSpriteAssigned: 0
+  m_WasSpriteAssigned: 1
   m_SpriteSortPoint: 0
 --- !u!4 &243884042
 Transform:
@@ -3071,6 +3071,7 @@ MonoBehaviour:
   howMoneyAdd: 0
   achievementsHandler: {fileID: 1636014922}
   xpHandler: {fileID: 1740135151}
+  dailyQuestHandler: {fileID: 1508050407}
 --- !u!4 &793148557
 Transform:
   m_ObjectHideFlags: 0
@@ -4837,6 +4838,60 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1508050406
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1508050408}
+  - component: {fileID: 1508050407}
+  m_Layer: 0
+  m_Name: DailyQuestHandler
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1508050407
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1508050406}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c33a9bcf5d24521418b0c44f9b1631c6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::DailyQuestHandler
+  quests:
+  - {fileID: 11400000, guid: d38255f5f3cbef24b91ce3d7f3be7e56, type: 2}
+  - {fileID: 11400000, guid: 869b07a3f57637a448065dacd9efe2b2, type: 2}
+  - {fileID: 11400000, guid: 25bf1b718fd73104d992ec10dea0ce88, type: 2}
+  - {fileID: 11400000, guid: 715a9a75097ea08468bc29456ce6dc01, type: 2}
+  - {fileID: 11400000, guid: b1f0b4bb8fb8b444481538bf1f49f206, type: 2}
+  dailyQuestItems: []
+  statusText: {fileID: 0}
+  moneyHandler: {fileID: 1342946019}
+  xpHandler: {fileID: 1740135151}
+--- !u!4 &1508050408
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1508050406}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1543717348
 GameObject:
   m_ObjectHideFlags: 0
@@ -6419,3 +6474,4 @@ SceneRoots:
   - {fileID: 874260107}
   - {fileID: 1211414538}
   - {fileID: 1286145900}
+  - {fileID: 1508050408}
