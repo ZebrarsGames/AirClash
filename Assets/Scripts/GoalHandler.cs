@@ -54,6 +54,8 @@ public class GoalHandler : MonoBehaviour
     private int howManyXpAddForGoal;
     private int howManyXpAddAsLose;
     private int totalXpEarned;
+    [Header("Quests")]
+    [SerializeField] private DailyQuestHandler dailyQuestHandler;
 
 
     void Awake()
@@ -202,6 +204,7 @@ public class GoalHandler : MonoBehaviour
             int actuallyEarned = xpAfter - xpBefore;
             endScreen.StartEndScreen(actuallyEarned, xpBefore); 
             UpdateAchievements();
+            UpdateWinQuests();
             switch(PlayerPrefs.GetFloat("Difficulty"))
             {
                 case 3.1415926535f:
@@ -212,6 +215,7 @@ public class GoalHandler : MonoBehaviour
                     break;
                 case 13.5f:
                     achievementsHandler.UpdateProgress("training", 1);
+                    dailyQuestHandler.UpdateQuestProgress("win_normal_bot", 1);
                     break;
                 case 25f:
                     achievementsHandler.UpdateProgress("fight", 1);
@@ -271,5 +275,11 @@ public class GoalHandler : MonoBehaviour
         achievementsHandler.UpdateProgress("world_champion", 1);
         achievementsHandler.UpdateProgress("best_in_the_galaxy", 1);
         achievementsHandler.UpdateProgress("best_in_the_universe", 1);
+    }
+    private void UpdateWinQuests()
+    {
+        dailyQuestHandler.UpdateQuestProgress("win_1_matches", 1);
+        dailyQuestHandler.UpdateQuestProgress("win_3_matches", 1);
+        dailyQuestHandler.UpdateQuestProgress("win_5_matches", 1);
     }
 }

@@ -1,6 +1,7 @@
 using UnityEngine;
 using System;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class DailyQuestHandler : MonoBehaviour
 {
@@ -13,15 +14,18 @@ public class DailyQuestHandler : MonoBehaviour
     
     private const string NextMidnightTimeKey = "NextMidnightSave";
     private const string QuestIdsKey = "SavedQuestIds"; 
+    private bool isMainMenu;
 
     void Start()
     {
+        if(SceneManager.GetActiveScene().name.Equals("MainMenu")) isMainMenu = true;
+        else isMainMenu = false;
         CheckQuestAvailability();
     }
 
     void FixedUpdate() 
     {
-        UpdateTimer();
+        if(isMainMenu) UpdateTimer();
     }
 
     private void CheckQuestAvailability() 

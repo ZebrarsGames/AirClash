@@ -29,6 +29,7 @@ public class MainMenu : MonoBehaviour
     [SerializeField] private CoinMover coinMover;
     [SerializeField] private XpHandler xpHandler;
     [SerializeField] private QuestsHandler questsHandler; 
+    [SerializeField] private DailyQuestHandler dailyQuestHandler;
     [Header("Floats")]
     public float rotationSpeed = 10f;
     private RectTransform rectTransform;
@@ -267,5 +268,6 @@ public class MainMenu : MonoBehaviour
         questsHandler.UpdateQuestProgress("money200", amount);
         questsHandler.UpdateQuestProgress("money300", amount);
         questsHandler.UpdateQuestProgress("money500", amount);
+        dailyQuestHandler.UpdateQuestProgress("money50", amount);
     }
 }
