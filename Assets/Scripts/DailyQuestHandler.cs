@@ -60,6 +60,7 @@ public class DailyQuestHandler : MonoBehaviour
         for(int i = 0; i < maxQuests; i++)
         {
             int rand = UnityEngine.Random.Range(0, quests.Length);
+            if(todayPool[i] != null && IsTodayHasQuest(quests[rand].QuestId)) GenerateNewQuests();
             savedIds[i] = rand;
             todayPool[i] = quests[rand];
         }
@@ -130,10 +131,12 @@ public class DailyQuestHandler : MonoBehaviour
                 switch(currentQuest.AwardType)
                 {
                     case AwardType.Money:
-                        moneyHandler.AddMoney(currentQuest.Award);
+                        PlayerPrefs.SetInt("HowMoneyAdds", PlayerPrefs.GetInt("HowMoneyAdds") + currentQuest.Award);
+                        PlayerPrefs.Save();
                         break;
                     case AwardType.Xp:
-                        xpHandler.AddXp(currentQuest.Award);
+                        PlayerPrefs.SetInt("HowXpAdds", PlayerPrefs.GetInt("HowXpAdds") + currentQuest.Award);
+                        PlayerPrefs.Save();
                         break;     
                 }
                 Debug.Log("Награда за " + questId + " выдана!");
