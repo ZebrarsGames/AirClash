@@ -41,10 +41,12 @@ public class QuestsHandler : MonoBehaviour
                 switch(currentQuest.AwardType)
                 {
                     case AwardType.Money:
-                        moneyHandler.AddMoney(currentQuest.Award);
+                        PlayerPrefs.SetInt("HowMoneyAdds", PlayerPrefs.GetInt("HowMoneyAdds") + currentQuest.Award);
+                        PlayerPrefs.Save();
                         break;
                     case AwardType.Xp:
-                        xpHandler.AddXp(currentQuest.Award);
+                        PlayerPrefs.SetInt("HowXpAdds", PlayerPrefs.GetInt("HowXpAdds") + currentQuest.Award);
+                        PlayerPrefs.Save();
                         break;   
                     case AwardType.Skin:
                         achievementsHandler.UpdateProgress("large_wardrobe", 1);
