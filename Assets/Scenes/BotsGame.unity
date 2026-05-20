@@ -4873,7 +4873,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 25bf1b718fd73104d992ec10dea0ce88, type: 2}
   - {fileID: 11400000, guid: 715a9a75097ea08468bc29456ce6dc01, type: 2}
   - {fileID: 11400000, guid: b1f0b4bb8fb8b444481538bf1f49f206, type: 2}
-  dailyQuestItems: []
+  maxQuests: 3
   statusText: {fileID: 0}
   moneyHandler: {fileID: 1342946019}
   xpHandler: {fileID: 1740135151}

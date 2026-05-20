@@ -6,7 +6,7 @@ using UnityEngine.SceneManagement;
 public class DailyQuestHandler : MonoBehaviour
 {
     [SerializeField] private DailyQuestSO[] quests;
-    [SerializeField] private DailyQuestItem[] dailyQuestItems;
+    [SerializeField] private int maxQuests;
     private DailyQuestSO[] todayPool = new DailyQuestSO[3];
     [SerializeField] private Text statusText;
     [SerializeField] private MoneyHandler moneyHandler;
@@ -16,11 +16,15 @@ public class DailyQuestHandler : MonoBehaviour
     private const string QuestIdsKey = "SavedQuestIds"; 
     private bool isMainMenu;
 
+    void Awake()
+    {
+        CheckQuestAvailability();
+    }
+
     void Start()
     {
         if(SceneManager.GetActiveScene().name.Equals("MainMenu")) isMainMenu = true;
         else isMainMenu = false;
-        CheckQuestAvailability();
     }
 
     void FixedUpdate() 
@@ -51,12 +55,11 @@ public class DailyQuestHandler : MonoBehaviour
 
     private void GenerateNewQuests()
     {
-        int[] savedIds = new int[dailyQuestItems.Length];
+        int[] savedIds = new int[maxQuests];
 
-        for(int i = 0; i < dailyQuestItems.Length; i++)
+        for(int i = 0; i < maxQuests; i++)
         {
             int rand = UnityEngine.Random.Range(0, quests.Length);
-            dailyQuestItems[i].SetData(quests[rand]);
             savedIds[i] = rand;
             todayPool[i] = quests[rand];
         }
@@ -77,17 +80,21 @@ public class DailyQuestHandler : MonoBehaviour
         string idsString = PlayerPrefs.GetString(QuestIdsKey);
         string[] splitIds = idsString.Split(',');
 
-        for (int i = 0; i < dailyQuestItems.Length; i++)
+        for (int i = 0; i < maxQuests; i++)
         {
             if (i < splitIds.Length && int.TryParse(splitIds[i], out int questIndex))
             {
                 if (questIndex >= 0 && questIndex < quests.Length)
-                {
-                    dailyQuestItems[i].SetData(quests[questIndex]);
+                {           
+                    if (i < todayPool.Length)
+                    {
+                        todayPool[i] = quests[questIndex];
+                    }
                 }
             }
         }
     }
+
     public void UpdateQuestProgress(string questId, int amount)
     {
         if(IsTodayHasQuest(questId))
@@ -143,6 +150,10 @@ public class DailyQuestHandler : MonoBehaviour
             }
         }
         return false;
+    }
+    public DailyQuestSO[] GetTodayPool()
+    {
+        return todayPool;
     }
 
     private void UpdateTimer()
