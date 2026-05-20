@@ -9,8 +9,6 @@ public class DailyQuestHandler : MonoBehaviour
     [SerializeField] private int maxQuests;
     private DailyQuestSO[] todayPool = new DailyQuestSO[3];
     [SerializeField] private Text statusText;
-    [SerializeField] private MoneyHandler moneyHandler;
-    [SerializeField] private XpHandler xpHandler;
     
     private const string NextMidnightTimeKey = "NextMidnightSave";
     private const string QuestIdsKey = "SavedQuestIds"; 

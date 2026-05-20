@@ -5,8 +5,6 @@ public class QuestsHandler : MonoBehaviour
     [Header("Arrays")]
     [SerializeField] private QuestSO[] commonQuests;
     [Header("Scripts")]
-    [SerializeField] private MoneyHandler moneyHandler;
-    [SerializeField] private XpHandler xpHandler;
     [SerializeField] private AchievementsHandler achievementsHandler;
 
     public void UpdateQuestProgress(string questId, int amount)

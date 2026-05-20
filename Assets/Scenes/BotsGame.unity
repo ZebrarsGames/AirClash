@@ -671,6 +671,64 @@ RectTransform:
   m_AnchoredPosition: {x: 0.19699097, y: 0}
   m_SizeDelta: {x: -9.607, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!1 &235091420
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 235091422}
+  - component: {fileID: 235091421}
+  m_Layer: 0
+  m_Name: QuestHandler
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &235091421
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 235091420}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3fe6105fe4339c94493448fb8b09307f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::QuestsHandler
+  commonQuests:
+  - {fileID: 11400000, guid: 9bf2c5c01ed36464796890cb50847b10, type: 2}
+  - {fileID: 11400000, guid: 81370ec3d7ada0f48a048c884bf07a77, type: 2}
+  - {fileID: 11400000, guid: 0b27d39edc02ddd42b6efcaa9c698734, type: 2}
+  - {fileID: 11400000, guid: bab0b4e6f61c6d240a936c19c1e04f20, type: 2}
+  - {fileID: 11400000, guid: 262d53f67d68c6548aeae1dc0c1b819a, type: 2}
+  - {fileID: 11400000, guid: e77a699a4bec0a8458409f23af468f01, type: 2}
+  - {fileID: 11400000, guid: 88eada9b3fa2ec54eb491b6c53599adb, type: 2}
+  - {fileID: 11400000, guid: 6a91b07f6a93d994784afe0d657327bb, type: 2}
+  - {fileID: 11400000, guid: 4d2b9f5c08d22ff44a47042c85f3591a, type: 2}
+  - {fileID: 11400000, guid: d88155704e81f4f43977b604b7ee34c8, type: 2}
+  - {fileID: 11400000, guid: 5065f397d5f178641bf06e9d82fe205f, type: 2}
+  - {fileID: 11400000, guid: 2fcb37fdc360014468e67aa9ef7cc006, type: 2}
+  achievementsHandler: {fileID: 1636014922}
+--- !u!4 &235091422
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 235091420}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &236193929
 GameObject:
   m_ObjectHideFlags: 0
@@ -3072,6 +3130,7 @@ MonoBehaviour:
   achievementsHandler: {fileID: 1636014922}
   xpHandler: {fileID: 1740135151}
   dailyQuestHandler: {fileID: 1508050407}
+  questsHandler: {fileID: 235091421}
 --- !u!4 &793148557
 Transform:
   m_ObjectHideFlags: 0
@@ -4868,17 +4927,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::DailyQuestHandler
   quests:
-  - {fileID: 11400000, guid: d38255f5f3cbef24b91ce3d7f3be7e56, type: 2}
   - {fileID: 11400000, guid: 869b07a3f57637a448065dacd9efe2b2, type: 2}
   - {fileID: 11400000, guid: 25bf1b718fd73104d992ec10dea0ce88, type: 2}
   - {fileID: 11400000, guid: 715a9a75097ea08468bc29456ce6dc01, type: 2}
+  - {fileID: 11400000, guid: d38255f5f3cbef24b91ce3d7f3be7e56, type: 2}
   - {fileID: 11400000, guid: b1f0b4bb8fb8b444481538bf1f49f206, type: 2}
-  - {fileID: 11400000, guid: c520943a9e566c440ab7144e65260555, type: 2}
   - {fileID: 11400000, guid: 5efe2d075c904444bb3befaef5e66f22, type: 2}
+  - {fileID: 11400000, guid: c520943a9e566c440ab7144e65260555, type: 2}
   maxQuests: 3
   statusText: {fileID: 0}
-  moneyHandler: {fileID: 1342946019}
-  xpHandler: {fileID: 1740135151}
 --- !u!4 &1508050408
 Transform:
   m_ObjectHideFlags: 0
@@ -6477,3 +6534,4 @@ SceneRoots:
   - {fileID: 1211414538}
   - {fileID: 1286145900}
   - {fileID: 1508050408}
+  - {fileID: 235091422}
