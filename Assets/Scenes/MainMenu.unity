@@ -17547,6 +17547,8 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 715a9a75097ea08468bc29456ce6dc01, type: 2}
   - {fileID: 11400000, guid: d38255f5f3cbef24b91ce3d7f3be7e56, type: 2}
   - {fileID: 11400000, guid: b1f0b4bb8fb8b444481538bf1f49f206, type: 2}
+  - {fileID: 11400000, guid: 5efe2d075c904444bb3befaef5e66f22, type: 2}
+  - {fileID: 11400000, guid: c520943a9e566c440ab7144e65260555, type: 2}
   maxQuests: 3
   statusText: {fileID: 1459960974}
   moneyHandler: {fileID: 1114898952}
