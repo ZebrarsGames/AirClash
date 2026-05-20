@@ -1,0 +1,24 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cda6015e8d440f44fbf5335c9f1ee1a2, type: 3}
+  m_Name: Open Legendary Roulette 1
+  m_EditorClassIdentifier: Assembly-CSharp::DailyQuestSO
+  QuestId: open_legendary_roulette
+  QuestName: "\u041F\u0440\u043E\u0444\u0435\u0441\u0441\u0438\u043E\u043D\u0430\u043B\u044C\u043D\u044B\u0439
+    \u0440\u0443\u043B\u0435\u0442\u0447\u0438\u043A"
+  Description: "\u041E\u0442\u043A\u0440\u043E\u0439\u0442\u0435 \u043E\u0434\u043D\u0443
+    \u043B\u0435\u0433\u0435\u043D\u0434\u0430\u0440\u043D\u0443\u044E \u0440\u0443\u043B\u0435\u0442\u043A\u0443"
+  AwardType: 1
+  Award: 100
+  SkinAward: 
+  Target: 1
+  QuestLogo: {fileID: 21300000, guid: f8520931070bc3d46ae689e1620a3c0d, type: 3}

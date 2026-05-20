@@ -109,12 +109,16 @@ public class RouletteHandler : MonoBehaviour
             {
                 case "Common":
                     StartCoroutine(SpinCommonRoulette());
+                    dailyQuestHandler.UpdateQuestProgress("open_roulette", 1);
                     break;
                 case "Epic":
                     StartCoroutine(SpinEpicRoulette());
+                    dailyQuestHandler.UpdateQuestProgress("open_roulette", 1);
                     break;
                 case "Legendary":
                     StartCoroutine(SpinLegendaryRoulette());
+                    dailyQuestHandler.UpdateQuestProgress("open_legendary_roulette", 1);
+                    dailyQuestHandler.UpdateQuestProgress("open_roulette", 1);
                     break;
                 default:
                     Debug.Log("Неправильный typeOfRoulette! (" + typeOfRoulette + ")");
