@@ -56,6 +56,7 @@ public class GoalHandler : MonoBehaviour
     private int totalXpEarned;
     [Header("Quests")]
     [SerializeField] private DailyQuestHandler dailyQuestHandler;
+    [SerializeField] private QuestsHandler questsHandler;
 
 
     void Awake()
@@ -120,6 +121,7 @@ public class GoalHandler : MonoBehaviour
             if(score2 >= howManyGoals)
             {
                 if(score2 >= 10) achievementsHandler.UpdateProgress("ten", 10);
+                UpdateGoalQuests();
                 Win();
             } else
             {
@@ -127,6 +129,7 @@ public class GoalHandler : MonoBehaviour
                 {
                     if(score2 >= 10) achievementsHandler.UpdateProgress("ten", 10);
                     totalXpEarned += howManyXpAddForGoal;
+                    UpdateGoalQuests();
                     UpdateAchievements();
                     botsAI.Fury();
                     ResetPosition();
@@ -281,5 +284,14 @@ public class GoalHandler : MonoBehaviour
         dailyQuestHandler.UpdateQuestProgress("win_1_matches", 1);
         dailyQuestHandler.UpdateQuestProgress("win_3_matches", 1);
         dailyQuestHandler.UpdateQuestProgress("win_5_matches", 1);
+    }
+    private void UpdateGoalQuests()
+    {
+        questsHandler.UpdateQuestProgress("goal10", 1);
+        questsHandler.UpdateQuestProgress("goal50", 1);
+        questsHandler.UpdateQuestProgress("goal100", 1);
+        questsHandler.UpdateQuestProgress("goal200", 1);
+        questsHandler.UpdateQuestProgress("goal300", 1);
+        questsHandler.UpdateQuestProgress("goal500", 1);
     }
 }

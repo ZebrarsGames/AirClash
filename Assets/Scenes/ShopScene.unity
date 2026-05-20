@@ -14857,8 +14857,6 @@ MonoBehaviour:
   - {fileID: 11400000, guid: d88155704e81f4f43977b604b7ee34c8, type: 2}
   - {fileID: 11400000, guid: 5065f397d5f178641bf06e9d82fe205f, type: 2}
   - {fileID: 11400000, guid: 2fcb37fdc360014468e67aa9ef7cc006, type: 2}
-  moneyHandler: {fileID: 2065031118}
-  xpHandler: {fileID: 1512294405}
   achievementsHandler: {fileID: 1029591086}
 --- !u!4 &1899276048
 Transform:
@@ -15909,17 +15907,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::DailyQuestHandler
   quests:
-  - {fileID: 11400000, guid: d38255f5f3cbef24b91ce3d7f3be7e56, type: 2}
   - {fileID: 11400000, guid: 869b07a3f57637a448065dacd9efe2b2, type: 2}
   - {fileID: 11400000, guid: 25bf1b718fd73104d992ec10dea0ce88, type: 2}
   - {fileID: 11400000, guid: 715a9a75097ea08468bc29456ce6dc01, type: 2}
+  - {fileID: 11400000, guid: d38255f5f3cbef24b91ce3d7f3be7e56, type: 2}
   - {fileID: 11400000, guid: b1f0b4bb8fb8b444481538bf1f49f206, type: 2}
   - {fileID: 11400000, guid: 5efe2d075c904444bb3befaef5e66f22, type: 2}
   - {fileID: 11400000, guid: c520943a9e566c440ab7144e65260555, type: 2}
   maxQuests: 3
   statusText: {fileID: 0}
-  moneyHandler: {fileID: 2065031118}
-  xpHandler: {fileID: 1512294405}
 --- !u!4 &2030816083
 Transform:
   m_ObjectHideFlags: 0
