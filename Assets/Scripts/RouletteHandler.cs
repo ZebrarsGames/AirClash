@@ -275,6 +275,7 @@ public class RouletteHandler : MonoBehaviour
                 case "Xp":
                     xpHandler.AddXp(bestCell.currentData.award);
                     awardText.text = "ВЫИГРЫШ: " + bestCell.currentData.award + " XP";
+                    UpdateXpQuests(bestCell.currentData.award);
                     break;    
                 default:
                     awardText.text = "Неправильный typeOFAward!";
@@ -314,5 +315,14 @@ public class RouletteHandler : MonoBehaviour
         questsHandler.UpdateQuestProgress("money300", amount);
         questsHandler.UpdateQuestProgress("money500", amount);
         dailyQuestHandler.UpdateQuestProgress("money50", amount);
+    }
+    private void UpdateXpQuests(int amount)
+    {
+        questsHandler.UpdateQuestProgress("xp100", amount);
+        questsHandler.UpdateQuestProgress("xp200", amount);
+        questsHandler.UpdateQuestProgress("xp400", amount);
+        questsHandler.UpdateQuestProgress("xp500", amount);
+        questsHandler.UpdateQuestProgress("xp700", amount);
+        questsHandler.UpdateQuestProgress("xp1000", amount);
     }
 }

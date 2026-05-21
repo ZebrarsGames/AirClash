@@ -713,6 +713,12 @@ MonoBehaviour:
   - {fileID: 11400000, guid: d88155704e81f4f43977b604b7ee34c8, type: 2}
   - {fileID: 11400000, guid: 5065f397d5f178641bf06e9d82fe205f, type: 2}
   - {fileID: 11400000, guid: 2fcb37fdc360014468e67aa9ef7cc006, type: 2}
+  - {fileID: 11400000, guid: 69c7e2db7a48ad142b1252bf0ed456c7, type: 2}
+  - {fileID: 11400000, guid: 28aab0eed4f276f4c935cb4d0f67ec73, type: 2}
+  - {fileID: 11400000, guid: 5a1d539e732f653488447890af99777e, type: 2}
+  - {fileID: 11400000, guid: fdc5779b6f447314a86f8674650761d9, type: 2}
+  - {fileID: 11400000, guid: 3e35bbc61d2b8b24ba42854d5e8403ad, type: 2}
+  - {fileID: 11400000, guid: be5d130d139ad7b4e8e54e87bdb9e890, type: 2}
   achievementsHandler: {fileID: 1636014922}
 --- !u!4 &235091422
 Transform:
