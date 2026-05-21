@@ -1,0 +1,24 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a4b244351641e7a43975e1d55ba4745d, type: 3}
+  m_Name: Xp 500
+  m_EditorClassIdentifier: Assembly-CSharp::QuestSO
+  QuestId: xp500
+  QuestName: "\u041F\u0440\u043E\u0444\u0435\u0441\u0441\u0438\u043E\u043D\u0430\u043B
+    \u043E\u043F\u044B\u0442\u0430"
+  Description: "\u0417\u0430\u0440\u0430\u0431\u043E\u0442\u0430\u0439\u0442\u0435
+    500 Xp"
+  AwardType: 0
+  Award: 150
+  SkinAward: 
+  Target: 500
+  QuestLogo: {fileID: 21300000, guid: efdad98044fb1744d84b0a4cba283518, type: 3}

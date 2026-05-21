@@ -14851,13 +14851,25 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::QuestsHandler
   commonQuests:
+  - {fileID: 11400000, guid: 9bf2c5c01ed36464796890cb50847b10, type: 2}
+  - {fileID: 11400000, guid: 81370ec3d7ada0f48a048c884bf07a77, type: 2}
+  - {fileID: 11400000, guid: 0b27d39edc02ddd42b6efcaa9c698734, type: 2}
+  - {fileID: 11400000, guid: bab0b4e6f61c6d240a936c19c1e04f20, type: 2}
+  - {fileID: 11400000, guid: 262d53f67d68c6548aeae1dc0c1b819a, type: 2}
+  - {fileID: 11400000, guid: e77a699a4bec0a8458409f23af468f01, type: 2}
   - {fileID: 11400000, guid: 88eada9b3fa2ec54eb491b6c53599adb, type: 2}
   - {fileID: 11400000, guid: 6a91b07f6a93d994784afe0d657327bb, type: 2}
   - {fileID: 11400000, guid: 4d2b9f5c08d22ff44a47042c85f3591a, type: 2}
   - {fileID: 11400000, guid: d88155704e81f4f43977b604b7ee34c8, type: 2}
   - {fileID: 11400000, guid: 5065f397d5f178641bf06e9d82fe205f, type: 2}
   - {fileID: 11400000, guid: 2fcb37fdc360014468e67aa9ef7cc006, type: 2}
-  achievementsHandler: {fileID: 1029591086}
+  - {fileID: 11400000, guid: 69c7e2db7a48ad142b1252bf0ed456c7, type: 2}
+  - {fileID: 11400000, guid: 28aab0eed4f276f4c935cb4d0f67ec73, type: 2}
+  - {fileID: 11400000, guid: 5a1d539e732f653488447890af99777e, type: 2}
+  - {fileID: 11400000, guid: fdc5779b6f447314a86f8674650761d9, type: 2}
+  - {fileID: 11400000, guid: 3e35bbc61d2b8b24ba42854d5e8403ad, type: 2}
+  - {fileID: 11400000, guid: be5d130d139ad7b4e8e54e87bdb9e890, type: 2}
+  achievementsHandler: {fileID: 0}
 --- !u!4 &1899276048
 Transform:
   m_ObjectHideFlags: 0

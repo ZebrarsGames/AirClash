@@ -5,6 +5,7 @@ public class QuestsUIScr : MonoBehaviour
     [Header("Arrays")]
     [SerializeField] private GameObject[] moneyQuests;
     [SerializeField] private GameObject[] goalsQuests;
+    [SerializeField] private GameObject[] xpQuests;
 
     public void OnClickMoneyBtn()
     {
@@ -33,6 +34,22 @@ public class QuestsUIScr : MonoBehaviour
                 int nextIndex = (i + 1) % goalsQuests.Length;
                 
                 goalsQuests[nextIndex].SetActive(true);
+                break;
+            }
+        }
+    }
+
+    public void OnClickXpBtn()
+    {
+        for (int i = 0; i < xpQuests.Length; i++)
+        {
+            if (xpQuests[i].activeSelf)
+            {
+                xpQuests[i].SetActive(false);
+                
+                int nextIndex = (i + 1) % xpQuests.Length;
+                
+                xpQuests[nextIndex].SetActive(true);
                 break;
             }
         }

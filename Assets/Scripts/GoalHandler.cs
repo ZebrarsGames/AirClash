@@ -208,9 +208,10 @@ public class GoalHandler : MonoBehaviour
             int xpAfter = xpHandler.GetXP();
             
             int actuallyEarned = xpAfter - xpBefore;
-            endScreen.StartEndScreen(actuallyEarned, xpBefore); 
+            UpdateXpQuests(actuallyEarned);
             UpdateAchievements();
             UpdateWinQuests();
+            endScreen.StartEndScreen(actuallyEarned, xpBefore); 
             switch(PlayerPrefs.GetFloat("Difficulty"))
             {
                 case 3.1415926535f:
@@ -253,6 +254,7 @@ public class GoalHandler : MonoBehaviour
             int xpAfter = xpHandler.GetXP();
             
             int actuallyEarned = xpAfter - xpBefore;
+            UpdateXpQuests(actuallyEarned);
             endScreen.StartEndScreen(actuallyEarned, xpBefore); 
             if(PlayerPrefs.GetFloat("Difficulty") == 7.5f) achievementsHandler.UpdateProgress("seriously", 1);
             PlayerPrefs.SetInt("Money", moneyHandler.GetMoney());
@@ -296,5 +298,14 @@ public class GoalHandler : MonoBehaviour
         questsHandler.UpdateQuestProgress("goal200", 1);
         questsHandler.UpdateQuestProgress("goal300", 1);
         questsHandler.UpdateQuestProgress("goal500", 1);
+    }
+    private void UpdateXpQuests(int amount)
+    {
+        questsHandler.UpdateQuestProgress("xp100", amount);
+        questsHandler.UpdateQuestProgress("xp200", amount);
+        questsHandler.UpdateQuestProgress("xp400", amount);
+        questsHandler.UpdateQuestProgress("xp500", amount);
+        questsHandler.UpdateQuestProgress("xp700", amount);
+        questsHandler.UpdateQuestProgress("xp1000", amount);
     }
 }
