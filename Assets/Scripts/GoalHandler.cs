@@ -120,8 +120,11 @@ public class GoalHandler : MonoBehaviour
             scoreText2.text = score2.ToString(); 
             if(score2 >= howManyGoals)
             {
-                if(score2 >= 10) achievementsHandler.UpdateProgress("ten", 10);
-                UpdateGoalQuests();
+                if(SceneManager.GetActiveScene().name == "BotsGame")
+                {
+                    if(score2 >= 10) achievementsHandler.UpdateProgress("ten", 10);
+                    UpdateGoalQuests();
+                }
                 Win();
             } else
             {
