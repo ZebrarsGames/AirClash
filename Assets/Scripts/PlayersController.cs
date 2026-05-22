@@ -41,6 +41,8 @@ public class PlayersController : MonoBehaviour, IBeginDragHandler, IDragHandler,
         AudioListener.volume = volume;
         if(PlayerPrefs.GetString("CurrentSkin") == "") PlayerPrefs.SetString("CurrentSkin", "DefSkin");
         SkinData currentSkin = Resources.Load<SkinData>(PlayerPrefs.GetString("CurrentSkin"));
+        if(PlayerPrefs.GetInt("Trail", 0) == 1) GetComponent<TrailRenderer>().enabled = true;
+        else GetComponent<TrailRenderer>().enabled = false;
         ApplySkin(currentSkin);
     }
 

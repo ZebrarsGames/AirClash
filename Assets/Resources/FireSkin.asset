@@ -15,7 +15,7 @@ MonoBehaviour:
   skinName: FireSkin
   skinGuiName: "\u041E\u0433\u043E\u043D\u044C"
   sprite: {fileID: 21300000, guid: c65bb960120cf164f852646e2fefe29d, type: 3}
-  particles: {fileID: 0}
+  particles: {fileID: 3806263090272470245, guid: 35990e0a6d93ad64eaf30e3b4c0943b5, type: 3}
   sound: {fileID: 8300000, guid: 7f339fc6b245998499d35ee8d1c00e59, type: 3}
   rarity: 7
   price: 0
