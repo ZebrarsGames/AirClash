@@ -1,3 +1,4 @@
+using DG.Tweening;
 using UnityEngine;
 
 public class QuestsUIScr : MonoBehaviour
@@ -18,6 +19,7 @@ public class QuestsUIScr : MonoBehaviour
                 int nextIndex = (i + 1) % moneyQuests.Length;
                 
                 moneyQuests[nextIndex].SetActive(true);
+                moneyQuests[nextIndex].GetComponent<RectTransform>().DOScale(1.05f, 0.1f).OnComplete(() => moneyQuests[nextIndex].GetComponent<RectTransform>().DOScale(1f, 0.1f));
                 break;
             }
         }
@@ -34,6 +36,7 @@ public class QuestsUIScr : MonoBehaviour
                 int nextIndex = (i + 1) % goalsQuests.Length;
                 
                 goalsQuests[nextIndex].SetActive(true);
+                goalsQuests[nextIndex].GetComponent<RectTransform>().DOScale(1.05f, 0.1f).OnComplete(() => goalsQuests[nextIndex].GetComponent<RectTransform>().DOScale(1f, 0.1f));
                 break;
             }
         }
@@ -50,6 +53,7 @@ public class QuestsUIScr : MonoBehaviour
                 int nextIndex = (i + 1) % xpQuests.Length;
                 
                 xpQuests[nextIndex].SetActive(true);
+                xpQuests[nextIndex].GetComponent<RectTransform>().DOScale(1.05f, 0.1f).OnComplete(() => xpQuests[nextIndex].GetComponent<RectTransform>().DOScale(1f, 0.1f));
                 break;
             }
         }
