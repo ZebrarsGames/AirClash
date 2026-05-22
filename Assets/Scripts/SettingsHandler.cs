@@ -8,7 +8,7 @@ public class SettingsHandler : MonoBehaviour
     [SerializeField] private Slider volumeSlider;
     [SerializeField] private Slider fpsSlider;
     [SerializeField] private Text fpsText;
-    [SerializeField] private Toggle particleToggle;
+    [SerializeField] private Toggle trailToggle;
     public float volumeLevel = 0.5f;
 
     public void Start() {
@@ -19,8 +19,8 @@ public class SettingsHandler : MonoBehaviour
         fpsSlider.value = PlayerPrefs.GetInt("FPS");
         if(SceneManager.GetActiveScene().name == "MainMenu")
         {
-            if(PlayerPrefs.GetInt("Particle") == 0) particleToggle.isOn = false;
-            else particleToggle.isOn = true;
+            if(PlayerPrefs.GetInt("Trail", 0) == 0) trailToggle.isOn = false;
+            else trailToggle.isOn = true;
         }
         
     }
@@ -36,9 +36,9 @@ public class SettingsHandler : MonoBehaviour
         Application.targetFrameRate = PlayerPrefs.GetInt("FPS");
     }
 
-    public void OnParticleToggleChanged()
+    public void OnTrailToggleChanged()
     {
-        PlayerPrefs.SetInt("Particle", particleToggle.isOn ? 1 : 0);
+        PlayerPrefs.SetInt("Trail", trailToggle.isOn ? 1 : 0);
     }
 
     public void ShowTelegram()
