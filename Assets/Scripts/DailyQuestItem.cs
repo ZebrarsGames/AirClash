@@ -40,6 +40,7 @@ public class DailyQuestItem : MonoBehaviour
         questDescriptionText.text = todayPool[i].Description;
         questId = todayPool[i].QuestId;
         targetText.text = QuestSaveSystem.GetProgress(questId) + "/" + todayPool[i].Target;
+        questLogo.sprite = todayPool[i].QuestLogo;
         if(QuestSaveSystem.GetIsCompleted(questId)) completeArrow.SetActive(true);
         else completeArrow.SetActive(false);
     }
