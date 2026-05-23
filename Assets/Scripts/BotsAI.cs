@@ -33,7 +33,7 @@ public class BotsAI : MonoBehaviour
         botRb.linearVelocity = Vector2.zero;
         moveSpeed = PlayerPrefs.GetFloat("Difficulty");
         baseSpeed = moveSpeed;
-        if(PlayerPrefs.GetInt("Trail", 0) == 1) GetComponent<TrailRenderer>().enabled = true;
+        if(PlayerPrefs.GetInt("Trail", 1) == 1) GetComponent<TrailRenderer>().enabled = true;
         else GetComponent<TrailRenderer>().enabled = false;
     }
 

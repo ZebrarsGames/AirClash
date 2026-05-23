@@ -121,7 +121,7 @@ public class PlayersController : MonoBehaviour, IBeginDragHandler, IDragHandler,
         }
         if(skin.trail != null)
         {
-            if(PlayerPrefs.GetInt("Trail", 0) == 1)
+            if(PlayerPrefs.GetInt("Trail", 1) == 1)
             {
                 var trail = skin.trail.GetComponent<TrailRenderer>();
                 var newTrail = gameObject.GetComponent<TrailRenderer>();
