@@ -41,8 +41,6 @@ public class PlayersController : MonoBehaviour, IBeginDragHandler, IDragHandler,
         AudioListener.volume = volume;
         if(PlayerPrefs.GetString("CurrentSkin") == "") PlayerPrefs.SetString("CurrentSkin", "DefSkin");
         SkinData currentSkin = Resources.Load<SkinData>(PlayerPrefs.GetString("CurrentSkin"));
-        if(PlayerPrefs.GetInt("Trail", 0) == 1) GetComponent<TrailRenderer>().enabled = true;
-        else GetComponent<TrailRenderer>().enabled = false;
         ApplySkin(currentSkin);
     }
 
@@ -120,6 +118,28 @@ public class PlayersController : MonoBehaviour, IBeginDragHandler, IDragHandler,
             var newParticles = Instantiate(particles, GetComponent<Transform>());
             newParticles.gameObject.SetActive(true);
             newParticles.GetComponent<ParticleSystem>().Play(); 
+        }
+        if(skin.trail != null)
+        {
+            if(PlayerPrefs.GetInt("Trail", 0) == 1)
+            {
+                var trail = skin.trail.GetComponent<TrailRenderer>();
+                var newTrail = gameObject.GetComponent<TrailRenderer>();
+                newTrail.sharedMaterial = trail.sharedMaterial;
+                newTrail.time = trail.time;
+                newTrail.startWidth = trail.startWidth;
+                newTrail.endWidth = trail.endWidth;
+                newTrail.colorGradient = trail.colorGradient;
+                newTrail.numCornerVertices = trail.numCornerVertices;
+                newTrail.numCapVertices = trail.numCapVertices;
+                newTrail.alignment = trail.alignment;
+                newTrail.textureMode = trail.textureMode;
+                gameObject.GetComponent<TrailRenderer>().enabled = true;
+            } else gameObject.GetComponent<TrailRenderer>().enabled = false;
+        } else
+        {
+            if(PlayerPrefs.GetInt("Trail", 0) == 1) GetComponent<TrailRenderer>().enabled = true;
+            else GetComponent<TrailRenderer>().enabled = false;
         }
     }
 
