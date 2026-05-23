@@ -36,7 +36,7 @@ public class AchievementsHandler : MonoBehaviour
         // Ачивки от подписчиков
         achievements.Add("ten", new Achievement {Title = "Десятка", Target = 10, Award = 35});
         achievements.Add("seriously", new Achievement {Title = "Серьёзно?", Target = 1, Award = 5});
-        achievements.Add("large_wardrobe", new Achievement {Title = "Большой гардероб", Target = 19, Award = 500});
+        achievements.Add("large_wardrobe", new Achievement {Title = "Большой гардероб", Target = 19, Award = 400});
         achievements.Add("own_goal", new Achievement {Title = "Автогол", Target = 2, Award = 10});
         // Ачивки для рулетки
         achievements.Add("ludoman", new Achievement {Title = "Лудоман", Target = 15, Award = 35});
@@ -47,6 +47,11 @@ public class AchievementsHandler : MonoBehaviour
         achievements.Add("regular_player", new Achievement {Title = "Постоянный игрок", Target = 5, Award = 70});
         achievements.Add("thunderstorm_game", new Achievement {Title = "Гроза игры", Target = 7, Award = 200});
         achievements.Add("game_legend", new Achievement {Title = "Легенда игры", Target = 10, Award = 500});
+        // Ачивки для квестов
+        achievements.Add("coin_master", new Achievement {Title = "Мастер монет", Target = 6, Award = 200});
+        achievements.Add("master_of_goals", new Achievement {Title = "Мастер голов", Target = 6, Award = 200});
+        achievements.Add("master_xp", new Achievement {Title = "Мастер XP", Target = 6, Award = 200});
+        achievements.Add("daily", new Achievement {Title = "Ежедневка", Target = 3, Award = 100});
         LoadAchievements();
     }
 

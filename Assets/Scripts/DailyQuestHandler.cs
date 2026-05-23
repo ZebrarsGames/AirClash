@@ -9,6 +9,7 @@ public class DailyQuestHandler : MonoBehaviour
     [SerializeField] private int maxQuests;
     private DailyQuestSO[] todayPool = new DailyQuestSO[3];
     [SerializeField] private Text statusText;
+    [SerializeField] private AchievementsHandler achievementsHandler;
     
     private const string NextMidnightTimeKey = "NextMidnightSave";
     private const string QuestIdsKey = "SavedQuestIds"; 
@@ -112,6 +113,7 @@ public class DailyQuestHandler : MonoBehaviour
                     Debug.Log("Прогресс у " + questId +  " стал больше на " + amount);
                     if(QuestSaveSystem.GetProgress(currentQuest.QuestId) >= currentQuest.Target)
                     {
+                        achievementsHandler.UpdateProgress("daily", 1);
                         QuestSaveSystem.SetCompleted(currentQuest.QuestId);
                         GiveAward(currentQuest.QuestId);
                     }

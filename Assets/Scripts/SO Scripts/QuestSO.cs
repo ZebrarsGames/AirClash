@@ -7,6 +7,12 @@ public enum AwardType
     Xp,
     Skin
 }
+public enum QuestType
+{
+    Money,
+    Xp,
+    Goals
+}
 [CreateAssetMenu(menuName = "Common Quest")]
 public class QuestSO : ScriptableObject
 {
@@ -14,6 +20,7 @@ public class QuestSO : ScriptableObject
     public string QuestName;
     public string Description;
     public AwardType AwardType;
+    public QuestType QuestType;
     public int Award;
     public string SkinAward;
     public int Target;
