@@ -17,6 +17,6 @@ MonoBehaviour:
   sprite: {fileID: 21300000, guid: b69e66ba9a847184bba4814e1df81fac, type: 3}
   particles: {fileID: 0}
   trail: {fileID: 6228129533499586917, guid: de56e5150348c3544924b153cf39b359, type: 3}
-  sound: {fileID: 8300000, guid: 8346d24a7b5724c4ba889b8a1d541bf7, type: 3}
+  sound: {fileID: 8300000, guid: 2cabec103afc0d1469cbc23c9dd961ec, type: 3}
   rarity: 7
   price: 0
