@@ -23,6 +23,18 @@ public class QuestsHandler : MonoBehaviour
                 Debug.Log("Прогресс у " + questId +  " стал больше на " + amount);
                 if(QuestSaveSystem.GetProgress(currentQuest.QuestId) >= currentQuest.Target)
                 {
+                    switch(currentQuest.QuestType)
+                    {
+                        case QuestType.Money:
+                            achievementsHandler.UpdateProgress("coin_master", 1);
+                            break;
+                        case QuestType.Xp:
+                            achievementsHandler.UpdateProgress("master_xp", 1);
+                            break;   
+                        case QuestType.Goals:
+                            achievementsHandler.UpdateProgress("master_of_goals", 1);
+                            break;
+                    }
                     QuestSaveSystem.SetCompleted(currentQuest.QuestId);
                     GiveAward(currentQuest.QuestId);
                 }

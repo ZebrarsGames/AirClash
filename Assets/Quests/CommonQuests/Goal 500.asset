@@ -17,6 +17,7 @@ MonoBehaviour:
     \u043F\u043B\u0430\u043D\u0435\u0442\u044B"
   Description: "\u0417\u0430\u0431\u0435\u0439\u0442\u0435 500 \u0433\u043E\u043B\u043E\u0432"
   AwardType: 2
+  QuestType: 2
   Award: 0
   SkinAward: SushiSkin
   Target: 500

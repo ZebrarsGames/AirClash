@@ -5294,6 +5294,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: c520943a9e566c440ab7144e65260555, type: 2}
   maxQuests: 3
   statusText: {fileID: 0}
+  achievementsHandler: {fileID: 1636014922}
 --- !u!4 &1508050408
 Transform:
   m_ObjectHideFlags: 0

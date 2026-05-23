@@ -16,6 +16,7 @@ MonoBehaviour:
   QuestName: "\u0418\u0433\u0440\u043E\u0432\u043E\u0435 \u043F\u043E\u043B\u0435"
   Description: "\u0417\u0430\u0431\u0435\u0439\u0442\u0435 50 \u0433\u043E\u043B\u043E\u0432"
   AwardType: 1
+  QuestType: 2
   Award: 40
   SkinAward: 
   Target: 50

@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: b3e34e86b37e09143a57189f26e95214
+guid: 4bd8abd932dd5ba47bf2eda5c587e89e
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 5882522485029904021
-    second: achievementSixSevev_0
+      213: 8275782119874835380
+    second: achievementForMasterGoals_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -113,7 +113,7 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: achievementSixSevev_0
+      name: achievementForMasterGoals_0
       rect:
         serializedVersion: 2
         x: 0
@@ -128,8 +128,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 59e947f780be2a150800000000000000
-      internalID: 5882522485029904021
+      spriteID: 4b33ba5bdfb79d270800000000000000
+      internalID: 8275782119874835380
       vertices: []
       indices: 
       edges: []
@@ -148,7 +148,7 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      achievementSixSevev_0: 5882522485029904021
+      achievementForMasterGoals_0: 8275782119874835380
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
