@@ -12105,6 +12105,8 @@ MonoBehaviour:
   - {fileID: 508768888}
   - {fileID: 648090352}
   - {fileID: 593836853}
+  - {fileID: 293114111}
+  - {fileID: 1564378335}
   surePanel: {fileID: 824279542}
   audioSource: {fileID: 1190845891}
   menuMusic: {fileID: 8300000, guid: 28aa2f1f0d3d6ce4fb156e38ed6c23f4, type: 3}
