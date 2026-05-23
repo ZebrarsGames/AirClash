@@ -19,7 +19,7 @@ public class SettingsHandler : MonoBehaviour
         fpsSlider.value = PlayerPrefs.GetInt("FPS");
         if(SceneManager.GetActiveScene().name == "MainMenu")
         {
-            if(PlayerPrefs.GetInt("Trail", 0) == 0) trailToggle.isOn = false;
+            if(PlayerPrefs.GetInt("Trail", 1) == 0) trailToggle.isOn = false;
             else trailToggle.isOn = true;
         }
         
