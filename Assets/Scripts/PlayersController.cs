@@ -138,7 +138,7 @@ public class PlayersController : MonoBehaviour, IBeginDragHandler, IDragHandler,
             } else gameObject.GetComponent<TrailRenderer>().enabled = false;
         } else
         {
-            if(PlayerPrefs.GetInt("Trail", 0) == 1) GetComponent<TrailRenderer>().enabled = true;
+            if(PlayerPrefs.GetInt("Trail", 1) == 1) GetComponent<TrailRenderer>().enabled = true;
             else GetComponent<TrailRenderer>().enabled = false;
         }
     }
