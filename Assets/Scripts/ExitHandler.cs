@@ -63,6 +63,8 @@ public class ExitHandler : MonoBehaviour
 
     public void ConfirmExit()
     {
+        PlayerPrefs.SetFloat("Music", 0);
+        SaveManager.SaveData();
         PlayerPrefs.Save();
         Application.Quit();
     }
