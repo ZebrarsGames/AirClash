@@ -49972,7 +49972,8 @@ MonoBehaviour:
   xpHandler: {fileID: 695791783}
   questsHandler: {fileID: 140701919}
   dailyQuestHandler: {fileID: 1134384870}
-  rotationSpeed: 10
+  rotationSpeed: 2.5
+  maxAngle: 6
 --- !u!1 &1912403822
 GameObject:
   m_ObjectHideFlags: 0

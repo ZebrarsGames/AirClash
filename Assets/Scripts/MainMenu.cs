@@ -33,7 +33,8 @@ public class MainMenu : MonoBehaviour
     [SerializeField] private QuestsHandler questsHandler; 
     [SerializeField] private DailyQuestHandler dailyQuestHandler;
     [Header("Floats")]
-    public float rotationSpeed = 10f;
+    [SerializeField] private float rotationSpeed = 10f;
+    [SerializeField] private float maxAngle = 6f;  
     private RectTransform rectTransform;
     private string toScene;
 
@@ -66,20 +67,9 @@ public class MainMenu : MonoBehaviour
 
     void Update()
     {
-        rectTransform.Rotate(0, 0, rotationSpeed * Time.deltaTime);
-
-        float currentAngle = rectTransform.localEulerAngles.z;
-        if (currentAngle > 180) currentAngle -= 360;
-
-        if (currentAngle >= 6 || currentAngle <= -6)
-        {
-            rotationSpeed *= -1;
-        
-            float clampedAngle = Mathf.Clamp(currentAngle, -12, 12);
-            rectTransform.localEulerAngles = new Vector3(0, 0, clampedAngle);
-        }
+        float angle = Mathf.Sin(Time.time * rotationSpeed) * maxAngle;
+        rectTransform.localRotation = Quaternion.Euler(0, 0, angle);
     }
-
 
     public void PlayBots(string difficulty)
     {
