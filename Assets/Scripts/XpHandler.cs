@@ -27,7 +27,7 @@ public class XpHandler : MonoBehaviour
 
     private Dictionary<string, XpAward> xpAwards = new Dictionary<string, XpAward>();
 
-    void Start()
+    void Awake()
     {
         currentXP = PlayerPrefs.GetInt("CurrentXp", 0);
         level = PlayerPrefs.GetInt("XpLevel", 1);

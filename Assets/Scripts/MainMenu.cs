@@ -1,4 +1,6 @@
 using System;
+using System.Collections;
+using DG.Tweening;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -81,7 +83,7 @@ public class MainMenu : MonoBehaviour
 
     public void PlayBots(string difficulty)
     {
-        switch (difficulty)
+        switch(difficulty)
         {
             case "VeryEasy":
                 PlayerPrefs.SetFloat("Difficulty", 3.1415926535f);
@@ -133,27 +135,6 @@ public class MainMenu : MonoBehaviour
         gamemodesPanel.SetActive(true);
     }
 
-    public void OpenSettings()
-    {
-        settingsPanel.SetActive(true);
-        onlinePanel.SetActive(false);
-        botPanel.SetActive(false);
-    }
-
-    public void OpenOnline()
-    {
-        settingsPanel.SetActive(false);
-        onlinePanel.SetActive(true);
-        botPanel.SetActive(false);
-    }
-
-    public void OpenBot()
-    {
-        settingsPanel.SetActive(false);
-        onlinePanel.SetActive(false);
-        botPanel.SetActive(true);
-    }
-
     public void CloseAllPanels()
     {
         settingsPanel.SetActive(false);
@@ -167,7 +148,24 @@ public class MainMenu : MonoBehaviour
         questPanel.SetActive(false);
         dailyQuestPanel.SetActive(false);
     }
-
+    public void ClosePanel(GameObject panel)
+    {
+        StartCoroutine(AnimateClosePanel(panel));
+    }
+    public void OpenPanel(GameObject panel)
+    {
+        var rect = panel.GetComponent<RectTransform>();
+        rect.localScale = Vector3.zero;
+        panel.SetActive(true);
+        rect.DOScale(new Vector3(1.0f, 1.0f, 1.0f), 0.3f).SetEase(Ease.OutBack);
+    }
+    IEnumerator AnimateClosePanel(GameObject panel)
+    {
+        var rect = panel.GetComponent<RectTransform>();
+        rect.DOScale(Vector3.zero, 0.3f).SetEase(Ease.InBack);
+        yield return new WaitForSeconds(0.35f);
+        panel.SetActive(false);
+    }
     public void VeryEasyMode()
     {
         PlayBots("VeryEasy");
@@ -199,8 +197,6 @@ public class MainMenu : MonoBehaviour
     public void StartGame()
     {
         toScene = "GameScene";
-        CloseAllPanels();
-        gamemodesPanel.SetActive(true);
     }
 
     public void OpenShop()
@@ -209,20 +205,7 @@ public class MainMenu : MonoBehaviour
         PlayerPrefs.Save();
         SceneManager.LoadScene("ShopScene");
     }
-
-    public void OpenMentions()
-    {
-        mentionsPanel.SetActive(true);
-    }
-    public void OpenAchievements()
-    {
-        achievementsPanel.SetActive(true);
-    }
-    public void OpenXpPanel()
-    {
-        xpPanel.SetActive(true);
-    }
-    public void OpenQuestPanel()
+    public void SwitchToQuestPanel()
     {
         questPanel.SetActive(true);
     }
@@ -255,10 +238,6 @@ public class MainMenu : MonoBehaviour
         PlayerPrefs.SetInt("Goals", Convert.ToInt32(goalsSlider.value));
         PlayerPrefs.Save();
         SceneManager.LoadScene(toScene);
-    }
-    public void OnGoalsSliderChanged()
-    {
-        goalsText.text = Convert.ToString(Convert.ToInt32(goalsSlider.value));
     }
     private void UpdateQuests(int amount)
     {
