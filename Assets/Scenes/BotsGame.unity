@@ -3758,6 +3758,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PauseHandler
   pauseMenu: {fileID: 897252422}
+  pausePanel: {fileID: 1999176201}
   goalHandler: {fileID: 793148556}
 --- !u!1 &929458179
 GameObject:
