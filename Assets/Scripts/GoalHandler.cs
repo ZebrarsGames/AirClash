@@ -275,6 +275,8 @@ public class GoalHandler : MonoBehaviour
     }
     public void UpdateAchievements()
     {
+        PlayerPrefs.SetInt("TotalGoals", PlayerPrefs.GetInt("TotalGoals", 0) + 1);
+        PlayerPrefs.Save();
         achievementsHandler.UpdateProgress("a_start_has_been_made", 1);
         achievementsHandler.UpdateProgress("begginer", 1);
         achievementsHandler.UpdateProgress("amateur", 1);

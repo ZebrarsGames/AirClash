@@ -177,13 +177,6 @@ public class MainMenu : MonoBehaviour
         PlayBots("Extreme");
     }
 
-    public void QuitGame()
-    {
-        PlayerPrefs.SetFloat("Music", 0);
-        PlayerPrefs.Save();
-        Application.Quit();
-    }
-
     public void StartGame()
     {
         toScene = "GameScene";
