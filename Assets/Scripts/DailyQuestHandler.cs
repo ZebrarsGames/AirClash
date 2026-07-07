@@ -54,6 +54,10 @@ public class DailyQuestHandler : MonoBehaviour
 
     private void GenerateNewQuests()
     {
+        for(int i = 0; i < quests.Length; i++)
+        {
+            QuestSaveSystem.RemoveQuest(quests[i].QuestId);
+        }
         int[] savedIds = new int[maxQuests];
 
         for(int i = 0; i < maxQuests; i++)

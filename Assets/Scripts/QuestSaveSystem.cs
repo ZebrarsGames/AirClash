@@ -36,4 +36,10 @@ public static class QuestSaveSystem
         PlayerPrefs.SetInt(questId + CompletedSuffix, 1);
         PlayerPrefs.Save();
     }
+    public static void RemoveQuest(string questId)
+    {
+        PlayerPrefs.DeleteKey(questId);
+        PlayerPrefs.DeleteKey(questId + CompletedSuffix);
+        PlayerPrefs.Save();
+    }
 }
