@@ -155,6 +155,7 @@ public class MainMenu : MonoBehaviour
         rect.DOScale(Vector3.zero, 0.3f).SetEase(Ease.InBack);
         yield return new WaitForSeconds(0.35f);
         panel.SetActive(false);
+        rect.localScale = Vector3.one;
     }
     public void VeryEasyMode()
     {
@@ -196,7 +197,6 @@ public class MainMenu : MonoBehaviour
     public void OpenDailyQuestPanel()
     {
         questPanel.SetActive(false);
-        dailyQuestPanel.GetComponent<RectTransform>().localScale = Vector3.one;
         dailyQuestPanel.SetActive(true);
     }
     public void OpenUserGamemode()
