@@ -3853,11 +3853,11 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 1912076073}
         m_TargetAssemblyTypeName: MainMenu, Assembly-CSharp
-        m_MethodName: OpenXpPanel
-        m_Mode: 1
+        m_MethodName: OpenPanel
+        m_Mode: 2
         m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_ObjectArgument: {fileID: 954353172}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.GameObject, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 
@@ -6024,10 +6024,10 @@ RectTransform:
   - {fileID: 684603752}
   m_Father: {fileID: 1912076072}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0.000061035156, y: 0}
-  m_SizeDelta: {x: 1018.11, y: 545.1}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
+  m_AnchoredPosition: {x: 0.00012207031, y: 0}
+  m_SizeDelta: {x: -901.89, y: -534.9}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &253191520
 MonoBehaviour:
@@ -7350,7 +7350,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -59.700012, y: -65.2}
+  m_AnchoredPosition: {x: -59.69995, y: -65.20001}
   m_SizeDelta: {x: 86.71997, y: 86.72}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &297755660
@@ -7414,11 +7414,11 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 1912076073}
         m_TargetAssemblyTypeName: MainMenu, Assembly-CSharp
-        m_MethodName: CloseAllPanels
-        m_Mode: 1
+        m_MethodName: ClosePanel
+        m_Mode: 2
         m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_ObjectArgument: {fileID: 1735674024}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.GameObject, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 
@@ -8001,11 +8001,11 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 1912076073}
         m_TargetAssemblyTypeName: MainMenu, Assembly-CSharp
-        m_MethodName: OpenAchievements
-        m_Mode: 1
+        m_MethodName: OpenPanel
+        m_Mode: 2
         m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_ObjectArgument: {fileID: 1229353364}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.GameObject, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 
@@ -8687,7 +8687,6 @@ GameObject:
   - component: {fileID: 373390344}
   - component: {fileID: 373390343}
   - component: {fileID: 373390342}
-  - component: {fileID: 373390345}
   m_Layer: 5
   m_Name: QuestsPanel
   m_TagString: Untagged
@@ -8713,10 +8712,10 @@ RectTransform:
   - {fileID: 1757505779}
   m_Father: {fileID: 1912076072}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0.000061035156, y: 0}
-  m_SizeDelta: {x: 1018.11, y: 545.1}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
+  m_AnchoredPosition: {x: 0.00012207031, y: 0}
+  m_SizeDelta: {x: -901.89, y: -534.9}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &373390342
 MonoBehaviour:
@@ -8771,39 +8770,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 373390340}
   m_CullTransparentMesh: 1
---- !u!114 &373390345
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 373390340}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: de0302f9b26e9d043b3705a744141219, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::QuestsUIScr
-  moneyQuests:
-  - {fileID: 1736376037}
-  - {fileID: 1436596721}
-  - {fileID: 1229152921}
-  - {fileID: 1575674264}
-  - {fileID: 1989387067}
-  - {fileID: 313102056}
-  goalsQuests:
-  - {fileID: 1658109074}
-  - {fileID: 1302441699}
-  - {fileID: 969620191}
-  - {fileID: 1108193507}
-  - {fileID: 264607670}
-  - {fileID: 1406948462}
-  xpQuests:
-  - {fileID: 790829562}
-  - {fileID: 1761999752}
-  - {fileID: 1017048212}
-  - {fileID: 30264463}
-  - {fileID: 92674059}
-  - {fileID: 1493307975}
 --- !u!1 &384147222
 GameObject:
   m_ObjectHideFlags: 0
@@ -9992,7 +9958,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -59.700012, y: -65.2}
+  m_AnchoredPosition: {x: -59.69995, y: -65.20001}
   m_SizeDelta: {x: 86.71997, y: 86.72}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &417762416
@@ -10041,11 +10007,11 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 1912076073}
         m_TargetAssemblyTypeName: MainMenu, Assembly-CSharp
-        m_MethodName: CloseAllPanels
-        m_Mode: 1
+        m_MethodName: ClosePanel
+        m_Mode: 2
         m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_ObjectArgument: {fileID: 1439479958}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.GameObject, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 
@@ -10356,7 +10322,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 373390345}
+      - m_Target: {fileID: 1835196396}
         m_TargetAssemblyTypeName: QuestsUIScr, Assembly-CSharp
         m_MethodName: OnClickMoneyBtn
         m_Mode: 1
@@ -10496,7 +10462,7 @@ MonoBehaviour:
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 718338721}
+      - m_Target: {fileID: 2104911444}
         m_TargetAssemblyTypeName: SettingsHandler, Assembly-CSharp
         m_MethodName: OnVolumeSliderChanged
         m_Mode: 1
@@ -10693,10 +10659,10 @@ RectTransform:
   - {fileID: 295732592}
   m_Father: {fileID: 1912076072}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0.000061035156, y: 0}
-  m_SizeDelta: {x: 1018.11, y: 545.1}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
+  m_AnchoredPosition: {x: 0.00012207031, y: 0}
+  m_SizeDelta: {x: -901.89, y: -534.9}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &441271435
 MonoBehaviour:
@@ -16633,7 +16599,6 @@ GameObject:
   - component: {fileID: 718338719}
   - component: {fileID: 718338718}
   - component: {fileID: 718338720}
-  - component: {fileID: 718338721}
   m_Layer: 5
   m_Name: SettingsPanel
   m_TagString: Untagged
@@ -16664,10 +16629,10 @@ RectTransform:
   - {fileID: 1112795252}
   m_Father: {fileID: 1912076072}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 1018.11, y: 545.1}
+  m_SizeDelta: {x: -901.89, y: -534.9}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &718338718
 MonoBehaviour:
@@ -16722,23 +16687,6 @@ MonoBehaviour:
   m_EffectColor: {r: 0.13176396, g: 0.36019346, b: 0.4433962, a: 1}
   m_EffectDistance: {x: 5, y: -5}
   m_UseGraphicAlpha: 1
---- !u!114 &718338721
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 718338716}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1b8a9748775074046be374477922597c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::SettingsHandler
-  volumeSlider: {fileID: 431368306}
-  fpsSlider: {fileID: 1816709576}
-  fpsText: {fileID: 1091560590}
-  trailToggle: {fileID: 1112795253}
-  volumeLevel: 0.5
 --- !u!1 &719197083
 GameObject:
   m_ObjectHideFlags: 0
@@ -19296,7 +19244,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -59.700012, y: -65.2}
+  m_AnchoredPosition: {x: -59.69995, y: -65.20001}
   m_SizeDelta: {x: 86.71997, y: 86.72}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &810204695
@@ -19360,11 +19308,11 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 1912076073}
         m_TargetAssemblyTypeName: MainMenu, Assembly-CSharp
-        m_MethodName: CloseAllPanels
-        m_Mode: 1
+        m_MethodName: ClosePanel
+        m_Mode: 2
         m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_ObjectArgument: {fileID: 373390340}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.GameObject, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 
@@ -19521,7 +19469,7 @@ MonoBehaviour:
         m_CallState: 2
       - m_Target: {fileID: 1912076073}
         m_TargetAssemblyTypeName: MainMenu, Assembly-CSharp
-        m_MethodName: OpenQuestPanel
+        m_MethodName: SwitchToQuestPanel
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -20048,7 +19996,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 373390345}
+      - m_Target: {fileID: 1835196396}
         m_TargetAssemblyTypeName: QuestsUIScr, Assembly-CSharp
         m_MethodName: OnClickXpBtn
         m_Mode: 1
@@ -21337,7 +21285,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -59.700012, y: -65.2}
+  m_AnchoredPosition: {x: -59.69995, y: -65.20001}
   m_SizeDelta: {x: 86.71997, y: 86.72}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &909891990
@@ -21386,11 +21334,11 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 1912076073}
         m_TargetAssemblyTypeName: MainMenu, Assembly-CSharp
-        m_MethodName: CloseAllPanels
-        m_Mode: 1
+        m_MethodName: ClosePanel
+        m_Mode: 2
         m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_ObjectArgument: {fileID: 954353172}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.GameObject, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 
@@ -22805,7 +22753,6 @@ GameObject:
   - component: {fileID: 954353176}
   - component: {fileID: 954353175}
   - component: {fileID: 954353174}
-  - component: {fileID: 954353177}
   m_Layer: 5
   m_Name: XpPanel
   m_TagString: Untagged
@@ -22831,10 +22778,10 @@ RectTransform:
   - {fileID: 1641509100}
   m_Father: {fileID: 1912076072}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 1018.11, y: 545.1}
+  m_SizeDelta: {x: -901.89, y: -534.9}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &954353174
 MonoBehaviour:
@@ -22889,28 +22836,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 954353172}
   m_CullTransparentMesh: 1
---- !u!114 &954353177
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 954353172}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8fb234d44d89e7f4b9d38650b018b7d5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::XpUiScr
-  xpSlider: {fileID: 2058283404}
-  xpHandler: {fileID: 695791783}
-  currentXpText: {fileID: 1897716477}
-  currentLvlText: {fileID: 758442123}
-  nextLvlText: {fileID: 3564644}
-  canvasGroup: {fileID: 0}
-  panel: {fileID: 0}
-  audioSource: {fileID: 0}
-  levelUpSound: {fileID: 0}
-  awardForNextLevel: {fileID: 1641509102}
 --- !u!1 &955827274
 GameObject:
   m_ObjectHideFlags: 0
@@ -23607,11 +23532,11 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 1912076073}
         m_TargetAssemblyTypeName: MainMenu, Assembly-CSharp
-        m_MethodName: OpenSettings
-        m_Mode: 1
+        m_MethodName: OpenPanel
+        m_Mode: 2
         m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_ObjectArgument: {fileID: 718338716}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.GameObject, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 
@@ -24448,7 +24373,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 718338721}
+      - m_Target: {fileID: 2104911444}
         m_TargetAssemblyTypeName: SettingsHandler, Assembly-CSharp
         m_MethodName: ShowGitHub
         m_Mode: 1
@@ -25243,7 +25168,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -59.700012, y: -65.2}
+  m_AnchoredPosition: {x: -59.69995, y: -65.20001}
   m_SizeDelta: {x: 86.71997, y: 86.72}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1064706960
@@ -25292,11 +25217,11 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 1912076073}
         m_TargetAssemblyTypeName: MainMenu, Assembly-CSharp
-        m_MethodName: CloseAllPanels
-        m_Mode: 1
+        m_MethodName: ClosePanel
+        m_Mode: 2
         m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_ObjectArgument: {fileID: 441271433}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.GameObject, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 
@@ -26659,7 +26584,7 @@ MonoBehaviour:
   onValueChanged:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 718338721}
+      - m_Target: {fileID: 2104911444}
         m_TargetAssemblyTypeName: SettingsHandler, Assembly-CSharp
         m_MethodName: OnTrailToggleChanged
         m_Mode: 1
@@ -27403,7 +27328,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -59.700012, y: -65.2}
+  m_AnchoredPosition: {x: -59.69995, y: -65.20001}
   m_SizeDelta: {x: 86.71997, y: 86.72}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1124694973
@@ -27452,11 +27377,11 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 1912076073}
         m_TargetAssemblyTypeName: MainMenu, Assembly-CSharp
-        m_MethodName: CloseAllPanels
-        m_Mode: 1
+        m_MethodName: ClosePanel
+        m_Mode: 2
         m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_ObjectArgument: {fileID: 1124770557}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.GameObject, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 
@@ -27554,10 +27479,10 @@ RectTransform:
   - {fileID: 352723718}
   m_Father: {fileID: 1912076072}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0.000061035156, y: 0}
-  m_SizeDelta: {x: 1018.11, y: 545.1}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
+  m_AnchoredPosition: {x: 0.00012207031, y: 0}
+  m_SizeDelta: {x: -901.89, y: -534.9}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1124770559
 MonoBehaviour:
@@ -30217,7 +30142,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -59.700012, y: -65.2}
+  m_AnchoredPosition: {x: -59.69995, y: -65.20001}
   m_SizeDelta: {x: 86.71997, y: 86.72}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1220761338
@@ -30266,11 +30191,11 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 1912076073}
         m_TargetAssemblyTypeName: MainMenu, Assembly-CSharp
-        m_MethodName: CloseAllPanels
-        m_Mode: 1
+        m_MethodName: ClosePanel
+        m_Mode: 2
         m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_ObjectArgument: {fileID: 718338716}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.GameObject, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 
@@ -30786,10 +30711,10 @@ RectTransform:
   - {fileID: 1733305156}
   m_Father: {fileID: 1912076072}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 1018.11, y: 545.1}
+  m_SizeDelta: {x: -901.89, y: -534.9}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1229353367
 MonoBehaviour:
@@ -34576,6 +34501,60 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1375743620}
   m_CullTransparentMesh: 1
+--- !u!1 &1381377193
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1381377195}
+  - component: {fileID: 1381377194}
+  m_Layer: 0
+  m_Name: XpUiScr
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1381377194
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1381377193}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8fb234d44d89e7f4b9d38650b018b7d5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::XpUiScr
+  xpSlider: {fileID: 2058283404}
+  xpHandler: {fileID: 695791783}
+  currentXpText: {fileID: 1897716477}
+  currentLvlText: {fileID: 758442123}
+  nextLvlText: {fileID: 3564644}
+  canvasGroup: {fileID: 0}
+  panel: {fileID: 0}
+  audioSource: {fileID: 0}
+  levelUpSound: {fileID: 0}
+  awardForNextLevel: {fileID: 1641509102}
+--- !u!4 &1381377195
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1381377193}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1383756489
 GameObject:
   m_ObjectHideFlags: 0
@@ -34613,10 +34592,10 @@ RectTransform:
   - {fileID: 622968025}
   m_Father: {fileID: 1912076072}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0.000061035156, y: 0}
-  m_SizeDelta: {x: 1018.11, y: 545.1}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
+  m_AnchoredPosition: {x: 0.00012207031, y: 0}
+  m_SizeDelta: {x: -901.89, y: -534.9}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1383756491
 MonoBehaviour:
@@ -36222,10 +36201,10 @@ RectTransform:
   - {fileID: 325451310}
   m_Father: {fileID: 1912076072}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0.000061035156, y: 0}
-  m_SizeDelta: {x: 1018.11, y: 545.1}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
+  m_AnchoredPosition: {x: 0.00012207031, y: 0}
+  m_SizeDelta: {x: -901.89, y: -534.9}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1439479960
 MonoBehaviour:
@@ -36995,7 +36974,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -59.700012, y: -65.2}
+  m_AnchoredPosition: {x: -59.69995, y: -65.20001}
   m_SizeDelta: {x: 86.71997, y: 86.72}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1456172003
@@ -37044,11 +37023,11 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 1912076073}
         m_TargetAssemblyTypeName: MainMenu, Assembly-CSharp
-        m_MethodName: CloseAllPanels
-        m_Mode: 1
+        m_MethodName: ClosePanel
+        m_Mode: 2
         m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_ObjectArgument: {fileID: 253191518}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.GameObject, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 
@@ -39701,7 +39680,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 373390345}
+      - m_Target: {fileID: 1835196396}
         m_TargetAssemblyTypeName: QuestsUIScr, Assembly-CSharp
         m_MethodName: OnClickGoalBtn
         m_Mode: 1
@@ -41777,11 +41756,11 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 1912076073}
         m_TargetAssemblyTypeName: MainMenu, Assembly-CSharp
-        m_MethodName: OpenQuestPanel
-        m_Mode: 1
+        m_MethodName: OpenPanel
+        m_Mode: 2
         m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_ObjectArgument: {fileID: 373390340}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.GameObject, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 
@@ -42574,11 +42553,11 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 1912076073}
         m_TargetAssemblyTypeName: MainMenu, Assembly-CSharp
-        m_MethodName: OpenMentions
-        m_Mode: 1
+        m_MethodName: OpenPanel
+        m_Mode: 2
         m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_ObjectArgument: {fileID: 1124770557}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.GameObject, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 
@@ -42802,11 +42781,11 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 1912076073}
         m_TargetAssemblyTypeName: MainMenu, Assembly-CSharp
-        m_MethodName: OpenBot
-        m_Mode: 1
+        m_MethodName: OpenPanel
+        m_Mode: 2
         m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_ObjectArgument: {fileID: 1439479958}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.GameObject, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 
@@ -44500,10 +44479,10 @@ RectTransform:
   - {fileID: 914714064}
   m_Father: {fileID: 1912076072}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0.000061035156, y: 0}
-  m_SizeDelta: {x: 1018.11, y: 545.1}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
+  m_AnchoredPosition: {x: 0.00012207031, y: 0}
+  m_SizeDelta: {x: -901.89, y: -534.9}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1735674026
 MonoBehaviour:
@@ -45501,7 +45480,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -59.700012, y: -65.2}
+  m_AnchoredPosition: {x: -59.69995, y: -65.20001}
   m_SizeDelta: {x: 86.71997, y: 86.72}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1757917088
@@ -45550,11 +45529,11 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 1912076073}
         m_TargetAssemblyTypeName: MainMenu, Assembly-CSharp
-        m_MethodName: CloseAllPanels
-        m_Mode: 1
+        m_MethodName: ClosePanel
+        m_Mode: 2
         m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_ObjectArgument: {fileID: 1383756489}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.GameObject, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 
@@ -46803,7 +46782,7 @@ MonoBehaviour:
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 718338721}
+      - m_Target: {fileID: 2104911444}
         m_TargetAssemblyTypeName: SettingsHandler, Assembly-CSharp
         m_MethodName: OnFpsSliderChanged
         m_Mode: 1
@@ -47620,6 +47599,71 @@ MonoBehaviour:
   m_EffectColor: {r: 0, g: 0, b: 0, a: 1}
   m_EffectDistance: {x: 3, y: -3}
   m_UseGraphicAlpha: 0
+--- !u!1 &1835196395
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1835196397}
+  - component: {fileID: 1835196396}
+  m_Layer: 0
+  m_Name: QuestUiScr
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1835196396
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1835196395}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: de0302f9b26e9d043b3705a744141219, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::QuestsUIScr
+  moneyQuests:
+  - {fileID: 1736376037}
+  - {fileID: 1436596721}
+  - {fileID: 1229152921}
+  - {fileID: 1575674264}
+  - {fileID: 1989387067}
+  - {fileID: 313102056}
+  goalsQuests:
+  - {fileID: 1658109074}
+  - {fileID: 1302441699}
+  - {fileID: 969620191}
+  - {fileID: 1108193507}
+  - {fileID: 264607670}
+  - {fileID: 1406948462}
+  xpQuests:
+  - {fileID: 790829562}
+  - {fileID: 1761999752}
+  - {fileID: 1017048212}
+  - {fileID: 30264463}
+  - {fileID: 92674059}
+  - {fileID: 1493307975}
+--- !u!4 &1835196397
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1835196395}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1837398023
 GameObject:
   m_ObjectHideFlags: 0
@@ -47801,11 +47845,11 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 1912076073}
         m_TargetAssemblyTypeName: MainMenu, Assembly-CSharp
-        m_MethodName: OpenOnline
-        m_Mode: 1
+        m_MethodName: OpenPanel
+        m_Mode: 2
         m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_ObjectArgument: {fileID: 441271433}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.GameObject, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 
@@ -48014,6 +48058,18 @@ MonoBehaviour:
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 1912076073}
+        m_TargetAssemblyTypeName: MainMenu, Assembly-CSharp
+        m_MethodName: OpenPanel
+        m_Mode: 2
+        m_Arguments:
+          m_ObjectArgument: {fileID: 253191518}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.GameObject, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 
@@ -51334,7 +51390,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -59.700012, y: -65.2}
+  m_AnchoredPosition: {x: -59.69995, y: -65.20001}
   m_SizeDelta: {x: 86.71997, y: 86.72}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1978475008
@@ -51383,11 +51439,11 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 1912076073}
         m_TargetAssemblyTypeName: MainMenu, Assembly-CSharp
-        m_MethodName: CloseAllPanels
-        m_Mode: 1
+        m_MethodName: ClosePanel
+        m_Mode: 2
         m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_ObjectArgument: {fileID: 1229353364}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.GameObject, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 
@@ -52913,7 +52969,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 718338721}
+      - m_Target: {fileID: 2104911444}
         m_TargetAssemblyTypeName: SettingsHandler, Assembly-CSharp
         m_MethodName: ShowTelegram
         m_Mode: 1
@@ -53647,6 +53703,55 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2096150533}
   m_CullTransparentMesh: 1
+--- !u!1 &2104911443
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2104911445}
+  - component: {fileID: 2104911444}
+  m_Layer: 0
+  m_Name: SettingsHandler
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &2104911444
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2104911443}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1b8a9748775074046be374477922597c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::SettingsHandler
+  volumeSlider: {fileID: 431368306}
+  fpsSlider: {fileID: 1816709576}
+  fpsText: {fileID: 1091560590}
+  trailToggle: {fileID: 1112795253}
+  volumeLevel: 0.5
+--- !u!4 &2104911445
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2104911443}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2108025154
 GameObject:
   m_ObjectHideFlags: 0
@@ -54359,8 +54464,11 @@ SceneRoots:
   - {fileID: 1114898953}
   - {fileID: 1016994373}
   - {fileID: 180572475}
+  - {fileID: 1381377195}
   - {fileID: 695791784}
   - {fileID: 140701920}
   - {fileID: 1134384871}
   - {fileID: 138613518}
   - {fileID: 110364729}
+  - {fileID: 1835196397}
+  - {fileID: 2104911445}
