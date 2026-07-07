@@ -1,4 +1,6 @@
 using System;
+using System.Collections;
+using DG.Tweening;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -83,13 +85,22 @@ public class ShopHandler : MonoBehaviour
 
     public void ShowSurePanel()
     {
+        var rect = surePanel.GetComponent<RectTransform>();
+        rect.localScale = Vector3.zero;
         surePanel.SetActive(true);
+        rect.DOScale(new Vector3(1.0f, 1.0f, 1.0f), 0.3f).SetEase(Ease.OutBack);
     }
     public void HideSurePanel()
     {
+        StartCoroutine(AnimateSurePanel());
+    }
+    IEnumerator AnimateSurePanel()
+    {
+        var rect = surePanel.GetComponent<RectTransform>();
+        rect.DOScale(Vector3.zero, 0.3f).SetEase(Ease.InBack);
+        yield return new WaitForSeconds(0.35f);
         surePanel.SetActive(false);
     }
-
     public void DeletePlayerPrefs()
     {
         int fps = PlayerPrefs.GetInt("FPS");
@@ -99,7 +110,6 @@ public class ShopHandler : MonoBehaviour
         Application.targetFrameRate = fps;
         PlayerPrefs.SetFloat("MusicVolume", musicVoulme);
         PlayerPrefs.Save();
-        surePanel.SetActive(false);
     }
 
     public void PlusMoney(int money)
