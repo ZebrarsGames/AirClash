@@ -190,10 +190,13 @@ public class MainMenu : MonoBehaviour
     }
     public void SwitchToQuestPanel()
     {
+        dailyQuestPanel.SetActive(false);
         questPanel.SetActive(true);
     }
     public void OpenDailyQuestPanel()
     {
+        questPanel.SetActive(false);
+        dailyQuestPanel.GetComponent<RectTransform>().localScale = Vector3.one;
         dailyQuestPanel.SetActive(true);
     }
     public void OpenUserGamemode()
