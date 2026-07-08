@@ -17,6 +17,7 @@ public class SaveManager : MonoBehaviour
         playerData.Goals = PlayerPrefs.GetInt("TotalGoals", 0);
         playerData.NickName = PlayerPrefs.GetString("Nick", "Ник");
         playerData.AvatarPath = Path.Combine(Application.persistentDataPath, "avatar.png");
+        playerData.CurrentSkinName = PlayerPrefs.GetString("CurrentSkin", "DefSkin");
 
         string json = JsonUtility.ToJson(playerData);
         File.WriteAllText(Application.persistentDataPath + "/save.json", json);

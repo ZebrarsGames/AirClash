@@ -12,12 +12,14 @@ public class ProfileUIHandler : MonoBehaviour
     [SerializeField] private RawImage displayImage; 
     [Header("Other")]
     [SerializeField] private ApplyProfileEvent applyProfileEvent;
+    [SerializeField] private SaveManager saveManager;
     private string avatarPath;
 
     void Start()
     {
         avatarPath = Path.Combine(Application.persistentDataPath, "avatar.png");
         LoadSavedAvatar();
+        nickInputField.text = saveManager.GetData().NickName;
     }
 
     public void OpenGallery()
