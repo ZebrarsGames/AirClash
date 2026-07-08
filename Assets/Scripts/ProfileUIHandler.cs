@@ -18,12 +18,17 @@ public class ProfileUIHandler : MonoBehaviour
     private string avatarPath;
     private RectTransform panelRect;
 
+    void Awake()
+    {
+        panelRect = editProfilePanel.GetComponent<RectTransform>();
+    }
+
     void Start()
     {
         avatarPath = Path.Combine(Application.persistentDataPath, "avatar.png");
         LoadSavedAvatar();
         nickInputField.text = saveManager.GetData().NickName;
-        panelRect = editProfilePanel.GetComponent<RectTransform>();
+        panelRect.DOKill();
         panelRect.localPosition = Vector2.zero;
     }
 
