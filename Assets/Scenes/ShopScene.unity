@@ -12362,6 +12362,7 @@ MonoBehaviour:
   menuMusic: {fileID: 8300000, guid: 28aa2f1f0d3d6ce4fb156e38ed6c23f4, type: 3}
   buySound: {fileID: 8300000, guid: 45a6151c7ae761845a4e78d03c17b1d8, type: 3}
   cancelSound: {fileID: 8300000, guid: 96a64f20e83e9374a8b6e6b9be262a82, type: 3}
+  saveManager: {fileID: 1251573710}
 --- !u!1 &1425535944
 GameObject:
   m_ObjectHideFlags: 0

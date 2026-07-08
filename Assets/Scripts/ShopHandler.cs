@@ -23,6 +23,9 @@ public class ShopHandler : MonoBehaviour
     [SerializeField] private AudioClip buySound;
     [SerializeField] private AudioClip cancelSound;
 
+    [Header("Other")]
+    [SerializeField] private SaveManager saveManager;
+
 
     void Start()
     {
@@ -109,6 +112,7 @@ public class ShopHandler : MonoBehaviour
         PlayerPrefs.SetInt("FPS", fps);
         Application.targetFrameRate = fps;
         PlayerPrefs.SetFloat("MusicVolume", musicVoulme);
+        saveManager.DeleteData();
         PlayerPrefs.Save();
     }
 
