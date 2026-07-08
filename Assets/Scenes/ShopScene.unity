@@ -16545,7 +16545,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: fdc5779b6f447314a86f8674650761d9, type: 2}
   - {fileID: 11400000, guid: 3e35bbc61d2b8b24ba42854d5e8403ad, type: 2}
   - {fileID: 11400000, guid: be5d130d139ad7b4e8e54e87bdb9e890, type: 2}
-  achievementsHandler: {fileID: 0}
+  achievementsHandler: {fileID: 1029591086}
 --- !u!4 &1899276048
 Transform:
   m_ObjectHideFlags: 0
