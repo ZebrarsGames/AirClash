@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -11,6 +10,7 @@ public class XpHandler : MonoBehaviour
     private int level = 1;
     public UnityEvent onLevelUp; 
     [SerializeField] private AchievementsHandler achievementsHandler;
+    [SerializeField] private SaveManager saveManager;
     public int GetXP() => currentXP;
     public int GetOldXP() => oldXp;
     public int GetXpToNextLevel() => xpToNextLevel;
@@ -29,9 +29,9 @@ public class XpHandler : MonoBehaviour
 
     void Awake()
     {
-        currentXP = PlayerPrefs.GetInt("CurrentXp", 0);
-        level = PlayerPrefs.GetInt("XpLevel", 1);
-        xpToNextLevel = PlayerPrefs.GetInt("XpToNextLevel", 100);
+        currentXP = saveManager.GetData().XP;
+        level = saveManager.GetData().XpLevel;
+        xpToNextLevel = saveManager.GetData().XpToNextLevel;
         Log();
 
         xpAwards.Add("AwardFor1Level", new XpAward { TypeOfAward = "Money", Award = 10, RequiredLevel = 1 });
@@ -117,10 +117,7 @@ public class XpHandler : MonoBehaviour
 
     private void Save()
     {
-        PlayerPrefs.SetInt("CurrentXp", currentXP);
-        PlayerPrefs.SetInt("XpLevel", level);
-        PlayerPrefs.SetInt("XpToNextLevel", xpToNextLevel);
-        PlayerPrefs.Save();
+        saveManager.SaveData();
     }
 
     private void Log()

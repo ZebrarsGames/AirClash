@@ -1,14 +1,15 @@
 using System;
 using UnityEngine;
 
-[Serializable]
-public class PlayerData : ScriptableObject
+[System.Serializable]
+public class PlayerData
 {
     public string NickName;
     public string AvatarPath;
     public int Money;
     public int XP;
     public int XpLevel;
+    public int XpToNextLevel;
     public int Goals;
     public SkinData CurrentSkin;
 }

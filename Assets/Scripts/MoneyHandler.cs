@@ -2,11 +2,12 @@ using UnityEngine;
 
 public class MoneyHandler : MonoBehaviour
 {
+    [SerializeField] private SaveManager saveManager;
     private int money;
 
     void Awake()
     {
-        money = PlayerPrefs.GetInt("Money", 0);
+        money = saveManager.GetData().Money;
     }
 
     public void AddMoney(int amount)
@@ -29,7 +30,6 @@ public class MoneyHandler : MonoBehaviour
 
     private void Save()
     {
-        PlayerPrefs.SetInt("Money", money);
-        PlayerPrefs.Save();
+        saveManager.SaveData();
     }
 }

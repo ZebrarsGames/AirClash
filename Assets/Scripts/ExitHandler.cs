@@ -11,6 +11,9 @@ public class ExitHandler : MonoBehaviour
     [Header("Time Settings")]
     [SerializeField] private float doubleClickDelay = 0.5f;
 
+    [Header("Other")]
+    [SerializeField] private SaveManager saveManager;
+
     private float lastClickTime = 0f;
 
     void Start()
@@ -64,7 +67,7 @@ public class ExitHandler : MonoBehaviour
     public void ConfirmExit()
     {
         PlayerPrefs.SetFloat("Music", 0);
-        SaveManager.SaveData();
+        saveManager.SaveData();
         PlayerPrefs.Save();
         Application.Quit();
     }
