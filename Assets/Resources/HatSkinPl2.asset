@@ -10,13 +10,13 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 94f26570548eac8418cc32b85d134ab0, type: 3}
-  m_Name: ParticleSkin
+  m_Name: HatSkinPl2
   m_EditorClassIdentifier: Assembly-CSharp::SkinData
-  skinName: ParticleSkin
-  skinGuiName: "\u042D\u0444\u0444\u0435\u043A\u0442"
-  sprite: {fileID: 21300000, guid: b7d8087d9ac7e2f4fba6a248eda686db, type: 3}
-  particles: {fileID: 8062503738438466386, guid: 2faa806d4d3b94a4480fb0f835b9bac2, type: 3}
-  trail: {fileID: 0}
+  skinName: HatSkinPl2
+  skinGuiName: "\u0428\u043B\u044F\u043F\u0430"
+  sprite: {fileID: 21300000, guid: a0ba7a19f1a368c4dbaf4a505b8acc75, type: 3}
+  particles: {fileID: 0}
+  trail: {fileID: 4747097867470956273, guid: 2e8327c2ff11fba468ef672a15c39ba2, type: 3}
   sound: {fileID: 8300000, guid: 8346d24a7b5724c4ba889b8a1d541bf7, type: 3}
-  rarity: 5
-  price: 240
+  rarity: 3
+  price: 40

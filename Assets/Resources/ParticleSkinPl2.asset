@@ -16,6 +16,7 @@ MonoBehaviour:
   skinGuiName: "\u042D\u0444\u0444\u0435\u043A\u0442"
   sprite: {fileID: 21300000, guid: ed6f6eea10a91f942bde190193d3c336, type: 3}
   particles: {fileID: 8062503738438466386, guid: 2faa806d4d3b94a4480fb0f835b9bac2, type: 3}
+  trail: {fileID: 0}
   sound: {fileID: 8300000, guid: 8346d24a7b5724c4ba889b8a1d541bf7, type: 3}
   rarity: 5
-  price: 220
+  price: 240
