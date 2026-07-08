@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 using System.IO;
+using System.Linq;
 
 public class ProfileHandler : MonoBehaviour
 {
@@ -18,9 +19,18 @@ public class ProfileHandler : MonoBehaviour
 
     void Start()
     {
+        PlayerData currentData = saveManager.GetData();
         avatarPath = Path.Combine(Application.persistentDataPath, "avatar.png");
         moneyText.text = "Деньги: " + moneyHandler.GetMoney();
-        nickText.text = saveManager.GetData().NickName;
+        nickText.text = currentData.NickName;
+        SkinData currentSkinSO = Resources.LoadAll<SkinData>("").FirstOrDefault(item => item.name == currentData.CurrentSkinName);
+        if(currentSkinSO == null)
+        {
+            Debug.Log("Null");
+            currentSkinSO = Resources.LoadAll<SkinData>("").FirstOrDefault(item => item.name == "DefSkin");
+        } 
+        currentSkinImage.sprite = currentSkinSO.sprite; 
+        Debug.Log("CurrentSkin: " + currentSkinSO.skinName);
         if (File.Exists(avatarPath))
         {
             byte[] bytes = File.ReadAllBytes(avatarPath);

@@ -34,12 +34,18 @@ public class MainMenu : MonoBehaviour
     [SerializeField] private XpHandler xpHandler;
     [SerializeField] private QuestsHandler questsHandler; 
     [SerializeField] private DailyQuestHandler dailyQuestHandler;
+    [SerializeField] private SaveManager saveManager;
     [Header("Floats")]
     [SerializeField] private float rotationSpeed = 10f;
     [SerializeField] private float maxAngle = 6f;  
     private RectTransform rectTransform;
     private string toScene;
 
+
+    void Awake()
+    {
+        saveManager.SaveData();
+    }
     void Start()
     {
         audioSource.clip = menuMusic;
@@ -49,7 +55,7 @@ public class MainMenu : MonoBehaviour
         Application.targetFrameRate = PlayerPrefs.GetInt("FPS", 60);
         audioSource.volume = PlayerPrefs.GetFloat("MusicVolume", 1.0f);
         rectTransform = mainMenuText.GetComponent<RectTransform>();
-        moneyText.text = "Деньги " + moneyHandler.GetMoney();
+        moneyText.text = "Деньги " + moneyHandler.GetMoney(); 
         if(PlayerPrefs.GetInt("isAfterGame") == 0)
         {
             PlayerPrefs.SetInt("HowMoneyAdds", 0);

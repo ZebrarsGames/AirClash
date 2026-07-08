@@ -11,5 +11,5 @@ public class PlayerData
     public int XpLevel;
     public int XpToNextLevel;
     public int Goals;
-    public SkinData CurrentSkin;
+    public string CurrentSkinName;
 }
