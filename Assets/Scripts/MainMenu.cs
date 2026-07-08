@@ -229,6 +229,11 @@ public class MainMenu : MonoBehaviour
         goalsText.text = Convert.ToString(PlayerPrefs.GetInt("Goals"));
     }
 
+    public void OnGoalsSliderChanged()
+    {
+        goalsText.text = Convert.ToString(Convert.ToInt32(goalsSlider.value));
+    }
+
     public void AddMoney(int amount)
     {
         coinMover.AddCoins(new Vector3(0, 0, 0), amount);
