@@ -2,6 +2,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.Events;
 using System.IO;
+using DG.Tweening;
 
 [System.Serializable]
 public class ApplyProfileEvent : UnityEvent<string, RawImage> { }
@@ -10,16 +11,20 @@ public class ProfileUIHandler : MonoBehaviour
     [Header("UI")]
     [SerializeField] private InputField nickInputField;
     [SerializeField] private RawImage displayImage; 
+    [SerializeField] private GameObject editProfilePanel;
     [Header("Other")]
     [SerializeField] private ApplyProfileEvent applyProfileEvent;
     [SerializeField] private SaveManager saveManager;
     private string avatarPath;
+    private RectTransform panelRect;
 
     void Start()
     {
         avatarPath = Path.Combine(Application.persistentDataPath, "avatar.png");
         LoadSavedAvatar();
         nickInputField.text = saveManager.GetData().NickName;
+        panelRect = editProfilePanel.GetComponent<RectTransform>();
+        panelRect.localPosition = Vector2.zero;
     }
 
     public void OpenGallery()
@@ -41,6 +46,16 @@ public class ProfileUIHandler : MonoBehaviour
                 }
             }
         }, "Выберите изображение", "image/*");
+    }
+
+    public void MoveUpPanel()
+    {
+        panelRect.DOLocalMoveY(100.0f, 0.3f).SetEase(Ease.OutSine);
+    }
+
+    public void MoveDownPanel()
+    {
+        panelRect.DOLocalMoveY(0, 0.3f).SetEase(Ease.OutSine);
     }
 
     public void Apply()
