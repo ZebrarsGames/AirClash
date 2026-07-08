@@ -19,6 +19,21 @@ public class ProfileHandler : MonoBehaviour
 
     void Start()
     {
+        SetProfileDataOnStart();
+    }
+
+    public void SetProfileData(string nick, RawImage avatar)
+    {
+        avatarImage.texture = avatar.texture;
+        nickText.text = nick;
+        PlayerPrefs.SetString("Nick", nick);
+        PlayerPrefs.Save();
+        moneyText.text = "Деньги: " + moneyHandler.GetMoney();
+        saveManager.SaveData();
+    }
+
+    public void SetProfileDataOnStart()
+    {
         PlayerData currentData = saveManager.GetData();
         avatarPath = Path.Combine(Application.persistentDataPath, "avatar.png");
         moneyText.text = "Деньги: " + moneyHandler.GetMoney();
@@ -41,15 +56,5 @@ public class ProfileHandler : MonoBehaviour
             avatarImage.texture = savedTexture;
             Debug.Log("Сохраненный аватар успешно загружен при старте.");
         }
-    }
-
-    public void SetProfileData(string nick, RawImage avatar)
-    {
-        avatarImage.texture = avatar.texture;
-        nickText.text = nick;
-        PlayerPrefs.SetString("Nick", nick);
-        PlayerPrefs.Save();
-        moneyText.text = "Деньги: " + moneyHandler.GetMoney();
-        saveManager.SaveData();
     }
 }
