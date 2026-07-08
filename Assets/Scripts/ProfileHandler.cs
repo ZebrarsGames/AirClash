@@ -28,7 +28,6 @@ public class ProfileHandler : MonoBehaviour
         nickText.text = nick;
         PlayerPrefs.SetString("Nick", nick);
         PlayerPrefs.Save();
-        moneyText.text = "Деньги: " + moneyHandler.GetMoney();
         saveManager.SaveData();
     }
 
@@ -37,6 +36,7 @@ public class ProfileHandler : MonoBehaviour
         PlayerData currentData = saveManager.GetData();
         avatarPath = Path.Combine(Application.persistentDataPath, "avatar.png");
         moneyText.text = "Деньги: " + moneyHandler.GetMoney();
+        goalText.text = "Голы: " + currentData.Goals;
         nickText.text = currentData.NickName;
         SkinData currentSkinSO = Resources.LoadAll<SkinData>("").FirstOrDefault(item => item.name == currentData.CurrentSkinName);
         if(currentSkinSO == null)
