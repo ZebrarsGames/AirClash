@@ -18,6 +18,8 @@ public class MainMenu : MonoBehaviour
     [SerializeField] private GameObject xpPanel;
     [SerializeField] private GameObject questPanel;
     [SerializeField] private GameObject dailyQuestPanel;
+    [SerializeField] private GameObject profilePanel;
+    [SerializeField] private GameObject editProfilePanel;
     [Header("Audio")]
     [SerializeField] private AudioSource audioSource;
     [SerializeField] private AudioClip menuMusic;
@@ -137,6 +139,8 @@ public class MainMenu : MonoBehaviour
         xpPanel.SetActive(false);
         questPanel.SetActive(false);
         dailyQuestPanel.SetActive(false);
+        profilePanel.SetActive(false);
+        editProfilePanel.SetActive(false);
     }
     public void ClosePanel(GameObject panel)
     {
@@ -193,6 +197,16 @@ public class MainMenu : MonoBehaviour
     {
         dailyQuestPanel.SetActive(false);
         questPanel.SetActive(true);
+    }
+    public void SwitchToEditProfilePanel()
+    {
+        profilePanel.SetActive(false);
+        editProfilePanel.SetActive(true);
+    }
+    public void SwithcToProfilePanel()
+    {
+        editProfilePanel.SetActive(false);
+        profilePanel.SetActive(true);
     }
     public void OpenDailyQuestPanel()
     {
