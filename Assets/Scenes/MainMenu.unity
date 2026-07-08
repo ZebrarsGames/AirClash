@@ -10690,6 +10690,8 @@ MonoBehaviour:
   moneyText: {fileID: 1822013305}
   goalText: {fileID: 942730543}
   currentSkinImage: {fileID: 26142245}
+  saveManager: {fileID: 622325057}
+  moneyHandler: {fileID: 1114898952}
 --- !u!4 &412532616
 Transform:
   m_ObjectHideFlags: 0

@@ -15,11 +15,13 @@ public class SaveManager : MonoBehaviour
         playerData.XpLevel = xpHandler.GetLevel();
         playerData.XpToNextLevel = xpHandler.GetXpToNextLevel();
         playerData.Goals = PlayerPrefs.GetInt("TotalGoals", 0);
-        playerData.NickName = "test";
-        playerData.AvatarPath = "test";
+        playerData.NickName = PlayerPrefs.GetString("Nick", "Ник");
+        playerData.AvatarPath = Path.Combine(Application.persistentDataPath, "avatar.png");
 
         string json = JsonUtility.ToJson(playerData);
         File.WriteAllText(Application.persistentDataPath + "/save.json", json);
+        PlayerPrefs.DeleteKey("Nick");
+        PlayerPrefs.Save();
     }
 
     public PlayerData GetData()
