@@ -1,0 +1,22 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 94f26570548eac8418cc32b85d134ab0, type: 3}
+  m_Name: ElectricitySkinPl2
+  m_EditorClassIdentifier: Assembly-CSharp::SkinData
+  skinName: ElectricitySkinPl2
+  skinGuiName: "\u042D\u043B\u0435\u043A\u0442\u0440\u0438\u0447\u0435\u0441\u0442\u0432\u043E"
+  sprite: {fileID: 21300000, guid: 65ca349db318d6345b6ef6b17c5efca4, type: 3}
+  particles: {fileID: 0}
+  trail: {fileID: 990863695361195320, guid: fcdfea0f0ec0a184c92d87d59a1df0d2, type: 3}
+  sound: {fileID: 8300000, guid: 982b33b702aae444b99862a7ead4b734, type: 3}
+  rarity: 5
+  price: 220
