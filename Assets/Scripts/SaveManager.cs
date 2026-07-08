@@ -2,15 +2,18 @@ using UnityEngine;
 using System.IO;
 using System.Collections.Generic;
 
-public static class SaveManager
+public class SaveManager : MonoBehaviour
 {
-    public static void SaveData()
+    [SerializeField] private XpHandler xpHandler;
+    [SerializeField] private MoneyHandler moneyHandler;
+    public void SaveData()
     {
         Debug.Log("Data Saved!");
-        PlayerData playerData = ScriptableObject.CreateInstance<PlayerData>();
-        playerData.Money = PlayerPrefs.GetInt("Money", 0);
-        playerData.XP = PlayerPrefs.GetInt("CurrentXp", 0);
-        playerData.XpLevel = PlayerPrefs.GetInt("XpLevel", 1);
+        PlayerData playerData = new PlayerData();
+        playerData.Money = moneyHandler.GetMoney();
+        playerData.XP = xpHandler.GetXP();
+        playerData.XpLevel = xpHandler.GetLevel();
+        playerData.XpToNextLevel = xpHandler.GetXpToNextLevel();
         playerData.Goals = PlayerPrefs.GetInt("TotalGoals", 0);
         playerData.NickName = "test";
         playerData.AvatarPath = "test";
@@ -19,7 +22,7 @@ public static class SaveManager
         File.WriteAllText(Application.persistentDataPath + "/save.json", json);
     }
 
-    public static PlayerData GetData()
+    public PlayerData GetData()
     {
         if (!File.Exists(Application.persistentDataPath + "/save.json"))
         {
@@ -31,7 +34,7 @@ public static class SaveManager
         return playerData;
     }
 
-    public static void DeleteData()
+    public void DeleteData()
     {
         if (File.Exists(Application.persistentDataPath + "/save.json"))
         {
