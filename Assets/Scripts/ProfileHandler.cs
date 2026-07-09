@@ -11,6 +11,7 @@ public class ProfileHandler : MonoBehaviour
     [SerializeField] Text moneyText;
     [SerializeField] Text goalText;
     [SerializeField] Image currentSkinImage;
+    [SerializeField] Texture defaultProfileIcon;
 
     [Header("Scripts")]
     [SerializeField] SaveManager saveManager;
@@ -41,11 +42,9 @@ public class ProfileHandler : MonoBehaviour
         SkinData currentSkinSO = Resources.LoadAll<SkinData>("").FirstOrDefault(item => item.name == currentData.CurrentSkinName);
         if(currentSkinSO == null)
         {
-            Debug.Log("Null");
             currentSkinSO = Resources.LoadAll<SkinData>("").FirstOrDefault(item => item.name == "DefSkin");
         } 
         currentSkinImage.sprite = currentSkinSO.sprite; 
-        Debug.Log("CurrentSkin: " + currentSkinSO.skinName);
         if (File.Exists(avatarPath))
         {
             byte[] bytes = File.ReadAllBytes(avatarPath);
@@ -55,6 +54,9 @@ public class ProfileHandler : MonoBehaviour
 
             avatarImage.texture = savedTexture;
             Debug.Log("Сохраненный аватар успешно загружен при старте.");
+        } else
+        {
+            avatarImage.texture = defaultProfileIcon;
         }
     }
 }
