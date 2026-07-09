@@ -2,27 +2,35 @@ using System;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using UnityEngine.Events;
 
+[System.Serializable]
+public class IsAnimToggleEvent : UnityEvent<bool> { }
 public class SettingsHandler : MonoBehaviour
 {
+    [Header("Sliders")]
     [SerializeField] private Slider volumeSlider;
     [SerializeField] private Slider fpsSlider;
-    [SerializeField] private Text fpsText;
-    [SerializeField] private Toggle trailToggle;
-    public float volumeLevel = 0.5f;
 
-    public void Start() {
+    [Header("Texts")]
+    [SerializeField] private Text fpsText;
+
+    [Header("Toggles")]
+    [SerializeField] private Toggle animBgToggle;
+    [SerializeField] private Toggle trailToggle;
+
+    [Header("Other")]
+    [SerializeField] private IsAnimToggleEvent isAnimToggleEvent;
+
+    public void Start() 
+    {
         QualitySettings.vSyncCount = 0;
         if(PlayerPrefs.GetInt("FPS") == 0) PlayerPrefs.SetInt("FPS", 60);
         else Application.targetFrameRate = PlayerPrefs.GetInt("FPS");
         volumeSlider.value = PlayerPrefs.GetFloat("MusicVolume", 1.0f);
         fpsSlider.value = PlayerPrefs.GetInt("FPS");
-        if(SceneManager.GetActiveScene().name == "MainMenu")
-        {
-            if(PlayerPrefs.GetInt("Trail", 1) == 0) trailToggle.isOn = false;
-            else trailToggle.isOn = true;
-        }
-        
+        trailToggle.isOn = PlayerPrefs.GetInt("Trail", 1) != 0;
+        animBgToggle.isOn = PlayerPrefs.GetInt("isAnimBg", 1) != 0;
     }
 
     public void OnVolumeSliderChanged() {
@@ -39,6 +47,13 @@ public class SettingsHandler : MonoBehaviour
     public void OnTrailToggleChanged()
     {
         PlayerPrefs.SetInt("Trail", trailToggle.isOn ? 1 : 0);
+    }
+
+    public void OnAnimBgToggleChanged()
+    {
+        PlayerPrefs.SetInt("isAnimBg", animBgToggle.isOn ? 1 : 0);
+        PlayerPrefs.Save();
+        isAnimToggleEvent.Invoke(animBgToggle.isOn);
     }
 
     public void ShowTelegram()
