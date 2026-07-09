@@ -61,6 +61,7 @@ public class MainMenu : MonoBehaviour
         audioSource.volume = PlayerPrefs.GetFloat("MusicVolume", 1.0f);
         rectTransform = mainMenuText.GetComponent<RectTransform>();
         moneyText.text = "Деньги " + moneyHandler.GetMoney(); 
+        saveManager.SaveData();
         if(PlayerPrefs.GetInt("isAfterGame") == 0)
         {
             PlayerPrefs.SetInt("HowMoneyAdds", 0);
