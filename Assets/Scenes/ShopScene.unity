@@ -932,7 +932,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::SkinItem
   skinData: {fileID: 11400000, guid: 2fb9f4c5748faef479b3f4bb58239859, type: 2}
   skinName: ZebraSkin
-  guiSkinName: "\u0417\u0435\u0431\u0440\u0430"
+  guiSkinName: 
   skinPrice: 30
   isBuy: 0
   isCanBuy: 0
