@@ -241,9 +241,10 @@ public class GoalHandler : MonoBehaviour
             endScreen.StartEndScreen(0, xpBefore);
         }
         goalTextCanvas.SetActive(true);
+        var rect = endSreenPanel.GetComponent<RectTransform>();
+        rect.localScale = Vector3.zero;
         endSreenPanel.SetActive(true);
-        endSreenPanel.GetComponent<CanvasGroup>().alpha = 0;
-        endSreenPanel.GetComponent<CanvasGroup>().DOFade(1f, 0.5f);
+        rect.DOScale(new Vector3(1.0f, 1.0f, 1.0f), 0.3f).SetEase(Ease.OutBack);
     }
     public void Lose()
     {
@@ -263,13 +264,13 @@ public class GoalHandler : MonoBehaviour
             PlayerPrefs.Save();
         }
         goalTextCanvas.SetActive(true);
+        var rect = endSreenPanel.GetComponent<RectTransform>();
+        rect.localScale = Vector3.zero;
         endSreenPanel.SetActive(true);
-        endSreenPanel.GetComponent<CanvasGroup>().alpha = 0;
-        endSreenPanel.GetComponent<CanvasGroup>().DOFade(1f, 0.5f);
+        rect.DOScale(new Vector3(1.0f, 1.0f, 1.0f), 0.3f).SetEase(Ease.OutBack);
     }
     public void LoadMainMenu()
     {
-        endSreenPanel.SetActive(false);
         PlayerPrefs.Save();
         SceneManager.LoadScene("MainMenu");
     }
