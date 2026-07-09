@@ -8790,7 +8790,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Texture: {fileID: 0}
+  m_Texture: {fileID: 2800000, guid: 7c77a89780a589640b80e4ecf1af2739, type: 3}
   m_UVRect:
     serializedVersion: 2
     x: 0
@@ -11531,6 +11531,7 @@ MonoBehaviour:
   moneyText: {fileID: 1822013305}
   goalText: {fileID: 942730543}
   currentSkinImage: {fileID: 26142245}
+  defaultProfileIcon: {fileID: 2800000, guid: 7c77a89780a589640b80e4ecf1af2739, type: 3}
   saveManager: {fileID: 622325057}
   moneyHandler: {fileID: 1114898952}
 --- !u!4 &412532616
@@ -15188,7 +15189,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Texture: {fileID: 0}
+  m_Texture: {fileID: 2800000, guid: 7c77a89780a589640b80e4ecf1af2739, type: 3}
   m_UVRect:
     serializedVersion: 2
     x: 0

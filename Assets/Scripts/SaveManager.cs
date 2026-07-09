@@ -43,6 +43,7 @@ public class SaveManager : MonoBehaviour
         if (File.Exists(Application.persistentDataPath + "/save.json"))
         {
             File.Delete(Application.persistentDataPath + "/save.json");
+            File.Delete(Path.Combine(Application.persistentDataPath, "avatar.png"));
             Debug.Log("Файл сохранения успешно удален по пути: " + Application.persistentDataPath + "/save.json");
         }
         else
@@ -65,8 +66,6 @@ public class SaveManager : MonoBehaviour
 
         string json = JsonUtility.ToJson(playerData);
         File.WriteAllText(Application.persistentDataPath + "/save.json", json);
-        PlayerPrefs.SetInt("IsFirstTimePlayed", 1);
-        PlayerPrefs.Save();
         Debug.Log("Default data Saved!");
     }
 }
