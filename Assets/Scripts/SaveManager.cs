@@ -15,7 +15,7 @@ public class SaveManager : MonoBehaviour
         playerData.XpLevel = xpHandler.GetLevel();
         playerData.XpToNextLevel = xpHandler.GetXpToNextLevel();
         playerData.Goals = PlayerPrefs.GetInt("TotalGoals", 0);
-        playerData.NickName = PlayerPrefs.GetString("Nick", "Ник");
+        playerData.NickName = PlayerPrefs.GetString("Nick", GetData().NickName);
         playerData.AvatarPath = Path.Combine(Application.persistentDataPath, "avatar.png");
         playerData.CurrentSkinName = PlayerPrefs.GetString("CurrentSkin", "DefSkin");
 
