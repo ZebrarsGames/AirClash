@@ -3,13 +3,14 @@ using UnityEngine.UI;
 using UnityEngine.Events;
 using System.IO;
 using DG.Tweening;
+using TMPro;
 
 [System.Serializable]
 public class ApplyProfileEvent : UnityEvent<string, RawImage> { }
 public class ProfileUIHandler : MonoBehaviour
 {
     [Header("UI")]
-    [SerializeField] private InputField nickInputField;
+    [SerializeField] private TMP_InputField nickInputField;
     [SerializeField] private RawImage displayImage; 
     [SerializeField] private GameObject editProfilePanel;
     [Header("Other")]
