@@ -44,7 +44,7 @@ public class MainMenu : MonoBehaviour
 
     void Awake()
     {
-        saveManager.SaveData();
+        if(PlayerPrefs.GetInt("IsFirstTimePlayed", 1) == 1) saveManager.SaveDefaultData();
     }
     void Start()
     {
