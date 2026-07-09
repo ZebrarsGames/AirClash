@@ -6,9 +6,9 @@ public class SaveManager : MonoBehaviour
 {
     [SerializeField] private XpHandler xpHandler;
     [SerializeField] private MoneyHandler moneyHandler;
+
     public void SaveData()
     {
-        Debug.Log("Data Saved!");
         PlayerData playerData = new PlayerData();
         playerData.Money = moneyHandler.GetMoney();
         playerData.XP = xpHandler.GetXP();
@@ -23,6 +23,7 @@ public class SaveManager : MonoBehaviour
         File.WriteAllText(Application.persistentDataPath + "/save.json", json);
         PlayerPrefs.DeleteKey("Nick");
         PlayerPrefs.Save();
+        Debug.Log("Data Saved!");
     }
 
     public PlayerData GetData()
@@ -48,5 +49,24 @@ public class SaveManager : MonoBehaviour
         {
             Debug.LogWarning("Файл сохранения не найден");
         }
+    }
+
+    public void SaveDefaultData()
+    {
+        PlayerData playerData = new PlayerData();
+        playerData.Money = 0;
+        playerData.XP = 0;
+        playerData.XpLevel = 1;
+        playerData.XpToNextLevel = 100;
+        playerData.Goals = 0;
+        playerData.NickName = "Ник";
+        playerData.AvatarPath = Path.Combine(Application.persistentDataPath, "avatar.png");
+        playerData.CurrentSkinName = "DefSkin";
+
+        string json = JsonUtility.ToJson(playerData);
+        File.WriteAllText(Application.persistentDataPath + "/save.json", json);
+        PlayerPrefs.SetInt("IsFirstTimePlayed", 1);
+        PlayerPrefs.Save();
+        Debug.Log("Default data Saved!");
     }
 }
