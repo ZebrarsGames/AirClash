@@ -131,6 +131,9 @@ public class BotsAI : MonoBehaviour
             moveSpeed = baseSpeed * 1.5f;
         } else if(score2 - score1 >= 7)
         {
+            moveSpeed = baseSpeed * 1.7f;
+        } else if(score2 - score1 >= 10)
+        {
             moveSpeed = baseSpeed * 2f;
         }
     }
@@ -141,14 +144,16 @@ public class BotsAI : MonoBehaviour
 
         if(score1 - score2 >= 3 && score1 - score2 < 5)
         {
-            moveSpeed = baseSpeed / 1.5f;
+            moveSpeed = baseSpeed / 2f;
         } else if(score1 - score2 >= 5 && score1 - score2 < 7)
         {
-            moveSpeed = baseSpeed / 2f;
+            moveSpeed = baseSpeed / 2.5f;
         } else if(score1 - score2 >= 7)
         {
             moveSpeed = baseSpeed / 3f;
+        } else if(score1 - score2 >= 10)
+        {
+            moveSpeed = baseSpeed / 3.5f;
         }
     }
-
 }
