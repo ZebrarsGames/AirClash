@@ -10,6 +10,7 @@ public class ProfileHandler : MonoBehaviour
     [SerializeField] Text nickText;
     [SerializeField] Text moneyText;
     [SerializeField] Text goalText;
+    [SerializeField] Text playtimeText;
     [SerializeField] Image currentSkinImage;
     [SerializeField] Texture defaultProfileIcon;
 
@@ -17,10 +18,22 @@ public class ProfileHandler : MonoBehaviour
     [SerializeField] SaveManager saveManager;
     [SerializeField] MoneyHandler moneyHandler;
     private string avatarPath;
+    private float _nextUpdate;
 
     void Start()
     {
         SetProfileDataOnStart();
+    }
+
+    void Update()
+    {
+        if (Time.time < _nextUpdate) return;
+        _nextUpdate = Time.time + 0.1f;
+        
+        if (PlaytimeTracker.Instance != null)
+        {
+            playtimeText.text = "Наиграно: " + PlaytimeTracker.Instance.GetFormattedPlaytime();
+        }
     }
 
     public void SetProfileData(string nick, RawImage avatar)
@@ -39,6 +52,7 @@ public class ProfileHandler : MonoBehaviour
         moneyText.text = "Деньги: " + moneyHandler.GetMoney();
         goalText.text = "Голы: " + currentData.Goals;
         nickText.text = currentData.NickName;
+        playtimeText.text = "Наиграно: " + PlaytimeTracker.Instance.GetFormattedPlaytime();
         SkinData currentSkinSO = Resources.LoadAll<SkinData>("").FirstOrDefault(item => item.name == currentData.CurrentSkinName);
         if(currentSkinSO == null)
         {

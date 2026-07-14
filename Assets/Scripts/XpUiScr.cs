@@ -15,7 +15,7 @@ public class XpUiScr : MonoBehaviour
     [SerializeField] private GameObject panel;
     [SerializeField] private AudioSource audioSource;
     [SerializeField] private AudioClip levelUpSound;
-    [SerializeField] private Text awardForNextLevel;
+    // [SerializeField] private Text awardForNextLevel;
     void Start()
     {
         if(SceneManager.GetActiveScene().name.Equals("BotsGame"))
@@ -27,13 +27,13 @@ public class XpUiScr : MonoBehaviour
         } else
         {
             SetProgress(xpHandler.GetXPProgress());
-            if(xpHandler.GetSkinAwardForNextLevel() != null)
-            {
-                awardForNextLevel.text = "Награда за следующий уровень: " + xpHandler.GetMoneyAwardForNextLevel().Award + " монет и скин " + xpHandler.GetSkinAwardForNextLevel().GuiSkinName ;
-            } else
-            {
-                awardForNextLevel.text = "Награда за следующий уровень: " + xpHandler.GetMoneyAwardForNextLevel().Award + " монет";
-            }
+            // if(xpHandler.GetSkinAwardForNextLevel() != null)
+            // {
+            //     awardForNextLevel.text = "Награда за следующий уровень: " + xpHandler.GetMoneyAwardForNextLevel().Award + " монет и скин " + xpHandler.GetSkinAwardForNextLevel().GuiSkinName ;
+            // } else
+            // {
+            //     awardForNextLevel.text = "Награда за следующий уровень: " + xpHandler.GetMoneyAwardForNextLevel().Award + " монет";
+            // }
         }
     }
 
