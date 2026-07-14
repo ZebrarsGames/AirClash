@@ -39,7 +39,7 @@ public class DailyQuestItem : MonoBehaviour
         questNameText.text = todayPool[i].QuestName;
         questDescriptionText.text = todayPool[i].Description;
         questId = todayPool[i].QuestId;
-        if(QuestSaveSystem.GetProgress(questId) >= todayPool[i].Target) targetText.text = todayPool[i].Target + "/" + todayPool[i].Target;
+        if(QuestSaveSystem.GetProgress(questId) > todayPool[i].Target) targetText.text = todayPool[i].Target + "/" + todayPool[i].Target;
         else targetText.text = QuestSaveSystem.GetProgress(questId) + "/" + todayPool[i].Target;
         questLogo.sprite = todayPool[i].QuestLogo;
         if(QuestSaveSystem.GetIsCompleted(questId)) completeArrow.SetActive(true);
