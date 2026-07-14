@@ -30,8 +30,10 @@ public class XpHandler : MonoBehaviour
     void Awake()
     {
         currentXP = saveManager.GetData().XP;
-        level = saveManager.GetData().XpLevel;
-        xpToNextLevel = saveManager.GetData().XpToNextLevel;
+        if(saveManager.GetData().XpLevel == 0) level = 1;
+        else level = saveManager.GetData().XpLevel;
+        if(saveManager.GetData().XpToNextLevel == 0) xpToNextLevel = 100;
+        else xpToNextLevel = saveManager.GetData().XpToNextLevel;
         Log();
 
         xpAwards.Add("AwardFor1Level", new XpAward { TypeOfAward = "Money", Award = 10, RequiredLevel = 1 });

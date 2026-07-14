@@ -70,6 +70,7 @@ public class XpUiScr : MonoBehaviour
         audioSource.PlayOneShot(levelUpSound);
         panel.transform.DOScale(1.5f, 0.4f).OnComplete(() => panel.transform.DOScale(1.0f, 0.2f));
         canvasGroup.DOFade(1.0f, 0.4f).OnComplete(() => canvasGroup.DOFade(0f, 0.2f));
+        yield return new WaitForSeconds(0.2f);
         SetProgress(xpHandler.GetXPProgress());
     }
 }
