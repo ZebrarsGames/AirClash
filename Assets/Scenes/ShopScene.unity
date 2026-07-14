@@ -21185,8 +21185,17 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 7d65e7b71b3fbf047b44202c9917dff5, type: 2}
   - {fileID: 11400000, guid: 587365a799d0a6e41938f9960d593e75, type: 2}
   maxQuests: 3
+  generateNewQuestsCost: 100
   statusText: {fileID: 0}
+  moneyText: {fileID: 1813086268}
   achievementsHandler: {fileID: 1029591086}
+  moneyHandler: {fileID: 2065031118}
+  audioSource: {fileID: 1190845891}
+  buySound: {fileID: 8300000, guid: 45a6151c7ae761845a4e78d03c17b1d8, type: 3}
+  cancelSound: {fileID: 8300000, guid: 96a64f20e83e9374a8b6e6b9be262a82, type: 3}
+  generateNewQuestsEvent:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!4 &2030816083
 Transform:
   m_ObjectHideFlags: 0
@@ -22022,5 +22031,5 @@ SceneRoots:
   - {fileID: 302607432}
   - {fileID: 1899276048}
   - {fileID: 2030816083}
-  - {fileID: 1592820834}
   - {fileID: 1251573711}
+  - {fileID: 1592820834}

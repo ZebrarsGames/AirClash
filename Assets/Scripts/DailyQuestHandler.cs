@@ -2,14 +2,33 @@ using UnityEngine;
 using System;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
+using UnityEngine.Events;
 
 public class DailyQuestHandler : MonoBehaviour
 {
+    [Header("Arrays")]
     [SerializeField] private DailyQuestSO[] quests;
-    [SerializeField] private int maxQuests;
     private DailyQuestSO[] todayPool = new DailyQuestSO[3];
+
+    [Header("Floats")]
+    [SerializeField] private int maxQuests;
+    [SerializeField] private int generateNewQuestsCost = 100;
+
+    [Header("UI")]
     [SerializeField] private Text statusText;
+    [SerializeField] private Text moneyText;
+    
+    [Header("Scripts")]
     [SerializeField] private AchievementsHandler achievementsHandler;
+    [SerializeField] private MoneyHandler moneyHandler;
+
+    [Header("Sounds")]
+    [SerializeField] private AudioSource audioSource;
+    [SerializeField] private AudioClip buySound;
+    [SerializeField] private AudioClip cancelSound;
+
+    [Header("Other")]
+    [SerializeField] private UnityEvent generateNewQuestsEvent;
     
     private const string NextMidnightTimeKey = "NextMidnightSave";
     private const string QuestIdsKey = "SavedQuestIds"; 
@@ -183,6 +202,18 @@ public class DailyQuestHandler : MonoBehaviour
     public DailyQuestSO[] GetTodayPool()
     {
         return todayPool;
+    }
+
+    public void BuyNewQuests()
+    {
+        if(moneyHandler.GetMoney() >= generateNewQuestsCost)
+        {
+            audioSource.PlayOneShot(buySound);
+            moneyHandler.RemoveMoney(generateNewQuestsCost);
+            GenerateNewQuests();
+            generateNewQuestsEvent.Invoke();
+            moneyText.text = "Деньги " + moneyHandler.GetMoney();
+        } else audioSource.PlayOneShot(cancelSound);
     }
 
     private void UpdateTimer()

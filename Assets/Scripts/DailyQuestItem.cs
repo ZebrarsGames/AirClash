@@ -14,6 +14,23 @@ public class DailyQuestItem : MonoBehaviour
     [SerializeField] private Image questLogo;
     void Start()
     {
+        StartSetQuestInfo();
+    }
+
+    private void SetQuestInfo(int i, DailyQuestSO[] todayPool)
+    {
+        questNameText.text = todayPool[i].QuestName;
+        questDescriptionText.text = todayPool[i].Description;
+        questId = todayPool[i].QuestId;
+        if(QuestSaveSystem.GetProgress(questId) > todayPool[i].Target) targetText.text = todayPool[i].Target + "/" + todayPool[i].Target;
+        else targetText.text = QuestSaveSystem.GetProgress(questId) + "/" + todayPool[i].Target;
+        questLogo.sprite = todayPool[i].QuestLogo;
+        if(QuestSaveSystem.GetIsCompleted(questId)) completeArrow.SetActive(true);
+        else completeArrow.SetActive(false);
+    }
+    
+    public void StartSetQuestInfo()
+    {
         DailyQuestSO[] todayPool = dailyQuestHandler.GetTodayPool();
         switch(PlayerPrefs.GetInt("CurrentUIUpdate", 0))
         {
@@ -33,16 +50,5 @@ public class DailyQuestItem : MonoBehaviour
                 PlayerPrefs.Save();
                 break;
         }
-    }
-    private void SetQuestInfo(int i, DailyQuestSO[] todayPool)
-    {
-        questNameText.text = todayPool[i].QuestName;
-        questDescriptionText.text = todayPool[i].Description;
-        questId = todayPool[i].QuestId;
-        if(QuestSaveSystem.GetProgress(questId) > todayPool[i].Target) targetText.text = todayPool[i].Target + "/" + todayPool[i].Target;
-        else targetText.text = QuestSaveSystem.GetProgress(questId) + "/" + todayPool[i].Target;
-        questLogo.sprite = todayPool[i].QuestLogo;
-        if(QuestSaveSystem.GetIsCompleted(questId)) completeArrow.SetActive(true);
-        else completeArrow.SetActive(false);
     }
 }
