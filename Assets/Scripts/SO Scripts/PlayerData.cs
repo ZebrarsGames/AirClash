@@ -12,4 +12,5 @@ public class PlayerData
     public int XpToNextLevel;
     public int Goals;
     public string CurrentSkinName;
+    public float Playtime;
 }
