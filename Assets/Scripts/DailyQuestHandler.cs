@@ -63,11 +63,18 @@ public class DailyQuestHandler : MonoBehaviour
             QuestSaveSystem.RemoveQuest(quests[i].QuestId);
         }
         int[] savedIds = new int[maxQuests];
+        System.Array.Clear(todayPool, 0, todayPool.Length); 
 
         for(int i = 0; i < maxQuests; i++)
         {
-            int rand = UnityEngine.Random.Range(0, quests.Length);
-            if(todayPool[i] != null && IsTodayHasQuest(quests[rand].QuestId)) GenerateNewQuests();
+            int rand = 0;
+            int safetyAttempts = 0; 
+            do 
+            {
+                rand = UnityEngine.Random.Range(0, quests.Length);
+                safetyAttempts++;
+            } while ((IsTodayHasQuest(quests[rand].QuestId) || IsTodayHasSeries(quests[rand].DailyQuestSeries)) && safetyAttempts < 100);
+
             savedIds[i] = rand;
             todayPool[i] = quests[rand];
         }
@@ -155,7 +162,18 @@ public class DailyQuestHandler : MonoBehaviour
     {
         for(int i = 0; i < todayPool.Length; i++)
         {
-            if(todayPool[i].QuestId.Equals(questId))
+            if(todayPool[i] != null && todayPool[i].QuestId.Equals(questId))
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+    public bool IsTodayHasSeries(DailyQuestSeries series) 
+    {
+        for(int i = 0; i < todayPool.Length; i++) 
+        {
+            if(todayPool[i] != null && todayPool[i].DailyQuestSeries == series) 
             {
                 return true;
             }
