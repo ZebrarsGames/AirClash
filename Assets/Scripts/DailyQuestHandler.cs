@@ -14,6 +14,7 @@ public class DailyQuestHandler : MonoBehaviour
     private const string NextMidnightTimeKey = "NextMidnightSave";
     private const string QuestIdsKey = "SavedQuestIds"; 
     private bool isMainMenu;
+    private float _nextUpdate;
 
     void Awake()
     {
@@ -26,9 +27,12 @@ public class DailyQuestHandler : MonoBehaviour
         else isMainMenu = false;
     }
 
-    void FixedUpdate() 
+    void Update() 
     {
-        if(isMainMenu) UpdateTimer();
+        if (Time.time < _nextUpdate && isMainMenu) return;
+        _nextUpdate = Time.time + 0.1f;
+
+        UpdateTimer();
     }
 
     private void CheckQuestAvailability() 
