@@ -1,0 +1,23 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cda6015e8d440f44fbf5335c9f1ee1a2, type: 3}
+  m_Name: Money 70
+  m_EditorClassIdentifier: Assembly-CSharp::DailyQuestSO
+  QuestId: money70
+  QuestName: "\u041A\u0440\u0443\u0442\u043E\u0439 \u043C\u043E\u043D\u0435\u0442\u0447\u0438\u043A"
+  Description: "\u0417\u0430\u0440\u0430\u0431\u043E\u0442\u0430\u0439\u0442\u0435
+    70 \u043C\u043E\u043D\u0435\u0442"
+  AwardType: 1
+  Award: 70
+  SkinAward: 
+  Target: 70
+  QuestLogo: {fileID: 21300000, guid: fea7161651b327d4ca73881e3732a940, type: 3}

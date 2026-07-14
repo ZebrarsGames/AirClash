@@ -292,6 +292,8 @@ public class GoalHandler : MonoBehaviour
         dailyQuestHandler.UpdateQuestProgress("win_1_matches", 1);
         dailyQuestHandler.UpdateQuestProgress("win_3_matches", 1);
         dailyQuestHandler.UpdateQuestProgress("win_5_matches", 1);
+        dailyQuestHandler.UpdateQuestProgress("win_7_matches", 1);
+        dailyQuestHandler.UpdateQuestProgress("win_10_matches", 1);
     }
     private void UpdateGoalQuests()
     {
@@ -301,6 +303,7 @@ public class GoalHandler : MonoBehaviour
         questsHandler.UpdateQuestProgress("goal200", 1);
         questsHandler.UpdateQuestProgress("goal300", 1);
         questsHandler.UpdateQuestProgress("goal500", 1);
+        dailyQuestHandler.UpdateQuestProgress("goal20", 1);
     }
     private void UpdateXpQuests(int amount)
     {
@@ -310,5 +313,6 @@ public class GoalHandler : MonoBehaviour
         questsHandler.UpdateQuestProgress("xp500", amount);
         questsHandler.UpdateQuestProgress("xp700", amount);
         questsHandler.UpdateQuestProgress("xp1000", amount);
+        dailyQuestHandler.UpdateQuestProgress("xp50", amount);
     }
 }
