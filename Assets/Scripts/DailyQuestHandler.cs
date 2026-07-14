@@ -29,7 +29,7 @@ public class DailyQuestHandler : MonoBehaviour
 
     void Update() 
     {
-        if (Time.time < _nextUpdate && isMainMenu) return;
+        if (Time.time < _nextUpdate || !isMainMenu) return;
         _nextUpdate = Time.time + 0.1f;
 
         UpdateTimer();
