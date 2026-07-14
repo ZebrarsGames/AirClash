@@ -19,4 +19,5 @@ MonoBehaviour:
   Award: 20
   SkinAward: 
   Target: 50
+  DailyQuestSeries: 1
   QuestLogo: {fileID: 21300000, guid: ff838b2f729897c44b2c5e9323a35da6, type: 3}
