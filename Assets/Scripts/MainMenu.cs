@@ -265,5 +265,7 @@ public class MainMenu : MonoBehaviour
         questsHandler.UpdateQuestProgress("money300", amount);
         questsHandler.UpdateQuestProgress("money500", amount);
         dailyQuestHandler.UpdateQuestProgress("money50", amount);
+        dailyQuestHandler.UpdateQuestProgress("money70", amount);
+        dailyQuestHandler.UpdateQuestProgress("money100", amount);
     }
 }

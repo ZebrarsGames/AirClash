@@ -315,6 +315,8 @@ public class RouletteHandler : MonoBehaviour
         questsHandler.UpdateQuestProgress("money300", amount);
         questsHandler.UpdateQuestProgress("money500", amount);
         dailyQuestHandler.UpdateQuestProgress("money50", amount);
+        dailyQuestHandler.UpdateQuestProgress("money70", amount);
+        dailyQuestHandler.UpdateQuestProgress("money100", amount);
     }
     private void UpdateXpQuests(int amount)
     {
@@ -324,5 +326,6 @@ public class RouletteHandler : MonoBehaviour
         questsHandler.UpdateQuestProgress("xp500", amount);
         questsHandler.UpdateQuestProgress("xp700", amount);
         questsHandler.UpdateQuestProgress("xp1000", amount);
+        dailyQuestHandler.UpdateQuestProgress("xp50", amount);
     }
 }
