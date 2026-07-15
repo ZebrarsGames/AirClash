@@ -118,42 +118,25 @@ public class BotsAI : MonoBehaviour
         
     }
 
-    public void Fury()
+    public void UpdateBotSpeed(int s1, int s2)
     {
-        score1 = goalHandler.score1;
-        score2 = goalHandler.score2;
+        score1 = s1;
+        score2 = s2;
 
-        if(score2 - score1 >= 3 && score2 - score1 < 5)
-        {
-            moveSpeed = baseSpeed * 1.2f;
-        } else if(score2 - score1 >= 5 && score2 - score1 < 7)
-        {
-            moveSpeed = baseSpeed * 1.5f;
-        } else if(score2 - score1 >= 7)
-        {
-            moveSpeed = baseSpeed * 1.7f;
-        } else if(score2 - score1 >= 10)
-        {
-            moveSpeed = baseSpeed * 2f;
-        }
-    }
-    public void EasyMode()
-    {
-        score1 = goalHandler.score1;
-        score2 = goalHandler.score2;
+        int scoreDifference = score1 - score2;
 
-        if(score1 - score2 >= 3 && score1 - score2 < 5)
-        {
-            moveSpeed = baseSpeed / 2f;
-        } else if(score1 - score2 >= 5 && score1 - score2 < 7)
-        {
-            moveSpeed = baseSpeed / 2.5f;
-        } else if(score1 - score2 >= 7)
-        {
-            moveSpeed = baseSpeed / 3f;
-        } else if(score1 - score2 >= 10)
-        {
-            moveSpeed = baseSpeed / 3.5f;
-        }
+        //EasyMode
+        if(scoreDifference >= 10) moveSpeed = baseSpeed / 3f;
+        else if(scoreDifference >= 7) moveSpeed = baseSpeed / 2.5f;
+        else if(scoreDifference >= 5) moveSpeed = baseSpeed / 2f;
+        else if(scoreDifference >= 3) moveSpeed = baseSpeed / 1.5f;
+        
+        //Fury
+        else if(scoreDifference <= -10) moveSpeed = baseSpeed * 2f;
+        else if(scoreDifference <= -7) moveSpeed = baseSpeed * 1.7f;
+        else if(scoreDifference <= -5) moveSpeed = baseSpeed * 1.5f;
+        else if(scoreDifference <= -3) moveSpeed = baseSpeed * 1.2f;
+        
+        else moveSpeed = baseSpeed;
     }
 }

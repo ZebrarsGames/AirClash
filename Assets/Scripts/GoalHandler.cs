@@ -105,7 +105,7 @@ public class GoalHandler : MonoBehaviour
             {
                 if(SceneManager.GetActiveScene().name == "BotsGame")
                 {
-                        botsAI.EasyMode();
+                        botsAI.UpdateBotSpeed(score1, score2);
                         ResetPosition();
                         timer.Goal();
                 } else
@@ -135,7 +135,7 @@ public class GoalHandler : MonoBehaviour
                     totalXpEarned += howManyXpAddForGoal;
                     UpdateGoalQuests();
                     UpdateAchievements();
-                    botsAI.Fury();
+                    botsAI.UpdateBotSpeed(score1, score2);
                     ResetPosition();
                     timer.Goal();
                 } else
