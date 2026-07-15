@@ -58,17 +58,17 @@ public class SaveManager : MonoBehaviour
     public void SaveDefaultData()
     {
         PlayerData playerData = new PlayerData();
-        playerData.Money = 0;
-        playerData.XP = 0;
-        playerData.XpLevel = 1;
-        playerData.XpToNextLevel = 100;
+        playerData.Money = PlayerPrefs.GetInt("Money", 0);
+        playerData.XP = PlayerPrefs.GetInt("CurrentXp", 0);
+        playerData.XpLevel = PlayerPrefs.GetInt("XpLevel", 1);;
+        playerData.XpToNextLevel = PlayerPrefs.GetInt("XpToNextLevel", 100);;
         playerData.Goals = 0;
         playerData.NickName = "Ник";
         playerData.AvatarPath = Path.Combine(Application.persistentDataPath, "avatar.png");
-        playerData.CurrentSkinName = "DefSkin";
+        playerData.CurrentSkinName = PlayerPrefs.GetString("CurrentSkin", "DefSkin");
         playerData.Playtime = 0;
-        playerData.TotalMoney = 0;
-        playerData.TotalXP = 0;
+        playerData.TotalMoney = PlayerPrefs.GetInt("Money", 0);;
+        playerData.TotalXP = PlayerPrefs.GetInt("CurrentXp", 0);;
 
         string json = JsonUtility.ToJson(playerData);
         File.WriteAllText(Application.persistentDataPath + "/save.json", json);
