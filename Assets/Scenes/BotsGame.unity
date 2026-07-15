@@ -1849,7 +1849,6 @@ MonoBehaviour:
   panel: {fileID: 0}
   audioSource: {fileID: 0}
   levelUpSound: {fileID: 0}
-  awardForNextLevel: {fileID: 0}
 --- !u!225 &483962702
 CanvasGroup:
   m_ObjectHideFlags: 0
@@ -4642,7 +4641,6 @@ MonoBehaviour:
   panel: {fileID: 1730743486}
   audioSource: {fileID: 2094474884}
   levelUpSound: {fileID: 8300000, guid: 1fa01e474b998e34d94aaafaae7cc3e6, type: 3}
-  awardForNextLevel: {fileID: 0}
 --- !u!4 &1286145900
 Transform:
   m_ObjectHideFlags: 0
@@ -5154,6 +5152,9 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 2e822a380dc0c4b459412ff169611ca7, type: 2}
   - {fileID: 11400000, guid: 7d65e7b71b3fbf047b44202c9917dff5, type: 2}
   - {fileID: 11400000, guid: 587365a799d0a6e41938f9960d593e75, type: 2}
+  - {fileID: 11400000, guid: e614f0b58bbacd64389be0c3debed04e, type: 2}
+  - {fileID: 11400000, guid: 5fc59fe1eb405754f8a766b8c8a8e38e, type: 2}
+  - {fileID: 11400000, guid: aedca946e4bd4604ba0fb2ebd9c0c37d, type: 2}
   maxQuests: 3
   generateNewQuestsCost: 100
   statusText: {fileID: 0}
