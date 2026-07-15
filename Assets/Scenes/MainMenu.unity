@@ -31922,7 +31922,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 82.21, y: -43.48}
+  m_AnchoredPosition: {x: 82.20999, y: -43.48}
   m_SizeDelta: {x: -193.58002, y: 61.4}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1105227460
@@ -33729,6 +33729,9 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 2e822a380dc0c4b459412ff169611ca7, type: 2}
   - {fileID: 11400000, guid: 7d65e7b71b3fbf047b44202c9917dff5, type: 2}
   - {fileID: 11400000, guid: 587365a799d0a6e41938f9960d593e75, type: 2}
+  - {fileID: 11400000, guid: e614f0b58bbacd64389be0c3debed04e, type: 2}
+  - {fileID: 11400000, guid: 5fc59fe1eb405754f8a766b8c8a8e38e, type: 2}
+  - {fileID: 11400000, guid: aedca946e4bd4604ba0fb2ebd9c0c37d, type: 2}
   maxQuests: 3
   generateNewQuestsCost: 100
   statusText: {fileID: 1834040479}
