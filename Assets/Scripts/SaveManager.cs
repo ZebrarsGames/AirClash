@@ -6,7 +6,6 @@ public class SaveManager : MonoBehaviour
 {
     [SerializeField] private XpHandler xpHandler;
     [SerializeField] private MoneyHandler moneyHandler;
-    private float _nextUpdate;
 
     public void SaveData()
     {
@@ -20,6 +19,8 @@ public class SaveManager : MonoBehaviour
         playerData.AvatarPath = Path.Combine(Application.persistentDataPath, "avatar.png");
         playerData.CurrentSkinName = PlayerPrefs.GetString("CurrentSkin", "DefSkin");
         playerData.Playtime = PlaytimeTracker.Instance.GetSecondsPlaytime();
+        playerData.TotalMoney = moneyHandler.GetTotalMoney();
+        playerData.TotalXP = xpHandler.GetTotalXP();
 
         string json = JsonUtility.ToJson(playerData);
         File.WriteAllText(Application.persistentDataPath + "/save.json", json);
@@ -66,6 +67,8 @@ public class SaveManager : MonoBehaviour
         playerData.AvatarPath = Path.Combine(Application.persistentDataPath, "avatar.png");
         playerData.CurrentSkinName = "DefSkin";
         playerData.Playtime = 0;
+        playerData.TotalMoney = 0;
+        playerData.TotalXP = 0;
 
         string json = JsonUtility.ToJson(playerData);
         File.WriteAllText(Application.persistentDataPath + "/save.json", json);

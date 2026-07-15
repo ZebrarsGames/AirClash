@@ -5,6 +5,7 @@ using UnityEngine.Events;
 public class XpHandler : MonoBehaviour
 {
     private int currentXP = 0;
+    private int totalXP = 0;
     private int oldXp = 0;
     private int xpToNextLevel = 100;
     private int level = 1;
@@ -15,6 +16,7 @@ public class XpHandler : MonoBehaviour
     public int GetOldXP() => oldXp;
     public int GetXpToNextLevel() => xpToNextLevel;
     public int GetLevel() => level;
+    public int GetTotalXP() => totalXP;
 
     public class XpAward
     {
@@ -34,6 +36,7 @@ public class XpHandler : MonoBehaviour
         else level = saveManager.GetData().XpLevel;
         if(saveManager.GetData().XpToNextLevel == 0) xpToNextLevel = 100;
         else xpToNextLevel = saveManager.GetData().XpToNextLevel;
+        totalXP = saveManager.GetData().TotalXP;
         Log();
 
         xpAwards.Add("AwardFor1Level", new XpAward { TypeOfAward = "Money", Award = 10, RequiredLevel = 1 });
@@ -59,6 +62,7 @@ public class XpHandler : MonoBehaviour
     {
         oldXp = currentXP;
         currentXP += amount;
+        totalXP += amount;
         if(currentXP >= xpToNextLevel)
         {
             currentXP -= xpToNextLevel;

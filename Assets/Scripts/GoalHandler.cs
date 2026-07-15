@@ -203,12 +203,10 @@ public class GoalHandler : MonoBehaviour
     {
         if(SceneManager.GetActiveScene().name == "BotsGame")
         {
-            int xpBefore = xpHandler.GetXP();
-            xpHandler.AddXp(howManyXpAddAsWin + PlayerPrefs.GetInt("HowXpAdds"));
-            int xpAfter = xpHandler.GetXP();
-            
-            int actuallyEarned = xpAfter - xpBefore;
+            int xpBefore = xpHandler.GetXP();   
+            int actuallyEarned = howManyXpAddAsWin + PlayerPrefs.GetInt("HowXpAdds");
             UpdateXpQuests(actuallyEarned);
+            xpHandler.AddXp(howManyXpAddAsWin + PlayerPrefs.GetInt("HowXpAdds"));
             UpdateAchievements();
             UpdateWinQuests();
             endScreen.StartEndScreen(actuallyEarned, xpBefore); 

@@ -4,15 +4,18 @@ public class MoneyHandler : MonoBehaviour
 {
     [SerializeField] private SaveManager saveManager;
     private int money;
+    private int totalMoney;
 
     void Awake()
     {
         money = saveManager.GetData().Money;
+        totalMoney = saveManager.GetData().TotalMoney;
     }
 
     public void AddMoney(int amount)
     {
         money += amount;
+        totalMoney += amount;
         Save();
     }
 
@@ -26,6 +29,11 @@ public class MoneyHandler : MonoBehaviour
     public int GetMoney()
     {
         return money;
+    }
+
+    public int GetTotalMoney()
+    {
+        return totalMoney;
     }
 
     private void Save()
