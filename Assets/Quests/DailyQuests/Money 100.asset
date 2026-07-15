@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cda6015e8d440f44fbf5335c9f1ee1a2, type: 3}
   m_Name: Money 100
   m_EditorClassIdentifier: Assembly-CSharp::DailyQuestSO
-  QuestId: money100
+  QuestId: daily_money100
   QuestName: "\u041F\u0440\u043E\u0444\u0435\u0441\u0441\u0438\u043E\u043D\u0430\u043B\u044C\u043D\u044B\u0439
     \u043C\u043E\u043D\u0435\u0442\u0447\u0438\u043A"
   Description: "\u0417\u0430\u0440\u0430\u0431\u043E\u0442\u0430\u0439\u0442\u0435
@@ -21,4 +21,5 @@ MonoBehaviour:
   Award: 100
   SkinAward: 
   Target: 100
+  DailyQuestSeries: 0
   QuestLogo: {fileID: 21300000, guid: d10e22673e517114893b775689b6fbee, type: 3}
