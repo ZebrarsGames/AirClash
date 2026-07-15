@@ -169,10 +169,10 @@ public class RouletteHandler : MonoBehaviour
                     randKoof = Random.Range(0, 17);
                     break;
                 case "Epic":
-                    randKoof = Random.Range(13, 24);
+                    randKoof = Random.Range(14, 24);
                     break;
                 case "Legendary":
-                    randKoof = Random.Range(22, 28);
+                    randKoof = Random.Range(23, 28);
                     break;
             }
             if (randKoof >= 0 && randKoof <= 15)
