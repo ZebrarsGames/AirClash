@@ -1,13 +1,13 @@
 fileFormatVersion: 2
-guid: 9751ae90f36a789458790fef52c6b8f9
+guid: cfc3eb0cc574a4b4187888acb7b51707
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 8578579598198363244
-    second: edit_square_256dp_E3E3E3_FILL0_wght400_GRAD0_opsz48_0
+      213: -281784049860801922
+    second: edit_square_256dp_FFFFFF_FILL0_wght400_GRAD0_opsz48_0
   - first:
-      213: -1700876687505149918
-    second: edit_square_256dp_E3E3E3_FILL0_wght400_GRAD0_opsz48_1
+      213: 5674358618115387064
+    second: edit_square_256dp_FFFFFF_FILL0_wght400_GRAD0_opsz48_1
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -54,7 +54,7 @@ TextureImporter:
   spriteMeshType: 1
   alignment: 0
   spritePivot: {x: 0.5, y: 0.5}
-  spritePixelsToUnits: 100
+  spritePixelsToUnits: 256
   spriteBorder: {x: 0, y: 0, z: 0, w: 0}
   spriteGenerateFallbackPhysicsShape: 0
   alphaUsage: 1
@@ -78,7 +78,7 @@ TextureImporter:
     maxTextureSize: 256
     resizeAlgorithm: 0
     textureFormat: -1
-    textureCompression: 0
+    textureCompression: 1
     compressionQuality: 50
     crunchedCompression: 0
     allowsAlphaSplitting: 0
@@ -116,7 +116,7 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: edit_square_256dp_E3E3E3_FILL0_wght400_GRAD0_opsz48_0
+      name: edit_square_256dp_FFFFFF_FILL0_wght400_GRAD0_opsz48_0
       rect:
         serializedVersion: 2
         x: 31
@@ -131,14 +131,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: c64d60c71bc3d0770800000000000000
-      internalID: 8578579598198363244
+      spriteID: e7a0dac46e6e61cf0800000000000000
+      internalID: -281784049860801922
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: edit_square_256dp_E3E3E3_FILL0_wght400_GRAD0_opsz48_1
+      name: edit_square_256dp_FFFFFF_FILL0_wght400_GRAD0_opsz48_1
       rect:
         serializedVersion: 2
         x: 95
@@ -153,8 +153,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 22033821aa54568e0800000000000000
-      internalID: -1700876687505149918
+      spriteID: 8bea1f0691f5fbe40800000000000000
+      internalID: 5674358618115387064
       vertices: []
       indices: 
       edges: []
@@ -173,8 +173,8 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      edit_square_256dp_E3E3E3_FILL0_wght400_GRAD0_opsz48_0: 8578579598198363244
-      edit_square_256dp_E3E3E3_FILL0_wght400_GRAD0_opsz48_1: -1700876687505149918
+      edit_square_256dp_FFFFFF_FILL0_wght400_GRAD0_opsz48_0: -281784049860801922
+      edit_square_256dp_FFFFFF_FILL0_wght400_GRAD0_opsz48_1: 5674358618115387064
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
