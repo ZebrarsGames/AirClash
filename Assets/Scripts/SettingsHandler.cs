@@ -63,6 +63,6 @@ public class SettingsHandler : MonoBehaviour
 
     public void ShowGitHub()
     {
-        Application.OpenURL("https://github.com/Zebraar/AirClash");
+        Application.OpenURL("https://github.com/ZebrarsGames/AirClash");
     }
 }
