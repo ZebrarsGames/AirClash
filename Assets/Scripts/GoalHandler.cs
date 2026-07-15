@@ -83,10 +83,11 @@ public class GoalHandler : MonoBehaviour
         howManyXpAddAsLose = 1;
         howMoneyAddAsLose = PlayerPrefs.GetInt("HowMoneyAddAsLose");  
         endSreenPanel.SetActive(false);
-        if (!ColorUtility.TryParseHtmlString("#30C7FE", out wallParticleColor))
+        if(!ColorUtility.TryParseHtmlString("#30C7FE", out wallParticleColor))
         {
             wallParticleColor = Color.white;
         } 
+        puck.GetComponent<TrailRenderer>().enabled = PlayerPrefs.GetInt("PuckTrail", 1) != 0;
     }
 
     public void OnGoalTrigger(Collider2D collision)
