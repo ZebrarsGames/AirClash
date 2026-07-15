@@ -8,10 +8,10 @@ public class DailyQuestHandler : MonoBehaviour
 {
     [Header("Arrays")]
     [SerializeField] private DailyQuestSO[] quests;
-    private DailyQuestSO[] todayPool = new DailyQuestSO[3];
+    private DailyQuestSO[] todayPool;
 
     [Header("Floats")]
-    [SerializeField] private int maxQuests;
+    [SerializeField] private int maxQuests = 3;
     [SerializeField] private int generateNewQuestsCost = 100;
 
     [Header("UI")]
@@ -34,9 +34,11 @@ public class DailyQuestHandler : MonoBehaviour
     private const string QuestIdsKey = "SavedQuestIds"; 
     private bool isMainMenu;
     private float _nextUpdate;
+    private DateTime nextMidnightTime;
 
     void Awake()
     {
+        todayPool = new DailyQuestSO[maxQuests];
         CheckQuestAvailability();
     }
 
@@ -49,7 +51,7 @@ public class DailyQuestHandler : MonoBehaviour
     void Update() 
     {
         if (Time.time < _nextUpdate || !isMainMenu) return;
-        _nextUpdate = Time.time + 0.1f;
+        _nextUpdate = Time.time + 0.2f;
 
         UpdateTimer();
     }
@@ -63,9 +65,18 @@ public class DailyQuestHandler : MonoBehaviour
         }
 
         string nextMidnightStr = PlayerPrefs.GetString(NextMidnightTimeKey);
-        DateTime nextMidnight = DateTime.Parse(nextMidnightStr);
+
+        if (DateTime.TryParse(nextMidnightStr, out DateTime savedMidnight))
+        {
+            nextMidnightTime = savedMidnight;
+        }
+        else
+        {
+            GenerateNewQuests();
+            return;
+        }
         
-        if (DateTime.Now >= nextMidnight)
+        if (DateTime.Now >= nextMidnightTime)
         {
             GenerateNewQuests();
         }
@@ -101,8 +112,8 @@ public class DailyQuestHandler : MonoBehaviour
         string idsString = string.Join(",", savedIds);
         PlayerPrefs.SetString(QuestIdsKey, idsString);
 
-        DateTime nextMidnight = DateTime.Now.Date.AddDays(1);
-        PlayerPrefs.SetString(NextMidnightTimeKey, nextMidnight.ToString());
+        nextMidnightTime = DateTime.Now.Date.AddDays(1);
+        PlayerPrefs.SetString(NextMidnightTimeKey, nextMidnightTime.ToString());
         
         PlayerPrefs.Save();
     }
@@ -133,49 +144,51 @@ public class DailyQuestHandler : MonoBehaviour
     {
         if(IsTodayHasQuest(questId))
         {
-            for(int i = 0; i < quests.Length; i++)
+            for(int i = 0; i < todayPool.Length; i++)
             {  
-                if(quests[i].QuestId.Equals(questId))
+                if(todayPool[i] != null && todayPool[i].QuestId.Equals(questId))
                 {
-                    DailyQuestSO currentQuest = quests[i];
+                    DailyQuestSO currentQuest = todayPool[i];
+
                     if(QuestSaveSystem.GetIsCompleted(currentQuest.QuestId)) return;
+
                     QuestSaveSystem.PlusProgress(currentQuest.QuestId, amount);
-                    if(amount > currentQuest.Target) 
+                    int currentProgress = QuestSaveSystem.GetProgress(currentQuest.QuestId);
+
+                    if(currentProgress > currentQuest.Target) 
                     { 
                         QuestSaveSystem.SetProgress(currentQuest.QuestId, currentQuest.Target);
+                        currentProgress = currentQuest.Target; 
                     }
+
                     Debug.Log("Прогресс у " + questId +  " стал больше на " + amount);
-                    if(QuestSaveSystem.GetProgress(currentQuest.QuestId) >= currentQuest.Target)
+
+                    if(currentProgress >= currentQuest.Target)
                     {
                         achievementsHandler.UpdateProgress("daily", 1);
                         QuestSaveSystem.SetCompleted(currentQuest.QuestId);
-                        GiveAward(currentQuest.QuestId);
+                        GiveAward(currentQuest);
                     }
+
+                    break;
                 }
             }
         }
     }
-    public void GiveAward(string questId)
+    public void GiveAward(DailyQuestSO currentQuest)
     {
-        for(int i = 0; i < quests.Length; i++)
+        switch(currentQuest.AwardType)
         {
-            if(quests[i].QuestId.Equals(questId))
-            {
-                DailyQuestSO currentQuest = quests[i];
-                switch(currentQuest.AwardType)
-                {
-                    case AwardType.Money:
-                        PlayerPrefs.SetInt("HowMoneyAdds", PlayerPrefs.GetInt("HowMoneyAdds") + currentQuest.Award);
-                        PlayerPrefs.Save();
-                        break;
-                    case AwardType.Xp:
-                        PlayerPrefs.SetInt("HowXpAdds", PlayerPrefs.GetInt("HowXpAdds") + currentQuest.Award);
-                        PlayerPrefs.Save();
-                        break;     
-                }
-                Debug.Log("Награда за " + questId + " выдана!");
-            }
+            case AwardType.Money:
+                PlayerPrefs.SetInt("HowMoneyAdds", PlayerPrefs.GetInt("HowMoneyAdds") + currentQuest.Award);
+                PlayerPrefs.Save();
+                break;
+            case AwardType.Xp:
+                PlayerPrefs.SetInt("HowXpAdds", PlayerPrefs.GetInt("HowXpAdds") + currentQuest.Award);
+                PlayerPrefs.Save();
+                break;     
         }
+        Debug.Log("Награда за " + currentQuest.QuestId + " выдана!");
     }
     public bool IsTodayHasQuest(string questId)
     {
@@ -218,9 +231,14 @@ public class DailyQuestHandler : MonoBehaviour
 
     private void UpdateTimer()
     {
+        if (DateTime.Now >= nextMidnightTime) 
+        {
+            GenerateNewQuests();
+            generateNewQuestsEvent.Invoke();
+        }
+
         DateTime now = DateTime.Now;
-        DateTime nextMidnight = now.Date.AddDays(1);
-        TimeSpan timeLeft = nextMidnight - now;
+        TimeSpan timeLeft = nextMidnightTime - now;
 
         statusText.text = string.Format("До обновления квестов: {0:D2}:{1:D2}:{2:D2}", 
             (int)timeLeft.TotalHours, 
