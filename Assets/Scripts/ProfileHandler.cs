@@ -49,7 +49,7 @@ public class ProfileHandler : MonoBehaviour
     {
         PlayerData currentData = saveManager.GetData();
         avatarPath = Path.Combine(Application.persistentDataPath, "avatar.png");
-        moneyText.text = "Деньги: " + moneyHandler.GetMoney();
+        moneyText.text = "Общие деньги: " + saveManager.GetData().TotalMoney;
         goalText.text = "Голы: " + currentData.Goals;
         nickText.text = currentData.NickName;
         playtimeText.text = "Наиграно: " + PlaytimeTracker.Instance.GetFormattedPlaytime();
