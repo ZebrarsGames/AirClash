@@ -65,8 +65,41 @@ function triggerDownload(platformName) {
 }
 
 // Отправка формы обратной связи
-function handleContactSubmit(event) {
+async function handleContactSubmit(event) {
     event.preventDefault();
-    alert("Сообщение успешно отправлено в центр управления AirClash! Мы ответим вам в ближайшее время.");
-    event.target.reset();
+    
+    const form = event.target;
+    const button = form.querySelector('button[type="submit"]');
+    
+    // Визуально меняем текст кнопки во время отправки
+    const originalButtonText = button.textContent;
+    button.textContent = "Отправка сигнала...";
+    button.disabled = true;
+
+    // Автоматически собираем все данные из полей формы
+    const formData = new FormData(form);
+
+    try {
+        // Отправляем запрос на сервер Web3Forms
+        const response = await fetch("https://web3forms.com", {
+            method: "POST",
+            body: formData
+        });
+
+        const result = await response.json();
+
+        if (result.success) {
+            alert("Сообщение успешно отправлено в центр управления AirClash! Мы ответим вам в ближайшее время.");
+            form.reset(); // Очищаем форму только при успехе
+        } else {
+            alert("Ошибка сервера: " + result.message);
+        }
+    } catch (error) {
+        console.error("Ошибка сети:", error);
+        alert("Не удалось отправить сигнал. Проверьте интернет-соединение.");
+    } finally {
+        // Возвращаем кнопку в исходное состояние
+        button.textContent = originalButtonText;
+        button.disabled = false;
+    }
 }
