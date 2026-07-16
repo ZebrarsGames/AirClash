@@ -66,43 +66,51 @@ function triggerDownload(platformName) {
 
 // Отправка формы обратной связи AirClash
 async function handleContactSubmit(event) {
-    event.preventDefault(); // Блокируем стандартную перезагрузку страницы
+    event.preventDefault();
     
     const form = event.target;
     const button = form.querySelector('button[type="submit"]');
     
-    // Блокируем кнопку и меняем текст на время отправки
     const originalButtonText = button.textContent;
     button.textContent = "Отправка сигнала...";
     button.disabled = true;
 
-    // Собираем данные из полей ввода
-    const formData = new FormData(form);
-    
-    // Автоматически добавляем ваш ключ активации Web3Forms в запрос
-    formData.append("access_key", "fcbe9b27-2403-431d-a8b0-ef4804fcf167".trim());
+    // Ищем элементы напрямую через селекторы внутри формы
+    const usernameInput = form.querySelector('input[type="text"]');
+    const emailInput = form.querySelector('input[type="email"]');
+    const messageInput = form.querySelector('textarea');
+
+    // Собираем объект вручную
+    const payload = {
+        access_key: "fcbe9b27-2403-431d-a8b0-ef4804fcf167",
+        username: usernameInput ? usernameInput.value : "",
+        email: emailInput ? emailInput.value : "",
+        message: messageInput ? messageInput.value : ""
+    };
 
     try {
-        // Отправляем данные на правильный рабочий сервер API
+        // Передаем данные как JSON-строку
         const response = await fetch("https://api.web3forms.com/submit", {
             method: "POST",
-            body: formData
+            headers: {
+                "Content-Type": "application/json",
+                "Accept": "application/json"
+            },
+            body: JSON.stringify(payload) // Превращаем объект в чистый текст JSON
         });
 
         const result = await response.json();
 
-        // Проверяем успешность ответа от сервера
         if (response.ok && result.success) {
             alert("Сообщение успешно отправлено в центр управления AirClash! Мы ответим вам в ближайшее время.");
-            form.reset(); // Очищаем поля формы только при успехе
+            form.reset(); 
         } else {
-            alert("Ошибка сервера: " + (result.message || "Неизвестная ошибка"));
+            alert("Ошибка сервера: " + (result.message || "Неверный ключ"));
         }
     } catch (error) {
         console.error("Ошибка сети:", error);
         alert("Не удалось отправить сигнал. Проверьте интернет-соединение.");
     } finally {
-        // В любом случае возвращаем кнопку в исходное рабочее состояние
         button.textContent = originalButtonText;
         button.disabled = false;
     }
