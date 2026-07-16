@@ -74,4 +74,9 @@ public class SettingsHandler : MonoBehaviour
     {
         Application.OpenURL("https://github.com/ZebrarsGames/AirClash");
     }
+
+    public void ShowWebSite()
+    {
+        Application.OpenURL("https://zebrarsgames.github.io/AirClash/");
+    }
 }
