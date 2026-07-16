@@ -1118,7 +1118,7 @@ MonoBehaviour:
   bubbleParticles: {fileID: 7871815180265863228, guid: 819d6f27244ec794cb74893e0673f613, type: 3}
   goldParticles: {fileID: 7871815180265863228, guid: 224f375812f8b684381d7f76307fc87c, type: 3}
   audioSource: {fileID: 2094474884}
-  puckSound: {fileID: 0}
+  puckSound: {fileID: 8300000, guid: 8346d24a7b5724c4ba889b8a1d541bf7, type: 3}
 --- !u!96 &243884045
 TrailRenderer:
   serializedVersion: 4
@@ -3174,7 +3174,7 @@ Transform:
   m_GameObject: {fileID: 793148555}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.48887, y: -1.28503, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []

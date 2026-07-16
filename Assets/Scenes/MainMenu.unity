@@ -30081,8 +30081,8 @@ MonoBehaviour:
   delayBetween: 0.05
   coinSound: {fileID: 8300000, guid: 5fc5bda55b8fae04d9bfb61fc45a3be5, type: 3}
   moneyHandler: {fileID: 1114898952}
-  xpUiScr: {fileID: 0}
-  xpHandler: {fileID: 0}
+  xpUiScr: {fileID: 1381377194}
+  xpHandler: {fileID: 695791783}
 --- !u!4 &1016994373
 Transform:
   m_ObjectHideFlags: 0
@@ -57349,7 +57349,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 546.7, y: 37.035}
+  m_AnchoredPosition: {x: 546.7, y: 37.035004}
   m_SizeDelta: {x: 1006.6, y: 74.07}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1884866984
