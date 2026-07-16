@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Скачать — AirClash</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;800&family=Russo+One&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <header>
+        <a href="index.html" class="logo">Air<span>Clash</span></a>
+        <nav>
+            <ul>
+                <li><a href="index.html" class="nav-link ">Главная</a></li>
+                <li><a href="about.html" class="nav-link ">Об игре</a></li>
+                <li><a href="download.html" class="nav-link active">Скачать</a></li>
+                <li><a href="team.html" class="nav-link ">О нас</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main class="content-container">
+        <h2 class="section-title neon-text-pink">ВЫБЕРИ СВОЮ ПЛАТФОРМУ</h2>
+        
+        <div class="download-grid">
+            <!-- Android -->
+            <div class="neon-card download-card">
+                <div class="card-glow-blue"></div>
+                <div class="platform-icon">🤖</div>
+                <h3>Android APK</h3>
+                <p>Оптимизировано для любых смартфонов. Плавные 120 FPS, точное сенсорное управление и мгновенный отклик.</p>
+                <button class="btn btn-neon-blue" onclick="triggerDownload('Android APK')">Скачать .APK</button>
+            </div>
+            
+            <!-- PC -->
+            <div class="neon-card download-card">
+                <div class="card-glow-pink"></div>
+                <div class="platform-icon">💻</div>
+                <h3>Windows PC</h3>
+                <p>Максимальное качество графики, поддержка клавиатуры и мыши. Играй прямо в браузере или скачай клиент.</p>
+                <button class="btn btn-neon-pink" onclick="triggerDownload('PC Client')">Скачать для Win</button>
+            </div>
+        </div>
+
+        <div class="specs-box neon-border-blue">
+            <h3 class="neon-text-blue" style="margin-bottom: 1rem;">Системные требования</h3>
+            <div class="specs-grid">
+                <div>
+                    <strong>Минимальные:</strong>
+                    <p>ОС: Android 7.0 / Windows 10<br>ОЗУ: 1 ГБ<br>Место на диске: 150 МБ</p>
+                </div>
+                <div>
+                    <strong>Рекомендуемые:</strong>
+                    <p>ОС: Android 11+ / Windows 11<br>ОЗУ: 2 ГБ<br>Экран: 90/120 Гц</p>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <p>&copy; 2026 Zebrar's Games. Все права защищены. Создано с неоновым драйвом.</p>
+    </footer>
+    <script src="js/main.js"></script>
+</body>
+</html>

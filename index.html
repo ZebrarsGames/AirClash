@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Главная — AirClash</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;800&family=Russo+One&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <header>
+        <a href="index.html" class="logo">Air<span>Clash</span></a>
+        <nav>
+            <ul>
+                <li><a href="index.html" class="nav-link active">Главная</a></li>
+                <li><a href="about.html" class="nav-link ">Об игре</a></li>
+                <li><a href="download.html" class="nav-link ">Скачать</a></li>
+                <li><a href="team.html" class="nav-link ">О нас</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main class="hero-container">
+        <div class="hero-content">
+            <h1 class="neon-text-blue">АРКАДНЫЙ АЭРОХОККЕЙ <br><span class="neon-text-pink">НОВОГО ПОКОЛЕНИЯ</span></h1>
+            <p class="hero-description">Врывайся в ультрадинамичные неоновые баталии на невероятных скоростях! Реалистичная физика, стильный дизайн и чистый драйв ждут тебя на поле боя.</p>
+            <div class="hero-buttons">
+                <a href="download.html" class="btn btn-neon-blue">Скачать игру</a>
+                <a href="about.html" class="btn btn-neon-pink">Об игре</a>
+            </div>
+        </div>
+        
+        <div class="hero-visual">
+            <div class="neon-arena-preview">
+                <div class="gate-left"></div>
+                <div class="mallet mallet-blue" id="interactive-mallet"></div>
+                <div class="puck" id="interactive-puck"></div>
+                <div class="mallet mallet-red"></div>
+                <div class="gate-right"></div>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <p>&copy; 2026 Zebrar's Games. Все права защищены. Создано с неоновым драйвом.</p>
+    </footer>
+    <script src="js/main.js"></script>
+</body>
+</html>

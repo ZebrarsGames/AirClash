@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>О нас — AirClash</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;800&family=Russo+One&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <header>
+        <a href="index.html" class="logo">Air<span>Clash</span></a>
+        <nav>
+            <ul>
+                <li><a href="index.html" class="nav-link ">Главная</a></li>
+                <li><a href="about.html" class="nav-link ">Об игре</a></li>
+                <li><a href="download.html" class="nav-link ">Скачать</a></li>
+                <li><a href="team.html" class="nav-link active">О нас</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main class="content-container">
+        <h2 class="section-title neon-text-blue">О РАЗРАБОТЧИКАХ AIRCLASH</h2>
+        
+        <div class="about-us-box neon-border-pink">
+            <p><strong>AirClash</strong> — это независимый проект, рожденный из любви к старым аркадным автоматам и современным состязательным играм. Наша цель — создать самый отзывчивый, стильный и честный аэрохоккей без навязчивой рекламы и механик Pay-to-Win.</p>
+            <p>Мы верим в силу комьюнити и постоянно развиваем игру на основе ваших отзывов и предложений.</p>
+        </div>
+
+        <div class="team-stats-grid">
+            <div class="stat-card">
+                <span class="stat-number neon-text-blue">100%</span>
+                <span class="stat-label">Физика скилла</span>
+            </div>
+            <div class="stat-card">
+                <span class="stat-number neon-text-pink">0%</span>
+                <span class="stat-label">Донат влияние</span>
+            </div>
+            <div class="stat-card">
+                <span class="stat-number neon-text-blue">24/7</span>
+                <span class="stat-label">Адреналин</span>
+            </div>
+        </div>
+
+        <div class="contact-section">
+            <h3 class="neon-text-blue" style="text-align: center; margin-bottom: 1.5rem;">Свяжись с нами</h3>
+            <form class="contact-form neon-border-blue" onsubmit="handleContactSubmit(event)">
+                <input type="text" placeholder="Твой ник" required>
+                <input type="email" placeholder="Твой Email" required>
+                <textarea rows="4" placeholder="Твое сообщение / отзыв об игре" required></textarea>
+                <button type="submit" class="btn btn-neon-blue" style="width: 100%;">Отправить сигнал</button>
+            </form>
+        </div>
+    </main>
+
+    <footer>
+        <p>&copy; 2026 Zebrar's Games. Все права защищены. Создано с неоновым драйвом.</p>
+    </footer>
+    <script src="js/main.js"></script>
+</body>
+</html>
