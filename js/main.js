@@ -64,23 +64,26 @@ function triggerDownload(platformName) {
     }
 }
 
-// Отправка формы обратной связи
+// Отправка формы обратной связи AirClash
 async function handleContactSubmit(event) {
-    event.preventDefault();
+    event.preventDefault(); // Блокируем стандартную перезагрузку страницы
     
     const form = event.target;
     const button = form.querySelector('button[type="submit"]');
     
-    // Визуально меняем текст кнопки во время отправки
+    // Блокируем кнопку и меняем текст на время отправки
     const originalButtonText = button.textContent;
     button.textContent = "Отправка сигнала...";
     button.disabled = true;
 
-    // Автоматически собираем все данные из полей формы
+    // Собираем данные из полей ввода
     const formData = new FormData(form);
+    
+    // Автоматически добавляем ваш ключ активации Web3Forms в запрос
+    formData.append("access_key", "fcbe9b27-2403-431d-a8b0-ef4804fcf167");
 
     try {
-        // Отправляем запрос на сервер Web3Forms
+        // Отправляем данные на правильный рабочий сервер API
         const response = await fetch("https://api.web3forms.com/submit", {
             method: "POST",
             body: formData
@@ -88,17 +91,18 @@ async function handleContactSubmit(event) {
 
         const result = await response.json();
 
-        if (result.success) {
+        // Проверяем успешность ответа от сервера
+        if (response.ok && result.success) {
             alert("Сообщение успешно отправлено в центр управления AirClash! Мы ответим вам в ближайшее время.");
-            form.reset(); // Очищаем форму только при успехе
+            form.reset(); // Очищаем поля формы только при успехе
         } else {
-            alert("Ошибка сервера: " + result.message);
+            alert("Ошибка сервера: " + (result.message || "Неизвестная ошибка"));
         }
     } catch (error) {
         console.error("Ошибка сети:", error);
         alert("Не удалось отправить сигнал. Проверьте интернет-соединение.");
     } finally {
-        // Возвращаем кнопку в исходное состояние
+        // В любом случае возвращаем кнопку в исходное рабочее состояние
         button.textContent = originalButtonText;
         button.disabled = false;
     }
