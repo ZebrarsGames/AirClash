@@ -80,7 +80,7 @@ async function handleContactSubmit(event) {
     const formData = new FormData(form);
     
     // Автоматически добавляем ваш ключ активации Web3Forms в запрос
-    formData.append("access_key", "fcbe9b27-2403-431d-a8b0-ef4804fcf167");
+    formData.append("access_key", "fcbe9b27-2403-431d-a8b0-ef4804fcf167".trim());
 
     try {
         // Отправляем данные на правильный рабочий сервер API
