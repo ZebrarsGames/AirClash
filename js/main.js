@@ -81,7 +81,7 @@ async function handleContactSubmit(event) {
 
     try {
         // Отправляем запрос на сервер Web3Forms
-        const response = await fetch("https://web3forms.com", {
+        const response = await fetch("https://api.web3forms.com/submit", {
             method: "POST",
             body: formData
         });
