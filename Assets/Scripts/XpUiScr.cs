@@ -6,16 +6,24 @@ using UnityEngine.UI;
 
 public class XpUiScr : MonoBehaviour
 {
+    [Header("UI")]
     [SerializeField] private Slider xpSlider;
-    [SerializeField] private XpHandler xpHandler;
+    // [SerializeField] private Text awardForNextLevel;
     [SerializeField] private Text currentXpText;
     [SerializeField] private Text currentLvlText;
     [SerializeField] private Text nextLvlText;
     [SerializeField] private CanvasGroup canvasGroup;
     [SerializeField] private GameObject panel;
+
+    [Header("Audio")]
     [SerializeField] private AudioSource audioSource;
     [SerializeField] private AudioClip levelUpSound;
-    // [SerializeField] private Text awardForNextLevel;
+    
+    [Header("Scripts")]
+    [SerializeField] private XpHandler xpHandler;
+
+    private bool isAnim;
+    public bool GetIsAnim() => isAnim;
     void Start()
     {
         if(SceneManager.GetActiveScene().name.Equals("BotsGame"))
@@ -66,12 +74,14 @@ public class XpUiScr : MonoBehaviour
 
     IEnumerator LevelUpAnim()
     {
+        isAnim = true;
         yield return new WaitForSeconds(1.1f);
         audioSource.PlayOneShot(levelUpSound);
         panel.transform.DOScale(1.5f, 0.4f).OnComplete(() => panel.transform.DOScale(1.0f, 0.2f));
         canvasGroup.DOFade(1.0f, 0.4f).OnComplete(() => canvasGroup.DOFade(0f, 0.2f));
         yield return new WaitForSeconds(0.2f);
         SetProgress(xpHandler.GetXPProgress());
+        isAnim = false;
     }
 }
 

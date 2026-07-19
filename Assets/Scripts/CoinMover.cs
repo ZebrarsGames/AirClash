@@ -37,6 +37,7 @@ public class CoinMover : MonoBehaviour
 
     public void AddXp(Vector3 spawnPosition, int amount, int startValue)
     {
+        if(xpUiScr.GetIsAnim() == true) return;
         StartCoroutine(AnimateXP(spawnPosition, amount, startValue));
     }
 
