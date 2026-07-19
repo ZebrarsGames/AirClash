@@ -90,7 +90,7 @@ public class MainMenu : MonoBehaviour
         switch(difficulty)
         {
             case "VeryEasy":
-                PlayerPrefs.SetFloat("Difficulty", 3.1415926535f);
+                PlayerPrefs.SetFloat("Difficulty", 5f);
                 PlayerPrefs.SetInt("HowMoneyAdd", 2);
                 PlayerPrefs.SetInt("HowMoneyAddAsLose", 1);
                 PlayerPrefs.SetInt("HowManyAddXp", 3);
@@ -99,22 +99,22 @@ public class MainMenu : MonoBehaviour
                 break;
             case "Easy":
                 PlayerPrefs.SetFloat("Difficulty", 7.5f);
-                PlayerPrefs.SetInt("HowMoneyAdd", 4);
+                PlayerPrefs.SetInt("HowMoneyAdd", 3);
                 PlayerPrefs.SetInt("HowMoneyAddAsLose", 2);
                 PlayerPrefs.SetInt("HowManyAddXp", 7);
                 PlayerPrefs.SetFloat("BotOffsetX", 0.7f);
                 PlayerPrefs.SetFloat("BotOffsetY", 0.7f);
                 break;
             case "Medium":
-                PlayerPrefs.SetFloat("Difficulty", 13.5f);
-                PlayerPrefs.SetInt("HowMoneyAdd", 6);
+                PlayerPrefs.SetFloat("Difficulty", 12f);
+                PlayerPrefs.SetInt("HowMoneyAdd", 5);
                 PlayerPrefs.SetInt("HowMoneyAddAsLose", 2);
                 PlayerPrefs.SetInt("HowManyAddXp", 10);
                 PlayerPrefs.SetFloat("BotOffsetX", 0.4f);
                 PlayerPrefs.SetFloat("BotOffsetY", 0.5f);
                 break;
             case "Hard":
-                PlayerPrefs.SetFloat("Difficulty", 25f);
+                PlayerPrefs.SetFloat("Difficulty", 17.5f);
                 PlayerPrefs.SetInt("HowMoneyAdd", 10);
                 PlayerPrefs.SetInt("HowMoneyAddAsLose", 2);
                 PlayerPrefs.SetInt("HowManyAddXp", 20);
@@ -122,7 +122,7 @@ public class MainMenu : MonoBehaviour
                 PlayerPrefs.SetFloat("BotOffsetY", 0.2f);
                 break;
             case "Extreme":
-                PlayerPrefs.SetFloat("Difficulty", 50f);
+                PlayerPrefs.SetFloat("Difficulty", 27.5f);
                 PlayerPrefs.SetInt("HowMoneyAdd", 20);
                 PlayerPrefs.SetInt("HowMoneyAddAsLose", 1);
                 PlayerPrefs.SetInt("HowManyAddXp", 30);
@@ -130,7 +130,7 @@ public class MainMenu : MonoBehaviour
                 PlayerPrefs.SetFloat("BotOffsetY", 0.1f);
                 break;
             default:
-                PlayerPrefs.SetFloat("Difficulty", 2f);
+                PlayerPrefs.SetFloat("Difficulty", 11.5f);
                 break;
         }
         PlayerPrefs.Save();
