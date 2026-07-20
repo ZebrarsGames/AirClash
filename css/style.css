@@ -10,6 +10,8 @@
     --neon-gold-glow: rgba(255, 215, 0, 0.3);
     --neon-green: #39ff14;
     --neon-green-glow: rgba(60, 255, 0, 0.4);
+    --neon-violet: #bc13fe;
+    --neon-violet-glow: rgba(188, 19, 254, 0.4);
     --text-white: #ffffff;
     --text-muted: #7987a5;
     --font-title: 'Russo One', sans-serif;
@@ -143,6 +145,21 @@ nav .nav-link:hover, nav .nav-link.active {
 .neon-text-pink {
     color: var(--neon-pink);
     text-shadow: 0 0 10px var(--neon-pink-glow);
+}
+
+.neon-text-gold {
+    color: var(--neon-gold);
+    text-shadow: 0 0 10px var(--neon-gold-glow);
+}
+
+.neon-text-green {
+    color: var(--neon-green);
+    text-shadow: 0 0 10px var(--neon-green-glow);
+}
+
+.neon-text-violet {
+    color: var(--neon-violet);
+    text-shadow: 0 0 10px var(--neon-violet-glow);
 }
 
 .section-title {
@@ -412,6 +429,21 @@ nav .nav-link:hover, nav .nav-link.active {
     grid-template-columns: repeat(3, 1fr);
     gap: 2rem;
     margin: 4rem 0;
+    text-align: center;
+}
+
+.parent-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 25vh;   
+}
+
+.community-grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 2rem;
+    margin: 0;
     text-align: center;
 }
 
