@@ -29,6 +29,7 @@ public class DailyQuestHandler : MonoBehaviour
 
     [Header("Other")]
     [SerializeField] private UnityEvent generateNewQuestsEvent;
+    [SerializeField] private UnityEvent nextDayEvent;
     
     private const string NextMidnightTimeKey = "NextMidnightSave";
     private const string QuestIdsKey = "SavedQuestIds"; 
@@ -60,6 +61,7 @@ public class DailyQuestHandler : MonoBehaviour
     {
         if (!PlayerPrefs.HasKey(NextMidnightTimeKey))
         {
+            nextDayEvent.Invoke();
             GenerateNewQuests();
             return;
         }
@@ -72,12 +74,14 @@ public class DailyQuestHandler : MonoBehaviour
         }
         else
         {
+            nextDayEvent.Invoke();
             GenerateNewQuests();
             return;
         }
         
         if (DateTime.Now >= nextMidnightTime)
         {
+            nextDayEvent.Invoke();
             GenerateNewQuests();
         }
         else
@@ -112,7 +116,7 @@ public class DailyQuestHandler : MonoBehaviour
         string idsString = string.Join(",", savedIds);
         PlayerPrefs.SetString(QuestIdsKey, idsString);
 
-        nextMidnightTime = DateTime.Now.Date.AddDays(1);
+        nextMidnightTime = DateTime.Today.AddDays(1); 
         PlayerPrefs.SetString(NextMidnightTimeKey, nextMidnightTime.ToString());
         
         PlayerPrefs.Save();

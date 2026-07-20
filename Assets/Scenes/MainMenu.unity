@@ -14681,6 +14681,60 @@ MonoBehaviour:
   targetText: {fileID: 1567428788}
   completeArrow: {fileID: 1675862083}
   questLogo: {fileID: 683108028}
+--- !u!1 &494791743
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 494791745}
+  - component: {fileID: 494791744}
+  m_Layer: 0
+  m_Name: DailyAwardHandler
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &494791744
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 494791743}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 790fd0c3baad0894b8b36637107aa1ee, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::DailyAwardHandler
+  dailyAwards:
+  - {fileID: 11400000, guid: fc000cff02b20b444b09dd90ce20d081, type: 2}
+  - {fileID: 11400000, guid: 62a3de9ec501e4540aac4365c59e572d, type: 2}
+  - {fileID: 11400000, guid: 3eeda640aa455654a821b185f6256d19, type: 2}
+  - {fileID: 11400000, guid: c54f8dc64c784804194757758b75a871, type: 2}
+  - {fileID: 11400000, guid: 8d8262f478817bd4fbf5a848cd7d8108, type: 2}
+  - {fileID: 11400000, guid: ed8c8218fba8889428c4ecfc1ed143ce, type: 2}
+  - {fileID: 11400000, guid: ad66d910441abf043ba7986bfc02ad99, type: 2}
+  moneyHandler: {fileID: 1114898952}
+  xpHandler: {fileID: 695791783}
+--- !u!4 &494791745
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 494791743}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &500360549
 GameObject:
   m_ObjectHideFlags: 0
@@ -33959,6 +34013,21 @@ MonoBehaviour:
       - m_Target: {fileID: 778370267}
         m_TargetAssemblyTypeName: DailyQuestItem, Assembly-CSharp
         m_MethodName: StartSetQuestInfo
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  nextDayEvent:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 494791744}
+        m_TargetAssemblyTypeName: DailyAwardHandler, Assembly-CSharp
+        m_MethodName: OnDayChanged
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -63251,50 +63320,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2080175027}
   m_CullTransparentMesh: 1
---- !u!1 &2090847262
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 2090847264}
-  - component: {fileID: 2090847263}
-  m_Layer: 0
-  m_Name: NotificationsHandler
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &2090847263
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2090847262}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 771c01122d6463a4cb82696529e67586, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::PushNotificationsHandler
---- !u!4 &2090847264
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2090847262}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2091836895
 GameObject:
   m_ObjectHideFlags: 0
@@ -64386,4 +64411,4 @@ SceneRoots:
   - {fileID: 183340301}
   - {fileID: 412532616}
   - {fileID: 906849857}
-  - {fileID: 2090847264}
+  - {fileID: 494791745}
