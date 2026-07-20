@@ -13,6 +13,9 @@ public class DailyAwardHandler : MonoBehaviour
     [Header("Floats")]
     [SerializeField] private int maxDays = 7;
 
+    [Header("UI")]
+    [SerializeField] private GameObject awardsPanel;
+
     private DateTime firstTimePlay;
     private const string FirstTimePlayKey = "FirstTimePlayed";
     private bool isInitialized;
@@ -57,6 +60,7 @@ public class DailyAwardHandler : MonoBehaviour
         {
             if (dailyAwards[i].Day == daysPlayed)
             {
+                awardsPanel.SetActive(true);
                 GiveAward(dailyAwards[i]);
                 break;
             }
@@ -79,5 +83,22 @@ public class DailyAwardHandler : MonoBehaviour
                 PlayerPrefs.Save();
                 break;
         }
+    }
+
+    public DailyAwardSO GetDailyAward(int day)
+    {
+        for (int i = 0; i < dailyAwards.Length; i++)
+        {
+            if (dailyAwards[i].Day == day)
+            {
+                return dailyAwards[i];
+            }
+        }
+        return new DailyAwardSO();
+    }
+
+    public int GetDaysPlayed()
+    {
+        return (DateTime.Today - firstTimePlay).Days + 1;
     }
 }

@@ -12,8 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ceda0ff877f80544fbc3eba292d3b9e1, type: 3}
   m_Name: AwardFor4Day
   m_EditorClassIdentifier: Assembly-CSharp::DailyAwardSO
-  AwardType: 1
+  AwardType: 0
   Day: 4
-  Award: 50
+  Award: 25
   SkinAward: 
-  AwardSprite: {fileID: 0}
+  AwardSprite: {fileID: 21300000, guid: d7bbb3126c5ee774493b8f88092aa2a6, type: 3}

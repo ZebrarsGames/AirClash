@@ -15,5 +15,5 @@ MonoBehaviour:
   AwardType: 2
   Day: 7
   Award: 0
-  SkinAward: GoldSkin
-  AwardSprite: {fileID: 0}
+  SkinAward: CdSkin
+  AwardSprite: {fileID: 21300000, guid: c1af4689e1098eb4db5fc29319e71376, type: 3}

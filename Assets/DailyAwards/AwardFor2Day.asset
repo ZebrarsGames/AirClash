@@ -16,4 +16,4 @@ MonoBehaviour:
   Day: 2
   Award: 15
   SkinAward: 
-  AwardSprite: {fileID: 0}
+  AwardSprite: {fileID: 21300000, guid: 03112351b9747ac439cb9d72f7c0ff5a, type: 3}
