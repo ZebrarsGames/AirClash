@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.Android;
 using Firebase;
 using Firebase.Messaging;
 using UnityEngine.Networking;
@@ -19,6 +20,10 @@ public class FirebaseManager : MonoBehaviour
         }
         else // Если запускаем на реальном Android-телефоне
         {
+            if (!Permission.HasUserAuthorizedPermission("android.permission.POST_NOTIFICATIONS"))
+            {
+                Permission.RequestUserPermission("android.permission.POST_NOTIFICATIONS");
+            }
             FirebaseApp.CheckAndFixDependenciesAsync().ContinueWith(task => {
                 var dependencyStatus = task.Result;
                 if (dependencyStatus == DependencyStatus.Available) {
