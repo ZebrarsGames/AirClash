@@ -541,4 +541,9 @@ footer {
         grid-template-columns: 1fr;
         gap: 1.5rem;
     }
+
+    .community-grid {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+    }
 }
