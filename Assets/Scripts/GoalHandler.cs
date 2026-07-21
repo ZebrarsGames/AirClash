@@ -77,11 +77,11 @@ public class GoalHandler : MonoBehaviour
         timer.TimerStart();
         audioSource.PlayOneShot(StartGameSound);
         howManyGoals = PlayerPrefs.GetInt("Goals");
-        howMoneyAdd = PlayerPrefs.GetInt("HowMoneyAdd") * Mathf.Max(1, Convert.ToInt32(howManyGoals / 1.5f));
-        howManyXpAddForGoal = PlayerPrefs.GetInt("HowManyAddXp");
-        howManyXpAddAsWin = PlayerPrefs.GetInt("HowManyAddXp") * Mathf.Max(1, Convert.ToInt32(howManyGoals / 1.5f));
+        howMoneyAdd = Convert.ToInt32(PlayerPrefs.GetFloat("Difficulty") / 3 * Mathf.Max(1, howManyGoals));
+        howManyXpAddForGoal = Convert.ToInt32(PlayerPrefs.GetFloat("Difficulty") / 2);
+        howManyXpAddAsWin = howManyXpAddForGoal * Mathf.Max(1, Convert.ToInt32(howManyGoals / 1.5f));
         howManyXpAddAsLose = 1;
-        howMoneyAddAsLose = PlayerPrefs.GetInt("HowMoneyAddAsLose");  
+        howMoneyAddAsLose = 1;  
         endSreenPanel.SetActive(false);
         if(!ColorUtility.TryParseHtmlString("#30C7FE", out wallParticleColor))
         {

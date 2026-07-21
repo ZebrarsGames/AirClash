@@ -28,6 +28,10 @@ public class MainMenu : MonoBehaviour
     [SerializeField] private Text moneyText;
     [SerializeField] private Slider goalsSlider;
     [SerializeField] private Text goalsText;
+    [SerializeField] private Slider speedSlider;
+    [SerializeField] private Text speedText;
+    [SerializeField] private GameObject userGamemodeBtn;
+    [SerializeField] private GameObject speedPanel;
     [Header("Scripts")]
     [SerializeField] private MoneyHandler moneyHandler;
     [SerializeField] private CoinMover coinMover;
@@ -55,14 +59,14 @@ public class MainMenu : MonoBehaviour
     {
         audioSource.clip = menuMusic;
         audioSource.loop = true;
-        audioSource.time = PlayerPrefs.GetFloat("Music");
+        audioSource.time = PlayerPrefs.GetFloat("Music", 0);
         audioSource.Play();
         Application.targetFrameRate = PlayerPrefs.GetInt("FPS", 60);
         audioSource.volume = PlayerPrefs.GetFloat("MusicVolume", 1.0f);
         rectTransform = mainMenuText.GetComponent<RectTransform>();
         moneyText.text = "Деньги " + moneyHandler.GetMoney(); 
         saveManager.SaveData();
-        if(PlayerPrefs.GetInt("isAfterGame") == 0)
+        if(PlayerPrefs.GetInt("isAfterGame", 0) == 0)
         {
             PlayerPrefs.SetInt("HowMoneyAdds", 0);
             PlayerPrefs.SetInt("HowXpAdds", 0);
@@ -137,6 +141,7 @@ public class MainMenu : MonoBehaviour
         toScene = "BotsGame";
         CloseAllPanels();
         gamemodesPanel.SetActive(true);
+        OnGamemodePanel();
     }
 
     public void CloseAllPanels()
@@ -164,6 +169,20 @@ public class MainMenu : MonoBehaviour
         rect.localScale = Vector3.zero;
         panel.SetActive(true);
         rect.DOScale(new Vector3(1.0f, 1.0f, 1.0f), 0.3f).SetEase(Ease.OutBack);
+    }
+    public void OnBotBtn()
+    {
+        toScene = "BotsGame";
+    }
+    public void OnGamemodePanel()
+    {
+        if(toScene == "GameScene")
+        {
+            userGamemodeBtn.SetActive(true);
+        } else if(toScene == "BotsGame")
+        {
+            userGamemodeBtn.SetActive(false);
+        }
     }
     IEnumerator AnimateClosePanel(GameObject panel)
     {
@@ -229,15 +248,31 @@ public class MainMenu : MonoBehaviour
     {
         CloseAllPanels();
         userGamemodePanel.SetActive(true);
-        if(PlayerPrefs.GetInt("Goals") == 0) PlayerPrefs.SetInt("Goals", 5);
-        else PlayerPrefs.SetInt("Goals", PlayerPrefs.GetInt("Goals"));
-        goalsSlider.value = PlayerPrefs.GetInt("Goals");
-        goalsText.text = Convert.ToString(PlayerPrefs.GetInt("Goals"));
+        if(toScene == "BotsGame")
+        {
+            goalsSlider.value = PlayerPrefs.GetInt("Goals", 4);
+            speedSlider.value = PlayerPrefs.GetFloat("Difficulty", 7.5f);
+            speedPanel.SetActive(true);
+            float value = speedSlider.value;
+            speedText.text = $"{value:F1}";
+            goalsText.text = PlayerPrefs.GetInt("Goals", 4).ToString();
+        } else if(toScene == "GameScene")
+        {
+            goalsSlider.value = PlayerPrefs.GetInt("Goals", 4);
+            speedSlider.value = PlayerPrefs.GetFloat("Difficulty", 7.5f);
+            speedPanel.SetActive(false);
+        }
     }
 
     public void OnGoalsSliderChanged()
     {
-        goalsText.text = Convert.ToString(Convert.ToInt32(goalsSlider.value));
+        goalsText.text = Convert.ToInt32(goalsSlider.value).ToString();
+    }
+
+    public void OnSpeedSliderChanged()
+    {
+        float value = speedSlider.value;
+        speedText.text = $"{value:F1}";
     }
 
     public void AddMoney(int amount)
@@ -253,6 +288,7 @@ public class MainMenu : MonoBehaviour
     public void SetUserGamemode()
     {
         PlayerPrefs.SetInt("Goals", Convert.ToInt32(goalsSlider.value));
+        PlayerPrefs.SetFloat("Difficulty", speedSlider.value);
         PlayerPrefs.Save();
         SceneManager.LoadScene(toScene);
     }
