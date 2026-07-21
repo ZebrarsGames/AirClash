@@ -6,6 +6,8 @@ using UnityEngine.Events;
 
 [System.Serializable]
 public class IsAnimToggleEvent : UnityEvent<bool> { }
+[System.Serializable]
+public class IsFpsCounterEvent : UnityEvent<bool> { }
 public class SettingsHandler : MonoBehaviour
 {
     [Header("Sliders")]
@@ -19,20 +21,23 @@ public class SettingsHandler : MonoBehaviour
     [SerializeField] private Toggle animBgToggle;
     [SerializeField] private Toggle trailToggle;
     [SerializeField] private Toggle puckTrailToggle;
+    [SerializeField] private Toggle fpsCounterToggle;
 
     [Header("Other")]
     [SerializeField] private IsAnimToggleEvent isAnimToggleEvent;
+    [SerializeField] private IsFpsCounterEvent isFpsCounterEvent;
 
-    public void Start() 
+    public void Awake() 
     {
         QualitySettings.vSyncCount = 0;
-        if(PlayerPrefs.GetInt("FPS") == 0) PlayerPrefs.SetInt("FPS", 60);
+        if(PlayerPrefs.GetInt("FPS", 0) == 0) PlayerPrefs.SetInt("FPS", 60);
         else Application.targetFrameRate = PlayerPrefs.GetInt("FPS");
         volumeSlider.value = PlayerPrefs.GetFloat("MusicVolume", 1.0f);
         fpsSlider.value = PlayerPrefs.GetInt("FPS");
         trailToggle.isOn = PlayerPrefs.GetInt("Trail", 1) != 0;
         animBgToggle.isOn = PlayerPrefs.GetInt("isAnimBg", 1) != 0;
         puckTrailToggle.isOn = PlayerPrefs.GetInt("PuckTrail", 1) != 0;
+        fpsCounterToggle.isOn = PlayerPrefs.GetInt("FpsCounter", 0) != 0;
     }
 
     public void OnVolumeSliderChanged() {
@@ -63,6 +68,13 @@ public class SettingsHandler : MonoBehaviour
     {
         PlayerPrefs.SetInt("PuckTrail", puckTrailToggle.isOn ? 1 : 0);
         PlayerPrefs.Save();
+    }
+
+    public void OnFPSCounterToggleChanged()
+    {
+        PlayerPrefs.SetInt("FpsCounter", fpsCounterToggle.isOn ? 1 : 0);
+        PlayerPrefs.Save();
+        isFpsCounterEvent.Invoke(fpsCounterToggle.isOn);
     }
 
     public void ShowTelegram()
