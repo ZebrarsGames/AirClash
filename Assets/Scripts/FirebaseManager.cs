@@ -1,14 +1,22 @@
 using UnityEngine;
 using UnityEngine.Android;
+using UnityEngine.SceneManagement;
 using Firebase;
 using Firebase.Messaging;
 using UnityEngine.Networking;
 using System.Collections;
 using System.IO;
+using UnityEngine.Events;
 
+[System.Serializable]
+public class StatusTextEvent : UnityEvent<string> { }
+[System.Serializable]
+public class IsServerProcessEvent : UnityEvent<bool> { }
 public class FirebaseManager : MonoBehaviour
 {
     private string lastSavedToken = ""; // Переменная для хранения токена
+    public StatusTextEvent statusTextEvent;
+    public IsServerProcessEvent isServerProcessEvent;
 
     // Вспомогательные классы для отправки и получения JSON-данных
     [System.Serializable]
@@ -119,7 +127,8 @@ public class FirebaseManager : MonoBehaviour
         
         if (!File.Exists(saveFilePath))
         {
-            Debug.LogError("❌ Локальный файл сохранения не найден!");
+            Debug.LogWarning("❌ Локальный файл сохранения не найден!");
+            statusTextEvent.Invoke("Локальный файл сохранения не найден!");
             return;
         }
 
@@ -139,6 +148,8 @@ public class FirebaseManager : MonoBehaviour
 
     IEnumerator SendAuthRequest(string user, string pass)
     {
+        statusTextEvent.Invoke("Заходим в аккаунт...");
+        isServerProcessEvent.Invoke(true);
         string url = "https://airclashserver.onrender.com/registerOrLogin";
 
         AuthData data = new AuthData();
@@ -165,12 +176,15 @@ public class FirebaseManager : MonoBehaviour
         {
             ServerResponse res = JsonUtility.FromJson<ServerResponse>(www.downloadHandler.text);
             Debug.Log($"✅ Авторизация: {res.message}");
-            // Здесь можно вызвать метод открытия основного игрового меню
+            statusTextEvent.Invoke($"Авторизация: {res.message}");
+            isServerProcessEvent.Invoke(false);
         }
     }
 
     IEnumerator SendSyncRequest(string user, string pass, string actionType, string gameDataJson)
     {
+        statusTextEvent.Invoke("Синхронизируемся...");
+        isServerProcessEvent.Invoke(true);
         string url = "https://airclashserver.onrender.com/syncProgress";
 
         SyncData data = new SyncData();
@@ -200,6 +214,8 @@ public class FirebaseManager : MonoBehaviour
             if (actionType == "save")
             {
                 Debug.Log("✅ Прогресс успешно загружен на сервер!");
+                statusTextEvent.Invoke("Прогресс успешно загружен на сервер!");
+                isServerProcessEvent.Invoke(false);
             }
             else if (actionType == "load")
             {
@@ -208,8 +224,9 @@ public class FirebaseManager : MonoBehaviour
                 File.WriteAllText(saveFilePath, res.game_data);
                 
                 Debug.Log("✅ Прогресс успешно скачан из облака и перезаписан на телефоне!");
-                // ВНИМАНИЕ: Здесь нужно вызвать метод перезагрузки данных в вашей игре,
-                // чтобы интерфейс (монеты, скины) обновился под новое сохранение!
+                statusTextEvent.Invoke("Прогресс успешно скачан из облака и перезаписан на телефоне!");
+                isServerProcessEvent.Invoke(false);
+                SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
             }
         }
     }
@@ -219,11 +236,15 @@ public class FirebaseManager : MonoBehaviour
         try
         {
             ServerResponse res = JsonUtility.FromJson<ServerResponse>(responseText);
-            Debug.LogError($"❌ Ошибка сервера: {res.message}");
+            Debug.LogWarning($"❌ Ошибка сервера: {res.message}");
+            statusTextEvent.Invoke($"Ошибка сервера: {res.message}");
+            isServerProcessEvent.Invoke(false);
         }
         catch
         {
-            Debug.LogError("❌ Неизвестная ошибка сети или сервера.");
+            Debug.LogWarning("❌ Неизвестная ошибка сети или сервера.");
+            statusTextEvent.Invoke("Неизвестная ошибка сети или сервера.");
+            isServerProcessEvent.Invoke(false);
         }
     }
 }

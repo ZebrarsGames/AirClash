@@ -1,11 +1,21 @@
 using UnityEngine;
 using TMPro;
+using UnityEngine.UI;
 
 public class CloudUIScr : MonoBehaviour
 {
-    public TMP_InputField usernameInput;
-    public TMP_InputField passwordInput;
-    public FirebaseManager firebaseManager;
+    [Header("Input Fields")]
+    [SerializeField] private TMP_InputField usernameInput;
+    [SerializeField] private TMP_InputField passwordInput;
+
+    [Header("Texts")]
+    [SerializeField] private Text statusText;
+
+    [Header("Buttons")]
+    [SerializeField] private Button[] buttons;
+
+    [Header("Scripts")]
+    [SerializeField] private FirebaseManager firebaseManager;
 
     public void OnClickLoginOrRegister()
     {
@@ -20,5 +30,18 @@ public class CloudUIScr : MonoBehaviour
     public void OnClickLoad()
     {
         firebaseManager.LoadProgress(usernameInput.text, passwordInput.text);
+    }
+
+    public void SetStatusText(string status)
+    {
+        statusText.text = "Статус: " + status;
+    }
+
+    public void SetActiveBtns(bool isActive)
+    {
+        for(int i = 0; i < buttons.Length; i++)
+        {
+            buttons[i].interactable = !isActive;
+        }
     }
 }

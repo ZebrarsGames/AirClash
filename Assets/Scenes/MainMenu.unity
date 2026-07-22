@@ -906,7 +906,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -184.4, y: 59.28}
+  m_AnchoredPosition: {x: -186, y: 77.979996}
   m_SizeDelta: {x: 586.73, y: 67.7}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &22939860
@@ -2508,7 +2508,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -184.4, y: 151.2}
+  m_AnchoredPosition: {x: -186, y: 169.9}
   m_SizeDelta: {x: 297.37, y: 81.32}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &51645780
@@ -2893,8 +2893,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 176.17499, y: -290.82248}
-  m_SizeDelta: {x: 312.34998, y: 92.865}
+  m_AnchoredPosition: {x: 176.17499, y: -313.6475}
+  m_SizeDelta: {x: 312.34998, y: 101.995}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &61593987
 MonoBehaviour:
@@ -28040,7 +28040,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -184.4, y: -107.34001}
+  m_AnchoredPosition: {x: -186, y: -88.640015}
   m_SizeDelta: {x: 586.73, y: 67.7}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &871349148
@@ -29286,12 +29286,13 @@ RectTransform:
   - {fileID: 2078823749}
   - {fileID: 871349147}
   - {fileID: 109942149}
+  - {fileID: 1529488741}
   m_Father: {fileID: 1042542427}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -6.5, y: -54.5}
-  m_SizeDelta: {x: -77, y: -179}
+  m_AnchoredPosition: {x: -6.5, y: -68.20001}
+  m_SizeDelta: {x: -77, y: -151.61}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &906999277
 MonoBehaviour:
@@ -34755,7 +34756,7 @@ GameObject:
   - component: {fileID: 1042542429}
   - component: {fileID: 1042542428}
   m_Layer: 5
-  m_Name: CloudProfileBtn
+  m_Name: CloudProfilePanel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -41705,8 +41706,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 176.17499, y: -178.62749}
-  m_SizeDelta: {x: 312.34998, y: 92.865}
+  m_AnchoredPosition: {x: 176.17499, y: -192.3225}
+  m_SizeDelta: {x: 312.34998, y: 101.995}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1223403554
 MonoBehaviour:
@@ -49245,7 +49246,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Text
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_RaycastTarget: 1
+  m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
@@ -50995,6 +50996,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::CloudUIScr
   usernameInput: {fileID: 22939860}
   passwordInput: {fileID: 871349148}
+  statusText: {fileID: 1529488738}
+  buttons:
+  - {fileID: 1539107219}
+  - {fileID: 1223403555}
+  - {fileID: 61593988}
   firebaseManager: {fileID: 1676043451}
 --- !u!4 &1501454215
 Transform:
@@ -52033,6 +52039,101 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1525532479}
   m_CullTransparentMesh: 1
+--- !u!1 &1529488737
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1529488741}
+  - component: {fileID: 1529488740}
+  - component: {fileID: 1529488738}
+  - component: {fileID: 1529488739}
+  m_Layer: 5
+  m_Name: StatusText
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1529488738
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1529488737}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5f7201a12d95ffc409449d95f23cf332, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Text
+  m_Material: {fileID: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_FontData:
+    m_Font: {fileID: 12800000, guid: 3cfde06b1980b8445ad6b84a8ee6c36d, type: 3}
+    m_FontSize: 14
+    m_FontStyle: 0
+    m_BestFit: 1
+    m_MinSize: 10
+    m_MaxSize: 300
+    m_Alignment: 3
+    m_AlignByGeometry: 1
+    m_RichText: 1
+    m_HorizontalOverflow: 0
+    m_VerticalOverflow: 0
+    m_LineSpacing: 1
+  m_Text: "\u0421\u0442\u0430\u0442\u0443\u0441: ???"
+--- !u!114 &1529488739
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1529488737}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e19747de3f5aca642ab2be37e372fb86, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Outline
+  m_EffectColor: {r: 0, g: 0, b: 0, a: 1}
+  m_EffectDistance: {x: 3, y: -3}
+  m_UseGraphicAlpha: 1
+--- !u!222 &1529488740
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1529488737}
+  m_CullTransparentMesh: 1
+--- !u!224 &1529488741
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1529488737}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 906999276}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: -188.77, y: -164}
+  m_SizeDelta: {x: 581.19, y: 70.58}
+  m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &1529992829
 GameObject:
   m_ObjectHideFlags: 0
@@ -52704,8 +52805,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 176.17499, y: -66.432495}
-  m_SizeDelta: {x: 312.34998, y: 92.865}
+  m_AnchoredPosition: {x: 176.17499, y: -70.9975}
+  m_SizeDelta: {x: 312.34998, y: 101.995}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1539107218
 MonoBehaviour:
@@ -57594,6 +57695,36 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 241dd26737735144190d8c67a2b9e499, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FirebaseManager
+  statusTextEvent:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 1501454214}
+        m_TargetAssemblyTypeName: CloudUIScr, Assembly-CSharp
+        m_MethodName: SetStatusText
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  isServerProcessEvent:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 1501454214}
+        m_TargetAssemblyTypeName: CloudUIScr, Assembly-CSharp
+        m_MethodName: SetActiveBtns
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!4 &1676043452
 Transform:
   m_ObjectHideFlags: 0
@@ -68981,7 +69112,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 64
+  m_fontSize: 60.55
   m_fontSizeBase: 14
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -71090,7 +71221,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -184.4, y: -15.420005}
+  m_AnchoredPosition: {x: -186, y: 3.279994}
   m_SizeDelta: {x: 529.47, y: 81.32}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &2078823750
