@@ -15,6 +15,12 @@ public class CloudUIScr : MonoBehaviour
     [SerializeField] private Button[] buttons;
 
     [Header("Scripts")]
+    [SerializeField] private QuestsHandler questsHandler;
+    [SerializeField] private DailyQuestHandler dailyQuestHandler;
+    [SerializeField] private AchievementsHandler achievementsHandler;
+    [SerializeField] private SaveManager saveManager;
+    [SerializeField] private MoneyHandler moneyHandler;
+    [SerializeField] private XpHandler xpHandler;
     [SerializeField] private FirebaseManager firebaseManager;
 
     public void OnClickLoginOrRegister()
@@ -43,5 +49,66 @@ public class CloudUIScr : MonoBehaviour
         {
             buttons[i].interactable = !isActive;
         }
+    }
+
+    public void SetPlayerData(PlayerData playerData)
+    {
+        SetMoneyQuests(playerData.TotalMoney);
+        SetXpQuests(playerData.XP);
+        SetGoalQuests(playerData.Goals);
+        PlayerPrefs.SetString("Nick", usernameInput.text);
+        PlayerPrefs.SetInt("TotalGoals", playerData.Goals);
+        PlayerPrefs.SetString("CurrentSkin", playerData.CurrentSkinName);
+        moneyHandler.SetMoney(playerData.Money);
+        moneyHandler.SetTotalMoney(playerData.TotalMoney);
+        xpHandler.SetLevel(playerData.XpLevel);
+        xpHandler.SetTotalXp(playerData.TotalXP);
+        xpHandler.SetXp(playerData.XP);
+        xpHandler.SetXpToNextLevel(playerData.XpToNextLevel);
+        PlaytimeTracker.Instance.SetSecondsPlaytime(playerData.Playtime);
+
+        int achievementsCount = achievementsHandler.GetCountOfAchievements();
+        for(int i = 0; i < achievementsCount; i++)
+        {
+            string id = achievementsHandler.GetStringId(i);
+            achievementsHandler.SetProgress(id, playerData.AchievementsProgress[i]);
+        }
+        PlayerPrefs.Save();
+        saveManager.SaveData();
+    }
+
+    public void SetMoneyQuests(int amount)
+    {
+        questsHandler.SetQuestProgress("money10", amount);
+        questsHandler.SetQuestProgress("money50", amount);
+        questsHandler.SetQuestProgress("money100", amount);
+        questsHandler.SetQuestProgress("money200", amount);
+        questsHandler.SetQuestProgress("money300", amount);
+        questsHandler.SetQuestProgress("money500", amount);
+        dailyQuestHandler.UpdateQuestProgress("daily_money50", amount);
+        dailyQuestHandler.UpdateQuestProgress("money70", amount);
+        dailyQuestHandler.UpdateQuestProgress("daily_money100", amount);
+    }
+
+    private void SetXpQuests(int amount)
+    {
+        questsHandler.SetQuestProgress("xp100", amount);
+        questsHandler.SetQuestProgress("xp200", amount);
+        questsHandler.SetQuestProgress("xp400", amount);
+        questsHandler.SetQuestProgress("xp500", amount);
+        questsHandler.SetQuestProgress("xp700", amount);
+        questsHandler.SetQuestProgress("xp1000", amount);
+        dailyQuestHandler.UpdateQuestProgress("xp50", amount);
+    }
+
+    private void SetGoalQuests(int amount)
+    {
+        questsHandler.SetQuestProgress("goal10", amount);
+        questsHandler.SetQuestProgress("goal50", amount);
+        questsHandler.SetQuestProgress("goal100", amount);
+        questsHandler.SetQuestProgress("goal200", amount);
+        questsHandler.SetQuestProgress("goal300", amount);
+        questsHandler.SetQuestProgress("goal500", amount);
+        dailyQuestHandler.UpdateQuestProgress("goal20", amount);
     }
 }

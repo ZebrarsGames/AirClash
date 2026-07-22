@@ -6,11 +6,10 @@ using DG.Tweening;
 using TMPro;
 
 [System.Serializable]
-public class ApplyProfileEvent : UnityEvent<string, RawImage> { }
+public class ApplyProfileEvent : UnityEvent<RawImage> { }
 public class ProfileUIHandler : MonoBehaviour
 {
     [Header("UI")]
-    [SerializeField] private TMP_InputField nickInputField;
     [SerializeField] private RawImage displayImage; 
     [SerializeField] private GameObject editProfilePanel;
     [Header("Other")]
@@ -28,7 +27,6 @@ public class ProfileUIHandler : MonoBehaviour
     {
         avatarPath = Path.Combine(Application.persistentDataPath, "avatar.png");
         LoadSavedAvatar();
-        nickInputField.text = saveManager.GetData().NickName;
         panelRect.DOKill();
         panelRect.localPosition = Vector2.zero;
     }
@@ -66,8 +64,7 @@ public class ProfileUIHandler : MonoBehaviour
 
     public void Apply()
     {
-        string nick = nickInputField.text;
-        applyProfileEvent.Invoke(nick, displayImage);
+        applyProfileEvent.Invoke(displayImage);
     }
 
     private void SaveAvatarToFile(Texture2D texture)

@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class AchievementsHandler : MonoBehaviour
@@ -15,8 +16,9 @@ public class AchievementsHandler : MonoBehaviour
     }
 
     private Dictionary<string, Achievement> achievements = new Dictionary<string, Achievement>();
+    public int GetCountOfAchievements() => achievements.Count;
 
-    void Start()
+    void Awake()
     {
         // Ачивки на голы
         achievements.Add("a_start_has_been_made", new Achievement { Title = "Начало положено", Target = 1, Award = 5});
@@ -77,6 +79,28 @@ public class AchievementsHandler : MonoBehaviour
         }
     }
 
+    public void SetProgress(string id, int amount)
+    {
+        if (achievements.TryGetValue(id, out Achievement ach))
+        {
+            if (ach.IsUnlocked) return;
+
+            ach.Progress = amount;
+
+            PlayerPrefs.SetInt(id, ach.Progress);
+        
+            if (ach.Progress >= ach.Target)
+            {
+                ach.IsUnlocked = true;
+                PlayerPrefs.SetInt("HowXpAdds", PlayerPrefs.GetInt("HowXpAdds") + ach.Award);
+                PlayerPrefs.SetInt(id + "_unlocked", 1); 
+                animationsHandler.ShowAchievement(ach.Title);
+            }
+        
+            PlayerPrefs.Save();
+        }
+    }
+
     public void LoadAchievements()
     {
         foreach (var pair in achievements)
@@ -116,5 +140,12 @@ public class AchievementsHandler : MonoBehaviour
         {
             return ach.Progress;
         } else return 0;
+    }
+    public string GetStringId(int id)
+    {
+        if(achievements.Keys.ElementAt(id) != null)
+        {
+            return achievements.Keys.ElementAt(id);
+        } else return "";
     }
 }

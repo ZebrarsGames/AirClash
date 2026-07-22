@@ -75,4 +75,9 @@ public class PlaytimeTracker : MonoBehaviour
         float totalTime = _totalPlaytimeSeconds + (Time.time - _sessionStartTime);
         return totalTime;
     }
+
+    public void SetSecondsPlaytime(float amount)
+    {
+        _totalPlaytimeSeconds = amount;
+    }
 }

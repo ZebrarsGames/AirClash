@@ -1,5 +1,6 @@
 using System;
 using UnityEngine;
+using System.Collections.Generic;
 
 [System.Serializable]
 public class PlayerData
@@ -15,4 +16,7 @@ public class PlayerData
     public int Goals;
     public string CurrentSkinName;
     public float Playtime;
+    public string[] AchievementsIds;
+    public int[] AchievementsProgress;
+    public string avatarBase64; 
 }

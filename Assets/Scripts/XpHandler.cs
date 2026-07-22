@@ -72,6 +72,34 @@ public class XpHandler : MonoBehaviour
         Log();
     }
 
+    public void SetXp(int amount)
+    {
+        currentXP = amount;
+        Save();
+        Log();
+    }
+
+    public void SetLevel(int amount)
+    {
+        level = amount;
+        Save();
+        Log();
+    }
+
+    public void SetTotalXp(int amount)
+    {
+        totalXP = amount;
+        Save();
+        Log();
+    }
+
+    public void SetXpToNextLevel(int amount)
+    {
+        xpToNextLevel = amount;
+        Save();
+        Log();
+    }
+
     private void LevelUp()
     {
         onLevelUp.Invoke();

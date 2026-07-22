@@ -5,6 +5,7 @@ using System.Collections.Generic;
 public class SaveManager : MonoBehaviour
 {
     [SerializeField] private XpHandler xpHandler;
+    [SerializeField] private AchievementsHandler achievementsHandler;
     [SerializeField] private MoneyHandler moneyHandler;
 
     public void SaveData()
@@ -21,6 +22,18 @@ public class SaveManager : MonoBehaviour
         playerData.Playtime = PlaytimeTracker.Instance.GetSecondsPlaytime();
         playerData.TotalMoney = moneyHandler.GetTotalMoney();
         playerData.TotalXP = xpHandler.GetTotalXP();
+
+        int achievementsCount = achievementsHandler.GetCountOfAchievements();
+
+        playerData.AchievementsIds = new string[achievementsCount];
+        playerData.AchievementsProgress = new int[achievementsCount];
+
+        for(int i = 0; i < achievementsCount; i++)
+        {
+            string id = achievementsHandler.GetStringId(i);
+            playerData.AchievementsIds[i] = id;
+            playerData.AchievementsProgress[i] = achievementsHandler.GetProgress(id);
+        }
 
         string json = JsonUtility.ToJson(playerData);
         File.WriteAllText(Application.persistentDataPath + "/save.json", json);

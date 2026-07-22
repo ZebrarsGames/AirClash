@@ -19,6 +19,19 @@ public class MoneyHandler : MonoBehaviour
         Save();
     }
 
+    public void SetMoney(int amount)
+    {
+        money = amount;
+        totalMoney += amount;
+        Save();
+    }
+
+    public void SetTotalMoney(int amount)
+    {
+        totalMoney = amount;
+        Save();
+    }
+
     public void RemoveMoney(int amount)
     {
         money -= amount;

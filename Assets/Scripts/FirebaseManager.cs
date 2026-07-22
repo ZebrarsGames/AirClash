@@ -12,11 +12,14 @@ using UnityEngine.Events;
 public class StatusTextEvent : UnityEvent<string> { }
 [System.Serializable]
 public class IsServerProcessEvent : UnityEvent<bool> { }
+[System.Serializable]
+public class DataLoadFromCloudEvent : UnityEvent<PlayerData> { }
 public class FirebaseManager : MonoBehaviour
 {
     private string lastSavedToken = ""; // Переменная для хранения токена
     public StatusTextEvent statusTextEvent;
     public IsServerProcessEvent isServerProcessEvent;
+    public DataLoadFromCloudEvent dataLoadFromCloudEvent;
 
     // Вспомогательные классы для отправки и получения JSON-данных
     [System.Serializable]
@@ -122,18 +125,49 @@ public class FirebaseManager : MonoBehaviour
     /// Вызывать при нажатии на кнопку "SAVE" (Сохранение прогресса в облако)
     public void SaveProgress(string inputUsername, string inputPassword)
     {
-        // Читаем локальный JSON файл вашей игры (подставьте ваш правильный путь к файлу!)
         string saveFilePath = Path.Combine(Application.persistentDataPath, "save.json");
-        
+        string avatarPath = Path.Combine(Application.persistentDataPath, "avatar.png");
+
         if (!File.Exists(saveFilePath))
         {
-            Debug.LogWarning("❌ Локальный файл сохранения не найден!");
-            statusTextEvent.Invoke("Локальный файл сохранения не найден!");
+            Debug.LogError("❌ Локальный файл сохранения не найден!");
             return;
         }
 
+        // 1. Читаем ваш текущий JSON сохранения
         string localJsonData = File.ReadAllText(saveFilePath);
-        StartCoroutine(SendSyncRequest(inputUsername, inputPassword, "save", localJsonData));
+        
+        // Десериализуем его в объект
+        PlayerData progress = JsonUtility.FromJson<PlayerData>(localJsonData);
+
+        // 2. Если файл аватарки существует, обрабатываем его
+        if (File.Exists(avatarPath))
+        {
+            byte[] rawPngBytes = File.ReadAllBytes(avatarPath);
+
+            // Создаем временную текстуру для конвертации
+            Texture2D tex = new Texture2D(2, 2);
+            if (tex.LoadImage(rawPngBytes))
+            {
+                // СЖИМАЕМ В JPEG: 75 — это идеальный баланс веса и качества (от 1 до 100)
+                byte[] compressedJpgBytes = tex.EncodeToJPG(75);
+                
+                // Конвертируем байты картинки в безопасную строку Base64
+                progress.avatarBase64 = System.Convert.ToBase64String(compressedJpgBytes);
+                Debug.Log($"📸 Аватарка сжата в JPG. Размер: {compressedJpgBytes.Length / 1024} КБ");
+            }
+            Destroy(tex); // Очищаем память
+        }
+        else
+        {
+            progress.avatarBase64 = ""; // Если аватарки нет
+        }
+
+        // 3. Запаковываем обновленный объект с аватаркой обратно в JSON строку
+        string finalJsonToSend = JsonUtility.ToJson(progress);
+
+        // Отправляем на сервер
+        StartCoroutine(SendSyncRequest(inputUsername, inputPassword, "save", finalJsonToSend));
     }
 
     /// Вызывать при нажатии на кнопку "LOAD" (Загрузка прогресса из облака)
@@ -222,10 +256,13 @@ public class FirebaseManager : MonoBehaviour
                 // Сохраняем полученный JSON из облака в локальный файл телефона
                 string saveFilePath = Path.Combine(Application.persistentDataPath, "save.json");
                 File.WriteAllText(saveFilePath, res.game_data);
+                PlayerData playerData = JsonUtility.FromJson<PlayerData>(res.game_data);
                 
                 Debug.Log("✅ Прогресс успешно скачан из облака и перезаписан на телефоне!");
                 statusTextEvent.Invoke("Прогресс успешно скачан из облака и перезаписан на телефоне!");
                 isServerProcessEvent.Invoke(false);
+                dataLoadFromCloudEvent.Invoke(playerData);
+                yield return new WaitForSeconds(1.0f);
                 SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
             }
         }

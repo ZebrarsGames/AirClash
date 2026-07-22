@@ -36,12 +36,9 @@ public class ProfileHandler : MonoBehaviour
         }
     }
 
-    public void SetProfileData(string nick, RawImage avatar)
+    public void SetProfileData(RawImage avatar)
     {
         avatarImage.texture = avatar.texture;
-        nickText.text = nick;
-        PlayerPrefs.SetString("Nick", nick);
-        PlayerPrefs.Save();
         saveManager.SaveData();
     }
 
