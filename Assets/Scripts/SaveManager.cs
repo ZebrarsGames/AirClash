@@ -17,7 +17,6 @@ public class SaveManager : MonoBehaviour
         playerData.XpToNextLevel = xpHandler.GetXpToNextLevel();
         playerData.Goals = PlayerPrefs.GetInt("TotalGoals", 0);
         playerData.NickName = PlayerPrefs.GetString("Nick", GetData().NickName);
-        playerData.AvatarPath = Path.Combine(Application.persistentDataPath, "avatar.png");
         playerData.CurrentSkinName = PlayerPrefs.GetString("CurrentSkin", "DefSkin");
         playerData.Playtime = PlaytimeTracker.Instance.GetSecondsPlaytime();
         playerData.TotalMoney = moneyHandler.GetTotalMoney();
@@ -77,14 +76,58 @@ public class SaveManager : MonoBehaviour
         playerData.XpToNextLevel = PlayerPrefs.GetInt("XpToNextLevel", 100);;
         playerData.Goals = 0;
         playerData.NickName = "Ник";
-        playerData.AvatarPath = Path.Combine(Application.persistentDataPath, "avatar.png");
         playerData.CurrentSkinName = PlayerPrefs.GetString("CurrentSkin", "DefSkin");
         playerData.Playtime = 0;
-        playerData.TotalMoney = PlayerPrefs.GetInt("Money", 0);;
-        playerData.TotalXP = PlayerPrefs.GetInt("CurrentXp", 0);;
+        playerData.TotalMoney = PlayerPrefs.GetInt("Money", 0);
+        playerData.TotalXP = PlayerPrefs.GetInt("CurrentXp", 0);
 
+        int achievementsCount = achievementsHandler.GetCountOfAchievements();
+
+        playerData.AchievementsIds = new string[achievementsCount];
+        playerData.AchievementsProgress = new int[achievementsCount];
+
+        for(int i = 0; i < achievementsCount; i++)
+        {
+            string id = achievementsHandler.GetStringId(i);
+            PlayerPrefs.SetInt(id + "_unlocked", 0); 
+            playerData.AchievementsIds[i] = id;
+            playerData.AchievementsProgress[i] = 0;
+        }
+
+        PlayerPrefs.Save();
         string json = JsonUtility.ToJson(playerData);
         File.WriteAllText(Application.persistentDataPath + "/save.json", json);
         Debug.Log("Default data Saved!");
+    }
+
+    public PlayerData GetDefaultData()
+    {
+        PlayerData playerData = new PlayerData();
+        playerData.Money = PlayerPrefs.GetInt("Money", 0);
+        playerData.XP = PlayerPrefs.GetInt("CurrentXp", 0);
+        playerData.XpLevel = PlayerPrefs.GetInt("XpLevel", 1);;
+        playerData.XpToNextLevel = PlayerPrefs.GetInt("XpToNextLevel", 100);;
+        playerData.Goals = 0;
+        playerData.NickName = "Ник";
+        playerData.CurrentSkinName = PlayerPrefs.GetString("CurrentSkin", "DefSkin");
+        playerData.Playtime = 0;
+        playerData.TotalMoney = PlayerPrefs.GetInt("Money", 0);
+        playerData.TotalXP = PlayerPrefs.GetInt("CurrentXp", 0);
+
+        int achievementsCount = achievementsHandler.GetCountOfAchievements();
+
+        playerData.AchievementsIds = new string[achievementsCount];
+        playerData.AchievementsProgress = new int[achievementsCount];
+
+        for(int i = 0; i < achievementsCount; i++)
+        {
+            string id = achievementsHandler.GetStringId(i);
+            PlayerPrefs.SetInt(id + "_unlocked", 0); 
+            playerData.AchievementsIds[i] = id;
+            playerData.AchievementsProgress[i] = 0;
+        }
+
+        PlayerPrefs.Save();
+        return playerData;
     }
 }

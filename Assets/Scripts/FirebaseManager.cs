@@ -20,6 +20,7 @@ public class FirebaseManager : MonoBehaviour
     public StatusTextEvent statusTextEvent;
     public IsServerProcessEvent isServerProcessEvent;
     public DataLoadFromCloudEvent dataLoadFromCloudEvent;
+    public SaveManager saveManager;
 
     // Вспомогательные классы для отправки и получения JSON-данных
     [System.Serializable]
@@ -50,6 +51,7 @@ public class FirebaseManager : MonoBehaviour
 
     void Start()
     {
+        DontDestroyOnLoad(gameObject);
         if (Application.isEditor)
         {
             Debug.Log("⚠️ Запущено в редакторе Unity. Симулируем получение токена...");
@@ -131,6 +133,8 @@ public class FirebaseManager : MonoBehaviour
         if (!File.Exists(saveFilePath))
         {
             Debug.LogError("❌ Локальный файл сохранения не найден!");
+            statusTextEvent.Invoke("Локальный файл сохранения не найден!");
+            isServerProcessEvent.Invoke(false);
             return;
         }
 
@@ -229,7 +233,8 @@ public class FirebaseManager : MonoBehaviour
 
         string jsonPayload = JsonUtility.ToJson(data);
 
-        UnityWebRequest www = new UnityWebRequest(url, "POST");
+        UnityWebRequest www = UnityWebRequest.Put(url, jsonPayload);
+        www.method = "POST"; 
         byte[] bodyRaw = System.Text.Encoding.UTF8.GetBytes(jsonPayload);
         www.uploadHandler = new UploadHandlerRaw(bodyRaw);
         www.downloadHandler = new DownloadHandlerBuffer();
@@ -239,6 +244,7 @@ public class FirebaseManager : MonoBehaviour
 
         if (www.result != UnityWebRequest.Result.Success)
         {
+            Debug.LogWarning($"HTTP Код ошибки: {www.responseCode}");
             HandleServerError(www.downloadHandler.text);
         }
         else
@@ -253,18 +259,92 @@ public class FirebaseManager : MonoBehaviour
             }
             else if (actionType == "load")
             {
-                // Сохраняем полученный JSON из облака в локальный файл телефона
+                
+                // 1. Сохраняем полученный JSON в файл прогресса
                 string saveFilePath = Path.Combine(Application.persistentDataPath, "save.json");
                 File.WriteAllText(saveFilePath, res.game_data);
-                PlayerData playerData = JsonUtility.FromJson<PlayerData>(res.game_data);
                 
+                // 2. Парсим полученные данные, чтобы вытащить аватарку
+                PlayerData loadedProgress;
+
+                if(res.game_data == "{}")
+                {
+                    Debug.LogWarning("⚠️ res.game_data равно ничему!");
+                    statusTextEvent.Invoke("Данные на сервере равны ничему!");
+                    yield return new WaitForSeconds(1.0f);
+                    statusTextEvent.Invoke("Генерируем стандартные данные...");
+                    yield return new WaitForSeconds(1.0f);
+                    loadedProgress = saveManager.GetDefaultData();
+                } else
+                {
+                    loadedProgress = JsonUtility.FromJson<PlayerData>(res.game_data);
+                }
+
+                if (loadedProgress != null && !string.IsNullOrEmpty(loadedProgress.avatarBase64))
+                {
+                    // Превращаем строку Base64 обратно в байты картинки
+                    byte[] avatarBytes = System.Convert.FromBase64String(loadedProgress.avatarBase64);
+                    
+                    // Сохраняем на телефон как файл avatar.png (игра прочитает его как обычно)
+                    string avatarPath = Path.Combine(Application.persistentDataPath, "avatar.png");
+                    File.WriteAllBytes(avatarPath, avatarBytes);
+                    
+                    Debug.Log("📸 Аватарка успешно скачана из облака и сохранена на устройство!");
+                }
+
                 Debug.Log("✅ Прогресс успешно скачан из облака и перезаписан на телефоне!");
                 statusTextEvent.Invoke("Прогресс успешно скачан из облака и перезаписан на телефоне!");
+                dataLoadFromCloudEvent.Invoke(loadedProgress);
                 isServerProcessEvent.Invoke(false);
-                dataLoadFromCloudEvent.Invoke(playerData);
-                yield return new WaitForSeconds(1.0f);
-                SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+                yield return new WaitForSeconds(0.7f);
+                statusTextEvent.Invoke("Перезагружаем игру...");
+                yield return new WaitForSeconds(0.5f);
+                int currentSceneIndex = SceneManager.GetActiveScene().buildIndex;
+                SceneManager.LoadSceneAsync(currentSceneIndex);
             }
+        }
+    }
+
+    public void DeleteAccount(string inputUsername, string inputPassword)
+    {
+        StartCoroutine(SendDeleteRequest(inputUsername, inputPassword));
+    }
+
+    IEnumerator SendDeleteRequest(string user, string pass)
+    {
+        statusTextEvent.Invoke("Удаление аккаунта...");
+        isServerProcessEvent.Invoke(true);
+        
+        string url = "https://airclashserver.onrender.com/deleteAccount";
+
+        AuthData data = new AuthData();
+        data.username = user;
+        data.password = pass;
+
+        string jsonPayload = JsonUtility.ToJson(data);
+
+        UnityWebRequest www = new UnityWebRequest(url, "POST");
+        byte[] bodyRaw = System.Text.Encoding.UTF8.GetBytes(jsonPayload);
+        www.uploadHandler = new UploadHandlerRaw(bodyRaw);
+        www.downloadHandler = new DownloadHandlerBuffer();
+        www.SetRequestHeader("Content-Type", "application/json");
+
+        yield return www.SendWebRequest();
+
+        if (www.result != UnityWebRequest.Result.Success)
+        {
+            HandleServerError(www.downloadHandler.text);
+            isServerProcessEvent.Invoke(false);
+        }
+        else
+        {
+            ServerResponse res = JsonUtility.FromJson<ServerResponse>(www.downloadHandler.text);
+            Debug.Log($"🔥 Аккаунт полностью удалён: {res.message}");
+            statusTextEvent.Invoke("Ваш аккаунт успешно удалён с серверов.");
+
+            isServerProcessEvent.Invoke(false);
+            
+            yield return new WaitForSeconds(1.5f);
         }
     }
 

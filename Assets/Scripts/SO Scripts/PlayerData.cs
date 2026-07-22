@@ -6,7 +6,6 @@ using System.Collections.Generic;
 public class PlayerData
 {
     public string NickName;
-    public string AvatarPath;
     public int Money;
     public int TotalMoney;
     public int XP;

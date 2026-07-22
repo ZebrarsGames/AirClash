@@ -1458,7 +1458,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 153.66, y: -47.41}
+  m_AnchoredPosition: {x: 153.66003, y: -47.410004}
   m_SizeDelta: {x: 279.65, y: 70.64}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &267363729
@@ -2495,6 +2495,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SaveManager
   xpHandler: {fileID: 1740135151}
+  achievementsHandler: {fileID: 1636014922}
   moneyHandler: {fileID: 1342946019}
 --- !u!4 &576726588
 Transform:

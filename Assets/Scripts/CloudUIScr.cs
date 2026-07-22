@@ -1,6 +1,7 @@
 using UnityEngine;
 using TMPro;
 using UnityEngine.UI;
+using DG.Tweening;
 
 public class CloudUIScr : MonoBehaviour
 {
@@ -13,6 +14,14 @@ public class CloudUIScr : MonoBehaviour
 
     [Header("Buttons")]
     [SerializeField] private Button[] buttons;
+
+    [Header("Panels")]
+    [SerializeField] private GameObject surePanel;
+    [SerializeField] private GameObject cloudPanel;
+
+    [Header("Audio")]
+    [SerializeField] private AudioSource audioSource;
+    [SerializeField] private AudioClip sureSound;
 
     [Header("Scripts")]
     [SerializeField] private QuestsHandler questsHandler;
@@ -53,31 +62,61 @@ public class CloudUIScr : MonoBehaviour
 
     public void SetPlayerData(PlayerData playerData)
     {
-        SetMoneyQuests(playerData.TotalMoney);
-        SetXpQuests(playerData.XP);
-        SetGoalQuests(playerData.Goals);
-        PlayerPrefs.SetString("Nick", usernameInput.text);
-        PlayerPrefs.SetInt("TotalGoals", playerData.Goals);
-        PlayerPrefs.SetString("CurrentSkin", playerData.CurrentSkinName);
-        moneyHandler.SetMoney(playerData.Money);
-        moneyHandler.SetTotalMoney(playerData.TotalMoney);
-        xpHandler.SetLevel(playerData.XpLevel);
-        xpHandler.SetTotalXp(playerData.TotalXP);
-        xpHandler.SetXp(playerData.XP);
-        xpHandler.SetXpToNextLevel(playerData.XpToNextLevel);
-        PlaytimeTracker.Instance.SetSecondsPlaytime(playerData.Playtime);
-
-        int achievementsCount = achievementsHandler.GetCountOfAchievements();
-        for(int i = 0; i < achievementsCount; i++)
+        if(playerData != null)
         {
-            string id = achievementsHandler.GetStringId(i);
-            achievementsHandler.SetProgress(id, playerData.AchievementsProgress[i]);
+            SetMoneyQuests(playerData.TotalMoney);
+            SetXpQuests(playerData.XP);
+            SetGoalQuests(playerData.Goals);
+            PlayerPrefs.SetString("Nick", usernameInput.text);
+            PlayerPrefs.SetInt("TotalGoals", playerData.Goals);
+            PlayerPrefs.SetString("CurrentSkin", playerData.CurrentSkinName);
+            moneyHandler.SetMoney(playerData.Money);
+            moneyHandler.SetTotalMoney(playerData.TotalMoney);
+            xpHandler.SetLevel(playerData.XpLevel);
+            xpHandler.SetTotalXp(playerData.TotalXP);
+            xpHandler.SetXp(playerData.XP);
+            xpHandler.SetXpToNextLevel(playerData.XpToNextLevel);
+            PlaytimeTracker.Instance.SetSecondsPlaytime(playerData.Playtime);
+
+            int achievementsCount = achievementsHandler.GetCountOfAchievements();
+            for(int i = 0; i < achievementsCount; i++)
+            {
+                string id = achievementsHandler.GetStringId(i);
+                achievementsHandler.SetProgress(id, playerData.AchievementsProgress[i]);
+            }
+            PlayerPrefs.Save();
+            saveManager.SaveData();
+        } else
+        {
+            saveManager.SaveDefaultData();
         }
-        PlayerPrefs.Save();
-        saveManager.SaveData();
     }
 
-    public void SetMoneyQuests(int amount)
+    public void ShowSurePanel()
+    {
+        audioSource.PlayOneShot(sureSound);
+        var rect = surePanel.GetComponent<RectTransform>();
+        rect.localScale = Vector3.zero;
+        surePanel.SetActive(true);
+        rect.DOScale(Vector3.one, 0.2f).SetEase(Ease.OutBack);
+    }
+
+    public void NoSurePanel()
+    {
+        var rect = surePanel.GetComponent<RectTransform>();
+        rect.DOScale(Vector3.zero, 0.2f).SetEase(Ease.InBack).OnComplete(() => surePanel.SetActive(false));
+        rect.localScale = Vector3.one;
+    }
+
+    public void YesSurePanel()
+    {
+        firebaseManager.DeleteAccount(usernameInput.text, passwordInput.text);
+        var rect = surePanel.GetComponent<RectTransform>();
+        rect.DOScale(Vector3.zero, 0.2f).SetEase(Ease.InBack).OnComplete(() => surePanel.SetActive(false));
+        rect.localScale = Vector3.one;
+    }
+
+    private void SetMoneyQuests(int amount)
     {
         questsHandler.SetQuestProgress("money10", amount);
         questsHandler.SetQuestProgress("money50", amount);
