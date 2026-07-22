@@ -20,6 +20,7 @@ public class MainMenu : MonoBehaviour
     [SerializeField] private GameObject dailyQuestPanel;
     [SerializeField] private GameObject profilePanel;
     [SerializeField] private GameObject editProfilePanel;
+    [SerializeField] private GameObject cloudPanel;
     [Header("Audio")]
     [SerializeField] private AudioSource audioSource;
     [SerializeField] private AudioClip menuMusic;
@@ -237,7 +238,13 @@ public class MainMenu : MonoBehaviour
     public void SwithcToProfilePanel()
     {
         editProfilePanel.SetActive(false);
+        cloudPanel.SetActive(false);
         profilePanel.SetActive(true);
+    }
+    public void SwithcToCloudPanel()
+    {
+        profilePanel.SetActive(false);
+        cloudPanel.SetActive(true);
     }
     public void OpenDailyQuestPanel()
     {
