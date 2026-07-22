@@ -246,6 +246,8 @@ public class FirebaseManager : MonoBehaviour
         {
             Debug.LogWarning($"HTTP Код ошибки: {www.responseCode}");
             HandleServerError(www.downloadHandler.text);
+            statusTextEvent.Invoke("Ошибка синхронизации! Проверьте данные.");
+            isServerProcessEvent.Invoke(false);
         }
         else
         {
@@ -300,7 +302,7 @@ public class FirebaseManager : MonoBehaviour
                 statusTextEvent.Invoke("Перезагружаем игру...");
                 yield return new WaitForSeconds(0.5f);
                 int currentSceneIndex = SceneManager.GetActiveScene().buildIndex;
-                SceneManager.LoadSceneAsync(currentSceneIndex);
+                SceneManager.LoadScene(currentSceneIndex);
             }
         }
     }
