@@ -47,6 +47,16 @@ public class CloudUIScr : MonoBehaviour
         firebaseManager.LoadProgress(usernameInput.text, passwordInput.text);
     }
 
+    public void OnInputField()
+    {
+        cloudPanel.GetComponent<RectTransform>().DOLocalMoveY(228, 0.3f).SetEase(Ease.OutSine);
+    }
+
+    public void OnInputFieldEnd()
+    {
+        cloudPanel.GetComponent<RectTransform>().DOLocalMoveY(0, 0.3f).SetEase(Ease.OutSine);
+    }
+
     public void SetStatusText(string status)
     {
         statusText.text = "Статус: " + status;
