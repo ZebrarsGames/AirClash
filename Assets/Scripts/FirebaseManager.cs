@@ -87,7 +87,7 @@ public class FirebaseManager : MonoBehaviour
     {
         Debug.Log($"[Android] Токен устройства получен: {token.Token}");
         lastSavedToken = token.Token;
-        StartCoroutine(SendTokenToServer(SystemInfo.deviceUniqueIdentifier, token.Token));
+        // StartCoroutine(SendTokenToServer(SystemInfo.deviceUniqueIdentifier, token.Token));
     }
 
     IEnumerator SendTokenToServer(string deviceId, string token)
@@ -229,7 +229,7 @@ public class FirebaseManager : MonoBehaviour
             {
                 statusTextEvent.Invoke($"Авторизация: {res.message}");
             }
-            
+
             isServerProcessEvent.Invoke(false);
         }
     }
