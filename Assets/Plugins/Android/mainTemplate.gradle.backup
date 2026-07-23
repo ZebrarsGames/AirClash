@@ -73,8 +73,8 @@ subprojects {
             project.android {
                 if (defaultConfig.hasProperty("targetSdk")) {
                     defaultConfig.targetSdk = 34
-                } else if (defaultConfig.hasProperty("targetSdk")) {
-                    defaultConfig.targetSdk = 34
+                } else if (defaultConfig.hasProperty("targetSdkVersion")) {
+                    defaultConfig.targetSdkVersion = 34
                 }
             }
         }
