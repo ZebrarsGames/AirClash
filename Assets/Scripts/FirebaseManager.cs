@@ -47,6 +47,7 @@ public class FirebaseManager : MonoBehaviour
         public string status;
         public string message;
         public string game_data;
+        public string action; 
     }
 
     void Start()
@@ -193,7 +194,7 @@ public class FirebaseManager : MonoBehaviour
         AuthData data = new AuthData();
         data.username = user;
         data.password = pass;
-        data.fcm_token = lastSavedToken; // Передаем токен пушей, чтобы связать с аккаунтом
+        data.fcm_token = lastSavedToken;
         data.timezone_offset = (int)System.TimeZoneInfo.Local.GetUtcOffset(System.DateTime.Now).TotalMinutes;
 
         string jsonPayload = JsonUtility.ToJson(data);
@@ -213,8 +214,22 @@ public class FirebaseManager : MonoBehaviour
         else
         {
             ServerResponse res = JsonUtility.FromJson<ServerResponse>(www.downloadHandler.text);
-            Debug.Log($"✅ Авторизация: {res.message}");
-            statusTextEvent.Invoke($"Авторизация: {res.message}");
+
+            if (res.action == "register")
+            {
+                Debug.Log("🎉 Аккаунт успешно создан!");
+                statusTextEvent.Invoke("Аккаунт успешно создан!");
+            }
+            else if (res.action == "login")
+            {
+                Debug.Log("🔓 Успешный вход в аккаунт!");
+                statusTextEvent.Invoke($"Добро пожаловать, {user}!");
+            }
+            else
+            {
+                statusTextEvent.Invoke($"Авторизация: {res.message}");
+            }
+            
             isServerProcessEvent.Invoke(false);
         }
     }
