@@ -239,6 +239,7 @@ public class DailyQuestHandler : MonoBehaviour
         {
             GenerateNewQuests();
             generateNewQuestsEvent.Invoke();
+            nextDayEvent.Invoke();
         }
 
         DateTime now = DateTime.Now;

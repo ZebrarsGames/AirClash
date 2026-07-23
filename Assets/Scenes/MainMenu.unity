@@ -16153,6 +16153,9 @@ MonoBehaviour:
   - {fileID: 11400000, guid: ad66d910441abf043ba7986bfc02ad99, type: 2}
   moneyHandler: {fileID: 1114898952}
   xpHandler: {fileID: 695791783}
+  questsHandler: {fileID: 140701919}
+  dailyQuestHandler: {fileID: 1134384870}
+  achievementsHandler: {fileID: 180572474}
   maxDays: 7
   awardsPanel: {fileID: 187921912}
 --- !u!4 &494791745
