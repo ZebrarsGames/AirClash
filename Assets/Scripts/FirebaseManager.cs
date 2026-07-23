@@ -246,7 +246,7 @@ public class FirebaseManager : MonoBehaviour
         {
             Debug.LogWarning($"HTTP Код ошибки: {www.responseCode}");
             HandleServerError(www.downloadHandler.text);
-            statusTextEvent.Invoke("Ошибка синхронизации! Проверьте данные.");
+            statusTextEvent.Invoke("Ошибка синхронизации! Проверьте интернет." + $"(HTTP Код ошибки: {www.responseCode})");
             isServerProcessEvent.Invoke(false);
         }
         else
