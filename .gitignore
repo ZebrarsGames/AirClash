@@ -101,4 +101,6 @@ InitTestScene*.unity*
 
 /Assets/EosApiKey.asset
 /Assets/EosApiKey.asset.meta
+/Assets/Scripts/NetworkScripts/EOSBootstrap.cs
+/Assets/Scripts/NetworkScripts/EOSBootstrap.cs.meta
 /Assets/StreamingAssets
