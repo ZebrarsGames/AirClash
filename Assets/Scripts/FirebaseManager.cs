@@ -14,15 +14,15 @@ public class StatusTextEvent : UnityEvent<string> { }
 public class IsServerProcessEvent : UnityEvent<bool> { }
 [System.Serializable]
 public class DataLoadFromCloudEvent : UnityEvent<PlayerData> { }
+
 public class FirebaseManager : MonoBehaviour
 {
-    private string lastSavedToken = ""; // Переменная для хранения токена
+    private string lastSavedToken = "";
     public StatusTextEvent statusTextEvent;
     public IsServerProcessEvent isServerProcessEvent;
     public DataLoadFromCloudEvent dataLoadFromCloudEvent;
     public SaveManager saveManager;
 
-    // Вспомогательные классы для отправки и получения JSON-данных
     [System.Serializable]
     public class AuthData
     {
@@ -39,6 +39,7 @@ public class FirebaseManager : MonoBehaviour
         public string password;
         public string action;
         public string game_data;
+        public int elo;
     }
 
     [System.Serializable]
@@ -48,12 +49,13 @@ public class FirebaseManager : MonoBehaviour
         public string message;
         public string game_data;
         public string action; 
+        public int elo;
     }
 
     void Start()
     {
         DontDestroyOnLoad(gameObject);
-        if (Application.isEditor)
+        if(Application.isEditor)
         {
             Debug.Log("⚠️ Запущено в редакторе Unity. Симулируем получение токена...");
             lastSavedToken = "TEST_EDITOR_TOKEN_12345";
@@ -62,13 +64,13 @@ public class FirebaseManager : MonoBehaviour
         }
         else 
         {
-            if (!Permission.HasUserAuthorizedPermission("android.permission.POST_NOTIFICATIONS"))
+            if(!Permission.HasUserAuthorizedPermission("android.permission.POST_NOTIFICATIONS"))
             {
                 Permission.RequestUserPermission("android.permission.POST_NOTIFICATIONS");
             }
             FirebaseApp.CheckAndFixDependenciesAsync().ContinueWith(task => {
                 var dependencyStatus = task.Result;
-                if (dependencyStatus == DependencyStatus.Available) {
+                if(dependencyStatus == DependencyStatus.Available) {
                     InitializeFirebase();
                 } else {
                     Debug.LogError($"Не удалось запустить Firebase: {dependencyStatus}");
@@ -87,7 +89,6 @@ public class FirebaseManager : MonoBehaviour
     {
         Debug.Log($"[Android] Токен устройства получен: {token.Token}");
         lastSavedToken = token.Token;
-        // StartCoroutine(SendTokenToServer(SystemInfo.deviceUniqueIdentifier, token.Token));
     }
 
     IEnumerator SendTokenToServer(string deviceId, string token)
@@ -103,7 +104,7 @@ public class FirebaseManager : MonoBehaviour
 
         yield return www.SendWebRequest();
 
-        if (www.result != UnityWebRequest.Result.Success) {
+        if(www.result != UnityWebRequest.Result.Success) {
             Debug.LogError($"❌ Ошибка отправки токена: {www.error}");
         } else {
             Debug.Log("✅ Успех! Токен привязан к устройству.");
@@ -115,23 +116,17 @@ public class FirebaseManager : MonoBehaviour
         return $"{{\"device_id\":\"{deviceId}\",\"fcm_token\":\"{token}\",\"timezone_offset\":{(int)System.TimeZoneInfo.Local.GetUtcOffset(System.DateTime.Now).TotalMinutes}}}";
     }
 
-    // =========================================================================
-    // [НОВЫЕ ПУБЛИЧНЫЕ МЕТОДЫ] Вызывайте их из UI (кнопки или другие менеджеры)
-    // =========================================================================
-
-    /// Вызывать при нажатии на кнопку "Войти / Регистрация"
     public void AccountAuth(string inputUsername, string inputPassword)
     {
         StartCoroutine(SendAuthRequest(inputUsername, inputPassword));
     }
 
-    /// Вызывать при нажатии на кнопку "SAVE" (Сохранение прогресса в облако)
     public void SaveProgress(string inputUsername, string inputPassword)
     {
         string saveFilePath = Path.Combine(Application.persistentDataPath, "save.json");
         string avatarPath = Path.Combine(Application.persistentDataPath, "avatar.png");
 
-        if (!File.Exists(saveFilePath))
+        if(!File.Exists(saveFilePath))
         {
             Debug.LogError("❌ Локальный файл сохранения не найден!");
             statusTextEvent.Invoke("Локальный файл сохранения не найден!");
@@ -139,51 +134,40 @@ public class FirebaseManager : MonoBehaviour
             return;
         }
 
-        // 1. Читаем ваш текущий JSON сохранения
         string localJsonData = File.ReadAllText(saveFilePath);
         
-        // Десериализуем его в объект
         PlayerData progress = JsonUtility.FromJson<PlayerData>(localJsonData);
 
-        // 2. Если файл аватарки существует, обрабатываем его
-        if (File.Exists(avatarPath))
+        if(File.Exists(avatarPath))
         {
             byte[] rawPngBytes = File.ReadAllBytes(avatarPath);
 
-            // Создаем временную текстуру для конвертации
             Texture2D tex = new Texture2D(2, 2);
-            if (tex.LoadImage(rawPngBytes))
+            if(tex.LoadImage(rawPngBytes))
             {
-                // СЖИМАЕМ В JPEG: 75 — это идеальный баланс веса и качества (от 1 до 100)
                 byte[] compressedJpgBytes = tex.EncodeToJPG(75);
                 
-                // Конвертируем байты картинки в безопасную строку Base64
                 progress.avatarBase64 = System.Convert.ToBase64String(compressedJpgBytes);
                 Debug.Log($"📸 Аватарка сжата в JPG. Размер: {compressedJpgBytes.Length / 1024} КБ");
             }
-            Destroy(tex); // Очищаем память
+            Destroy(tex);
         }
         else
         {
-            progress.avatarBase64 = ""; // Если аватарки нет
+            progress.avatarBase64 = "";
         }
 
-        // 3. Запаковываем обновленный объект с аватаркой обратно в JSON строку
         string finalJsonToSend = JsonUtility.ToJson(progress);
 
-        // Отправляем на сервер
-        StartCoroutine(SendSyncRequest(inputUsername, inputPassword, "save", finalJsonToSend));
+        int currentElo = progress != null ? progress.elo : 500;
+
+        StartCoroutine(SendSyncRequest(inputUsername, inputPassword, "save", finalJsonToSend, currentElo));
     }
 
-    /// Вызывать при нажатии на кнопку "LOAD" (Загрузка прогресса из облака)
     public void LoadProgress(string inputUsername, string inputPassword)
     {
-        StartCoroutine(SendSyncRequest(inputUsername, inputPassword, "load", ""));
+        StartCoroutine(SendSyncRequest(inputUsername, inputPassword, "load", "", 0));
     }
-
-    // =========================================================================
-    // КОРОУТИНЫ ДЛЯ СЕТЕВЫХ ЗАПРОСОВ К СЕРВЕРУ RENDER
-    // =========================================================================
 
     IEnumerator SendAuthRequest(string user, string pass)
     {
@@ -207,7 +191,7 @@ public class FirebaseManager : MonoBehaviour
 
         yield return www.SendWebRequest();
 
-        if (www.result != UnityWebRequest.Result.Success)
+        if(www.result != UnityWebRequest.Result.Success)
         {
             HandleServerError(www.downloadHandler.text);
         }
@@ -215,12 +199,12 @@ public class FirebaseManager : MonoBehaviour
         {
             ServerResponse res = JsonUtility.FromJson<ServerResponse>(www.downloadHandler.text);
 
-            if (res.action == "register")
+            if(res.action == "register")
             {
                 Debug.Log("🎉 Аккаунт успешно создан!");
                 statusTextEvent.Invoke("Аккаунт успешно создан!");
             }
-            else if (res.action == "login")
+            else if(res.action == "login")
             {
                 Debug.Log("🔓 Успешный вход в аккаунт!");
                 statusTextEvent.Invoke($"Добро пожаловать, {user}!");
@@ -234,7 +218,7 @@ public class FirebaseManager : MonoBehaviour
         }
     }
 
-    IEnumerator SendSyncRequest(string user, string pass, string actionType, string gameDataJson)
+    IEnumerator SendSyncRequest(string user, string pass, string actionType, string gameDataJson, int eloValue)
     {
         statusTextEvent.Invoke("Синхронизируемся...");
         isServerProcessEvent.Invoke(true);
@@ -245,6 +229,7 @@ public class FirebaseManager : MonoBehaviour
         data.password = pass;
         data.action = actionType;
         data.game_data = gameDataJson;
+        data.elo = eloValue;
 
         string jsonPayload = JsonUtility.ToJson(data);
 
@@ -257,7 +242,7 @@ public class FirebaseManager : MonoBehaviour
 
         yield return www.SendWebRequest();
 
-        if (www.result != UnityWebRequest.Result.Success)
+        if(www.result != UnityWebRequest.Result.Success)
         {
             Debug.LogWarning($"HTTP Код ошибки: {www.responseCode}");
             HandleServerError(www.downloadHandler.text);
@@ -268,20 +253,14 @@ public class FirebaseManager : MonoBehaviour
         {
             ServerResponse res = JsonUtility.FromJson<ServerResponse>(www.downloadHandler.text);
             
-            if (actionType == "save")
+            if(actionType == "save")
             {
                 Debug.Log("✅ Прогресс успешно загружен на сервер!");
                 statusTextEvent.Invoke("Прогресс успешно загружен на сервер!");
                 isServerProcessEvent.Invoke(false);
             }
-            else if (actionType == "load")
+            else if(actionType == "load")
             {
-                
-                // 1. Сохраняем полученный JSON в файл прогресса
-                string saveFilePath = Path.Combine(Application.persistentDataPath, "save.json");
-                File.WriteAllText(saveFilePath, res.game_data);
-                
-                // 2. Парсим полученные данные, чтобы вытащить аватарку
                 PlayerData loadedProgress;
 
                 if(res.game_data == "{}")
@@ -297,19 +276,26 @@ public class FirebaseManager : MonoBehaviour
                     loadedProgress = JsonUtility.FromJson<PlayerData>(res.game_data);
                 }
 
-                if (loadedProgress != null && !string.IsNullOrEmpty(loadedProgress.avatarBase64))
+                if(loadedProgress != null)
                 {
-                    // Превращаем строку Base64 обратно в байты картинки
+                    loadedProgress.elo = res.elo;
+                }
+
+                string updatedJson = JsonUtility.ToJson(loadedProgress);
+                string saveFilePath = Path.Combine(Application.persistentDataPath, "save.json");
+                File.WriteAllText(saveFilePath, updatedJson);
+
+                if(loadedProgress != null && !string.IsNullOrEmpty(loadedProgress.avatarBase64))
+                {
                     byte[] avatarBytes = System.Convert.FromBase64String(loadedProgress.avatarBase64);
                     
-                    // Сохраняем на телефон как файл avatar.png (игра прочитает его как обычно)
                     string avatarPath = Path.Combine(Application.persistentDataPath, "avatar.png");
                     File.WriteAllBytes(avatarPath, avatarBytes);
                     
                     Debug.Log("📸 Аватарка успешно скачана из облака и сохранена на устройство!");
                 }
 
-                Debug.Log("✅ Прогресс успешно скачан из облака и перезаписан на телефоне!");
+                Debug.Log($"✅ Прогресс успешно скачан из облака! ELO: {res.elo}");
                 statusTextEvent.Invoke("Прогресс успешно скачан из облака и перезаписан на телефоне!");
                 dataLoadFromCloudEvent.Invoke(loadedProgress);
                 isServerProcessEvent.Invoke(false);
@@ -348,7 +334,7 @@ public class FirebaseManager : MonoBehaviour
 
         yield return www.SendWebRequest();
 
-        if (www.result != UnityWebRequest.Result.Success)
+        if(www.result != UnityWebRequest.Result.Success)
         {
             HandleServerError(www.downloadHandler.text);
             isServerProcessEvent.Invoke(false);

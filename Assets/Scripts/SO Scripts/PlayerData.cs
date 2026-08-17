@@ -19,4 +19,5 @@ public class PlayerData
     public string[] AllBuySkins;
     public int[] AchievementsProgress;
     public string avatarBase64; 
+    public int elo;
 }

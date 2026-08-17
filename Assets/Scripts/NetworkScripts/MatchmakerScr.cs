@@ -52,6 +52,20 @@ public class CancelSearchResponse
     public string status;
     public string message;
 }
+
+[System.Serializable]
+public class EloRequestData
+{
+    public string username;
+}
+
+[System.Serializable]
+public class EloResponseData
+{
+    public string status;
+    public string message;
+    public int elo;
+}
 #endregion
 
 public class MatchmakerScr : MonoBehaviour
@@ -59,8 +73,7 @@ public class MatchmakerScr : MonoBehaviour
     private const string BASE_URL = "https://airclashserver.onrender.com";
 
     [Header("Elo Settings")]
-    [SerializeField] private string eloKey = "Player_Elo";
-    [SerializeField] private int defaultElo = 1000;
+    [SerializeField] private int defaultElo = 500;
 
     [Header("Matchmaking Parameters")]
     [SerializeField] private int initialEloRange = 50;
@@ -79,7 +92,54 @@ public class MatchmakerScr : MonoBehaviour
 
     void Start()
     {
-        currentElo = PlayerPrefs.GetInt(eloKey, defaultElo);
+        string username = PlayerPrefs.GetString("Nick", "Ник"); 
+
+        if(string.IsNullOrEmpty(username))
+        {
+            Debug.LogWarning("Имя пользователя не найдено! Применяем стандартный ELO.");
+            currentElo = defaultElo;
+            return;
+        }
+
+        StartCoroutine(FetchEloFromServer(username));
+    }
+
+    public IEnumerator FetchEloFromServer(string username)
+    {
+        string url = "https://airclashserver.onrender.com/getElo";
+
+        EloRequestData requestData = new EloRequestData
+        {
+            username = username
+        };
+
+        string jsonPayload = JsonUtility.ToJson(requestData);
+
+        UnityWebRequest www = new UnityWebRequest(url, "POST");
+        byte[] bodyRaw = System.Text.Encoding.UTF8.GetBytes(jsonPayload);
+        www.uploadHandler = new UploadHandlerRaw(bodyRaw);
+        www.downloadHandler = new DownloadHandlerBuffer();
+        www.SetRequestHeader("Content-Type", "application/json");
+
+        yield return www.SendWebRequest();
+
+        if(www.result == UnityWebRequest.Result.Success)
+        {
+            EloResponseData res = JsonUtility.FromJson<EloResponseData>(www.downloadHandler.text);
+            if(res.status == "success")
+            {
+                currentElo = res.elo;
+                Debug.Log($"✅ Актуальный ELO для {username} успешно получен: {currentElo}");
+            }
+            else
+            {
+                Debug.LogError($"❌ Ошибка сервера: {res.message}");
+            }
+        }
+        else
+        {
+            Debug.LogError($"❌ Сетевая ошибка при запросе ELO: {www.error}");
+        }
     }
 
     public void OnOpponentJoinedHost()
