@@ -29,38 +29,34 @@ public class EOSMenuUI : MonoBehaviour
             yield return new WaitForSeconds(0.2f);
         }
 
-        currentEosId = EOSSDKComponent.LocalUserProductIdString;
-
-        if(string.IsNullOrEmpty(currentEosId) && EOSSDKComponent.LocalUserProductId != null)
+        while(EOSSDKComponent.LocalUserProductId == null || !EOSSDKComponent.LocalUserProductId.IsValid())
         {
-            currentEosId = EOSSDKComponent.LocalUserProductId.ToString();
+            yield return new WaitForSeconds(0.2f);
         }
 
+        currentEosId = EOSSDKComponent.LocalUserProductId.ToString();
+
         myIdText.text = "Мой EOS ID: " + currentEosId;
-        Debug.Log($"EOS ID: {currentEosId}");
+        Debug.Log($"[EOS Menu] Авторизация успешна. EOS ID: {currentEosId}");
     }
 
     public void StartHostGame()
     {
-        if(string.IsNullOrEmpty(currentEosId))
-        {
-            currentEosId = EOSSDKComponent.LocalUserProductIdString;
-        }
-
-        if(string.IsNullOrEmpty(currentEosId) || !EOSSDKComponent.Initialized)
+        if(EOSSDKComponent.LocalUserProductId == null || !EOSSDKComponent.LocalUserProductId.IsValid())
         {
             myIdText.text = "Подождите, идёт авторизация EOS...";
             Debug.LogWarning("Попытка создать комнату до завершения авторизации Epic!");
             return;
         }
 
+        currentEosId = EOSSDKComponent.LocalUserProductIdString;
         myIdText.text = "Создание комнаты...";
 
         roomManager.CreateRoom(currentEosId, 
         (roomId) =>
         {
             myIdText.text = "Код комнаты: " + roomId;
-            if(networkManager is MyNetworkManager customManager)
+            if (networkManager is MyNetworkManager customManager)
             {
                 customManager.SetCurrentRoomCode(roomId);
             }
@@ -105,5 +101,11 @@ public class EOSMenuUI : MonoBehaviour
             myIdText.text = "Комната не найдена: " + errorText;
             Debug.LogError($"Ошибка при поиске комнаты: {errorText}");
         });
+    }
+
+    public void OnMatchFound()
+    {
+        var group = uiPanel.GetComponent<CanvasGroup>();
+        group.DOFade(0, 1f).OnComplete(() => uiPanel.SetActive(false));
     }
 }

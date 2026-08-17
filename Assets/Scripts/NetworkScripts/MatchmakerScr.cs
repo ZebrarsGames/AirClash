@@ -1,13 +1,63 @@
+using System;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.Events;
-using Epic.OnlineServices;
-using Epic.OnlineServices.Lobby;
+using UnityEngine.Networking;
 using EpicTransport;
 using Mirror;
 
-public class MatchmakingManager : MonoBehaviour
+#region DTOs for Matchmaking
+[Serializable]
+public class CreateMMRoomRequest
 {
+    public string eos_id;
+    public int elo;
+}
+
+[Serializable]
+public class CreateMMRoomResponse
+{
+    public string status;
+    public string message;
+    public string host_eos_id;
+    public int elo;
+}
+
+[Serializable]
+public class FindOpponentRequest
+{
+    public string eos_id;
+    public int elo;
+    public int max_elo_diff;
+}
+
+[Serializable]
+public class FindOpponentResponse
+{
+    public string status; // "found" | "not_found" | "error"
+    public string host_eos_id;
+    public int host_elo;
+    public string message;
+}
+
+[Serializable]
+public class CancelSearchRequest
+{
+    public string eos_id;
+}
+
+[Serializable]
+public class CancelSearchResponse
+{
+    public string status;
+    public string message;
+}
+#endregion
+
+public class MatchmakerScr : MonoBehaviour
+{
+    private const string BASE_URL = "https://airclashserver.onrender.com";
+
     [Header("Elo Settings")]
     [SerializeField] private string eloKey = "Player_Elo";
     [SerializeField] private int defaultElo = 1000;
@@ -22,7 +72,7 @@ public class MatchmakingManager : MonoBehaviour
     private int currentRange;
     private Coroutine matchmakingCoroutine;
     private bool isSearching = false;
-    private LobbyInterface lobbyInterface;
+    private bool isHostCreated = false;
 
     public UnityEvent<int, int> OnSearchRangeUpdated; // (minElo, maxElo)
     public UnityEvent OnMatchFound;
@@ -30,39 +80,67 @@ public class MatchmakingManager : MonoBehaviour
     void Start()
     {
         currentElo = PlayerPrefs.GetInt(eloKey, defaultElo);
-        if(EOSBootstrap.PlatformHandle != null)
+    }
+
+    public void OnOpponentJoinedHost()
+    {
+        Debug.Log("[MatchmakerScr] Гость успешно подключился к нашему Хосту!");
+
+        isSearching = false;
+
+        if(matchmakingCoroutine != null) 
         {
-            lobbyInterface = EOSBootstrap.PlatformHandle.GetLobbyInterface();
-            Debug.Log("[Matchmaking] LobbyInterface готов к работе.");
+            StopCoroutine(matchmakingCoroutine);
+            matchmakingCoroutine = null;
         }
-        else
-        {
-            Debug.LogError("[Matchmaking] PlatformHandle равен null! Платформа не инициализирована.");
-        }
+
+        OnMatchFound?.Invoke();
     }
 
     public void StartMatchmaking()
     {
         if(isSearching) return;
 
+        string localEosId = GetLocalEosId();
+        if(string.IsNullOrEmpty(localEosId))
+        {
+            Debug.LogError("[MatchmakerScr] Ошибка: Нельзя начать поиск, игрок не авторизован в EOS!");
+            return;
+        }
+
         isSearching = true;
+        isHostCreated = false;
         currentRange = initialEloRange;
-        matchmakingCoroutine = StartCoroutine(SearchRoutine());
-        Debug.Log($"[Matchmaking] Поиск начат. Ваш Elo: {currentElo}");
+
+        matchmakingCoroutine = StartCoroutine(SearchRoutine(localEosId));
+        Debug.Log($"[MatchmakerScr] Поиск начат. Ваш Elo: {currentElo}");
     }
 
     public void CancelMatchmaking()
     {
-        if(!isSearching) return;
+        if(!isSearching && !isHostCreated) return;
 
         if(matchmakingCoroutine != null)
             StopCoroutine(matchmakingCoroutine);
 
         isSearching = false;
-        Debug.Log("[Matchmaking] Поиск отменен.");
+
+        string localEosId = GetLocalEosId();
+        if(!string.IsNullOrEmpty(localEosId))
+        {
+            StartCoroutine(CancelSearchRoutine(localEosId));
+        }
+
+        if(isHostCreated)
+        {
+            NetworkManager.singleton.StopHost();
+            isHostCreated = false;
+        }
+
+        Debug.Log("[MatchmakerScr] Поиск отменен.");
     }
 
-    private IEnumerator SearchRoutine()
+    private IEnumerator SearchRoutine(string localEosId)
     {
         while(isSearching)
         {
@@ -70,9 +148,23 @@ public class MatchmakingManager : MonoBehaviour
             int maxElo = currentElo + currentRange;
 
             OnSearchRangeUpdated?.Invoke(minElo, maxElo);
-            Debug.Log($"[Matchmaking] Ищем игрока с Elo от {minElo} до {maxElo} (Диапазон: ±{currentRange})");
+            Debug.Log($"[MatchmakerScr] Ищем соперника (Elo: {currentElo}, Допуск: ±{currentRange})...");
 
-            SearchMatch(minElo, maxElo);
+            yield return StartCoroutine(FindOpponentRoutine(localEosId, currentRange, (foundHostId) =>
+            {
+                if(!string.IsNullOrEmpty(foundHostId))
+                {
+                    Debug.Log($"[MatchmakerScr] Найден хост: {foundHostId}. Подключаемся...");
+                    OnOpponentFound(foundHostId);
+                }
+            }));
+
+            if(!isSearching) yield break;
+
+            if(!isHostCreated)
+            {
+                yield return StartCoroutine(CreateRoomRoutine(localEosId));
+            }
 
             yield return new WaitForSeconds(expandInterval);
 
@@ -83,92 +175,113 @@ public class MatchmakingManager : MonoBehaviour
         }
     }
 
-    public void CheckUserStatusBeforeSearch(ProductUserId puid)
+    private IEnumerator FindOpponentRoutine(string localEosId, int maxDiff, Action<string> onResult)
     {
-        var connectInterface = EOSBootstrap.PlatformHandle.GetConnectInterface();
-        
-        LoginStatus status = connectInterface.GetLoginStatus(puid);
-        Debug.Log($"[EOS Connect] Статус авторизации пользователя {puid}: {status}");
-        
-        // Если статус != LoginStatus.LoggedIn, вызывать LobbySearch.Find нельзя!
-    }
-
-    public void SearchMatch(int minElo, int maxElo)
-    {
-        if(lobbyInterface == null)
+        string url = BASE_URL + "/mm/findOpponent";
+        FindOpponentRequest requestData = new FindOpponentRequest
         {
-            Debug.LogError("[EOS] LobbyInterface не инициализирован!");
-            return;
-        }
-
-        CreateLobbySearchOptions createSearchOptions = new CreateLobbySearchOptions
-        {
-            MaxResults = 10
+            eos_id = localEosId,
+            elo = currentElo,
+            max_elo_diff = maxDiff
         };
 
-        Result result = lobbyInterface.CreateLobbySearch(ref createSearchOptions, out LobbySearch lobbySearch);
+        string json = JsonUtility.ToJson(requestData);
 
-        if(result != Result.Success || lobbySearch == null)
+        using(UnityWebRequest www = new UnityWebRequest(url, "POST"))
         {
-            Debug.LogError($"[EOS] Ошибка создания поиска: {result}");
-            return;
-        }
+            byte[] bodyRaw = System.Text.Encoding.UTF8.GetBytes(json);
+            www.uploadHandler = new UploadHandlerRaw(bodyRaw);
+            www.downloadHandler = new DownloadHandlerBuffer();
+            www.SetRequestHeader("Content-Type", "application/json");
 
-        LobbySearchSetParameterOptions minEloOptions = new LobbySearchSetParameterOptions
-        {
-            Parameter = new AttributeData
+            yield return www.SendWebRequest();
+
+            if(www.result == UnityWebRequest.Result.Success)
             {
-                Key = "PlayerElo",
-                Value = new AttributeDataValue { AsInt64 = minElo }
-            },
-            ComparisonOp = ComparisonOp.Greaterthanorequal
-        };
-        lobbySearch.SetParameter(ref minEloOptions);
+                FindOpponentResponse res = JsonUtility.FromJson<FindOpponentResponse>(www.downloadHandler.text);
 
-        LobbySearchSetParameterOptions maxEloOptions = new LobbySearchSetParameterOptions
-        {
-            Parameter = new AttributeData
-            {
-                Key = "PlayerElo",
-                Value = new AttributeDataValue { AsInt64 = maxElo }
-            },
-            ComparisonOp = ComparisonOp.Lessthanorequal
-        };
-        lobbySearch.SetParameter(ref maxEloOptions);
-
-        ProductUserId localUserId = ProductUserId.FromString(EOSSDKComponent.LocalUserAccountIdString);
-        if(localUserId == null || !localUserId.IsValid())
-        {
-            Debug.LogError($"[EOS] Ошибка: LocalUserId невалиден! PUID string: '{EOSSDKComponent.LocalUserProductIdString}'. Убедитесь, что прошли авторизацию Connect.");
-            return;
-        }
-        CheckUserStatusBeforeSearch(localUserId);
-        LobbySearchFindOptions findOptions = new LobbySearchFindOptions
-        {
-            LocalUserId = localUserId
-        };
-
-        lobbySearch.Find(ref findOptions, null, (ref LobbySearchFindCallbackInfo callbackInfo) =>
-        {
-            if(callbackInfo.ResultCode == Result.Success)
-            {
-                LobbySearchGetSearchResultCountOptions options = new LobbySearchGetSearchResultCountOptions();
-                uint searchResultCount = lobbySearch.GetSearchResultCount(ref options);
-                Debug.Log($"[EOS] Поиск завершен. Найдено лобби ({searchResultCount} штук)!");
+                if(res.status == "found")
+                {
+                    onResult?.Invoke(res.host_eos_id);
+                    yield break;
+                }
             }
             else
             {
-                Debug.LogWarning($"[EOS] Поиск не дал результатов: {callbackInfo.ResultCode}");
+                Debug.LogWarning($"[MatchmakerScr] Ошибка поиска комнат: {www.error}");
             }
-        });
+        }
+
+        onResult?.Invoke(null);
     }
 
-    public void OnOpponentFound(string matchConnectCode)
+    private IEnumerator CreateRoomRoutine(string localEosId)
     {
-        CancelMatchmaking();
+        string url = BASE_URL + "/mm/createRoom";
+        CreateMMRoomRequest requestData = new CreateMMRoomRequest
+        {
+            eos_id = localEosId,
+            elo = currentElo
+        };
+
+        string json = JsonUtility.ToJson(requestData);
+
+        using(UnityWebRequest www = new UnityWebRequest(url, "POST"))
+        {
+            byte[] bodyRaw = System.Text.Encoding.UTF8.GetBytes(json);
+            www.uploadHandler = new UploadHandlerRaw(bodyRaw);
+            www.downloadHandler = new DownloadHandlerBuffer();
+            www.SetRequestHeader("Content-Type", "application/json");
+
+            yield return www.SendWebRequest();
+
+            if(www.result == UnityWebRequest.Result.Success)
+            {
+                Debug.Log("[MatchmakerScr] Комната поиска создана. Запускаем Mirror Host в ожидании подключения...");
+                isHostCreated = true;
+                NetworkManager.singleton.StartHost();
+            }
+            else
+            {
+                Debug.LogError($"[MatchmakerScr] Ошибка создания комнаты поиска: {www.error}");
+            }
+        }
+    }
+
+    private IEnumerator CancelSearchRoutine(string localEosId)
+    {
+        string url = BASE_URL + "/mm/cancelSearch";
+        CancelSearchRequest requestData = new CancelSearchRequest { eos_id = localEosId };
+        string json = JsonUtility.ToJson(requestData);
+
+        using(UnityWebRequest www = new UnityWebRequest(url, "POST"))
+        {
+            byte[] bodyRaw = System.Text.Encoding.UTF8.GetBytes(json);
+            www.uploadHandler = new UploadHandlerRaw(bodyRaw);
+            www.downloadHandler = new DownloadHandlerBuffer();
+            www.SetRequestHeader("Content-Type", "application/json");
+
+            yield return www.SendWebRequest();
+        }
+    }
+
+    public void OnOpponentFound(string hostEosId)
+    {
+        isSearching = false;
+        if(matchmakingCoroutine != null) StopCoroutine(matchmakingCoroutine);
+
         OnMatchFound?.Invoke();
-        
-        NetworkManager.singleton.networkAddress = matchConnectCode;
+
+        NetworkManager.singleton.networkAddress = hostEosId;
         NetworkManager.singleton.StartClient();
+    }
+
+    private string GetLocalEosId()
+    {
+        if(EOSSDKComponent.LocalUserProductId != null && EOSSDKComponent.LocalUserProductId.IsValid())
+        {
+            return EOSSDKComponent.LocalUserProductId.ToString();
+        }
+        return null;
     }
 }

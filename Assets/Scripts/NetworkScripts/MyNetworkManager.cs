@@ -76,6 +76,22 @@ public class MyNetworkManager : NetworkManager
         DeleteRoomFromBackend();
     }
 
+    public override void OnServerConnect(NetworkConnectionToClient conn)
+    {
+        base.OnServerConnect(conn);
+
+        if(conn != NetworkServer.localConnection)
+        {
+            Debug.Log("[CustomNetworkManager] Гость подключился!");
+
+            MatchmakerScr matchmaker = FindAnyObjectByType<MatchmakerScr>();
+            if(matchmaker != null)
+            {
+                matchmaker.OnOpponentJoinedHost();
+            }
+        }
+    }
+
     private void DeleteRoomFromBackend()
     {
         if(!string.IsNullOrEmpty(currentRoomCode) && roomManager != null)
