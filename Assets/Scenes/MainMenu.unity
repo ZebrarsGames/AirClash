@@ -74503,7 +74503,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::MainMenu
   settingsPanel: {fileID: 718338716}
-  onlinePanel: {fileID: 0}
   botPanel: {fileID: 1439479958}
   mentionsPanel: {fileID: 1124770557}
   achievementsPanel: {fileID: 1229353364}

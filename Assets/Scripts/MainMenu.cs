@@ -46,10 +46,11 @@ public class MainMenu : MonoBehaviour
     [Header("Floats")]
     [SerializeField] private float rotationSpeed = 10f;
     [SerializeField] private float maxAngle = 6f;  
-    private RectTransform rectTransform;
+    private RectTransform _rectTransform;
     private string toScene;
     private string lastOpenMenu;
     private bool isHostDisconnect = false;
+    private Tweener _wobbleTweener;
 
     void Awake()
     {
@@ -68,7 +69,23 @@ public class MainMenu : MonoBehaviour
         isHostDisconnect = PlayerPrefs.GetInt("IsHostDisconnect", 0) != 0;
         audioSource.Play();
         Application.targetFrameRate = PlayerPrefs.GetInt("FPS", 60);
-        rectTransform = mainMenuText.GetComponent<RectTransform>();
+        if (mainMenuText == null)
+        {
+            enabled = false;
+            return;
+        }
+
+        _rectTransform = mainMenuText.rectTransform;
+
+        float duration = Mathf.PI / rotationSpeed;
+
+        _rectTransform.localRotation = Quaternion.Euler(0f, 0f, -maxAngle);
+
+        _wobbleTweener = _rectTransform.DOLocalRotate(new Vector3(0f, 0f, maxAngle), duration)
+            .SetLoops(-1, LoopType.Yoyo)
+            .SetEase(Ease.InOutSine)
+            .SetUpdate(UpdateType.Normal, true);
+
         moneyText.text = "Деньги " + moneyHandler.GetMoney(); 
         saveManager.SaveData();
         if(PlayerPrefs.GetInt("isAfterGame", 0) == 0)
@@ -93,10 +110,9 @@ public class MainMenu : MonoBehaviour
         }
     }
 
-    void Update()
+    private void OnDestroy()
     {
-        float angle = Mathf.Sin(Time.time * rotationSpeed) * maxAngle;
-        rectTransform.localRotation = Quaternion.Euler(0, 0, angle);
+        _wobbleTweener?.Kill();
     }
 
     public void PlayBots(string difficulty)

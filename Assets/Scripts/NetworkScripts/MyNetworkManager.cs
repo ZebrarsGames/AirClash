@@ -22,6 +22,11 @@ public class MyNetworkManager : NetworkManager
         currentRoomCode = code;
     }
 
+    public string GetCurrentRoomCode()
+    {
+        return currentRoomCode;
+    }
+
     #region Client Callbacks
 
     public override void OnStartClient()

@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: d88693bdc1dd9f249822dd35009b7382
+guid: 0434eaea84f766042845ce8f355e4c15
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: -7793312510398098659
-    second: MainMenuBg_0
+      213: 8798104715361385938
+    second: RouletteBgNoSeam_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -40,9 +40,9 @@ TextureImporter:
     filterMode: 1
     aniso: 1
     mipBias: 0
-    wrapU: 1
-    wrapV: 1
-    wrapW: 1
+    wrapU: 0
+    wrapV: 0
+    wrapW: 0
   nPOTScale: 0
   lightmap: 0
   compressionQuality: 50
@@ -51,9 +51,9 @@ TextureImporter:
   spriteMeshType: 1
   alignment: 0
   spritePivot: {x: 0.5, y: 0.5}
-  spritePixelsToUnits: 100
+  spritePixelsToUnits: 2048
   spriteBorder: {x: 0, y: 0, z: 0, w: 0}
-  spriteGenerateFallbackPhysicsShape: 0
+  spriteGenerateFallbackPhysicsShape: 1
   alphaUsage: 1
   alphaIsTransparency: 1
   spriteTessellationDetail: -1
@@ -113,7 +113,7 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: MainMenuBg_0
+      name: RouletteBgNoSeam_0
       rect:
         serializedVersion: 2
         x: 0
@@ -128,8 +128,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: d131d12009798d390800000000000000
-      internalID: -7793312510398098659
+      spriteID: 2ddfdcfcf95291a70800000000000000
+      internalID: 8798104715361385938
       vertices: []
       indices: 
       edges: []
@@ -148,7 +148,7 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      MainMenuBg_0: -7793312510398098659
+      RouletteBgNoSeam_0: 8798104715361385938
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

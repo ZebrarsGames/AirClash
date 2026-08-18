@@ -88,6 +88,8 @@ public class MatchmakerScr : MonoBehaviour
     private bool isHostCreated = false;
 
     public UnityEvent<int, int> OnSearchRangeUpdated; // (minElo, maxElo)
+    public UnityEvent OnMatchmakingStart;
+    public UnityEvent OnMatchmakingCancel;
     public UnityEvent OnMatchFound;
 
     void Start()
@@ -164,13 +166,15 @@ public class MatchmakerScr : MonoBehaviour
         string localEosId = GetLocalEosId();
         if(string.IsNullOrEmpty(localEosId))
         {
-            Debug.LogError("[MatchmakerScr] Ошибка: Нельзя начать поиск, игрок не авторизован в EOS!");
+            Debug.LogWarning("[MatchmakerScr] Ошибка: Нельзя начать поиск, игрок не авторизован в EOS!");
             return;
         }
 
         isSearching = true;
         isHostCreated = false;
         currentRange = initialEloRange;
+
+        OnMatchmakingStart?.Invoke();
 
         matchmakingCoroutine = StartCoroutine(SearchRoutine(localEosId));
         Debug.Log($"[MatchmakerScr] Поиск начат. Ваш Elo: {currentElo}");
@@ -197,6 +201,7 @@ public class MatchmakerScr : MonoBehaviour
             isHostCreated = false;
         }
 
+        OnMatchmakingCancel?.Invoke();
         Debug.Log("[MatchmakerScr] Поиск отменен.");
     }
 
