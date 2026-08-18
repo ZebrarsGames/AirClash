@@ -5,9 +5,41 @@ using UnityEngine;
 using UnityEngine.Rendering.Universal;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using System;
+using System.Collections;
+using System.Text;
+using UnityEngine.Networking;
 
 public class GoalHandlerNetwork : NetworkBehaviour
 {
+    [System.Serializable]
+    public class EloRequestData
+    {
+        public string username;
+    }
+
+    [System.Serializable]
+    public class EloResponseData
+    {
+        public string status;
+        public int elo;
+        public string message;
+    }
+
+    [Serializable]
+    public class MatchesRequestData
+    {
+        public string username;
+    }
+
+    [Serializable]
+    public class MatchesResponseData
+    {
+        public string status;
+        public string message;
+        public int played_matches;
+    }
+
     public static GoalHandlerNetwork Instance;
 
     [Header("UI Elements")]
@@ -49,6 +81,9 @@ public class GoalHandlerNetwork : NetworkBehaviour
     [SyncVar(hook = nameof(OnPlayer2RematchChanged))]
     private bool player2Ready = false;
 
+    private int playerARating, playerBRating;
+    private int playerAMatches, playerBMatches;
+
     void Awake()
     {
         Instance = this;
@@ -77,9 +112,32 @@ public class GoalHandlerNetwork : NetworkBehaviour
         puck.GetComponent<TrailRenderer>().enabled = PlayerPrefs.GetInt("PuckTrail", 1) != 0;
     }
 
+    public void SetRating(string username, int playerIndex)
+    {
+        string smallUsername = username.ToLower();
+        Debug.Log($"Set Rating for {smallUsername}, playerIndex: {playerIndex}");
+        StartCoroutine(GetPlayerEloRequest(smallUsername, (elo) =>
+        {
+            if(playerIndex == 1) playerARating = elo;
+            else if(playerIndex == 2) playerBRating = elo;
+        }));
+    }
+
+    public void SetPlayedMatches(string username, int playerIndex)
+    {
+        string smallUsername = username.ToLower();
+        Debug.Log($"Set PlayerMatches for {smallUsername}, playerIndex: {playerIndex}");
+        StartCoroutine(GetPlayerMatchesRequest(smallUsername, (matches) =>
+        {
+            if(playerIndex == 1) playerAMatches = matches;
+            else if(playerIndex == 2) playerBMatches = matches;
+        }));
+    }
+
     [Server] 
     public void ServerProcessGoal(Collider2D collision)
     {
+        double scoreA = 0;
         if(collision.gameObject.CompareTag("GoalTrigger1"))
         {
             score1++;
@@ -91,10 +149,31 @@ public class GoalHandlerNetwork : NetworkBehaviour
 
         if(score1 >= howManyGoals)
         {
-            RpcWinLose(1);
-        } else if(score2 >= howManyGoals)
+            scoreA = 1.0; 
+            playerAMatches++;
+            playerBMatches++;
+            (int newRatingA, int newRatingB) = EloSystemScr.CalculateNewRatings(
+                playerARating, playerBRating, playerAMatches, playerBMatches, scoreA
+            );
+
+            Debug.Log($"Игрок А: {playerARating} -> {newRatingA} (Изменение: {newRatingA - playerARating})");
+            Debug.Log($"Игрок Б: {playerBRating} -> {newRatingB} (Изменение: {newRatingB - playerBRating})");
+
+            RpcWinLose(1, newRatingA, newRatingB, playerAMatches, playerBMatches);
+        } 
+        else if(score2 >= howManyGoals)
         {
-            RpcWinLose(2);
+            scoreA = 0.0; 
+            playerAMatches++;
+            playerBMatches++;
+            (int newRatingA, int newRatingB) = EloSystemScr.CalculateNewRatings(
+                playerARating, playerBRating, playerAMatches, playerBMatches, scoreA
+            );
+
+            Debug.Log($"Игрок А: {playerARating} -> {newRatingA} (Изменение: {newRatingA - playerARating})");
+            Debug.Log($"Игрок Б: {playerBRating} -> {newRatingB} (Изменение: {newRatingB - playerBRating})");
+
+            RpcWinLose(2, newRatingA, newRatingB, playerAMatches, playerBMatches);
         } else
         {
             RpcOnGoalScored(score1, score2);
@@ -112,23 +191,40 @@ public class GoalHandlerNetwork : NetworkBehaviour
     }
 
     [ClientRpc]
-    private void RpcWinLose(int playerIndex)
+    private void RpcWinLose(int playerIndex, int newRatingA, int newRatingB, int matchesA, int matchesB)
     {
+        if(!isClientOnly)
+        {
+            PlayerPrefs.SetInt("MyElo", newRatingA);
+            PlayerPrefs.SetInt("MyMatches", matchesA);
+        }
+        else
+        {
+            PlayerPrefs.SetInt("MyElo", newRatingB);
+            PlayerPrefs.SetInt("MyMatches", matchesB);
+        }
+
+        PlayerPrefs.SetInt("IsAfterMatchmaking", 1);
+        PlayerPrefs.Save();
+
         if(playerIndex == 1)
         {
             if(isClientOnly)
             {
-                Win();
-            } else
+                Lose();
+            } 
+            else
             {
-               Lose();
+            Win();
             }
-        } else if(playerIndex == 2)
+        } 
+        else if(playerIndex == 2)
         {
             if(isClientOnly)
             {
                 Lose();
-            } else
+            } 
+            else
             {
                 Win();
             }
@@ -309,5 +405,82 @@ public class GoalHandlerNetwork : NetworkBehaviour
         PlayerPrefs.SetInt("IsHostDisconnect", 0);
         PlayerPrefs.Save();
         SceneManager.LoadScene("MainMenu");
+    }
+
+    IEnumerator GetPlayerEloRequest(string user, Action<int> onEloReceived)
+    {   
+        string url = "https://airclashserver.onrender.com/getElo";
+
+        EloRequestData data = new EloRequestData();
+        data.username = user;
+        string jsonPayload = JsonUtility.ToJson(data);
+
+        UnityWebRequest www = UnityWebRequest.Put(url, jsonPayload);
+        www.method = "POST"; 
+        byte[] bodyRaw = Encoding.UTF8.GetBytes(jsonPayload);
+        www.uploadHandler = new UploadHandlerRaw(bodyRaw);
+        www.downloadHandler = new DownloadHandlerBuffer();
+        www.SetRequestHeader("Content-Type", "application/json");
+
+        yield return www.SendWebRequest();
+
+        if(www.result != UnityWebRequest.Result.Success)
+        {
+            Debug.LogWarning($"HTTP Код ошибки: {www.responseCode}");
+            onEloReceived?.Invoke(-1);
+        }
+        else
+        {
+            EloResponseData res = JsonUtility.FromJson<EloResponseData>(www.downloadHandler.text);
+            
+            if(res.status == "success")
+            {
+                Debug.Log($"✅ ELO успешно получено для {user}: {res.elo}");
+                onEloReceived?.Invoke(res.elo);
+            }
+            else
+            {
+                Debug.LogWarning($"Сервер вернул ошибку: {res.message}");
+            }
+        }
+    }
+
+    IEnumerator GetPlayerMatchesRequest(string user, Action<int> onMatchesReceived)
+    {   
+        string url = "https://airclashserver.onrender.com/getPlayedMatches";
+
+        MatchesRequestData data = new MatchesRequestData();
+        data.username = user;
+        string jsonPayload = JsonUtility.ToJson(data);
+
+        UnityWebRequest www = UnityWebRequest.Put(url, jsonPayload);
+        www.method = "POST"; 
+        byte[] bodyRaw = Encoding.UTF8.GetBytes(jsonPayload);
+        www.uploadHandler = new UploadHandlerRaw(bodyRaw);
+        www.downloadHandler = new DownloadHandlerBuffer();
+        www.SetRequestHeader("Content-Type", "application/json");
+
+        yield return www.SendWebRequest();
+
+        if(www.result != UnityWebRequest.Result.Success)
+        {
+            Debug.LogWarning($"HTTP Код ошибки: {www.responseCode}");
+            onMatchesReceived?.Invoke(-1);
+        }
+        else
+        {
+            MatchesResponseData res = JsonUtility.FromJson<MatchesResponseData>(www.downloadHandler.text);
+            
+            if(res.status == "success")
+            {
+                Debug.Log($"✅ Матчи успешно получены для {user}: {res.played_matches}");
+                onMatchesReceived?.Invoke(res.played_matches);
+            }
+            else
+            {
+                Debug.LogWarning($"Сервер вернул ошибку: {res.message}");
+                onMatchesReceived?.Invoke(-1);
+            }
+        }
     }
 }

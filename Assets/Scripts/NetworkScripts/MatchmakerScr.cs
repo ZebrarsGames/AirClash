@@ -106,8 +106,9 @@ public class MatchmakerScr : MonoBehaviour
         StartCoroutine(FetchEloFromServer(username));
     }
 
-    public IEnumerator FetchEloFromServer(string username)
+    public IEnumerator FetchEloFromServer(string bigUsername)
     {
+        string username = bigUsername.ToLower();
         string url = "https://airclashserver.onrender.com/getElo";
 
         EloRequestData requestData = new EloRequestData

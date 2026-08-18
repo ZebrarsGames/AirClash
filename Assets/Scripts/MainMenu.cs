@@ -23,9 +23,11 @@ public class MainMenu : MonoBehaviour
     [SerializeField] private GameObject cloudPanel;
     [SerializeField] private GameObject modificatorsPanel;
     [SerializeField] private GameObject hostDisconnectedPanel;
+
     [Header("Audio")]
     [SerializeField] private AudioSource audioSource;
     [SerializeField] private AudioClip menuMusic;
+
     [Header("UI Elements")]
     [SerializeField] private Text mainMenuText;
     [SerializeField] private Text moneyText;
@@ -36,6 +38,7 @@ public class MainMenu : MonoBehaviour
     [SerializeField] private GameObject userGamemodeBtn;
     [SerializeField] private GameObject speedPanel;
     [SerializeField] private GameObject modificatorsMultiplyText;
+
     [Header("Scripts")]
     [SerializeField] private MoneyHandler moneyHandler;
     [SerializeField] private CoinMover coinMover;
@@ -43,6 +46,8 @@ public class MainMenu : MonoBehaviour
     [SerializeField] private QuestsHandler questsHandler; 
     [SerializeField] private DailyQuestHandler dailyQuestHandler;
     [SerializeField] private SaveManager saveManager;
+    [SerializeField] private FirebaseManager firebaseManager;
+
     [Header("Floats")]
     [SerializeField] private float rotationSpeed = 10f;
     [SerializeField] private float maxAngle = 6f;  
@@ -107,6 +112,10 @@ public class MainMenu : MonoBehaviour
         {   
             PlayerPrefs.SetInt("IsHostDisconnect", 0);
             OpenPanel(hostDisconnectedPanel);
+        }
+        if(PlayerPrefs.GetInt("IsAfterMatchmaking", 0) == 1 && Application.internetReachability == NetworkReachability.NotReachable)
+        {
+            firebaseManager.SaveProgress(saveManager.GetData().NickName, PlayerPrefs.GetString("AccountPassword", ""));
         }
     }
 
@@ -202,7 +211,7 @@ public class MainMenu : MonoBehaviour
         var rect = panel.GetComponent<RectTransform>();
         rect.localScale = Vector3.zero;
         panel.SetActive(true);
-        rect.DOScale(new Vector3(1.0f, 1.0f, 1.0f), 0.3f).SetEase(Ease.OutBack);
+        rect.DOScale(Vector3.one, 0.3f).SetEase(Ease.OutBack);
     }
     public void OnBotBtn()
     {

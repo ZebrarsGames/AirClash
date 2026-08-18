@@ -7,6 +7,8 @@ using UnityEngine.Networking;
 using System.Collections;
 using System.IO;
 using UnityEngine.Events;
+using System;
+using System.Threading.Tasks;
 
 [System.Serializable]
 public class StatusTextEvent : UnityEvent<string> { }
@@ -50,6 +52,13 @@ public class FirebaseManager : MonoBehaviour
         public string game_data;
         public string action; 
         public int elo;
+    }
+
+    [System.Serializable]
+    public class CheckUserResponse
+    {
+        public string status;
+        public bool exists;
     }
 
     void Start()
@@ -202,6 +211,7 @@ public class FirebaseManager : MonoBehaviour
             if(res.action == "register")
             {
                 Debug.Log("🎉 Аккаунт успешно создан!");
+                PlayerPrefs.SetString("AccountPassword", pass);
                 statusTextEvent.Invoke("Аккаунт успешно создан!");
             }
             else if(res.action == "login")
@@ -365,6 +375,37 @@ public class FirebaseManager : MonoBehaviour
             Debug.LogWarning("❌ Неизвестная ошибка сети или сервера.");
             statusTextEvent.Invoke("Неизвестная ошибка сети или сервера.");
             isServerProcessEvent.Invoke(false);
+        }
+    }
+
+    public static async Task<bool> CheckUserExistsAsync(string username)
+    {
+        string url = $"https://airclashserver.onrender.com/checkUser?username={UnityWebRequest.EscapeURL(username)}";
+
+        using(UnityWebRequest www = UnityWebRequest.Get(url))
+        {
+            var operation = www.SendWebRequest();
+            while(!operation.isDone)
+            {
+                await Task.Yield();
+            }
+
+            if(www.result != UnityWebRequest.Result.Success)
+            {
+                Debug.LogError($"Ошибка сети: {www.error}");
+                return false;
+            }
+
+            try
+            {
+                CheckUserResponse res = JsonUtility.FromJson<CheckUserResponse>(www.downloadHandler.text);
+                return res.exists;
+            }
+            catch(Exception e)
+            {
+                Debug.LogError($"Ошибка парсинга: {e.Message}");
+                return false;
+            }
         }
     }
 }

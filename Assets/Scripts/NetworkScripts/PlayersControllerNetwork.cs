@@ -159,6 +159,9 @@ public class PlayersControllerNetwork : NetworkBehaviour, IBeginDragHandler, IDr
         {
             GameObject.Find("Player2NickTextTMP").GetComponent<TextMeshProUGUI>().text = nickName;
         }
+        var goalHandlerNetwork = FindAnyObjectByType<GoalHandlerNetwork>();
+        goalHandlerNetwork.SetRating(nickName, netPlayerIndex);
+        goalHandlerNetwork.SetPlayedMatches(nickName, netPlayerIndex);
     }
 
     public void OnBeginDrag(PointerEventData eventData)

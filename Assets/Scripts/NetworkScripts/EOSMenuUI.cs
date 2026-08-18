@@ -5,6 +5,7 @@ using Mirror;
 using TMPro;
 using EpicTransport;
 using DG.Tweening;
+using System.Threading.Tasks;
 
 public class EOSMenuUI : MonoBehaviour
 {
@@ -14,6 +15,7 @@ public class EOSMenuUI : MonoBehaviour
     [SerializeField] private RoomManager roomManager;
     [SerializeField] private GameObject uiPanel;
     [SerializeField] private GameObject placeholderPanel;
+    [SerializeField] private GameObject warningPanel;
     [SerializeField] private RectTransform imageTransform;
     [SerializeField] private float rotationSpeed = 90f; 
     [SerializeField] private TextMeshProUGUI hintText;
@@ -27,6 +29,7 @@ public class EOSMenuUI : MonoBehaviour
 
     private void Awake()
     {
+        CheckMultiplayerRequirments();
         delay = new WaitForSeconds(changeInterval);
     }
 
@@ -47,6 +50,7 @@ public class EOSMenuUI : MonoBehaviour
 
         uiPanel.SetActive(true);
         placeholderPanel.SetActive(false);
+        warningPanel.SetActive(false);
         myIdText.text = "Авторизация в Epic Games...";
         StartCoroutine(WaitForEOSLoginRoutine());
     }
@@ -230,5 +234,39 @@ public class EOSMenuUI : MonoBehaviour
     public void OnMatchmakingCancel()
     {
         HidePlaceholder();
+    }
+
+    private Task<bool> GetIsExists(string username) 
+    {
+        return FirebaseManager.CheckUserExistsAsync(username);
+    }
+
+    private async void CheckMultiplayerRequirments()
+    {
+        if(Application.internetReachability == NetworkReachability.NotReachable)
+        {
+            Debug.LogWarning("Нельзя играть в мультиплеер без интернета!");
+            var rect = warningPanel.GetComponent<RectTransform>();
+            rect.localScale = Vector3.zero;
+            warningPanel.SetActive(true);
+            rect.DOScale(Vector3.one, 0.3f).SetEase(Ease.OutBack);
+
+            await Task.Delay(5000);
+
+            UnityEngine.SceneManagement.SceneManager.LoadScene("MainMenu");
+        }
+        bool isAccountExists = await GetIsExists(PlayerPrefs.GetString("Nick", "Ник"));
+        if(!isAccountExists)
+        {
+            Debug.LogWarning("Нельзя играть в мультиплеер без аккаунта!");
+            var rect = warningPanel.GetComponent<RectTransform>();
+            rect.localScale = Vector3.zero;
+            warningPanel.SetActive(true);
+            rect.DOScale(Vector3.one, 0.3f).SetEase(Ease.OutBack);
+
+            await Task.Delay(5000);
+
+            UnityEngine.SceneManagement.SceneManager.LoadScene("MainMenu");
+        }
     }
 }

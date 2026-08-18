@@ -4,6 +4,9 @@ using System;
 using TMPro;
 using UnityEngine.UI;
 using DG.Tweening;
+using System.Text;
+using System.Text.RegularExpressions;
+using System.Linq;
 
 public class CloudUIScr : MonoBehaviour
 {
@@ -186,34 +189,33 @@ public class CloudUIScr : MonoBehaviour
 
     private bool IsTextValid()
     {
-        foreach(char c in usernameInput.text)
+        string username = usernameInput.text;
+        string password = passwordInput.text;
+
+        foreach(char c in username)
         {
-            if(!char.IsLetterOrDigit(c) && !char.IsWhiteSpace(c))
+            if(!char.IsLetterOrDigit(c) && c != '_' && c != ' ')
             {
-                Debug.LogWarning($"Найден запрещенный символ: {c}");
-                statusText.text = $"Статус: Найден запрещенный символ: {c}";
+                Debug.LogWarning($"Найден запрещенный символ в логине: {c}");
+                statusText.text = $"Статус: Недопустимый символ '{c}' в логине.";
                 return false;
             }
         }
 
-        foreach(char c in passwordInput.text)
+        if(string.IsNullOrEmpty(password) || password.Length < 6)
         {
-            if(!char.IsLetterOrDigit(c) && !char.IsWhiteSpace(c))
-            {
-                Debug.LogWarning($"Найден запрещенный символ: {c}");
-                statusText.text = $"Статус: Найден запрещенный символ: {c}";
-                return false;
-            }
+            statusText.text = "Статус: Пароль слишком короткий (минимум 6 символов).";
+            return false;
         }
 
-        string preparedInput = PrepareText(usernameInput.text);
+        string preparedInput = PrepareText(username);
 
-        foreach (var badWord in forbiddenWords)
+        foreach(var badWord in forbiddenWords)
         {
-            if (preparedInput.Contains(badWord))
+            if(preparedInput.Contains(badWord))
             {
-                statusText.text = "Логин содержит запрещенное слово!";
-                Debug.LogWarning($"Блокировка: Ввод '{usernameInput.text}' содержит '{badWord}'");
+                statusText.text = "Статус: Логин содержит запрещенное слово!";
+                Debug.LogWarning($"Блокировка: Ввод '{username}' содержит запрещенную комбинацию.");
                 return false;
             }
         }
@@ -230,47 +232,64 @@ public class CloudUIScr : MonoBehaviour
             try
             {
                 byte[] decodedBytes = Convert.FromBase64String(textAsset.text);
-                
-                string decodedText = System.Text.Encoding.UTF8.GetString(decodedBytes);
+                string decodedText = Encoding.UTF8.GetString(decodedBytes);
 
                 string[] lines = decodedText.Split(new[] { "\r\n", "\r", "\n" }, StringSplitOptions.RemoveEmptyEntries);
                 
-                foreach (var word in lines)
+                HashSet<string> uniqueWords = new HashSet<string>();
+
+                foreach(var word in lines)
                 {
-                    string trimmed = word.Trim().ToLower();
-                    if (!string.IsNullOrEmpty(trimmed) && trimmed.Length > 2)
+                    string preparedBadWord = PrepareText(word);
+                    if (!string.IsNullOrEmpty(preparedBadWord) && preparedBadWord.Length > 2)
                     {
-                        forbiddenWords.Add(trimmed);
+                        uniqueWords.Add(preparedBadWord);
                     }
                 }
-                Debug.Log($"[System] Данные конфигурации сети успешно инициализированы. Элементов: {forbiddenWords.Count}");
+                
+                forbiddenWords = uniqueWords;
+                Debug.Log($"[System] База сети загружена. Оптимизированных элементов: {forbiddenWords.Count}");
             }
-            catch (Exception e)
+            catch(Exception e)
             {
                 Debug.LogError($"Ошибка чтения конфигурации сети: {e.Message}");
             }
         }
         else
         {
-            Debug.LogError("Файл конфигурации network_config.dat не найден в Resources!");
+            Debug.LogError("Файл network_config не найден в Resources!");
         }
     }
-
 
     private string PrepareText(string input)
     {
         if(string.IsNullOrEmpty(input)) return "";
 
-        string text = input.ToLower();
+        string text = input.ToLowerInvariant();
 
-        text = text.Replace("0", "о")
-                   .Replace("1", "и")
-                   .Replace("3", "з")
-                   .Replace("4", "ч")
-                   .Replace("a", "а")
-                   .Replace("o", "о")
-                   .Replace("e", "е")
-                   .Replace("x", "х");
+        text = text.Replace("@", "а")
+                .Replace("$", "с")
+                .Replace("0", "о")
+                .Replace("1", "и")
+                .Replace("3", "з")
+                .Replace("4", "ч")
+                .Replace("5", "с")
+                .Replace("6", "б")
+                .Replace("9", "д")
+                .Replace("a", "а")
+                .Replace("o", "о")
+                .Replace("e", "е")
+                .Replace("c", "с")
+                .Replace("p", "р")
+                .Replace("x", "х")
+                .Replace("y", "у")
+                .Replace("k", "к")
+                .Replace("m", "м")
+                .Replace("t", "т");
+
+        text = new string(text.Where(char.IsLetterOrDigit).ToArray());
+
+        text = Regex.Replace(text, @"(.)\1+", "$1");
 
         return text;
     }
