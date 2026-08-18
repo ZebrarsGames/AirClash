@@ -212,6 +212,8 @@ public class FirebaseManager : MonoBehaviour
             {
                 Debug.Log("🎉 Аккаунт успешно создан!");
                 PlayerPrefs.SetString("AccountPassword", pass);
+                PlayerPrefs.SetString("Nick", user);
+                PlayerPrefs.Save();
                 statusTextEvent.Invoke("Аккаунт успешно создан!");
             }
             else if(res.action == "login")

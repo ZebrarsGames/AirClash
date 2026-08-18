@@ -165,8 +165,7 @@ public class EOSMenuUI : MonoBehaviour
         {
             myIdText.text = "Подключение к " + inputCode + "...";
             Debug.Log($"Успешно получен EOS ID хоста: {roomEosId}");
-            var group = uiPanel.GetComponent<CanvasGroup>();
-            group.DOFade(0, 0.5f);
+            OnMatchFound();
             
             networkManager.networkAddress = roomEosId.Trim();
             networkManager.StartClient();
@@ -222,8 +221,9 @@ public class EOSMenuUI : MonoBehaviour
 
     public void OnMatchFound()
     {
-        var group = uiPanel.GetComponent<CanvasGroup>();
-        group.DOFade(0, 1f).OnComplete(() => uiPanel.SetActive(false));
+        HidePlaceholder();
+        uiPanel.SetActive(false);
+        myIdText.gameObject.SetActive(false);
     }
 
     public void OnMatchmakingStart()
@@ -267,6 +267,21 @@ public class EOSMenuUI : MonoBehaviour
             await Task.Delay(5000);
 
             UnityEngine.SceneManagement.SceneManager.LoadScene("MainMenu");
+        }
+
+        await Task.Delay(10000);
+
+        if(!CheckEOSID()) UnityEngine.SceneManagement.SceneManager.LoadScene(UnityEngine.SceneManagement.SceneManager.GetActiveScene().buildIndex);
+    }
+
+    private bool CheckEOSID()
+    {
+        if(EOSSDKComponent.LocalUserProductId == null || !EOSSDKComponent.LocalUserProductId.IsValid())
+        {
+            return false;
+        } else
+        {
+            return true;
         }
     }
 }

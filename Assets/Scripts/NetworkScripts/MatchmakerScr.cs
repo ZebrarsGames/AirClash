@@ -12,6 +12,7 @@ public class CreateMMRoomRequest
 {
     public string eos_id;
     public int elo;
+    public int played_matches; 
 }
 
 [Serializable]
@@ -28,6 +29,7 @@ public class FindOpponentRequest
 {
     public string eos_id;
     public int elo;
+    public int played_matches;
     public int max_elo_diff;
 }
 
@@ -83,6 +85,7 @@ public class MatchmakerScr : MonoBehaviour
 
     private int currentElo;
     private int currentRange;
+    private int currentPlayedMatches;
     private Coroutine matchmakingCoroutine;
     private bool isSearching = false;
     private bool isHostCreated = false;
@@ -95,6 +98,7 @@ public class MatchmakerScr : MonoBehaviour
     void Start()
     {
         string username = PlayerPrefs.GetString("Nick", "Ник"); 
+        currentPlayedMatches = PlayerPrefs.GetInt("MyMatches", 0);
 
         if(string.IsNullOrEmpty(username))
         {
@@ -248,6 +252,7 @@ public class MatchmakerScr : MonoBehaviour
         {
             eos_id = localEosId,
             elo = currentElo,
+            played_matches = currentPlayedMatches,
             max_elo_diff = maxDiff
         };
 
@@ -287,7 +292,8 @@ public class MatchmakerScr : MonoBehaviour
         CreateMMRoomRequest requestData = new CreateMMRoomRequest
         {
             eos_id = localEosId,
-            elo = currentElo
+            elo = currentElo,
+            played_matches = currentPlayedMatches 
         };
 
         string json = JsonUtility.ToJson(requestData);
@@ -336,6 +342,7 @@ public class MatchmakerScr : MonoBehaviour
         isSearching = false;
         if(matchmakingCoroutine != null) StopCoroutine(matchmakingCoroutine);
 
+        Debug.Log("[MatchmakerScr] OnOpponentFound()");
         OnMatchFound?.Invoke();
 
         NetworkManager.singleton.networkAddress = hostEosId;
