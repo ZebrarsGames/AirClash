@@ -49,7 +49,7 @@ public class EOSMenuUI : MonoBehaviour
             return;
         }
 
-        currentEosId = EOSSDKComponent.LocalUserProductIdString;
+        currentEosId = EOSSDKComponent.LocalUserProductId.ToString();
         myIdText.text = "Создание комнаты...";
 
         roomManager.CreateRoom(currentEosId, 

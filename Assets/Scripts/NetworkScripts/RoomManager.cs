@@ -66,6 +66,7 @@ public class RoomManager : MonoBehaviour
 
     private IEnumerator CreateRoomRoutine(string eosId, Action<string> onSuccess, Action<string> onError)
     {
+        Debug.Log($"[Room] EOS ID: {eosId}");
         string url = BASE_URL + "/createRoom";
         CreateRoomRequest requestData = new CreateRoomRequest { eos_id = eosId };
         string json = JsonUtility.ToJson(requestData);
