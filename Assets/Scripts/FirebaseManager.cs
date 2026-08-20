@@ -224,6 +224,9 @@ public class FirebaseManager : MonoBehaviour
                 else if(res.action == "login")
                 {
                     Debug.Log("[FirebaseManager] Успешный вход в аккаунт!");
+                    PlayerPrefs.SetString("AccountPassword", pass);
+                    PlayerPrefs.SetString("Nick", user);
+                    PlayerPrefs.Save();
                     statusTextEvent.Invoke($"Добро пожаловать, {user}!");
                 }
                 else
@@ -275,6 +278,9 @@ public class FirebaseManager : MonoBehaviour
                 if(actionType == "save")
                 {
                     Debug.Log("[FirebaseManager] Прогресс успешно загружен на сервер!");
+                    PlayerPrefs.SetString("AccountPassword", pass);
+                    PlayerPrefs.SetString("Nick", user);
+                    PlayerPrefs.Save();
                     statusTextEvent.Invoke("Прогресс успешно загружен на сервер!");
                     isServerProcessEvent.Invoke(false);
                 }
@@ -315,6 +321,9 @@ public class FirebaseManager : MonoBehaviour
                     }
 
                     Debug.Log($"[FirebaseManager] Прогресс успешно скачан из облака! ELO: {res.elo}");
+                    PlayerPrefs.SetString("AccountPassword", pass);
+                    PlayerPrefs.SetString("Nick", user);
+                    PlayerPrefs.Save();
                     statusTextEvent.Invoke("Прогресс успешно скачан из облака и перезаписан на телефоне!");
                     dataLoadFromCloudEvent.Invoke(loadedProgress);
                     isServerProcessEvent.Invoke(false);

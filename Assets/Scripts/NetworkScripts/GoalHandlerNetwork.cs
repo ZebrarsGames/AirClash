@@ -530,7 +530,7 @@ public class GoalHandlerNetwork : NetworkBehaviour
 
             if(www.result != UnityWebRequest.Result.Success)
             {
-                Debug.LogWarning($"HTTP Код ошибки при сохранении матча: {www.responseCode} ({www.error})");
+                Debug.LogWarning($"HTTP {www.responseCode} | Ответ сервера: {www.downloadHandler.text}");
             }
             else
             {
