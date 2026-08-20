@@ -74535,6 +74535,7 @@ MonoBehaviour:
   saveManager: {fileID: 622325057}
   rotationSpeed: 2.5
   maxAngle: 6
+  tweenDuration: 0.3
 --- !u!1 &1912403822
 GameObject:
   m_ObjectHideFlags: 0

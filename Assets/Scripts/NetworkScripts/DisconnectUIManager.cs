@@ -50,8 +50,8 @@ public class DisconnectUIManager : MonoBehaviour
 
         yield return new WaitForSecondsRealtime(3.5f);
 
-        NetworkManager.singleton.StopHost();
-        NetworkManager.singleton.StopClient();
+        MyNetworkManager.singleton.StopHost();
+        MyNetworkManager.singleton.StopClient();
         SceneManager.LoadScene("MainMenu");
     }
 

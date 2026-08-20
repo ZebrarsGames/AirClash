@@ -9,7 +9,6 @@ using System.Threading.Tasks;
 
 public class EOSMenuUI : MonoBehaviour
 {
-    [SerializeField] private NetworkManager networkManager;
     [SerializeField] private TMP_InputField idInputField;
     [SerializeField] private TextMeshProUGUI myIdText;
     [SerializeField] private RoomManager roomManager;
@@ -129,8 +128,26 @@ public class EOSMenuUI : MonoBehaviour
         roomManager.CreateRoom(currentEosId, 
         (roomId) =>
         {
+            if(MyNetworkManager.singleton == null)
+            {
+                var foundManager = FindAnyObjectByType<MyNetworkManager>();
+                if (foundManager != null)
+                {
+                    foundManager.gameObject.SetActive(true);
+                }
+                else
+                {
+                    myIdText.text = "Ошибка: Сетевой менеджер не найден!";
+                    Debug.LogError("Критическая ошибка: Компонент MyNetworkManager отсутствует на сцене!");
+                    return;
+                }
+            }
+            else if(!MyNetworkManager.singleton.gameObject.activeInHierarchy)
+            {
+                MyNetworkManager.singleton.gameObject.SetActive(true);
+            }
             myIdText.text = "Код комнаты: " + roomId;
-            if(networkManager is MyNetworkManager customManager)
+            if(MyNetworkManager.singleton is MyNetworkManager customManager)
             {
                 customManager.SetCurrentRoomCode(roomId);
             }
@@ -139,7 +156,7 @@ public class EOSMenuUI : MonoBehaviour
             var group = uiPanel.GetComponent<CanvasGroup>();
             group.DOFade(0, 1f).OnComplete(() => uiPanel.SetActive(false));
             
-            networkManager.StartHost();
+            MyNetworkManager.singleton.StartHost();
         },
         (errorText) =>
         {
@@ -166,9 +183,28 @@ public class EOSMenuUI : MonoBehaviour
             myIdText.text = "Подключение к " + inputCode + "...";
             Debug.Log($"Успешно получен EOS ID хоста: {roomEosId}");
             OnMatchFound();
+
+            if(MyNetworkManager.singleton == null)
+            {
+                var foundManager = FindAnyObjectByType<MyNetworkManager>();
+                if (foundManager != null)
+                {
+                    foundManager.gameObject.SetActive(true);
+                }
+                else
+                {
+                    myIdText.text = "Ошибка: Сетевой менеджер не найден!";
+                    Debug.LogError("Критическая ошибка: Компонент MyNetworkManager отсутствует на сцене!");
+                    return;
+                }
+            }
+            else if(!MyNetworkManager.singleton.gameObject.activeInHierarchy)
+            {
+                MyNetworkManager.singleton.gameObject.SetActive(true);
+            }
             
-            networkManager.networkAddress = roomEosId.Trim();
-            networkManager.StartClient();
+            MyNetworkManager.singleton.networkAddress = roomEosId.Trim();
+            MyNetworkManager.singleton.StartClient();
         },
         (errorText) =>
         {
@@ -181,7 +217,7 @@ public class EOSMenuUI : MonoBehaviour
     {
         string roomCode;
 
-        if(networkManager is MyNetworkManager customManager)
+        if(MyNetworkManager.singleton is MyNetworkManager customManager)
         {
             roomCode = customManager.GetCurrentRoomCode();
             myIdText.text = "Удаление комнаты...";
@@ -192,9 +228,28 @@ public class EOSMenuUI : MonoBehaviour
                 myIdText.text = $"Комната {roomCode} успешно удалена";
                 Debug.Log($"Комната {roomCode} успешно удалена");
                 HidePlaceholder();
+
+                if(MyNetworkManager.singleton == null)
+                {
+                    var foundManager = FindAnyObjectByType<MyNetworkManager>();
+                    if (foundManager != null)
+                    {
+                        foundManager.gameObject.SetActive(true);
+                    }
+                    else
+                    {
+                        myIdText.text = "Ошибка: Сетевой менеджер не найден!";
+                        Debug.LogError("Критическая ошибка: Компонент MyNetworkManager отсутствует на сцене!");
+                        return;
+                    }
+                }
+                else if(!MyNetworkManager.singleton.gameObject.activeInHierarchy)
+                {
+                    MyNetworkManager.singleton.gameObject.SetActive(true);
+                }
                 
-                networkManager.StopClient();
-                networkManager.StopHost();
+                MyNetworkManager.singleton.StopClient();
+                MyNetworkManager.singleton.StopHost();
             },
             (errorText) =>
             {
@@ -253,6 +308,8 @@ public class EOSMenuUI : MonoBehaviour
 
             await Task.Delay(5000);
 
+            MyNetworkManager.singleton.StopClient();
+            MyNetworkManager.singleton.StopHost();
             UnityEngine.SceneManagement.SceneManager.LoadScene("MainMenu");
         }
         bool isAccountExists = await GetIsExists(PlayerPrefs.GetString("Nick", "Ник"));
@@ -266,6 +323,8 @@ public class EOSMenuUI : MonoBehaviour
 
             await Task.Delay(5000);
 
+            MyNetworkManager.singleton.StopClient();
+            MyNetworkManager.singleton.StopHost();
             UnityEngine.SceneManagement.SceneManager.LoadScene("MainMenu");
         }
 

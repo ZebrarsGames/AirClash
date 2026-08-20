@@ -167,7 +167,7 @@ public class GoalHandlerNetwork : NetworkBehaviour
             playerAMatches++;
             playerBMatches++;
             (int newRatingA, int newRatingB) = EloSystemScr.CalculateNewRatings(
-                playerARating, playerBRating, playerAMatches, playerBMatches, score1, score2
+                playerBRating, playerARating, playerBMatches, playerAMatches, score2, score1
             );
 
             Debug.Log($"Игрок А: {playerARating} -> {newRatingA} (Изменение: {newRatingA - playerARating})");
@@ -180,7 +180,7 @@ public class GoalHandlerNetwork : NetworkBehaviour
             playerAMatches++;
             playerBMatches++;
             (int newRatingA, int newRatingB) = EloSystemScr.CalculateNewRatings(
-                playerARating, playerBRating, playerAMatches, playerBMatches, score1, score2
+                playerBRating, playerARating, playerBMatches, playerAMatches, score2, score1
             );
 
             Debug.Log($"Игрок А: {playerARating} -> {newRatingA} (Изменение: {newRatingA - playerARating})");
@@ -245,8 +245,15 @@ public class GoalHandlerNetwork : NetworkBehaviour
         }
     }
 
+    [ClientRpc]
+    private void RpcStartTimer()
+    {
+        timer.TimerStart();
+    }
+
     public void RegisterPlayer(GameObject player, string name)
     {
+        RpcStartTimer();
         if(name == "Player1")
         {
             player1 = player;
@@ -418,6 +425,8 @@ public class GoalHandlerNetwork : NetworkBehaviour
     {
         PlayerPrefs.SetInt("IsHostDisconnect", 0);
         PlayerPrefs.Save();
+        MyNetworkManager.singleton.StopHost();
+        MyNetworkManager.singleton.StopClient();
         SceneManager.LoadScene("MainMenu");
     }
 

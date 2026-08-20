@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using Mirror;
 using DG.Tweening;
 using TMPro;
@@ -8,6 +9,16 @@ using UnityEngine.UI;
 
 public class MainMenu : MonoBehaviour
 {
+    [System.Serializable]
+    public struct BotDifficultySettings
+    {
+        public float difficulty;
+        public int moneyWin;
+        public int moneyLose;
+        public int xpAdd;
+        public Vector2 botOffset;
+    }
+
     [Header("Menu Panels")]
     [SerializeField] private GameObject settingsPanel;
     [SerializeField] private GameObject botPanel;
@@ -47,40 +58,93 @@ public class MainMenu : MonoBehaviour
     [SerializeField] private DailyQuestHandler dailyQuestHandler;
     [SerializeField] private SaveManager saveManager;
 
-    [Header("Floats")]
+    [Header("Animation Settings")]
     [SerializeField] private float rotationSpeed = 10f;
-    [SerializeField] private float maxAngle = 6f;  
+    [SerializeField] private float maxAngle = 6f; 
+    [SerializeField] private float tweenDuration = 0.3f;
+
+    private List<GameObject> _allPanels;
     private RectTransform _rectTransform;
-    private string toScene;
-    private string lastOpenMenu;
-    private bool isHostDisconnect = false;
     private Tweener _wobbleTweener;
 
-    void Awake()
+    private string _toScene = "GameScene";
+    private string _lastOpenMenu;
+
+    private const string SCENE_BOTS = "BotsGame";
+    private const string SCENE_GAME = "GameScene";
+    private const string SCENE_SHOP = "ShopScene";
+    private const string SCENE_MULTIPLAYER = "MultiPlayerScene";
+
+    private static readonly string[] QuestKeys = { "money10", "money50", "money100", "money200", "money300", "money500" };
+    private static readonly string[] DailyQuestKeys = { "daily_money50", "money70", "daily_money100" };
+
+    private readonly Dictionary<string, BotDifficultySettings> _difficulties = new()
+    {
+        { "VeryEasy", new BotDifficultySettings { difficulty = 5.0f, moneyWin = 2, moneyLose = 1, xpAdd = 3, botOffset = new Vector2(1.0f, 0.8f) } },
+        { "Easy",     new BotDifficultySettings { difficulty = 7.5f, moneyWin = 3, moneyLose = 2, xpAdd = 7, botOffset = new Vector2(0.7f, 0.7f) } },
+        { "Medium",   new BotDifficultySettings { difficulty = 12f,  moneyWin = 5, moneyLose = 2, xpAdd = 10, botOffset = new Vector2(0.4f, 0.5f) } },
+        { "Hard",     new BotDifficultySettings { difficulty = 17.5f,moneyWin = 10, moneyLose = 2, xpAdd = 20, botOffset = new Vector2(0.3f, 0.2f) } },
+        { "Extreme",  new BotDifficultySettings { difficulty = 27.5f,moneyWin = 20, moneyLose = 1, xpAdd = 30, botOffset = new Vector2(0.15f, 0.1f) } }
+    };
+
+    private void Awake()
+    {
+        CachePanels();
+        HandleFirstLaunch();
+    }
+
+    private void Start()
+    {
+        InitAudio();
+        InitMainMenuAnimation();
+        InitGameStateAndMoney();
+        CheckHostDisconnect();
+
+        Application.targetFrameRate = PlayerPrefs.GetInt("FPS", 60);
+    }
+
+    private void OnDestroy()
+    {
+        _wobbleTweener?.Kill();
+    }
+
+    #region Initialization Logic
+
+    private void CachePanels()
+    {
+        _allPanels = new List<GameObject>
+        {
+            settingsPanel, botPanel, mentionsPanel, achievementsPanel, gamemodesPanel,
+            userGamemodePanel, xpPanel, questPanel, dailyQuestPanel, profilePanel,
+            editProfilePanel, cloudPanel, modificatorsPanel
+        };
+    }
+
+    private void HandleFirstLaunch()
     {
         if(PlayerPrefs.GetInt("IsFirstTimePlayed", 1) == 1)
         {
             saveManager.SaveDefaultData();
             PlayerPrefs.SetInt("IsFirstTimePlayed", 0);
             PlayerPrefs.Save();
-        } 
+        }
     }
-    void Start()
+
+    private void InitAudio()
     {
+        if(audioSource == null) return;
+
         audioSource.clip = menuMusic;
         audioSource.loop = true;
-        audioSource.time = PlayerPrefs.GetFloat("MainMenuMusicTime", 0);
-        isHostDisconnect = PlayerPrefs.GetInt("IsHostDisconnect", 0) != 0;
+        audioSource.time = PlayerPrefs.GetFloat("MainMenuMusicTime", 0f);
         audioSource.Play();
-        Application.targetFrameRate = PlayerPrefs.GetInt("FPS", 60);
-        if (mainMenuText == null)
-        {
-            enabled = false;
-            return;
-        }
+    }
+
+    private void InitMainMenuAnimation()
+    {
+        if(mainMenuText == null) return;
 
         _rectTransform = mainMenuText.rectTransform;
-
         float duration = Mathf.PI / rotationSpeed;
 
         _rectTransform.localRotation = Quaternion.Euler(0f, 0f, -maxAngle);
@@ -89,287 +153,247 @@ public class MainMenu : MonoBehaviour
             .SetLoops(-1, LoopType.Yoyo)
             .SetEase(Ease.InOutSine)
             .SetUpdate(UpdateType.Normal, true);
+    }
 
-        moneyText.text = "Деньги " + moneyHandler.GetMoney(); 
+    private void InitGameStateAndMoney()
+    {
+        if(moneyText != null && moneyHandler != null)
+            moneyText.text = $"Деньги {moneyHandler.GetMoney()}";
+
         saveManager.SaveData();
-        if(PlayerPrefs.GetInt("isAfterGame", 0) == 0)
+
+        if(PlayerPrefs.GetInt("isAfterGame", 0) != 0)
         {
-            PlayerPrefs.SetInt("HowMoneyAdds", 0);
-            PlayerPrefs.SetInt("HowXpAdds", 0);
-            PlayerPrefs.SetInt("isAfterGame", 0);
-            PlayerPrefs.Save();    
-        } else
-        {
-            AddMoney(PlayerPrefs.GetInt("HowMoneyAdds"));
-            UpdateQuests(PlayerPrefs.GetInt("HowMoneyAdds"));
-            PlayerPrefs.SetInt("isAfterGame", 0);
-            PlayerPrefs.SetInt("HowMoneyAdds", 0);
-            PlayerPrefs.SetInt("HowXpAdds", 0);
-            PlayerPrefs.Save();
+            int addedMoney = PlayerPrefs.GetInt("HowMoneyAdds", 0);
+            AddMoney(addedMoney);
+            UpdateQuests(addedMoney);
         }
-        if(NetworkClient.active == false && NetworkServer.active == false && isHostDisconnect == true)
-        {   
+
+        PlayerPrefs.SetInt("HowMoneyAdds", 0);
+        PlayerPrefs.SetInt("HowXpAdds", 0);
+        PlayerPrefs.SetInt("isAfterGame", 0);
+        PlayerPrefs.Save();
+    }
+
+    private void CheckHostDisconnect()
+    {
+        bool isHostDisconnect = PlayerPrefs.GetInt("IsHostDisconnect", 0) != 0;
+
+        if(!NetworkClient.active && !NetworkServer.active && isHostDisconnect)
+        {
             PlayerPrefs.SetInt("IsHostDisconnect", 0);
+            PlayerPrefs.Save();
             OpenPanel(hostDisconnectedPanel);
         }
     }
 
-    private void OnDestroy()
-    {
-        _wobbleTweener?.Kill();
-    }
+    #endregion
 
-    public void PlayBots(string difficulty)
-    {
-        switch(difficulty)
-        {
-            case "VeryEasy":
-                PlayerPrefs.SetFloat("Difficulty", 5f);
-                PlayerPrefs.SetInt("HowMoneyAdd", 2);
-                PlayerPrefs.SetInt("HowMoneyAddAsLose", 1);
-                PlayerPrefs.SetInt("HowManyAddXp", 3);
-                PlayerPrefs.SetFloat("BotOffsetX", 1f);
-                PlayerPrefs.SetFloat("BotOffsetY", 0.8f);
-                break;
-            case "Easy":
-                PlayerPrefs.SetFloat("Difficulty", 7.5f);
-                PlayerPrefs.SetInt("HowMoneyAdd", 3);
-                PlayerPrefs.SetInt("HowMoneyAddAsLose", 2);
-                PlayerPrefs.SetInt("HowManyAddXp", 7);
-                PlayerPrefs.SetFloat("BotOffsetX", 0.7f);
-                PlayerPrefs.SetFloat("BotOffsetY", 0.7f);
-                break;
-            case "Medium":
-                PlayerPrefs.SetFloat("Difficulty", 12f);
-                PlayerPrefs.SetInt("HowMoneyAdd", 5);
-                PlayerPrefs.SetInt("HowMoneyAddAsLose", 2);
-                PlayerPrefs.SetInt("HowManyAddXp", 10);
-                PlayerPrefs.SetFloat("BotOffsetX", 0.4f);
-                PlayerPrefs.SetFloat("BotOffsetY", 0.5f);
-                break;
-            case "Hard":
-                PlayerPrefs.SetFloat("Difficulty", 17.5f);
-                PlayerPrefs.SetInt("HowMoneyAdd", 10);
-                PlayerPrefs.SetInt("HowMoneyAddAsLose", 2);
-                PlayerPrefs.SetInt("HowManyAddXp", 20);
-                PlayerPrefs.SetFloat("BotOffsetX", 0.3f);
-                PlayerPrefs.SetFloat("BotOffsetY", 0.2f);
-                break;
-            case "Extreme":
-                PlayerPrefs.SetFloat("Difficulty", 27.5f);
-                PlayerPrefs.SetInt("HowMoneyAdd", 20);
-                PlayerPrefs.SetInt("HowMoneyAddAsLose", 1);
-                PlayerPrefs.SetInt("HowManyAddXp", 30);
-                PlayerPrefs.SetFloat("BotOffsetX", 0.15f);
-                PlayerPrefs.SetFloat("BotOffsetY", 0.1f);
-                break;
-            default:
-                PlayerPrefs.SetFloat("Difficulty", 11.5f);
-                break;
-        }
-        PlayerPrefs.Save();
-        toScene = "BotsGame";
-        CloseAllPanels();
-        gamemodesPanel.SetActive(true);
-        OnGamemodePanel();
-    }
+    #region Panel Management
 
     public void CloseAllPanels()
     {
-        settingsPanel.SetActive(false);
-        botPanel.SetActive(false);
-        mentionsPanel.SetActive(false);
-        achievementsPanel.SetActive(false);
-        gamemodesPanel.SetActive(false);
-        userGamemodePanel.SetActive(false);
-        xpPanel.SetActive(false);
-        questPanel.SetActive(false);
-        dailyQuestPanel.SetActive(false);
-        profilePanel.SetActive(false);
-        editProfilePanel.SetActive(false);
-        cloudPanel.SetActive(false);
-        modificatorsPanel.SetActive(false);
+        for(int i = 0; i < _allPanels.Count; i++)
+        {
+            if(_allPanels[i] != null)
+                _allPanels[i].SetActive(false);
+        }
     }
+
+    public void OpenPanel(GameObject panel)
+    {
+        if(panel == null) return;
+
+        RectTransform rect = panel.GetComponent<RectTransform>();
+        rect.DOKill();
+        rect.localScale = Vector3.zero;
+        panel.SetActive(true);
+        rect.DOScale(Vector3.one, tweenDuration).SetEase(Ease.OutBack);
+    }
+
     public void ClosePanel(GameObject panel)
     {
-        var rect = panel.GetComponent<RectTransform>();
-        rect.DOScale(Vector3.zero, 0.3f)
+        if(panel == null) return;
+
+        RectTransform rect = panel.GetComponent<RectTransform>();
+        rect.DOKill();
+        rect.DOScale(Vector3.zero, tweenDuration)
             .SetEase(Ease.InBack)
-            .OnComplete(() => 
+            .OnComplete(() =>
             {
                 panel.SetActive(false);
                 rect.localScale = Vector3.one;
             });
     }
-    public void OpenPanel(GameObject panel)
+
+    #endregion
+
+    #region Game Modes & Difficulty Logic
+
+    public void PlayBots(string difficultyKey)
     {
-        var rect = panel.GetComponent<RectTransform>();
-        rect.localScale = Vector3.zero;
-        panel.SetActive(true);
-        rect.DOScale(Vector3.one, 0.3f).SetEase(Ease.OutBack);
+        if(_difficulties.TryGetValue(difficultyKey, out var settings))
+        {
+            PlayerPrefs.SetFloat("Difficulty", settings.difficulty);
+            PlayerPrefs.SetInt("HowMoneyAdd", settings.moneyWin);
+            PlayerPrefs.SetInt("HowMoneyAddAsLose", settings.moneyLose);
+            PlayerPrefs.SetInt("HowManyAddXp", settings.xpAdd);
+            PlayerPrefs.SetFloat("BotOffsetX", settings.botOffset.x);
+            PlayerPrefs.SetFloat("BotOffsetY", settings.botOffset.y);
+        }
+        else
+        {
+            PlayerPrefs.SetFloat("Difficulty", 11.5f);
+        }
+
+        PlayerPrefs.Save();
+        _toScene = SCENE_BOTS;
+        
+        CloseAllPanels();
+        gamemodesPanel.SetActive(true);
+        OnGamemodePanel();
     }
-    public void OnBotBtn()
-    {
-        toScene = "BotsGame";
-    }
+
+    public void VeryEasyMode() => PlayBots("VeryEasy");
+    public void Easy()         => PlayBots("Easy");
+    public void Normal()       => PlayBots("Medium");
+    public void Hard()         => PlayBots("Hard");
+    public void Extreme()      => PlayBots("Extreme");
+
+    public void OnBotBtn() => _toScene = SCENE_BOTS;
+    public void StartGame() => _toScene = SCENE_GAME;
+
     public void OnGamemodePanel()
     {
-        lastOpenMenu = "GamemodePanel";
-        if(toScene == "GameScene")
+        _lastOpenMenu = "GamemodePanel";
+        userGamemodeBtn.SetActive(_toScene == SCENE_GAME);
+    }
+
+    public void SwitchToGameModesPanel()
+    {
+        CloseAllPanels();
+        if(_lastOpenMenu == "UserGameModePanel")
+            OpenUserGamemode();
+        else
         {
-            userGamemodeBtn.SetActive(true);
-        } else if(toScene == "BotsGame")
-        {
-            userGamemodeBtn.SetActive(false);
+            gamemodesPanel.SetActive(true);
+            OnGamemodePanel();
         }
     }
 
-    public void VeryEasyMode()
+    public void OpenUserGamemode()
     {
-        PlayBots("VeryEasy");
-    }
-    public void Easy()
-    {
-        PlayBots("Easy");
-    }
-    public void Normal()
-    {
-        PlayBots("Medium");
-    }
-    public void Hard()
-    {
-        PlayBots("Hard");
-    }
-    public void Extreme()
-    {
-        PlayBots("Extreme");
+        CloseAllPanels();
+        userGamemodePanel.SetActive(true);
+        _lastOpenMenu = "UserGameModePanel";
+
+        int defaultGoals = PlayerPrefs.GetInt("Goals", 4);
+        float defaultDifficulty = PlayerPrefs.GetFloat("Difficulty", 7.5f);
+
+        goalsSlider.value = defaultGoals;
+        speedSlider.value = defaultDifficulty;
+
+        bool isBots = _toScene == SCENE_BOTS;
+        speedPanel.SetActive(isBots);
+
+        if(isBots)
+        {
+            speedText.text = $"{speedSlider.value:F1}";
+            goalsText.text = defaultGoals.ToString();
+        }
     }
 
-    public void StartGame()
-    {
-        toScene = "GameScene";
-    }
+    public void OnGoalsSliderChanged() => goalsText.text = goalsSlider.value.ToString("F0");
+    public void OnSpeedSliderChanged() => speedText.text = speedSlider.value.ToString("F1");
+
+    #endregion
+
+    #region Navigation & Scene Loading
 
     public void OpenShop()
     {
-        PlayerPrefs.SetFloat("MainMenuMusicTime", audioSource.time);
+        if(audioSource != null)
+            PlayerPrefs.SetFloat("MainMenuMusicTime", audioSource.time);
+
         PlayerPrefs.Save();
-        SceneManager.LoadScene("ShopScene");
+        SceneManager.LoadScene(SCENE_SHOP);
     }
-    public void SwitchToQuestPanel()
+
+    public void SetGamemode(int howManyGoals)
     {
-        dailyQuestPanel.SetActive(false);
-        questPanel.SetActive(true);
+        PlayerPrefs.SetInt("Goals", howManyGoals);
+        LoadToScene();
     }
-    public void SwitchToEditProfilePanel()
+
+    public void SetUserGamemode()
     {
-        profilePanel.SetActive(false);
-        editProfilePanel.SetActive(true);
+        PlayerPrefs.SetInt("Goals", Mathf.RoundToInt(goalsSlider.value));
+        PlayerPrefs.SetFloat("Difficulty", speedSlider.value);
+        LoadToScene();
     }
+
+    public void LoadToScene()
+    {
+        PlayerPrefs.Save();
+        SceneManager.LoadScene(_toScene);
+    }
+
+    public void LoadMultiplayer() => SceneManager.LoadScene(SCENE_MULTIPLAYER);
+
+    #endregion
+
+    #region Simple Panel Switches
+
+    public void SwitchToQuestPanel() => TogglePanels(dailyQuestPanel, questPanel);
+    public void OpenDailyQuestPanel() => TogglePanels(questPanel, dailyQuestPanel);
+    public void SwitchToEditProfilePanel() => TogglePanels(profilePanel, editProfilePanel);
+    
     public void SwithcToProfilePanel()
     {
         editProfilePanel.SetActive(false);
         cloudPanel.SetActive(false);
         profilePanel.SetActive(true);
     }
-    public void SwithcToCloudPanel()
-    {
-        profilePanel.SetActive(false);
-        cloudPanel.SetActive(true);
-    }
+
+    public void SwithcToCloudPanel() => TogglePanels(profilePanel, cloudPanel);
+
     public void SwithcToModificatorsPanel()
     {
-        if(toScene == "BotsGame") modificatorsMultiplyText.SetActive(true);
-        else if(toScene == "GameScene") modificatorsMultiplyText.SetActive(false);
+        modificatorsMultiplyText.SetActive(_toScene == SCENE_BOTS);
         CloseAllPanels();
         modificatorsPanel.SetActive(true);
     }
 
-    public void SwitchToGameModesPanel()
+    private void TogglePanels(GameObject hidePanel, GameObject showPanel)
     {
-        CloseAllPanels();
-        if(lastOpenMenu == "GamemodePanel")
-        {
-            gamemodesPanel.SetActive(true);
-            OnGamemodePanel();
-        } else if(lastOpenMenu == "UserGameModePanel")
-        {
-            OpenUserGamemode();
-        }
-    }
-    public void OpenDailyQuestPanel()
-    {
-        questPanel.SetActive(false);
-        dailyQuestPanel.SetActive(true);
-    }
-    public void OpenUserGamemode()
-    {
-        CloseAllPanels();
-        userGamemodePanel.SetActive(true);
-        lastOpenMenu = "UserGameModePanel";
-        if(toScene == "BotsGame")
-        {
-            goalsSlider.value = PlayerPrefs.GetInt("Goals", 4);
-            speedSlider.value = PlayerPrefs.GetFloat("Difficulty", 7.5f);
-            speedPanel.SetActive(true);
-            float value = speedSlider.value;
-            speedText.text = $"{value:F1}";
-            goalsText.text = PlayerPrefs.GetInt("Goals", 4).ToString();
-        } else if(toScene == "GameScene")
-        {
-            goalsSlider.value = PlayerPrefs.GetInt("Goals", 4);
-            speedSlider.value = PlayerPrefs.GetFloat("Difficulty", 7.5f);
-            speedPanel.SetActive(false);
-        }
+        if(hidePanel != null) hidePanel.SetActive(false);
+        if(showPanel != null) showPanel.SetActive(true);
     }
 
-    public void OnGoalsSliderChanged()
-    {
-        goalsText.text = goalsSlider.value.ToString();
-    }
+    #endregion
 
-    public void OnSpeedSliderChanged()
-    {
-        float value = speedSlider.value;
-        speedText.text = $"{value:F1}";
-    }
+    #region Helpers
 
     public void AddMoney(int amount)
     {
-        coinMover.AddCoins(new Vector3(0, 0, 0), amount);
+        if(coinMover != null)
+            coinMover.AddCoins(Vector3.zero, amount);
     }
-    public void SetGamemode(int howManyGoals)
-    {
-        PlayerPrefs.SetInt("Goals", howManyGoals);
-        PlayerPrefs.Save();
-        SceneManager.LoadScene(toScene);
-    }
-    public void SetUserGamemode()
-    {
-        PlayerPrefs.SetInt("Goals", Convert.ToInt32(goalsSlider.value));
-        PlayerPrefs.SetFloat("Difficulty", speedSlider.value);
-        PlayerPrefs.Save();
-        SceneManager.LoadScene(toScene);
-    }
-    public void LoadToScene()
-    {
-        PlayerPrefs.Save();
-        SceneManager.LoadScene(toScene);
-    }
-    public void LoadMultiplayer()
-    {
-        SceneManager.LoadScene("MultiPlayerScene");
-    }
+
     private void UpdateQuests(int amount)
     {
-        questsHandler.UpdateQuestProgress("money10", amount);
-        questsHandler.UpdateQuestProgress("money50", amount);
-        questsHandler.UpdateQuestProgress("money100", amount);
-        questsHandler.UpdateQuestProgress("money200", amount);
-        questsHandler.UpdateQuestProgress("money300", amount);
-        questsHandler.UpdateQuestProgress("money500", amount);
-        dailyQuestHandler.UpdateQuestProgress("daily_money50", amount);
-        dailyQuestHandler.UpdateQuestProgress("money70", amount);
-        dailyQuestHandler.UpdateQuestProgress("daily_money100", amount);
+        if(questsHandler != null)
+        {
+            foreach(var key in QuestKeys)
+                questsHandler.UpdateQuestProgress(key, amount);
+        }
+
+        if(dailyQuestHandler != null)
+        {
+            foreach(var key in DailyQuestKeys)
+                dailyQuestHandler.UpdateQuestProgress(key, amount);
+        }
     }
+
+    #endregion
 }

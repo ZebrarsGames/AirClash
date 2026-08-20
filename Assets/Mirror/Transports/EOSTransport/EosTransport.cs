@@ -301,7 +301,7 @@ namespace EpicTransport {
         }
 
         private IEnumerator FetchEpicAccountId() {
-            while (!EOSSDKComponent.Initialized) {
+            while (!EOSSDKComponent.Initialized || EOSSDKComponent.LocalUserProductId == null) {
                 yield return null;
             }
 
@@ -309,7 +309,7 @@ namespace EpicTransport {
         }
 
         private IEnumerator ChangeRelayStatus() {
-            while (!EOSSDKComponent.Initialized) {
+            while (!EOSSDKComponent.Initialized || EOSSDKComponent.LocalUserProductId == null) {
                 yield return null;
             }
 

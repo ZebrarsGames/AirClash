@@ -205,7 +205,7 @@ public class MatchmakerScr : MonoBehaviour
 
         if(isHostCreated)
         {
-            NetworkManager.singleton.StopHost();
+            MyNetworkManager.singleton.StopHost();
             isHostCreated = false;
         }
 
@@ -316,7 +316,7 @@ public class MatchmakerScr : MonoBehaviour
             {
                 Debug.Log("[MatchmakerScr] Комната поиска создана. Запускаем Mirror Host в ожидании подключения...");
                 isHostCreated = true;
-                NetworkManager.singleton.StartHost();
+                MyNetworkManager.singleton.StartHost();
             }
             else
             {
@@ -351,8 +351,8 @@ public class MatchmakerScr : MonoBehaviour
         Debug.Log("[MatchmakerScr] OnOpponentFound()");
         OnMatchFound?.Invoke();
 
-        NetworkManager.singleton.networkAddress = hostEosId;
-        NetworkManager.singleton.StartClient();
+        MyNetworkManager.singleton.networkAddress = hostEosId;
+        MyNetworkManager.singleton.StartClient();
     }
 
     private string GetLocalEosId()
