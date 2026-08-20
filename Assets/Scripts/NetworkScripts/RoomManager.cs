@@ -77,6 +77,7 @@ public class RoomManager : MonoBehaviour
             www.uploadHandler = new UploadHandlerRaw(bodyRaw);
             www.downloadHandler = new DownloadHandlerBuffer();
             www.SetRequestHeader("Content-Type", "application/json");
+            www.SetRequestHeader("x-game-secret", GameConfig.ApiSecret);
 
             yield return www.SendWebRequest();
 
@@ -111,6 +112,7 @@ public class RoomManager : MonoBehaviour
             www.uploadHandler = new UploadHandlerRaw(bodyRaw);
             www.downloadHandler = new DownloadHandlerBuffer();
             www.SetRequestHeader("Content-Type", "application/json");
+            www.SetRequestHeader("x-game-secret", GameConfig.ApiSecret);
 
             yield return www.SendWebRequest();
 
@@ -145,6 +147,7 @@ public class RoomManager : MonoBehaviour
             www.uploadHandler = new UploadHandlerRaw(bodyRaw);
             www.downloadHandler = new DownloadHandlerBuffer();
             www.SetRequestHeader("Content-Type", "application/json");
+            www.SetRequestHeader("x-game-secret", GameConfig.ApiSecret);
 
             yield return www.SendWebRequest();
 

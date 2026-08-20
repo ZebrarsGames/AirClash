@@ -46,7 +46,6 @@ public class MainMenu : MonoBehaviour
     [SerializeField] private QuestsHandler questsHandler; 
     [SerializeField] private DailyQuestHandler dailyQuestHandler;
     [SerializeField] private SaveManager saveManager;
-    [SerializeField] private FirebaseManager firebaseManager;
 
     [Header("Floats")]
     [SerializeField] private float rotationSpeed = 10f;
@@ -112,10 +111,6 @@ public class MainMenu : MonoBehaviour
         {   
             PlayerPrefs.SetInt("IsHostDisconnect", 0);
             OpenPanel(hostDisconnectedPanel);
-        }
-        if(PlayerPrefs.GetInt("IsAfterMatchmaking", 0) == 1 && Application.internetReachability == NetworkReachability.NotReachable)
-        {
-            firebaseManager.SaveProgress(saveManager.GetData().NickName, PlayerPrefs.GetString("AccountPassword", ""));
         }
     }
 

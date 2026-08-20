@@ -74533,7 +74533,6 @@ MonoBehaviour:
   questsHandler: {fileID: 140701919}
   dailyQuestHandler: {fileID: 1134384870}
   saveManager: {fileID: 622325057}
-  firebaseManager: {fileID: 1676043451}
   rotationSpeed: 2.5
   maxAngle: 6
 --- !u!1 &1912403822

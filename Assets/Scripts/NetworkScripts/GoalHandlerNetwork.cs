@@ -40,7 +40,23 @@ public class GoalHandlerNetwork : NetworkBehaviour
         public int played_matches;
     }
 
-    public static GoalHandlerNetwork Instance;
+    [System.Serializable]
+    public class MatchStatsData
+    {
+        public string username;
+        public string password;
+        public int elo;
+        public int played_matches;
+    }
+
+    [System.Serializable]
+    public class MatchStatsResponse
+    {
+        public string status;
+        public string message;
+    }
+
+        public static GoalHandlerNetwork Instance;
 
     [Header("UI Elements")]
     public TextMeshProUGUI scoreText1;
@@ -137,7 +153,6 @@ public class GoalHandlerNetwork : NetworkBehaviour
     [Server] 
     public void ServerProcessGoal(Collider2D collision)
     {
-        double scoreA = 0;
         if(collision.gameObject.CompareTag("GoalTrigger1"))
         {
             score1++;
@@ -149,11 +164,10 @@ public class GoalHandlerNetwork : NetworkBehaviour
 
         if(score1 >= howManyGoals)
         {
-            scoreA = 1.0; 
             playerAMatches++;
             playerBMatches++;
             (int newRatingA, int newRatingB) = EloSystemScr.CalculateNewRatings(
-                playerARating, playerBRating, playerAMatches, playerBMatches, scoreA
+                playerARating, playerBRating, playerAMatches, playerBMatches, score1, score2
             );
 
             Debug.Log($"Игрок А: {playerARating} -> {newRatingA} (Изменение: {newRatingA - playerARating})");
@@ -163,11 +177,10 @@ public class GoalHandlerNetwork : NetworkBehaviour
         } 
         else if(score2 >= howManyGoals)
         {
-            scoreA = 0.0; 
             playerAMatches++;
             playerBMatches++;
             (int newRatingA, int newRatingB) = EloSystemScr.CalculateNewRatings(
-                playerARating, playerBRating, playerAMatches, playerBMatches, scoreA
+                playerARating, playerBRating, playerAMatches, playerBMatches, score1, score2
             );
 
             Debug.Log($"Игрок А: {playerARating} -> {newRatingA} (Изменение: {newRatingA - playerARating})");
@@ -197,14 +210,15 @@ public class GoalHandlerNetwork : NetworkBehaviour
         {
             PlayerPrefs.SetInt("MyElo", newRatingA);
             PlayerPrefs.SetInt("MyMatches", matchesA);
+            StartCoroutine(SendMatchStatsRequest(PlayerPrefs.GetString("Nick", "Ник"), PlayerPrefs.GetString("AccountPassword", ""), newRatingA, matchesA));
         }
         else
         {
             PlayerPrefs.SetInt("MyElo", newRatingB);
             PlayerPrefs.SetInt("MyMatches", matchesB);
+            StartCoroutine(SendMatchStatsRequest(PlayerPrefs.GetString("Nick", "Ник"), PlayerPrefs.GetString("AccountPassword", ""), newRatingB, matchesB));
         }
 
-        PlayerPrefs.SetInt("IsAfterMatchmaking", 1);
         PlayerPrefs.Save();
 
         if(playerIndex == 1)
@@ -415,32 +429,34 @@ public class GoalHandlerNetwork : NetworkBehaviour
         data.username = user;
         string jsonPayload = JsonUtility.ToJson(data);
 
-        UnityWebRequest www = UnityWebRequest.Put(url, jsonPayload);
-        www.method = "POST"; 
-        byte[] bodyRaw = Encoding.UTF8.GetBytes(jsonPayload);
-        www.uploadHandler = new UploadHandlerRaw(bodyRaw);
-        www.downloadHandler = new DownloadHandlerBuffer();
-        www.SetRequestHeader("Content-Type", "application/json");
-
-        yield return www.SendWebRequest();
-
-        if(www.result != UnityWebRequest.Result.Success)
+        using(UnityWebRequest www = new UnityWebRequest(url, "POST"))
         {
-            Debug.LogWarning($"HTTP Код ошибки: {www.responseCode}");
-            onEloReceived?.Invoke(-1);
-        }
-        else
-        {
-            EloResponseData res = JsonUtility.FromJson<EloResponseData>(www.downloadHandler.text);
-            
-            if(res.status == "success")
+            byte[] bodyRaw = Encoding.UTF8.GetBytes(jsonPayload);
+            www.uploadHandler = new UploadHandlerRaw(bodyRaw);
+            www.downloadHandler = new DownloadHandlerBuffer();
+            www.SetRequestHeader("Content-Type", "application/json");
+            www.SetRequestHeader("x-game-secret", GameConfig.ApiSecret);
+
+            yield return www.SendWebRequest();
+
+            if(www.result != UnityWebRequest.Result.Success)
             {
-                Debug.Log($"✅ ELO успешно получено для {user}: {res.elo}");
-                onEloReceived?.Invoke(res.elo);
+                Debug.LogWarning($"HTTP Код ошибки: {www.responseCode}");
+                onEloReceived?.Invoke(-1);
             }
             else
             {
-                Debug.LogWarning($"Сервер вернул ошибку: {res.message}");
+                EloResponseData res = JsonUtility.FromJson<EloResponseData>(www.downloadHandler.text);
+                
+                if(res.status == "success")
+                {
+                    Debug.Log($"ELO успешно получено для {user}: {res.elo}");
+                    onEloReceived?.Invoke(res.elo);
+                }
+                else
+                {
+                    Debug.LogWarning($"Сервер вернул ошибку: {res.message}");
+                }
             }
         }
     }
@@ -453,33 +469,73 @@ public class GoalHandlerNetwork : NetworkBehaviour
         data.username = user;
         string jsonPayload = JsonUtility.ToJson(data);
 
-        UnityWebRequest www = UnityWebRequest.Put(url, jsonPayload);
-        www.method = "POST"; 
-        byte[] bodyRaw = Encoding.UTF8.GetBytes(jsonPayload);
-        www.uploadHandler = new UploadHandlerRaw(bodyRaw);
-        www.downloadHandler = new DownloadHandlerBuffer();
-        www.SetRequestHeader("Content-Type", "application/json");
-
-        yield return www.SendWebRequest();
-
-        if(www.result != UnityWebRequest.Result.Success)
+        using(UnityWebRequest www = new UnityWebRequest(url, "POST"))
         {
-            Debug.LogWarning($"HTTP Код ошибки: {www.responseCode}");
-            onMatchesReceived?.Invoke(-1);
-        }
-        else
-        {
-            MatchesResponseData res = JsonUtility.FromJson<MatchesResponseData>(www.downloadHandler.text);
-            
-            if(res.status == "success")
+            byte[] bodyRaw = Encoding.UTF8.GetBytes(jsonPayload);
+            www.uploadHandler = new UploadHandlerRaw(bodyRaw);
+            www.downloadHandler = new DownloadHandlerBuffer();
+            www.SetRequestHeader("Content-Type", "application/json");
+            www.SetRequestHeader("x-game-secret", GameConfig.ApiSecret);
+
+            yield return www.SendWebRequest();
+
+            if(www.result != UnityWebRequest.Result.Success)
             {
-                Debug.Log($"✅ Матчи успешно получены для {user}: {res.played_matches}");
-                onMatchesReceived?.Invoke(res.played_matches);
+                Debug.LogWarning($"HTTP Код ошибки: {www.responseCode}");
+                onMatchesReceived?.Invoke(-1);
             }
             else
             {
-                Debug.LogWarning($"Сервер вернул ошибку: {res.message}");
-                onMatchesReceived?.Invoke(-1);
+                MatchesResponseData res = JsonUtility.FromJson<MatchesResponseData>(www.downloadHandler.text);
+                
+                if(res.status == "success")
+                {
+                    Debug.Log($"Матчи успешно получены для {user}: {res.played_matches}");
+                    onMatchesReceived?.Invoke(res.played_matches);
+                }
+                else
+                {
+                    Debug.LogWarning($"Сервер вернул ошибку: {res.message}");
+                    onMatchesReceived?.Invoke(-1);
+                }
+            }
+        }
+    }
+
+    IEnumerator SendMatchStatsRequest(string bigUser, string pass, int eloValue, int playedMatchesValue)
+    {
+        string url = "https://airclashserver.onrender.com/saveMatchStats";
+        string user = bigUser.Trim().ToLower();
+
+        MatchStatsData data = new MatchStatsData
+        {
+            username = user,
+            password = pass,
+            elo = eloValue,
+            played_matches = playedMatchesValue
+        };
+
+        string jsonPayload = JsonUtility.ToJson(data);
+
+        using(UnityWebRequest www = new UnityWebRequest(url, "POST"))
+        {
+            byte[] bodyRaw = System.Text.Encoding.UTF8.GetBytes(jsonPayload);
+            www.uploadHandler = new UploadHandlerRaw(bodyRaw);
+            www.downloadHandler = new DownloadHandlerBuffer();
+
+            www.SetRequestHeader("Content-Type", "application/json");
+            www.SetRequestHeader("x-game-secret", GameConfig.ApiSecret);
+
+            yield return www.SendWebRequest();
+
+            if(www.result != UnityWebRequest.Result.Success)
+            {
+                Debug.LogWarning($"HTTP Код ошибки при сохранении матча: {www.responseCode} ({www.error})");
+            }
+            else
+            {
+                MatchStatsResponse res = JsonUtility.FromJson<MatchStatsResponse>(www.downloadHandler.text);
+                Debug.Log($"Статистика матча успешно сохранена! ELO: {eloValue}, Матчей: {playedMatchesValue}");
             }
         }
     }

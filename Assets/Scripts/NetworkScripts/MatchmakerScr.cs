@@ -102,7 +102,7 @@ public class MatchmakerScr : MonoBehaviour
 
         if(string.IsNullOrEmpty(username))
         {
-            Debug.LogWarning("Имя пользователя не найдено! Применяем стандартный ELO.");
+            Debug.LogWarning("[MatchmakerScr] Имя пользователя не найдено! Применяем стандартный ELO.");
             currentElo = defaultElo;
             return;
         }
@@ -122,30 +122,33 @@ public class MatchmakerScr : MonoBehaviour
 
         string jsonPayload = JsonUtility.ToJson(requestData);
 
-        UnityWebRequest www = new UnityWebRequest(url, "POST");
-        byte[] bodyRaw = System.Text.Encoding.UTF8.GetBytes(jsonPayload);
-        www.uploadHandler = new UploadHandlerRaw(bodyRaw);
-        www.downloadHandler = new DownloadHandlerBuffer();
-        www.SetRequestHeader("Content-Type", "application/json");
-
-        yield return www.SendWebRequest();
-
-        if(www.result == UnityWebRequest.Result.Success)
+        using(UnityWebRequest www = new UnityWebRequest(url, "POST"))
         {
-            EloResponseData res = JsonUtility.FromJson<EloResponseData>(www.downloadHandler.text);
-            if(res.status == "success")
+            byte[] bodyRaw = System.Text.Encoding.UTF8.GetBytes(jsonPayload);
+            www.uploadHandler = new UploadHandlerRaw(bodyRaw);
+            www.downloadHandler = new DownloadHandlerBuffer();
+            www.SetRequestHeader("Content-Type", "application/json");
+            www.SetRequestHeader("x-game-secret", GameConfig.ApiSecret);
+
+            yield return www.SendWebRequest();
+
+            if(www.result == UnityWebRequest.Result.Success)
             {
-                currentElo = res.elo;
-                Debug.Log($"✅ Актуальный ELO для {username} успешно получен: {currentElo}");
+                EloResponseData res = JsonUtility.FromJson<EloResponseData>(www.downloadHandler.text);
+                if(res.status == "success")
+                {
+                    currentElo = res.elo;
+                    Debug.Log($"[MatchmakerScr] Актуальный ELO для {username} успешно получен: {currentElo}");
+                }
+                else
+                {
+                    Debug.LogError($"[MatchmakerScr] Ошибка сервера: {res.message}");
+                }
             }
             else
             {
-                Debug.LogError($"❌ Ошибка сервера: {res.message}");
+                Debug.LogError($"[MatchmakerScr] Сетевая ошибка при запросе ELO: {www.error}");
             }
-        }
-        else
-        {
-            Debug.LogError($"❌ Сетевая ошибка при запросе ELO: {www.error}");
         }
     }
 
@@ -264,6 +267,7 @@ public class MatchmakerScr : MonoBehaviour
             www.uploadHandler = new UploadHandlerRaw(bodyRaw);
             www.downloadHandler = new DownloadHandlerBuffer();
             www.SetRequestHeader("Content-Type", "application/json");
+            www.SetRequestHeader("x-game-secret", GameConfig.ApiSecret);
 
             yield return www.SendWebRequest();
 
@@ -304,6 +308,7 @@ public class MatchmakerScr : MonoBehaviour
             www.uploadHandler = new UploadHandlerRaw(bodyRaw);
             www.downloadHandler = new DownloadHandlerBuffer();
             www.SetRequestHeader("Content-Type", "application/json");
+            www.SetRequestHeader("x-game-secret", GameConfig.ApiSecret);
 
             yield return www.SendWebRequest();
 
@@ -332,6 +337,7 @@ public class MatchmakerScr : MonoBehaviour
             www.uploadHandler = new UploadHandlerRaw(bodyRaw);
             www.downloadHandler = new DownloadHandlerBuffer();
             www.SetRequestHeader("Content-Type", "application/json");
+            www.SetRequestHeader("x-game-secret", GameConfig.ApiSecret);
 
             yield return www.SendWebRequest();
         }
