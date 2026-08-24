@@ -251,9 +251,15 @@ public class GoalHandlerNetwork : NetworkBehaviour
         timer.TimerStart();
     }
 
-    public void RegisterPlayer(GameObject player, string name)
+    [Command]
+    public void CmdRequestStartTimer()
     {
         RpcStartTimer();
+    }
+
+    public void RegisterPlayer(GameObject player, string name)
+    {
+        CmdRequestStartTimer();
         if(name == "Player1")
         {
             player1 = player;
@@ -272,53 +278,74 @@ public class GoalHandlerNetwork : NetworkBehaviour
         }
     }
 
+    [Server]
     private void ServerResetPosition()
     {
-        if(puck != null)
+        ResetRigidBody(puck, puckStartPos);
+        ResetRigidBody(player1, player1startPos);
+        ResetRigidBody(player2, player2startPos);
+
+        RpcResetPositions(puckStartPos, player1startPos, player2startPos);
+    }
+
+    private void ResetRigidBody(GameObject go, Vector2 targetPos)
+    {
+        if(go == null) return;
+        
+        if(go.TryGetComponent<Rigidbody2D>(out var rb))
         {
-            TeleportAndReset(puck.GetComponent<Rigidbody2D>(), puckStartPos);
-            TeleportAndReset(player1.GetComponent<Rigidbody2D>(), player1startPos);
-            TeleportAndReset(player2.GetComponent<Rigidbody2D>(), player2startPos);
+            rb.position = targetPos;
+            rb.transform.position = targetPos;
+            rb.linearVelocity = Vector2.zero;
+            rb.angularVelocity = 0f;
+        }
+
+        if(go.TryGetComponent<PlayersControllerNetwork>(out var controller))
+        {
+            controller.ResetTargetPosition(targetPos);
         }
     }
 
-    private void TeleportAndReset(Rigidbody2D rb, Vector2 targetPos)
+    [ClientRpc]
+    private void RpcResetPositions(Vector2 puckPos, Vector2 p1Pos, Vector2 p2Pos)
     {
-        if(rb == null) return;
-
-        if(rb.TryGetComponent<PlayersControllerNetwork>(out var controller))
+        if(puck != null)
         {
-            if(rb.TryGetComponent<NetworkTransformBase>(out var netTransform))
+            if(puck.TryGetComponent<PuckScrNetwork>(out var puckNetwork))
             {
-                netTransform.enabled = false;
-                netTransform.Reset();
-                
-                controller.ResetTargetPosition(targetPos);
-                
-                netTransform.enabled = true;
+                puckNetwork.ClientForceReset(puckPos);
             }
-            else
+            else if(puck.TryGetComponent<Rigidbody2D>(out var puckRb))
             {
-                controller.ResetTargetPosition(targetPos); 
+                puckRb.position = puckPos;
+                puckRb.transform.position = puckPos;
+                puckRb.linearVelocity = Vector2.zero;
             }
         }
-        else 
-        {
-            if(rb.TryGetComponent<NetworkTransformBase>(out var netTransform))
-            {
-                netTransform.enabled = false;
-                netTransform.Reset();
-            }
 
-            rb.linearVelocity = Vector2.zero;
-            rb.angularVelocity = 0f;
+        if(player1 != null)
+        {
+            ResetClientPlayer(player1, p1Pos);
+        }
+
+        if(player2 != null)
+        {
+            ResetClientPlayer(player2, p2Pos);
+        }
+    }
+
+    private void ResetClientPlayer(GameObject playerGo, Vector2 targetPos)
+    {
+        if(playerGo.TryGetComponent<Rigidbody2D>(out var rb))
+        {
             rb.position = targetPos;
             rb.transform.position = targetPos;
+            rb.linearVelocity = Vector2.zero;
+        }
 
-            if(netTransform != null)
-            {
-                netTransform.enabled = true;
-            }
+        if(playerGo.TryGetComponent<PlayersControllerNetwork>(out var controller))
+        {
+            controller.ResetTargetPosition(targetPos);
         }
     }
 

@@ -265,6 +265,7 @@ MonoBehaviour:
   minY: -4.05
   maxY: 4.05
   timer: {fileID: 0}
+  smoothTime: 0.05
   audioSource: {fileID: 0}
   puckSound: {fileID: 8300000, guid: 8346d24a7b5724c4ba889b8a1d541bf7, type: 3}
 --- !u!96 &4248820097455076887
@@ -417,7 +418,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Mirror.Components::Mirror.NetworkTransformUnreliable
   syncDirection: 1
   syncMode: 0
-  syncInterval: 0
+  syncInterval: 0.016
   target: {fileID: 6637040443184789843}
   syncPosition: 1
   syncRotation: 1

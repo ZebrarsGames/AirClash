@@ -26,7 +26,7 @@ public class PlayersControllerNetwork : NetworkBehaviour, IBeginDragHandler, IDr
     private Camera cam; 
     private Vector3 offset;
     [SyncVar]
-    private Vector2 targetPos;
+    private Vector2 targetPos; 
     private bool isDragging = false;
     private Color particleColor;
     private GameObject particles;
@@ -49,6 +49,7 @@ public class PlayersControllerNetwork : NetworkBehaviour, IBeginDragHandler, IDr
         cam = Camera.main;
         if(audioSource == null) audioSource = GameObject.Find("SoundManagerSfx").GetComponent<AudioSource>();
     }
+
     void Start()
     {
         QualitySettings.vSyncCount = 0;
@@ -212,10 +213,14 @@ public class PlayersControllerNetwork : NetworkBehaviour, IBeginDragHandler, IDr
     }
 
     [Command(channel = Channels.Unreliable)]
-    private void CmdUpdatePosition(Vector2 newPos)
+    private void CmdUpdatePosition(Vector2 requestedPos)
     {
-        if(isMovementBlocked) return; 
-        targetPos = newPos;
+        if(isMovementBlocked) return;
+
+        requestedPos.x = Mathf.Clamp(requestedPos.x, minX, maxX);
+        requestedPos.y = Mathf.Clamp(requestedPos.y, minY, maxY);
+
+        MoveRigidbodyPhysically(requestedPos);
     }
 
     private void SmoothNetworkMovement()
@@ -242,16 +247,19 @@ public class PlayersControllerNetwork : NetworkBehaviour, IBeginDragHandler, IDr
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        if(isServer && collision.gameObject.name.Equals("Puck") && audioSource != null)
+        if(collision.gameObject.name.Equals("Puck"))
         {
-            RpcPlayPuckSound();
+            if(isServer && audioSource != null)
+            {
+                RpcPlayPuckSound();
+            }
         }
     }
 
     [ClientRpc]
     private void RpcPlayPuckSound()
     {
-        if (audioSource != null && puckSound != null)
+        if(audioSource != null && puckSound != null)
         {
             audioSource.PlayOneShot(puckSound);
         }
@@ -387,7 +395,6 @@ public class PlayersControllerNetwork : NetworkBehaviour, IBeginDragHandler, IDr
         {
             netTransform.Reset();
         }
-        
     }
 
     [Server]

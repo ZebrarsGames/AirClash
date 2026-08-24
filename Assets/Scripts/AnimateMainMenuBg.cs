@@ -1,36 +1,97 @@
 using UnityEngine;
 using UnityEngine.UI;
+using DG.Tweening;
+using DG.Tweening.Core;
+using DG.Tweening.Plugins.Options;
 
+[RequireComponent(typeof(RawImage))]
+[DisallowMultipleComponent]
 public class AnimateMainMenuBg : MonoBehaviour
 {
-    [Header("Floats")]
-    public Vector2 speed = new Vector2(0.1f, 0.1f);
-    
-    private RawImage rawImage;
-    private bool isAnim = true;
+    private const string AnimBgKey = "isAnimBg";
 
-    void Awake()
+    [Header("Settings")]
+    [SerializeField] private Vector2 speed = new Vector2(0.1f, 0.1f);
+
+    private RawImage rawImage;
+    private TweenerCore<Vector2, Vector2, VectorOptions> tween;
+
+    private Rect initialUvRect;
+    private bool isAnim;
+
+    private Vector2 currentOffset;
+
+    private void Awake()
     {
-        if(PlayerPrefs.GetInt("isAnimBg", 1) == 1) SetIsAnim(true);
-        else SetIsAnim(false);
         rawImage = GetComponent<RawImage>();
+        initialUvRect = rawImage.uvRect;
+        isAnim = PlayerPrefs.GetInt(AnimBgKey, 1) == 1;
     }
 
-    void Update()
+    private void Start()
     {
         if(isAnim)
         {
-           Rect currentUV = rawImage.uvRect;
+            StartAnimation();
+        }
+    }
 
-            currentUV.x += speed.x * Time.deltaTime;
-            currentUV.y += speed.y * Time.deltaTime;
+    private void StartAnimation()
+    {
+        if(tween != null && tween.IsActive()) return;
+        if(speed == Vector2.zero) return;
 
-            rawImage.uvRect = currentUV; 
+        currentOffset = Vector2.zero;
+
+        tween = DOTween.To(
+            GetPositionOffset,
+            SetPositionOffset,
+            speed,
+            1f
+        )
+        .SetLoops(-1, LoopType.Incremental)
+        .SetEase(Ease.Linear)
+        .SetLink(gameObject);
+    }
+
+    private Vector2 GetPositionOffset() => currentOffset;
+    
+    private void SetPositionOffset(Vector2 value)
+    {
+        currentOffset = value;
+
+        Rect currentRect = initialUvRect;
+        currentRect.x += currentOffset.x;
+        currentRect.y += currentOffset.y;
+
+        currentRect.x %= 1f;
+        currentRect.y %= 1f;
+
+        rawImage.uvRect = currentRect;
+    }
+
+    private void StopAnimation()
+    {
+        if(tween != null && tween.IsActive())
+        {
+            tween.Kill();
+            tween = null;
+        }
+        
+        if(rawImage != null)
+        {
+            rawImage.uvRect = initialUvRect;
         }
     }
 
     public void SetIsAnim(bool value)
     {
+        if(isAnim == value) return;
+
         isAnim = value;
+        PlayerPrefs.SetInt(AnimBgKey, value ? 1 : 0);
+
+        if(isAnim) StartAnimation();
+        else StopAnimation();
     }
 }
