@@ -62,6 +62,8 @@ public class GoalHandlerNetwork : NetworkBehaviour
     public TextMeshProUGUI scoreText1;
     public TextMeshProUGUI scoreText2;
     [SerializeField] private TextMeshProUGUI winOrLoseText;
+    [SerializeField] private TextMeshProUGUI eloText;
+    [SerializeField] private TextMeshProUGUI matchesText;
     [SerializeField] private TextMeshProUGUI rematchButtonText;
     [SerializeField] private Button mainMenuBtn;
     [SerializeField] private Button rematchButton;
@@ -225,22 +227,22 @@ public class GoalHandlerNetwork : NetworkBehaviour
         {
             if(isClientOnly)
             {
-                Lose();
+                Win(newRatingB, matchesB);
             } 
             else
             {
-            Win();
+                Lose(newRatingA, matchesA);
             }
         } 
         else if(playerIndex == 2)
         {
             if(isClientOnly)
             {
-                Lose();
+                Lose(newRatingB, matchesB);
             } 
             else
             {
-                Win();
+                Win(newRatingA, matchesA);
             }
         }
     }
@@ -259,7 +261,14 @@ public class GoalHandlerNetwork : NetworkBehaviour
 
     public void RegisterPlayer(GameObject player, string name)
     {
-        CmdRequestStartTimer();
+        if(isServer)
+        {
+            RpcStartTimer(); 
+        }
+        else
+        {
+            CmdRequestStartTimer();
+        }
         if(name == "Player1")
         {
             player1 = player;
@@ -430,7 +439,7 @@ public class GoalHandlerNetwork : NetworkBehaviour
         endSreenPanel.SetActive(false);
     }
 
-    public void Win()
+    public void Win(int newRating, int matches)
     {
         goalTextCanvas.SetActive(true);
         var rect = endSreenPanel.GetComponent<RectTransform>();
@@ -438,8 +447,10 @@ public class GoalHandlerNetwork : NetworkBehaviour
         endSreenPanel.SetActive(true);
         rect.DOScale(new Vector3(1.0f, 1.0f, 1.0f), 0.3f).SetEase(Ease.OutBack);
         winOrLoseText.text = "Победа!";
+        eloText.text = $"Ваш новый эло: {newRating}";
+        matchesText.text = $"Ваши матчи: {matches}";
     }
-    public void Lose()
+    public void Lose(int newRating, int matches)
     {
         goalTextCanvas.SetActive(true);
         var rect = endSreenPanel.GetComponent<RectTransform>();
@@ -447,6 +458,8 @@ public class GoalHandlerNetwork : NetworkBehaviour
         endSreenPanel.SetActive(true);
         rect.DOScale(new Vector3(1.0f, 1.0f, 1.0f), 0.3f).SetEase(Ease.OutBack);
         winOrLoseText.text = "Поражение!";
+        eloText.text = $"Ваш новый эло: {newRating}";
+        matchesText.text = $"Ваши матчи: {matches}";
     }
     public void LoadMainMenu()
     {

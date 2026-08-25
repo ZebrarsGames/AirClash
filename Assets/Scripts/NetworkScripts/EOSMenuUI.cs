@@ -1,24 +1,37 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using Mirror;
 using TMPro;
 using EpicTransport;
 using DG.Tweening;
 using System.Threading.Tasks;
+using System;
+using System.Text;
+using UnityEngine.Networking;
 
 public class EOSMenuUI : MonoBehaviour
 {
-    [SerializeField] private TMP_InputField idInputField;
-    [SerializeField] private TextMeshProUGUI myIdText;
-    [SerializeField] private RoomManager roomManager;
+    [Header("Panels")]
     [SerializeField] private GameObject uiPanel;
     [SerializeField] private GameObject placeholderPanel;
     [SerializeField] private GameObject warningPanel;
-    [SerializeField] private RectTransform imageTransform;
-    [SerializeField] private float rotationSpeed = 90f; 
+    [SerializeField] private GameObject matchmakingPanel;
+    [SerializeField] private GameObject roomPanel;
+
+    [Header("UI")]
+    [SerializeField] private TMP_InputField roomCodeInputfield;
+    [SerializeField] private TextMeshProUGUI debugText;
+    [SerializeField] private TextMeshProUGUI roomCodeText;
     [SerializeField] private TextMeshProUGUI hintText;
-    [SerializeField] private float changeInterval = 5f;
+    [SerializeField] private RectTransform imageTransform;
+    [SerializeField] private TextMeshProUGUI eloText;
+
+    [Header("Floats")]
+    [SerializeField] private float rotationSpeed = 90f; 
+    [SerializeField] private float hintChangeInterval = 5f;
+
+    [Header("Other")]
+    [SerializeField] private RoomManager roomManager;
     [SerializeField] private List<string> hints = new List<string>();
 
     private int lastHintIndex = -1;
@@ -29,15 +42,11 @@ public class EOSMenuUI : MonoBehaviour
     private void Awake()
     {
         CheckMultiplayerRequirments();
-        delay = new WaitForSeconds(changeInterval);
+        delay = new WaitForSeconds(hintChangeInterval);
     }
 
     void Start()
     {
-        var rect = myIdText.GetComponent<RectTransform>();
-        rect.localPosition = new Vector3(0, -400, 0);
-        rect.sizeDelta = new Vector3(825, 165);
-
         float duration = 360f / Mathf.Abs(rotationSpeed);
 
         float targetAngle = rotationSpeed > 0 ? -360f : 360f;
@@ -50,7 +59,12 @@ public class EOSMenuUI : MonoBehaviour
         uiPanel.SetActive(true);
         placeholderPanel.SetActive(false);
         warningPanel.SetActive(false);
-        myIdText.text = "Авторизация в Epic Games...";
+        matchmakingPanel.SetActive(false);
+        roomPanel.SetActive(false);
+        debugText.gameObject.SetActive(true);
+        roomCodeText.gameObject.SetActive(false);
+        debugText.text = "Авторизация в Epic Games...";
+        StartCoroutine(GetPlayerEloRequest(PlayerPrefs.GetString("Nick", "Ник"), (elo) => eloText.text = $"Ваш эло: {elo}"));
         StartCoroutine(WaitForEOSLoginRoutine());
     }
 
@@ -65,6 +79,16 @@ public class EOSMenuUI : MonoBehaviour
     private void OnDisable()
     {
         StopAllCoroutines();
+    }
+
+    public void OnInputField(GameObject panel)
+    {
+        panel.GetComponent<RectTransform>().DOLocalMoveY(228, 0.3f).SetEase(Ease.OutSine);
+    }
+
+    public void OnInputFieldEnd(GameObject panel)
+    {
+        panel.GetComponent<RectTransform>().DOLocalMoveY(0, 0.3f).SetEase(Ease.OutSine);
     }
 
     private IEnumerator ChangeHintRoutine()
@@ -84,7 +108,7 @@ public class EOSMenuUI : MonoBehaviour
             return;
         }
 
-        int newIndex = Random.Range(0, hints.Count);
+        int newIndex = UnityEngine.Random.Range(0, hints.Count);
 
         if(newIndex == lastHintIndex)
         {
@@ -109,7 +133,7 @@ public class EOSMenuUI : MonoBehaviour
 
         currentEosId = EOSSDKComponent.LocalUserProductId.ToString();
 
-        myIdText.text = "Мой EOS ID: " + currentEosId;
+        debugText.text = "Мой EOS ID: " + currentEosId;
         Debug.Log($"[EOS Menu] Авторизация успешна. EOS ID: {currentEosId}");
     }
 
@@ -117,13 +141,13 @@ public class EOSMenuUI : MonoBehaviour
     {
         if(EOSSDKComponent.LocalUserProductId == null || !EOSSDKComponent.LocalUserProductId.IsValid())
         {
-            myIdText.text = "Подождите, идёт авторизация EOS...";
+            debugText.text = "Подождите, идёт авторизация EOS...";
             Debug.LogWarning("Попытка создать комнату до завершения авторизации Epic!");
             return;
         }
 
         currentEosId = EOSSDKComponent.LocalUserProductId.ToString();
-        myIdText.text = "Создание комнаты...";
+        debugText.text = "Создание комнаты...";
 
         roomManager.CreateRoom(currentEosId, 
         (roomId) =>
@@ -131,13 +155,13 @@ public class EOSMenuUI : MonoBehaviour
             if(MyNetworkManager.singleton == null)
             {
                 var foundManager = FindAnyObjectByType<MyNetworkManager>();
-                if (foundManager != null)
+                if(foundManager != null)
                 {
                     foundManager.gameObject.SetActive(true);
                 }
                 else
                 {
-                    myIdText.text = "Ошибка: Сетевой менеджер не найден!";
+                    debugText.text = "Ошибка: Сетевой менеджер не найден!";
                     Debug.LogError("Критическая ошибка: Компонент MyNetworkManager отсутствует на сцене!");
                     return;
                 }
@@ -146,41 +170,41 @@ public class EOSMenuUI : MonoBehaviour
             {
                 MyNetworkManager.singleton.gameObject.SetActive(true);
             }
-            myIdText.text = "Код комнаты: " + roomId;
+            roomCodeText.text = "Код комнаты: " + roomId;
             if(MyNetworkManager.singleton is MyNetworkManager customManager)
             {
                 customManager.SetCurrentRoomCode(roomId);
             }
             Debug.Log($"Комната успешно создана на сервере! Код: {roomId}");
+            roomCodeText.gameObject.SetActive(true);
             ShowPlaceholder();
-            var group = uiPanel.GetComponent<CanvasGroup>();
-            group.DOFade(0, 1f).OnComplete(() => uiPanel.SetActive(false));
+            ClosePanel(uiPanel);
             
             MyNetworkManager.singleton.StartHost();
         },
         (errorText) =>
         {
-            myIdText.text = "Ошибка создания: " + errorText;
+            debugText.text = "Ошибка создания: " + errorText;
             Debug.LogError($"Ошибка сервера Firebase: {errorText}");
         });
     }
 
     public void JoinClientGame()
     {
-        string inputCode = idInputField.text.Trim().ToUpper();
+        string inputCode = roomCodeInputfield.text.Trim().ToUpper();
 
         if(string.IsNullOrEmpty(inputCode))
         {
-            myIdText.text = "Введите код комнаты!";
+            debugText.text = "Введите код комнаты!";
             return;
         }
 
-        myIdText.text = "Поиск комнаты...";
+        debugText.text = "Поиск комнаты...";
 
         roomManager.JoinRoom(inputCode, 
         (roomEosId) =>
         {
-            myIdText.text = "Подключение к " + inputCode + "...";
+            debugText.text = "Подключение к " + inputCode + "...";
             Debug.Log($"Успешно получен EOS ID хоста: {roomEosId}");
             OnMatchFound();
 
@@ -193,7 +217,7 @@ public class EOSMenuUI : MonoBehaviour
                 }
                 else
                 {
-                    myIdText.text = "Ошибка: Сетевой менеджер не найден!";
+                    debugText.text = "Ошибка: Сетевой менеджер не найден!";
                     Debug.LogError("Критическая ошибка: Компонент MyNetworkManager отсутствует на сцене!");
                     return;
                 }
@@ -208,7 +232,7 @@ public class EOSMenuUI : MonoBehaviour
         },
         (errorText) =>
         {
-            myIdText.text = "Комната не найдена: " + errorText;
+            debugText.text = "Комната не найдена: " + errorText;
             Debug.LogError($"Ошибка при поиске комнаты: {errorText}");
         });
     }
@@ -220,12 +244,12 @@ public class EOSMenuUI : MonoBehaviour
         if(MyNetworkManager.singleton is MyNetworkManager customManager)
         {
             roomCode = customManager.GetCurrentRoomCode();
-            myIdText.text = "Удаление комнаты...";
+            debugText.text = "Удаление комнаты...";
 
             roomManager.DeleteRoom(roomCode, 
             () =>
             {
-                myIdText.text = $"Комната {roomCode} успешно удалена";
+                debugText.text = $"Комната {roomCode} успешно удалена";
                 Debug.Log($"Комната {roomCode} успешно удалена");
                 HidePlaceholder();
 
@@ -238,7 +262,7 @@ public class EOSMenuUI : MonoBehaviour
                     }
                     else
                     {
-                        myIdText.text = "Ошибка: Сетевой менеджер не найден!";
+                        debugText.text = "Ошибка: Сетевой менеджер не найден!";
                         Debug.LogError("Критическая ошибка: Компонент MyNetworkManager отсутствует на сцене!");
                         return;
                     }
@@ -253,7 +277,7 @@ public class EOSMenuUI : MonoBehaviour
             },
             (errorText) =>
             {
-                myIdText.text = "Комната не найдена: " + errorText;
+                debugText.text = "Комната не найдена: " + errorText;
                 Debug.LogError($"Ошибка при поиске комнаты: {errorText}");
             });
         }
@@ -262,23 +286,24 @@ public class EOSMenuUI : MonoBehaviour
     private void ShowPlaceholder()
     {
         placeholderPanel.SetActive(true);
-        var rect = myIdText.GetComponent<RectTransform>();
-        rect.localPosition = new Vector3(-700, 26, 0);
-        rect.sizeDelta = new Vector3(500, 370);
+        debugText.gameObject.SetActive(false);
     }
 
     private void HidePlaceholder()
     {
+        matchmakingPanel.SetActive(false);
+        roomPanel.SetActive(false);
+        debugText.gameObject.SetActive(true);
+        roomCodeText.gameObject.SetActive(false);
         uiPanel.SetActive(true);
-        var group = placeholderPanel.GetComponent<CanvasGroup>();
-        group.DOFade(0, 1f).OnComplete(() => placeholderPanel.SetActive(false));
+        ClosePanel(placeholderPanel);
     }
 
     public void OnMatchFound()
     {
         HidePlaceholder();
         uiPanel.SetActive(false);
-        myIdText.gameObject.SetActive(false);
+        debugText.gameObject.SetActive(false);
     }
 
     public void OnMatchmakingStart()
@@ -289,6 +314,35 @@ public class EOSMenuUI : MonoBehaviour
     public void OnMatchmakingCancel()
     {
         HidePlaceholder();
+    }
+
+    public void OpenPanel(GameObject panel)
+    {
+        if(panel == null) return;
+
+        CanvasGroup group = panel.GetComponent<CanvasGroup>();
+        group.DOKill();
+        group.alpha = 0;
+        panel.SetActive(true);
+        group.DOFade(1, 0.3f);
+    }
+
+    public void ClosePanel(GameObject panel)
+    {
+        if(panel == null) return;
+
+        CanvasGroup group = panel.GetComponent<CanvasGroup>();
+        group.DOKill();
+        group.alpha = 1;
+        group.DOFade(0, 0.3f).OnComplete(() => panel.SetActive(false));
+    }
+
+    public void OpenMainMenu()
+    {
+        MyNetworkManager.singleton.StopHost();
+        MyNetworkManager.singleton.StopClient();
+        PlayerPrefs.Save();
+        UnityEngine.SceneManagement.SceneManager.LoadScene("MainMenu");
     }
 
     private Task<bool> GetIsExists(string username) 
@@ -341,6 +395,47 @@ public class EOSMenuUI : MonoBehaviour
         } else
         {
             return true;
+        }
+    }
+
+    IEnumerator GetPlayerEloRequest(string bigUser, Action<int> onEloReceived)
+    {   
+        string user = bigUser.ToLower();
+        string url = "https://airclashserver.onrender.com/getElo";
+
+        EloRequestData data = new EloRequestData();
+        data.username = user;
+        string jsonPayload = JsonUtility.ToJson(data);
+
+        using(UnityWebRequest www = new UnityWebRequest(url, "POST"))
+        {
+            byte[] bodyRaw = Encoding.UTF8.GetBytes(jsonPayload);
+            www.uploadHandler = new UploadHandlerRaw(bodyRaw);
+            www.downloadHandler = new DownloadHandlerBuffer();
+            www.SetRequestHeader("Content-Type", "application/json");
+            www.SetRequestHeader("x-game-secret", GameConfig.ApiSecret);
+
+            yield return www.SendWebRequest();
+
+            if(www.result != UnityWebRequest.Result.Success)
+            {
+                Debug.LogWarning($"HTTP Код ошибки: {www.responseCode}");
+                onEloReceived?.Invoke(-1);
+            }
+            else
+            {
+                EloResponseData res = JsonUtility.FromJson<EloResponseData>(www.downloadHandler.text);
+                
+                if(res.status == "success")
+                {
+                    Debug.Log($"ELO успешно получено для {user}: {res.elo}");
+                    onEloReceived?.Invoke(res.elo);
+                }
+                else
+                {
+                    Debug.LogWarning($"Сервер вернул ошибку: {res.message}");
+                }
+            }
         }
     }
 }
