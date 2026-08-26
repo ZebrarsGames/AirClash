@@ -11,7 +11,6 @@ public class GoalHandler : MonoBehaviour
     public TextMeshProUGUI scoreText1;
     public TextMeshProUGUI scoreText2;
     [SerializeField] private TextMeshProUGUI goalText;
-    [SerializeField] private GameObject goalTextCanvas;
     [SerializeField] private GameObject endSreenPanel;
 
     [Header("Players & Puck")]
@@ -42,7 +41,6 @@ public class GoalHandler : MonoBehaviour
 
     [Header("Effects")]
     public GameObject particlePrefab;
-    private bool isParticlesOn;
     private bool isWind;
     private Color wallParticleColor;
 
@@ -81,8 +79,6 @@ public class GoalHandler : MonoBehaviour
         player1startPos = player1.transform.position;
         player2startPos = player2.transform.position;
         puckStartPos = puck.transform.position;
-        if(PlayerPrefs.GetInt("Particle") == 0) isParticlesOn = false;
-        else isParticlesOn = true;
         light2D.intensity = 1.0f;
         player1.GetComponentInChildren<Light2D>().intensity = 0;
         player2.GetComponentInChildren<Light2D>().intensity = 0;
@@ -198,18 +194,6 @@ public class GoalHandler : MonoBehaviour
     public void OnPuckCollisionEnter2D(Collision2D collision) 
     {
         lastCollision = collision.gameObject.name;
-        if(isParticlesOn == true && collision.gameObject.CompareTag("Wall"))
-        {
-            var ps = particlePrefab.GetComponent<ParticleSystem>();
-            var psMain = ps.main;
-            ContactPoint2D contact = collision.contacts[0];
-            Vector3 spawnPos = contact.point;
-            spawnPos.z = -1f;
-            Quaternion rotation = Quaternion.FromToRotation(Vector3.up, contact.normal);
-            psMain.startColor = wallParticleColor;     
-            var newParticles = Instantiate(particlePrefab, contact.point, rotation);
-            newParticles.GetComponent<ParticleSystem>().Play();
-        }
         if(!(collision.gameObject.name.Equals("Player1") || collision.gameObject.name.Equals("Player2")))
         {
             audioSourceSfx.PlayOneShot(puckSound);
@@ -218,18 +202,36 @@ public class GoalHandler : MonoBehaviour
 
     public void ResetPosition()
     {
-        if (puck != null)
+        if(puck != null)
         {
             puck.transform.position = puckStartPos;
-            player1.transform.position = player1startPos;
-            player1.GetComponent<Rigidbody2D>().linearVelocity = Vector2.zero;
-            player2.transform.position = player2startPos;
-            player2.GetComponent<Rigidbody2D>().linearVelocity = Vector2.zero;
-            Rigidbody2D rb = puck.GetComponent<Rigidbody2D>();
-            if (rb != null)
+            Rigidbody2D puckRb = puck.GetComponent<Rigidbody2D>();
+            if(puckRb != null)
             {
-                rb.linearVelocity = Vector2.zero;
-                rb.angularVelocity = 0f;
+                puckRb.linearVelocity = Vector2.zero;
+                puckRb.angularVelocity = 0f;
+            }
+
+            PlayersController p1Controller = player1.GetComponent<PlayersController>();
+            if(p1Controller != null)
+            {
+                p1Controller.TeleportToPosition(player1startPos);
+            }
+            else
+            {
+                player1.transform.position = player1startPos;
+                player1.GetComponent<Rigidbody2D>().linearVelocity = Vector2.zero;
+            }
+
+            PlayersController p2Controller = player2.GetComponent<PlayersController>();
+            if(p2Controller != null)
+            {
+                p2Controller.TeleportToPosition(player2startPos);
+            }
+            else
+            {
+                player2.transform.position = player2startPos;
+                player2.GetComponent<Rigidbody2D>().linearVelocity = Vector2.zero;
             }
         }
     }
@@ -291,7 +293,6 @@ public class GoalHandler : MonoBehaviour
             int xpBefore = xpHandler.GetXP();
             endScreen.StartEndScreen(0, xpBefore);
         }
-        goalTextCanvas.SetActive(true);
         if(isFog)
         {
             DOTween.To(() => light2D.intensity, x => light2D.intensity = x, 1f, 3f);
@@ -323,7 +324,6 @@ public class GoalHandler : MonoBehaviour
             PlayerPrefs.SetInt("isAfterGame", 1);
             PlayerPrefs.Save();
         }
-        goalTextCanvas.SetActive(true);
         if(isFog)
         {
             DOTween.To(() => light2D.intensity, x => light2D.intensity = x, 1f, 3f);

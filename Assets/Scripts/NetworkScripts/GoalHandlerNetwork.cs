@@ -67,7 +67,6 @@ public class GoalHandlerNetwork : NetworkBehaviour
     [SerializeField] private TextMeshProUGUI rematchButtonText;
     [SerializeField] private Button mainMenuBtn;
     [SerializeField] private Button rematchButton;
-    [SerializeField] private GameObject goalTextCanvas;
     [SerializeField] private GameObject endSreenPanel;
 
     [Header("Players & Puck")]
@@ -441,7 +440,6 @@ public class GoalHandlerNetwork : NetworkBehaviour
 
     public void Win(int newRating, int matches)
     {
-        goalTextCanvas.SetActive(true);
         var rect = endSreenPanel.GetComponent<RectTransform>();
         rect.localScale = Vector3.zero;
         endSreenPanel.SetActive(true);
@@ -452,7 +450,6 @@ public class GoalHandlerNetwork : NetworkBehaviour
     }
     public void Lose(int newRating, int matches)
     {
-        goalTextCanvas.SetActive(true);
         var rect = endSreenPanel.GetComponent<RectTransform>();
         rect.localScale = Vector3.zero;
         endSreenPanel.SetActive(true);

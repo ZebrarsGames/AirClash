@@ -4,7 +4,6 @@ using System.Collections;
 
 public class PauseHandler : MonoBehaviour
 {
-    [SerializeField] private GameObject pauseMenu;
     [SerializeField] private GameObject pausePanel;
     private bool isPaused = false;
     [SerializeField] private GoalHandler goalHandler;
@@ -18,7 +17,6 @@ public class PauseHandler : MonoBehaviour
     {
         if(isPaused)
         {  
-            pauseMenu.SetActive(true);
             ShowPauseMenu();
         } else
         {
@@ -29,11 +27,7 @@ public class PauseHandler : MonoBehaviour
     {
         Time.timeScale = 1.0f;
         var rect = pausePanel.GetComponent<RectTransform>();
-        rect.DOScale(Vector3.zero, 0.3f).SetEase(Ease.InBack).SetUpdate(true).OnComplete(() =>
-        {
-            pausePanel.SetActive(false);
-            pauseMenu.SetActive(false);
-        });    
+        rect.DOScale(Vector3.zero, 0.3f).SetEase(Ease.InBack).SetUpdate(true).OnComplete(() => pausePanel.SetActive(false));    
     }
     private void ShowPauseMenu()
     {
@@ -45,9 +39,9 @@ public class PauseHandler : MonoBehaviour
     }
     public void MainMenu()
     {
+        Time.timeScale = 1f;
         PlayerPrefs.SetInt("HowMoneyAdds", 0);
         PlayerPrefs.Save();
-        Time.timeScale = 1f;
         UnityEngine.SceneManagement.SceneManager.LoadScene("MainMenu");
     }
 

@@ -2,141 +2,151 @@ using UnityEngine;
 
 public class BotsAI : MonoBehaviour
 {
-
     [Header("Object links")]
-    public GameObject bot;
-    public Transform puck;
+    [SerializeField] private Rigidbody2D botRb;
     [SerializeField] private GoalHandler goalHandler;
     [SerializeField] private TimerScr timer;
 
     [Header("Movement settings")]
-    public float moveSpeed;
-    public Vector3 PuckKoof; // Коэффициент слежения за шайбой
     [SerializeField] private Vector2 botStartPos;
-    private float baseSpeed;
+    public float moveSpeed;
+    public Vector3 puckKoof;
 
     [Header("AI Boundary")]
-    public float minX;
-    public float maxX;
-    public float minY;
-    public float maxY;
+    [SerializeField] private float minX;
+    [SerializeField] private float maxX;
+    [SerializeField] private float minY;
+    [SerializeField] private float maxY;
 
-    [Header("Technical components")]
-    private Rigidbody2D botRb;
-    private int score1 = 0;
-    private int score2 = 0;
-
+    private Transform puckTransform;
+    private TrailRenderer trailRenderer;
+    private float baseSpeed;
+    private float botOffsetX;
+    private float botOffsetY;
+    private int score1;
+    private int score2;
 
     void Start()
     {
-        botRb = bot.GetComponent<Rigidbody2D>();
-        botRb.linearVelocity = Vector2.zero;
-        moveSpeed = PlayerPrefs.GetFloat("Difficulty");
+        if(botRb == null) botRb = GetComponent<Rigidbody2D>();
+        
+        trailRenderer = GetComponent<TrailRenderer>();
+
+        GameObject puckObj = GameObject.FindWithTag("Puck");
+        if(puckObj != null) puckTransform = puckObj.transform;
+
+        if(botRb != null) botRb.linearVelocity = Vector2.zero;
+        
+        moveSpeed = PlayerPrefs.GetFloat("Difficulty", 5f);
         baseSpeed = moveSpeed;
-        if(PlayerPrefs.GetInt("Trail", 1) == 1) GetComponent<TrailRenderer>().enabled = true;
-        else GetComponent<TrailRenderer>().enabled = false;
+        botOffsetX = PlayerPrefs.GetFloat("BotOffsetX", 0f);
+        botOffsetY = PlayerPrefs.GetFloat("BotOffsetY", 0f);
+
+        if(trailRenderer != null)
+        {
+            trailRenderer.enabled = PlayerPrefs.GetInt("Trail", 1) == 1;
+        }
     }
 
     void FixedUpdate()
     {
-        if(timer.TimerOn) return;
+        if(timer != null && timer.TimerOn) 
+        {
+            if(botRb != null) botRb.linearVelocity = Vector2.zero;
+            return;
+        }
+        if(puckTransform == null || botRb == null) return;
 
-        Vector2 targetDestination;
+        Vector2 puckPos = puckTransform.position;
+        Vector2 currentBotPos = botRb.position;
+        Vector2 targetDestination = currentBotPos;
         float currentSpeed = moveSpeed;
 
-        if(puck.position.x > 0 && puck.position.x < 2f)
+        if(puckPos.x > 0 && puckPos.x < 2f)
         {
-            Vector2 puckPos = puck.position;
-            puckPos.x *= -1.0f;
-            puckPos.x -= PlayerPrefs.GetFloat("BotOffsetX");
-            if(UnityEngine.Random.Range(0, 1) == 0) puckPos.y += PlayerPrefs.GetInt("BotOffsetY");
-            else puckPos.y -= PlayerPrefs.GetInt("BotOffsetY");
-            targetDestination = puckPos;          
-            currentSpeed = moveSpeed / 4;
-        } else if(puck.position.x > 2)
-        {
-            targetDestination = botStartPos;
-            currentSpeed = moveSpeed / 3;
-        } else if(puck.position.x < 0 && (puck.position.y > 4 || puck.position.y < -4))
-        {
-            targetDestination = botStartPos;
-            currentSpeed = moveSpeed / 4;
-        } else if(puck.position.x < -6 && (puck.position.y > 3.5f || puck.position.y < -3.5f))
-        {
-            targetDestination = botStartPos;
-            currentSpeed = moveSpeed / 4;
-        } else if(puck.position.x < -6)
-        {
-            targetDestination = puck.position;
-            currentSpeed = moveSpeed * 1.5f;
-        } else if(puck.position.x < -4)
-        {
-            if(puck.position.y > 0)
-            {
-                PuckKoof.y += 0.5f;
-                targetDestination = puck.position - PuckKoof;
-                currentSpeed = moveSpeed;
-                PuckKoof.y -= 0.5f;
-            } else if(puck.position.y < 0)
-            {
-                PuckKoof.y -= 0.5f;
-                targetDestination = puck.position - PuckKoof;
-                currentSpeed = moveSpeed;
-                PuckKoof.y += 0.5f;
-            } else
-            {
-                targetDestination = puck.position;
-                currentSpeed = moveSpeed;
-            }
-        } else
-        {
-            if(puck.position.y > 0)
-            {
-                PuckKoof.y += 0.5f;
-                targetDestination = puck.position - PuckKoof;
-                currentSpeed = moveSpeed;
-                PuckKoof.y -= 0.5f;
-            } else if(puck.position.y < 0)
-            {
-                PuckKoof.y -= 0.5f;
-                targetDestination = puck.position - PuckKoof;
-                currentSpeed = moveSpeed;
-                PuckKoof.y += 0.5f;
-            } else
-            {
-                targetDestination = puck.position;
-                currentSpeed = moveSpeed;
-            }
+            puckPos.x = (-puckPos.x) - botOffsetX;
+            puckPos.y += (Random.value > 0.5f) ? botOffsetY : -botOffsetY;
             
+            targetDestination = puckPos;          
+            currentSpeed = moveSpeed * 0.25f;
+        } 
+        else if(puckPos.x > 2f)
+        {
+            targetDestination = botStartPos;
+            currentSpeed = moveSpeed * 0.33f;
+        } 
+        else if((puckPos.x < 0 && (puckPos.y > 4f || puckPos.y < -4f)) || (puckPos.x < -6f && (puckPos.y > 3.5f || puckPos.y < -3.5f)))
+        {
+            targetDestination = botStartPos;
+            currentSpeed = moveSpeed * 0.25f;
+        } 
+        else if(puckPos.x < -6f)
+        {
+            targetDestination = puckPos;
+            currentSpeed = moveSpeed * 1.5f;
+        } 
+        else
+        {
+            if(puckPos.y > 0)
+            {
+                Vector2 offset = new Vector2(puckKoof.x, puckKoof.y + 0.5f);
+                targetDestination = puckPos - offset;
+            } 
+            else if(puckPos.y < 0)
+            {
+                Vector2 offset = new Vector2(puckKoof.x, puckKoof.y - 0.5f);
+                targetDestination = puckPos - offset;
+            } 
+            else
+            {
+                targetDestination = puckPos;
+            }
+            currentSpeed = moveSpeed;
         }
-        Vector2 newPos = Vector2.MoveTowards(botRb.position, targetDestination, currentSpeed * Time.fixedDeltaTime);
-    
-        newPos.x = Mathf.Clamp(newPos.x, minX, maxX);
-        newPos.y = Mathf.Clamp(newPos.y, minY, maxY);
 
-        botRb.MovePosition(newPos);
-        
+        targetDestination.x = Mathf.Clamp(targetDestination.x, minX, maxX);
+        targetDestination.y = Mathf.Clamp(targetDestination.y, minY, maxY);
+
+        Vector2 direction = targetDestination - currentBotPos;
+        float sqrDistance = direction.sqrMagnitude;
+
+        if(sqrDistance > 0.0001f)
+        {
+            float distance = Mathf.Sqrt(sqrDistance);
+            float fixedDelta = Time.fixedDeltaTime;
+            
+            float maxSpeedPossible = fixedDelta > 0f ? (distance / fixedDelta) : currentSpeed;
+            float speedThisFrame = Mathf.Min(currentSpeed, maxSpeedPossible);
+            
+            botRb.linearVelocity = direction / distance * speedThisFrame;
+        }
+        else
+        {
+            botRb.linearVelocity = Vector2.zero;
+        }
     }
 
     public void UpdateBotSpeed(int s1, int s2)
     {
         score1 = s1;
         score2 = s2;
-
         int scoreDifference = score1 - score2;
 
-        //EasyMode
-        if(scoreDifference >= 10) moveSpeed = baseSpeed / 3f;
-        else if(scoreDifference >= 7) moveSpeed = baseSpeed / 2.5f;
-        else if(scoreDifference >= 5) moveSpeed = baseSpeed / 2f;
-        else if(scoreDifference >= 3) moveSpeed = baseSpeed / 1.5f;
-        
-        //Fury
-        else if(scoreDifference <= -10) moveSpeed = baseSpeed * 2f;
-        else if(scoreDifference <= -7) moveSpeed = baseSpeed * 1.7f;
-        else if(scoreDifference <= -5) moveSpeed = baseSpeed * 1.5f;
-        else if(scoreDifference <= -3) moveSpeed = baseSpeed * 1.2f;
-        
-        else moveSpeed = baseSpeed;
+        switch(scoreDifference)
+        {
+            // EasyMode
+            case >= 10:  moveSpeed = baseSpeed * 0.33f; break;
+            case >= 7:   moveSpeed = baseSpeed * 0.4f;  break;
+            case >= 5:   moveSpeed = baseSpeed * 0.5f;  break;
+            case >= 3:   moveSpeed = baseSpeed * 0.66f; break;
+            
+            // FuryMode
+            case <= -10: moveSpeed = baseSpeed * 2.0f;  break;
+            case <= -7:  moveSpeed = baseSpeed * 1.7f;  break;
+            case <= -5:  moveSpeed = baseSpeed * 1.5f;  break;
+            case <= -3:  moveSpeed = baseSpeed * 1.2f;  break;
+            
+            default:     moveSpeed = baseSpeed;         break;
+        }
     }
 }

@@ -1,54 +1,106 @@
+using System.Collections;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class TimerScr : MonoBehaviour
 {
-    
-    public TextMeshProUGUI TimerText;
-    public GameObject TimerCanvas;
-    public int TimeLeft = 4;
-    public bool TimerOn = false;
-    public AudioSource audioSource;
-    public AudioClip[] goalSounds;
-    public AudioClip timerSound;
+    [Header("UI Elements")]
+    [SerializeField] private TextMeshProUGUI timerText;
+    [SerializeField] private GameObject timerPanel;
+    [SerializeField] private Button pauseBtn;
 
-    [SerializeField] private Button restartBtn;
+    [Header("Audio")]
+    [SerializeField] private AudioSource audioSource;
+    [SerializeField] private AudioClip[] goalSounds;
+    [SerializeField] private AudioClip timerSound;
 
+    [Header("Settings")]
+    [SerializeField] private int startSeconds = 4;
+
+    [HideInInspector] public bool TimerOn = false;
+    private int TimeLeft;
+
+    private static readonly string[] CachedNumbers = { "0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10" };
+    private static readonly string GoalText = "GOAL";
+    private Coroutine timerCoroutine;
 
     public void Goal()
     {
-        TimerCanvas.gameObject.SetActive(true);
-        TimerText.text = "GOAL";
+        if(timerCoroutine != null) StopCoroutine(timerCoroutine);
+
+        timerPanel.SetActive(true);
+        timerText.SetText(GoalText);
         TimerOn = true;
-        restartBtn.interactable = false;
-        int rand = UnityEngine.Random.Range(0, goalSounds.Length);
-        audioSource.PlayOneShot(goalSounds[rand]);
-        Invoke("TimerStart", 1f);
+        if(pauseBtn != null) pauseBtn.interactable = false;
+
+        if(goalSounds != null && goalSounds.Length > 0 && audioSource != null)
+        {
+            int rand = Random.Range(0, goalSounds.Length);
+            audioSource.PlayOneShot(goalSounds[rand]);
+        }
+
+        timerCoroutine = StartCoroutine(GoalSequence());
+    }
+
+    private IEnumerator GoalSequence()
+    {
+        yield return WaitForSecondsCache.Wait(1f);
+        
+        yield return TimerCountdownSequence();
     }
 
     public void TimerStart()
     {
-        TimerCanvas.gameObject.SetActive(true);
-        TimerText.text = "4";
-        TimeLeft = 4;
+        if(timerCoroutine != null) StopCoroutine(timerCoroutine);
+        
+        timerPanel.SetActive(true);
         TimerOn = true;
-        restartBtn.interactable = false;
-        InvokeRepeating("Timer", 0f, 1f);
+        if(pauseBtn != null) pauseBtn.interactable = false;
+
+        timerCoroutine = StartCoroutine(TimerCountdownSequence());
     }
 
-    private void Timer()
+    private IEnumerator TimerCountdownSequence()
     {
-        TimeLeft--;
-        TimerText.text = TimeLeft.ToString();
-        audioSource.PlayOneShot(timerSound);
+        TimeLeft = startSeconds;
 
-        if (TimeLeft <= 0)
+        while(TimeLeft > 0)
         {
-            CancelInvoke("Timer");
-            TimerCanvas.gameObject.SetActive(false);
-            TimerOn = false;
-            restartBtn.interactable = true;
+            timerText.SetText((TimeLeft < CachedNumbers.Length) ? CachedNumbers[TimeLeft] : TimeLeft.ToString());
+            
+            if(audioSource != null && timerSound != null)
+            {
+                audioSource.PlayOneShot(timerSound);
+            }
+
+            yield return WaitForSecondsCache.Wait(1f);
+            TimeLeft--;
         }
+
+        if(audioSource != null && timerSound != null)
+        {
+            audioSource.PlayOneShot(timerSound);
+        }
+
+        timerPanel.SetActive(false);
+        TimerOn = false;
+        if(pauseBtn != null) pauseBtn.interactable = true;
+        timerCoroutine = null;
+    }
+}
+
+public static class WaitForSecondsCache
+{
+    private static readonly System.Collections.Generic.Dictionary<float, WaitForSeconds> TimeDictionary = new();
+
+    public static WaitForSeconds Wait(float seconds)
+    {
+        if(!TimeDictionary.TryGetValue(seconds, out var waitForSeconds))
+        {
+            waitForSeconds = new WaitForSeconds(seconds);
+            TimeDictionary.Add(seconds, waitForSeconds);
+        }
+        return waitForSeconds;
     }
 }

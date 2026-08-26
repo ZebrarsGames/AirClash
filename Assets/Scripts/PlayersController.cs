@@ -28,7 +28,6 @@ public class PlayersController : MonoBehaviour, IBeginDragHandler, IDragHandler,
     private Color particleColor;
     private GameObject particles;
 
-
     void Start()
     {
         QualitySettings.vSyncCount = 0;
@@ -38,47 +37,75 @@ public class PlayersController : MonoBehaviour, IBeginDragHandler, IDragHandler,
         targetPos = rb.position;
         float volume = PlayerPrefs.GetFloat("MusicVolume", 0.5f);
         AudioListener.volume = volume;
-        if(PlayerPrefs.GetString("CurrentSkin") == "") PlayerPrefs.SetString("CurrentSkin", "DefSkin");
-        SkinData currentSkin = Resources.Load<SkinData>(PlayerPrefs.GetString("CurrentSkin"));
+        SkinData currentSkin = Resources.Load<SkinData>(PlayerPrefs.GetString("CurrentSkin", "DefSkin"));
         ApplySkin(currentSkin);
+    }
+
+    void Update()
+    {
+        if(timer != null && timer.TimerOn && isDragging)
+        {
+            ResetDragState();
+        }
     }
 
     public void OnBeginDrag(PointerEventData eventData)
     {
+        if(timer != null && timer.TimerOn) return; 
         Vector3 mousePos = cam.ScreenToWorldPoint(eventData.position);
-        offset = transform.position - new Vector3(mousePos.x, mousePos.y);
+        offset = (Vector2)transform.position - (Vector2)mousePos;
         isDragging = true;
     }
 
     public void OnDrag(PointerEventData eventData)
     {
-        // if (!isDragging || timer.TimerOn) return;
-        if (!isDragging) return;
+        if(timer != null && timer.TimerOn || !isDragging) return; 
 
         Vector3 mousePos = cam.ScreenToWorldPoint(eventData.position);
-        targetPos = new Vector2(mousePos.x + offset.x, mousePos.y + offset.y);
+        Vector2 calculatedPos = new Vector2(mousePos.x + offset.x, mousePos.y + offset.y);
 
-        targetPos.x = Mathf.Clamp(targetPos.x, minX, maxX);
-        targetPos.y = Mathf.Clamp(targetPos.y, minY, maxY);
+        calculatedPos.x = Mathf.Clamp(calculatedPos.x, minX, maxX);
+        calculatedPos.y = Mathf.Clamp(calculatedPos.y, minY, maxY);
+
+        targetPos = calculatedPos;
     }
 
-    private void FixedUpdate() {
-        // if (isDragging && !timer.TimerOn)
-        if(isDragging)
+    private void FixedUpdate()
+    {
+        if(timer != null && timer.TimerOn)
         {
-            rb.MovePosition(targetPos);
+            rb.linearVelocity = Vector2.zero;
+            return;
         }
-        // else if(timer.TimerOn)
-        // {
-        //     rb.linearVelocity = Vector2.zero;
-        //     rb.angularVelocity = 0f;
-        //     targetPos = rb.position;
-        // }
+
+        MoveRigidbodyPhysically(targetPos);
+    }
+
+    public void TeleportToPosition(Vector2 newPos)
+    {
+        isDragging = false;
+        rb.position = newPos;
+        rb.linearVelocity = Vector2.zero;
+        targetPos = newPos;
+    }
+
+    private void MoveRigidbodyPhysically(Vector2 target)
+    {
+        Vector2 desiredVelocity = (target - rb.position) / Time.fixedDeltaTime;
+        rb.linearVelocity = desiredVelocity;
+        rb.MovePosition(target);
     }
 
     public void OnEndDrag(PointerEventData eventData)
     {
         isDragging = false;
+    }
+
+    private void ResetDragState()
+    {
+        isDragging = false;
+        targetPos = rb.position;
+        rb.linearVelocity = Vector2.zero;
     }
 
     private void OnCollisionEnter2D(Collision2D other) {
@@ -103,18 +130,12 @@ public class PlayersController : MonoBehaviour, IBeginDragHandler, IDragHandler,
             var ps = particles.GetComponent<ParticleSystem>();
             var psMain = ps.main;
             particles.gameObject.SetActive(true);
-            if(skin.name == "GoldSkin")
+            if(gameObject.name.Equals("Player2") && ColorUtility.TryParseHtmlString("#ff6a6a", out particleColor))
             {
-                psMain.startColor = Color.white;
-            } else
+                psMain.startColor = particleColor;
+            } else if(gameObject.name.Equals("Player1") && ColorUtility.TryParseHtmlString("#9abaf5", out particleColor))
             {
-                if(gameObject.name.Equals("Player2") && ColorUtility.TryParseHtmlString("#ff6a6a", out particleColor))
-                {
-                    psMain.startColor = particleColor;
-                } else if(gameObject.name.Equals("Player1") && ColorUtility.TryParseHtmlString("#9abaf5", out particleColor))
-                {
-                    psMain.startColor = particleColor;
-                }
+                psMain.startColor = particleColor;
             }
             var newParticles = Instantiate(particles, GetComponent<Transform>());
             newParticles.gameObject.SetActive(true);
@@ -143,5 +164,4 @@ public class PlayersController : MonoBehaviour, IBeginDragHandler, IDragHandler,
             else GetComponent<TrailRenderer>().enabled = false;
         }
     }
-
 }

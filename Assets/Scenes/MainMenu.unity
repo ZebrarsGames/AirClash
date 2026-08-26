@@ -8167,7 +8167,6 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-  saveManager: {fileID: 622325057}
 --- !u!4 &183340301
 Transform:
   m_ObjectHideFlags: 0
