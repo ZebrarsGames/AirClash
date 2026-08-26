@@ -14,7 +14,6 @@ public class ProfileUIHandler : MonoBehaviour
     [SerializeField] private GameObject editProfilePanel;
     [Header("Other")]
     [SerializeField] private ApplyProfileEvent applyProfileEvent;
-    [SerializeField] private SaveManager saveManager;
     private string avatarPath;
     private RectTransform panelRect;
 

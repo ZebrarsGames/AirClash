@@ -1,11 +1,12 @@
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 
 public class DailyAwardCell : MonoBehaviour
 {
     [Header("UI")]
     [SerializeField] private Image cellLogo;
-    [SerializeField] private Text dayText;
+    [SerializeField] private TextMeshProUGUI dayText;
     [SerializeField] private GameObject checkMark;
 
     [Header("Floats")]

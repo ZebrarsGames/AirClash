@@ -3,14 +3,14 @@ using DG.Tweening;
 using UnityEngine;
 using UnityEngine.Rendering.Universal;
 using UnityEngine.SceneManagement;
-using UnityEngine.UI;
+using TMPro;
 
 public class GoalHandler : MonoBehaviour
 {
     [Header("UI Elements")]
-    public Text scoreText1;
-    public Text scoreText2;
-    [SerializeField] private Text goalText;
+    public TextMeshProUGUI scoreText1;
+    public TextMeshProUGUI scoreText2;
+    [SerializeField] private TextMeshProUGUI goalText;
     [SerializeField] private GameObject goalTextCanvas;
     [SerializeField] private GameObject endSreenPanel;
 

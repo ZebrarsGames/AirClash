@@ -1,13 +1,13 @@
 using DG.Tweening;
 using UnityEngine;
-using UnityEngine.UI;
+using TMPro;
 using System.Collections;
 
 public class AnimationsHandler : MonoBehaviour
 {
     [Header("UI")]
     [SerializeField] private GameObject achievementPanel;
-    [SerializeField] private Text achievementText;
+    [SerializeField] private TextMeshProUGUI achievementText;
     [Header("Floats")]
     public Vector2 endDotToMoveAchievementPanel;
     private Vector2 startPosAchievementPanel;

@@ -70,10 +70,10 @@ public class PlaytimeTracker : MonoBehaviour
         return timeSpan.ToString(@"hh\:mm\:ss");
     }
 
-    public float GetSecondsPlaytime()
+    public int GetSecondsPlaytime()
     {
         float totalTime = _totalPlaytimeSeconds + (Time.time - _sessionStartTime);
-        return totalTime;
+        return (int)totalTime;
     }
 
     public void SetSecondsPlaytime(float amount)

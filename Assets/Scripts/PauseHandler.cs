@@ -19,30 +19,29 @@ public class PauseHandler : MonoBehaviour
         if(isPaused)
         {  
             pauseMenu.SetActive(true);
-            StartCoroutine(ShowPauseMenu());
+            ShowPauseMenu();
         } else
         {
-            StartCoroutine(HidePauseMenu());
+            HidePauseMenu();
         }
     }
-    IEnumerator HidePauseMenu()
+    private void HidePauseMenu()
     {
         Time.timeScale = 1.0f;
         var rect = pausePanel.GetComponent<RectTransform>();
-        rect.DOScale(Vector3.zero, 0.3f).SetEase(Ease.InBack);
-        yield return new WaitForSeconds(0.35f);
-        pausePanel.SetActive(false);
-        pauseMenu.SetActive(false);
+        rect.DOScale(Vector3.zero, 0.3f).SetEase(Ease.InBack).SetUpdate(true).OnComplete(() =>
+        {
+            pausePanel.SetActive(false);
+            pauseMenu.SetActive(false);
+        });    
     }
-    IEnumerator ShowPauseMenu()
+    private void ShowPauseMenu()
     {
-        Time.timeScale = 1.0f;
+        Time.timeScale = 0f;
         var rect = pausePanel.GetComponent<RectTransform>();
         rect.localScale = Vector3.zero;
         pausePanel.SetActive(true);
-        rect.DOScale(new Vector3(1.0f, 1.0f, 1.0f), 0.3f).SetEase(Ease.OutBack);
-        yield return new WaitForSeconds(0.35f);
-        Time.timeScale = 0f;
+        rect.DOScale(new Vector3(1.0f, 1.0f, 1.0f), 0.3f).SetEase(Ease.OutBack).SetUpdate(true);
     }
     public void MainMenu()
     {
@@ -57,10 +56,4 @@ public class PauseHandler : MonoBehaviour
         TogglePause();
         goalHandler.RestartGame();
     }
-
-    public void QuitGame()
-    {
-        Application.Quit();
-    }
-    
 }

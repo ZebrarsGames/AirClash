@@ -4,7 +4,7 @@ using UnityEngine.UI;
 public class RouletteCell : MonoBehaviour
 {
     public Image icon;
-    public RouletteItemData currentData; // Здесь хранятся данные конкретной ячейки
+    public RouletteItemData currentData;
     public RectTransform rectTransform;
     public Image cellBg;
 

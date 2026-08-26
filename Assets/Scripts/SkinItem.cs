@@ -1,6 +1,7 @@
 using System;
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 
 public class SkinItem : MonoBehaviour
 {
@@ -16,8 +17,8 @@ public class SkinItem : MonoBehaviour
     public ShopHandler shop;
 
     [Header("UI")]
-    [SerializeField] private Text skinNameText;
-    [SerializeField] private Text priceText;
+    [SerializeField] private TextMeshProUGUI skinNameText;
+    [SerializeField] private TextMeshProUGUI priceText;
     [SerializeField] private Image skinImage;
 
     [Header("Selection indicators")]

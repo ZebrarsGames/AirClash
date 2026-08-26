@@ -2,23 +2,25 @@ using UnityEngine;
 using UnityEngine.UI;
 using System.IO;
 using System.Linq;
+using TMPro;
 
 public class ProfileHandler : MonoBehaviour
 {
     [Header("UI")]
     [SerializeField] RawImage avatarImage;
-    [SerializeField] Text nickText;
-    [SerializeField] Text moneyText;
-    [SerializeField] Text goalText;
-    [SerializeField] Text playtimeText;
+    [SerializeField] TextMeshProUGUI nickText;
+    [SerializeField] TextMeshProUGUI moneyText;
+    [SerializeField] TextMeshProUGUI goalText;
+    [SerializeField] TextMeshProUGUI playtimeText;
     [SerializeField] Image currentSkinImage;
     [SerializeField] Texture defaultProfileIcon;
 
     [Header("Scripts")]
     [SerializeField] SaveManager saveManager;
-    [SerializeField] MoneyHandler moneyHandler;
     private string avatarPath;
     private float _nextUpdate;
+    private int _lastRenderedSeconds = -1; 
+    private static readonly string PlaytimeTemplate = "Наиграно: {0:00}:{1:00}:{2:00}";
 
     void Start()
     {
@@ -27,12 +29,21 @@ public class ProfileHandler : MonoBehaviour
 
     void Update()
     {
-        if (Time.time < _nextUpdate) return;
+        if(Time.time < _nextUpdate) return;
         _nextUpdate = Time.time + 0.1f;
-        
-        if (PlaytimeTracker.Instance != null)
+
+        if(PlaytimeTracker.Instance != null)
         {
-            playtimeText.text = "Наиграно: " + PlaytimeTracker.Instance.GetFormattedPlaytime();
+            int totalSeconds = PlaytimeTracker.Instance.GetSecondsPlaytime(); 
+
+            if(totalSeconds == _lastRenderedSeconds) return;
+            _lastRenderedSeconds = totalSeconds;
+
+            int hours = totalSeconds / 3600;
+            int minutes = (totalSeconds % 3600) / 60;
+            int seconds = totalSeconds % 60;
+
+            playtimeText.SetText(PlaytimeTemplate, hours, minutes, seconds);
         }
     }
 

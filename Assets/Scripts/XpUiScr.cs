@@ -3,15 +3,16 @@ using DG.Tweening;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using TMPro;
 
 public class XpUiScr : MonoBehaviour
 {
     [Header("UI")]
     [SerializeField] private Slider xpSlider;
     // [SerializeField] private Text awardForNextLevel;
-    [SerializeField] private Text currentXpText;
-    [SerializeField] private Text currentLvlText;
-    [SerializeField] private Text nextLvlText;
+    [SerializeField] private TextMeshProUGUI currentXpText;
+    [SerializeField] private TextMeshProUGUI currentLvlText;
+    [SerializeField] private TextMeshProUGUI nextLvlText;
     [SerializeField] private CanvasGroup canvasGroup;
     [SerializeField] private GameObject panel;
 
@@ -62,6 +63,7 @@ public class XpUiScr : MonoBehaviour
     public void SetOldProgress(float progress)
     {
         xpSlider.value = progress;
+        if(currentXpText == null) {Debug.Log("currentXpText = null"); return;}
         currentXpText.text = xpHandler.GetOldXP().ToString() + " / " + xpHandler.GetXpToNextLevel().ToString() + " XP";
         currentLvlText.text = xpHandler.GetLevel().ToString();
         nextLvlText.text = (xpHandler.GetLevel() + 1).ToString();

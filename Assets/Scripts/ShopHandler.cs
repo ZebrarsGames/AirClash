@@ -1,16 +1,15 @@
 using System;
 using System.Collections;
 using DG.Tweening;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using UnityEngine.UI;
+using TMPro;
 
 public class ShopHandler : MonoBehaviour
 {
     [Header("Economy and Progress")]
     [SerializeField] private MoneyHandler moneyHandler;
-    [SerializeField] private Text moneyText;
+    [SerializeField] private TextMeshProUGUI moneyText;
     [SerializeField] private AchievementsHandler achievementsHandler;
 
     [Header("Shop and Skins")]
@@ -31,7 +30,7 @@ public class ShopHandler : MonoBehaviour
 
     void Start()
     {
-        moneyText.text = "Деньги " + Convert.ToString(moneyHandler.GetMoney());
+        moneyText.SetText($"{moneyHandler.GetMoney()} <sprite=0>");
         audioSourceBgMusic.clip = shopMusic;
         audioSourceBgMusic.loop = true;
         audioSourceBgMusic.time = PlayerPrefs.GetFloat("ShopMusicTime", 0);
@@ -59,7 +58,7 @@ public class ShopHandler : MonoBehaviour
             skins += "," + skinName;
             PlayerPrefs.SetString("AllBuySkins", skins);
             PlayerPrefs.Save();
-            moneyText.text = "Деньги " + Convert.ToString(moneyHandler.GetMoney());
+            moneyText.SetText($"{moneyHandler.GetMoney()} <sprite=0>");
             return true;
         } else
         {
@@ -88,7 +87,7 @@ public class ShopHandler : MonoBehaviour
     public void RemoveAllMoney()
     {
         moneyHandler.RemoveMoney(moneyHandler.GetMoney());
-        moneyText.text = "Деньги " + Convert.ToString(moneyHandler.GetMoney());
+        moneyText.SetText($"{moneyHandler.GetMoney()} <sprite=0>");
     }
 
     public void ShowSurePanel()
@@ -125,7 +124,7 @@ public class ShopHandler : MonoBehaviour
     public void PlusMoney(int money)
     {
         moneyHandler.AddMoney(money);
-        moneyText.text = "Деньги " + Convert.ToString(moneyHandler.GetMoney());
+        moneyText.SetText($"{moneyHandler.GetMoney()} <sprite=0>");
     }
 
 }

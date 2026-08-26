@@ -1,11 +1,12 @@
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 using System.Collections.Generic;
 
 public class ModificatorsHandler : MonoBehaviour
 {
     [Header("UI")]
-    [SerializeField] private Text moneyMultiplyText;
+    [SerializeField] private TextMeshProUGUI moneyMultiplyText;
     [SerializeField] private Toggle[] modificatorsToggles;
 
     public void SetModificators()
@@ -55,6 +56,6 @@ public class ModificatorsHandler : MonoBehaviour
             }
         }
 
-        moneyMultiplyText.text = "Деньги " + modificatorsMultiply + "x";
+        moneyMultiplyText.SetText($"Деньги {modificatorsMultiply}x");
     }
 }

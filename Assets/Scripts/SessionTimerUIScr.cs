@@ -1,7 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
+using TMPro;
 using DG.Tweening;
 
 public class SessionTimerUIScr : MonoBehaviour
@@ -10,8 +10,8 @@ public class SessionTimerUIScr : MonoBehaviour
     [SerializeField] private GameObject warningPanel;
 
     [Header("Texts")]
-    [SerializeField] private Text warningTextTitle;
-    [SerializeField] private Text warningTextBody;
+    [SerializeField] private TextMeshProUGUI warningTextTitle;
+    [SerializeField] private TextMeshProUGUI warningTextBody;
 
     private Vector2 startPosAchievementPanel;
     private Coroutine animationCoroutine; 

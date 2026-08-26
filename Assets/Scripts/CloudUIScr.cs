@@ -15,7 +15,7 @@ public class CloudUIScr : MonoBehaviour
     [SerializeField] private TMP_InputField passwordInput;
 
     [Header("Texts")]
-    [SerializeField] private Text statusText;
+    [SerializeField] private TextMeshProUGUI statusText;
 
     [Header("Buttons")]
     [SerializeField] private Button[] buttons;

@@ -2,6 +2,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using System.Collections;
 using DG.Tweening;
+using TMPro;
 
 public class RouletteHandler : MonoBehaviour
 {
@@ -17,12 +18,12 @@ public class RouletteHandler : MonoBehaviour
     [SerializeField] private GameObject choiceRoulettePanel;
     [SerializeField] private Transform centerMarker;
     [SerializeField] private Button stopRouletteBtn;
-    [SerializeField] private Text awardText;
+    [SerializeField] private TextMeshProUGUI awardText;
 
     [Header("Economy")]
     public int rouletteCost;
     [SerializeField] private MoneyHandler moneyHandler;
-    [SerializeField] private Text moneyText;
+    [SerializeField] private TextMeshProUGUI moneyText;
 
     [Header("Sounds Effects")]
     [SerializeField] private AudioSource audioSource;
@@ -104,7 +105,7 @@ public class RouletteHandler : MonoBehaviour
             roulettePanel.GetComponent<CanvasGroup>().alpha = 0;
             roulettePanel.GetComponent<CanvasGroup>().DOFade(1f, 1f);
             moneyHandler.RemoveMoney(rouletteCost);
-            moneyText.text = "Деньги " + moneyHandler.GetMoney();
+            moneyText.SetText($"{moneyHandler.GetMoney()} <sprite=0>");
             switch(typeOfRoulette)
             {
                 case "Common":
@@ -245,7 +246,7 @@ public class RouletteHandler : MonoBehaviour
                     awardText.text = "ВЫИГРЫШ: " + bestCell.currentData.award + " монет";
                     moneyHandler.AddMoney(bestCell.currentData.award);
                     UpdateQuests(bestCell.currentData.award);
-                    moneyText.text = "Деньги " + moneyHandler.GetMoney();
+                    moneyText.SetText($"{moneyHandler.GetMoney()} <sprite=0>");
                     break;
                 case "Skin":
                     foreach(var i in skins)
@@ -254,10 +255,10 @@ public class RouletteHandler : MonoBehaviour
                         {
                             if(i.isBuy)
                             {
-                                awardText.text = "ВЫИГРЫШ: " + i.skinPrice + " монет (скин уже куплен)";
+                                awardText.text = "ВЫИГРЫШ: " + i.skinPrice + " монет (скин уже получен)";
                                 moneyHandler.AddMoney(i.skinPrice);
                                 UpdateQuests(i.skinPrice);
-                                moneyText.text = "Деньги " + moneyHandler.GetMoney();
+                                moneyText.SetText($"{moneyHandler.GetMoney()} <sprite=0>");
                             } else
                             {
                                 achievementsHandler.UpdateProgress("large_wardrobe", 1);
@@ -297,6 +298,7 @@ public class RouletteHandler : MonoBehaviour
     }
     IEnumerator CloseChoiceRoulettePanelAnim()
     {
+        choiceRoulettePanel.GetComponent<CanvasGroup>().alpha = 1;
         choiceRoulettePanel.GetComponent<CanvasGroup>().DOFade(0.0f, 0.2f);
         yield return new WaitForSeconds(0.3f);
         choiceRoulettePanel.SetActive(false);
@@ -304,6 +306,7 @@ public class RouletteHandler : MonoBehaviour
     public void OpenChoiceRoulettePanel()
     {
         choiceRoulettePanel.SetActive(true);
+        choiceRoulettePanel.GetComponent<CanvasGroup>().alpha = 0;
         choiceRoulettePanel.GetComponent<CanvasGroup>().DOFade(1.0f, 0.2f);
     }
     private void UpdateQuests(int amount)

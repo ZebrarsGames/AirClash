@@ -1,5 +1,5 @@
 using UnityEngine;
-using UnityEngine.UI;
+using TMPro;
 using DG.Tweening;
 using System.Collections;
 
@@ -9,7 +9,7 @@ public class CoinMover : MonoBehaviour
     [SerializeField] private GameObject coinPrefab;
     [SerializeField] private GameObject xpPrefab;
     [SerializeField] private Transform targetPosition;
-    [SerializeField] private Text coinText;
+    [SerializeField] private TextMeshProUGUI coinText;
     [SerializeField] private Transform canvasParent;
 
     [Header("Settings")]
@@ -44,28 +44,23 @@ public class CoinMover : MonoBehaviour
     private IEnumerator AnimateCoins(Vector3 spawnPosition, int amount)
     {
         moneyHandler.AddMoney(amount);
-        for (int i = 0; i < amount; i++)
+        for(int i = 0; i < amount; i++)
         {
-            // 1. Создаем монету
             GameObject coin = Instantiate(coinPrefab, canvasParent);
             coin.transform.position = spawnPosition;
             
-            // Немного разбрасываем монеты в начале для "сочности"
             coin.transform.localScale = Vector3.zero;
             coin.transform.DOScale(1f, 0.2f);
             coin.transform.DOMove(spawnPosition + (Vector3)Random.insideUnitCircle * 6f, 0.2f);
 
-            // 2. Летим к цели через небольшую паузу
             coin.transform.DOMove(targetPosition.position, duration)
                 .SetDelay(0.2f)
-                .SetEase(Ease.InBack) // Эффект рывка в конце
+                .SetEase(Ease.InBack)
                 .OnComplete(() => {
-                    // 3. Когда долетела:
                     currentCoinsCount++;
                     UpdateUI();
                     PlayCoinSound();
                     
-                    // Анимация пульсации счетчика
                     targetPosition.DOScale(1.2f, 0.1f).OnComplete(() => targetPosition.DOScale(1f, 0.1f));
                     
                     Destroy(coin);
@@ -79,12 +74,11 @@ public class CoinMover : MonoBehaviour
     {
         yield return new WaitForSeconds(0.7f);
 
-        for (int i = 1; i <= amount; i++) 
+        for(int i = 1; i <= amount; i++) 
         {
             GameObject xp = Instantiate(xpPrefab, canvasParent);
             xp.transform.position = spawnPosition;
             
-            // Значение конкретно для этой летящей монетки
             int valueForThisCoin = startValue + i; 
 
             xp.transform.localScale = Vector3.zero;
@@ -96,7 +90,6 @@ public class CoinMover : MonoBehaviour
                 .SetEase(Ease.InBack)
                 .OnComplete(() => {
                     PlayCoinSound();
-                    // visualValue теперь точно не обгонит реальность
                     xpUiScr.SetProgress(xpHandler.GetXPProgress(valueForThisCoin), valueForThisCoin);
                     
                     targetPosition.DOScale(1.1f, 0.1f).OnComplete(() => targetPosition.DOScale(1f, 0.1f));
@@ -108,12 +101,12 @@ public class CoinMover : MonoBehaviour
     }
     void UpdateUI()
     {
-        coinText.text = "Деньги " + currentCoinsCount.ToString();
+        coinText.SetText($"{currentCoinsCount} <sprite=0>");
     }
 
     void PlayCoinSound()
     {
-        if (coinSound != null)
+        if(coinSound != null)
         {
             audioSource.pitch = 1f + (currentCoinsCount % 10 * 0.05f); 
             audioSource.PlayOneShot(coinSound);

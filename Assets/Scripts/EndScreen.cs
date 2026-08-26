@@ -1,14 +1,13 @@
-using System;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using UnityEngine.UI;
+using TMPro;
 
 public class EndScreen : MonoBehaviour
 {
     [Header("UI")]
-    [SerializeField] private Text loseOrWinText;
-    [SerializeField] private Text earnedMoneyText;
+    [SerializeField] private TextMeshProUGUI loseOrWinText;
+    [SerializeField] private TextMeshProUGUI earnedMoneyText;
     [Header("Scripts")]
     [SerializeField] private GoalHandler goalHandler;
     [SerializeField] private CoinMover coinMover;

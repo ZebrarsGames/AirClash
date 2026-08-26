@@ -1,6 +1,6 @@
 using UnityEngine;
 using System;
-using UnityEngine.UI;
+using TMPro;
 using UnityEngine.SceneManagement;
 using UnityEngine.Events;
 
@@ -15,8 +15,8 @@ public class DailyQuestHandler : MonoBehaviour
     [SerializeField] private int generateNewQuestsCost = 100;
 
     [Header("UI")]
-    [SerializeField] private Text statusText;
-    [SerializeField] private Text moneyText;
+    [SerializeField] private TextMeshProUGUI statusText;
+    [SerializeField] private TextMeshProUGUI moneyText;
     
     [Header("Scripts")]
     [SerializeField] private AchievementsHandler achievementsHandler;
@@ -36,6 +36,8 @@ public class DailyQuestHandler : MonoBehaviour
     private bool isMainMenu;
     private float _nextUpdate;
     private DateTime nextMidnightTime;
+    private int lastRenderedSeconds = -1;
+    private static readonly string TimerTemplate = "До обновления квестов: {0:00}:{1:00}:{2:00}";
 
     void Awake()
     {
@@ -229,25 +231,33 @@ public class DailyQuestHandler : MonoBehaviour
             moneyHandler.RemoveMoney(generateNewQuestsCost);
             GenerateNewQuests();
             generateNewQuestsEvent.Invoke();
-            moneyText.text = "Деньги " + moneyHandler.GetMoney();
+            moneyText.SetText($"{moneyHandler.GetMoney()} <sprite=0>");
         } else audioSource.PlayOneShot(cancelSound);
     }
 
     private void UpdateTimer()
     {
-        if (DateTime.Now >= nextMidnightTime) 
+        DateTime now = DateTime.UtcNow;
+
+        if(now >= nextMidnightTime) 
         {
             GenerateNewQuests();
-            generateNewQuestsEvent.Invoke();
-            nextDayEvent.Invoke();
+            generateNewQuestsEvent?.Invoke();
+            nextDayEvent?.Invoke();
+            return;
         }
 
-        DateTime now = DateTime.Now;
         TimeSpan timeLeft = nextMidnightTime - now;
+        int totalHours = (int)timeLeft.TotalHours;
+        int minutes = timeLeft.Minutes;
+        int seconds = timeLeft.Seconds;
 
-        statusText.text = string.Format("До обновления квестов: {0:D2}:{1:D2}:{2:D2}", 
-            (int)timeLeft.TotalHours, 
-            timeLeft.Minutes, 
-            timeLeft.Seconds);
+        if(seconds == lastRenderedSeconds)
+        {
+            return; 
+        }
+        lastRenderedSeconds = seconds;
+
+        statusText.SetText(TimerTemplate, totalHours, minutes, seconds);
     }
 }

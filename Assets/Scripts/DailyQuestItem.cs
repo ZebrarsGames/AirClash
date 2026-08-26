@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 
 public class DailyQuestItem : MonoBehaviour
 {
@@ -7,9 +8,9 @@ public class DailyQuestItem : MonoBehaviour
     [SerializeField] private string questId;
     [SerializeField] private DailyQuestHandler dailyQuestHandler;
     [Header("UI")]
-    [SerializeField] private Text questNameText;
-    [SerializeField] private Text questDescriptionText;
-    [SerializeField] private Text targetText;
+    [SerializeField] private TextMeshProUGUI questNameText;
+    [SerializeField] private TextMeshProUGUI questDescriptionText;
+    [SerializeField] private TextMeshProUGUI targetText;
     [SerializeField] private GameObject completeArrow;
     [SerializeField] private Image questLogo;
     void Start()

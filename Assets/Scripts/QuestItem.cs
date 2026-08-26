@@ -1,14 +1,15 @@
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 
 public class QuestItem : MonoBehaviour
 {
     [Header("Quest Info")]
     [SerializeField] private string questId;
     [Header("UI")]
-    [SerializeField] private Text questNameText;
-    [SerializeField] private Text questDescriptionText;
-    [SerializeField] private Text targetText;
+    [SerializeField] private TextMeshProUGUI questNameText;
+    [SerializeField] private TextMeshProUGUI questDescriptionText;
+    [SerializeField] private TextMeshProUGUI targetText;
     [SerializeField] private GameObject completeArrow;
     [SerializeField] private Image questLogo;
     [Header("Scripts")]

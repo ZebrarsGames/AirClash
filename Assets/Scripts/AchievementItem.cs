@@ -1,3 +1,4 @@
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -8,7 +9,7 @@ public class AchievementItem : MonoBehaviour
     private bool IsUnlocked;
     private int Progress;
     private int Target;
-    [SerializeField] private Text progressText;
+    [SerializeField] private TextMeshProUGUI progressText;
     [SerializeField] private GameObject unlockedCheckMark;
     void Start()
     {

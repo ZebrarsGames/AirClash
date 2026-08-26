@@ -40,8 +40,8 @@ public class MainMenu : MonoBehaviour
     [SerializeField] private AudioClip menuMusic;
 
     [Header("UI Elements")]
-    [SerializeField] private Text mainMenuText;
-    [SerializeField] private Text moneyText;
+    [SerializeField] private RectTransform mainMenuTextRect;
+    [SerializeField] private TextMeshProUGUI moneyText;
     [SerializeField] private Slider goalsSlider;
     [SerializeField] private TextMeshProUGUI goalsText;
     [SerializeField] private Slider speedSlider;
@@ -53,7 +53,6 @@ public class MainMenu : MonoBehaviour
     [Header("Scripts")]
     [SerializeField] private MoneyHandler moneyHandler;
     [SerializeField] private CoinMover coinMover;
-    [SerializeField] private XpHandler xpHandler;
     [SerializeField] private QuestsHandler questsHandler; 
     [SerializeField] private DailyQuestHandler dailyQuestHandler;
     [SerializeField] private SaveManager saveManager;
@@ -64,7 +63,6 @@ public class MainMenu : MonoBehaviour
     [SerializeField] private float tweenDuration = 0.3f;
 
     private List<GameObject> _allPanels;
-    private RectTransform _rectTransform;
     private Tweener _wobbleTweener;
 
     private string _toScene = "GameScene";
@@ -142,14 +140,13 @@ public class MainMenu : MonoBehaviour
 
     private void InitMainMenuAnimation()
     {
-        if(mainMenuText == null) return;
+        if(mainMenuTextRect == null) return;
 
-        _rectTransform = mainMenuText.rectTransform;
         float duration = Mathf.PI / rotationSpeed;
 
-        _rectTransform.localRotation = Quaternion.Euler(0f, 0f, -maxAngle);
+        mainMenuTextRect.localRotation = Quaternion.Euler(0f, 0f, -maxAngle);
 
-        _wobbleTweener = _rectTransform.DOLocalRotate(new Vector3(0f, 0f, maxAngle), duration)
+        _wobbleTweener = mainMenuTextRect.DOLocalRotate(new Vector3(0f, 0f, maxAngle), duration)
             .SetLoops(-1, LoopType.Yoyo)
             .SetEase(Ease.InOutSine)
             .SetUpdate(UpdateType.Normal, true);
@@ -158,7 +155,7 @@ public class MainMenu : MonoBehaviour
     private void InitGameStateAndMoney()
     {
         if(moneyText != null && moneyHandler != null)
-            moneyText.text = $"Деньги {moneyHandler.GetMoney()}";
+            moneyText.SetText($"{moneyHandler.GetMoney()} <sprite=0>");
 
         saveManager.SaveData();
 
@@ -303,8 +300,8 @@ public class MainMenu : MonoBehaviour
         }
     }
 
-    public void OnGoalsSliderChanged() => goalsText.text = goalsSlider.value.ToString("F0");
-    public void OnSpeedSliderChanged() => speedText.text = speedSlider.value.ToString("F1");
+    public void OnGoalsSliderChanged() => goalsText.SetText(goalsSlider.value.ToString("F0"));
+    public void OnSpeedSliderChanged() => speedText.SetText(speedSlider.value.ToString("F1"));
 
     #endregion
 
