@@ -26,6 +26,7 @@ public class SettingsHandler : MonoBehaviour
     [SerializeField] private Toggle puckTrailToggle;
     [SerializeField] private Toggle fpsCounterToggle;
     [SerializeField] private Toggle bgMusicInGameToggle;
+    [SerializeField] private Toggle debugConsoleToggle;
 
     [Header("Other")]
     [SerializeField] private AudioMixer audioMixer;
@@ -57,6 +58,7 @@ public class SettingsHandler : MonoBehaviour
         puckTrailToggle.isOn = PlayerPrefs.GetInt("PuckTrail", 1) != 0;
         fpsCounterToggle.isOn = PlayerPrefs.GetInt("FpsCounter", 0) != 0;
         bgMusicInGameToggle.isOn = PlayerPrefs.GetInt("BgMusicInGame", 1) != 0;
+        debugConsoleToggle.SetIsOnWithoutNotify(PlayerPrefs.GetInt("IsShowConsole", 0) != 0);
     }
 
     public void OnVolumeSliderChanged() {
@@ -109,6 +111,12 @@ public class SettingsHandler : MonoBehaviour
     public void OnBgMusicInGameToggleChanged()
     {
         PlayerPrefs.SetInt("BgMusicInGame", bgMusicInGameToggle.isOn ? 1 : 0);
+        PlayerPrefs.Save();
+    }
+
+    public void OnDebugConsoleToggleChanged()
+    {
+        PlayerPrefs.SetInt("IsShowConsole", debugConsoleToggle.isOn ? 1 : 0);
         PlayerPrefs.Save();
     }
 
