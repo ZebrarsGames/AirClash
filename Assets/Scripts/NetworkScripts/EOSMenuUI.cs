@@ -9,6 +9,12 @@ using System;
 using System.Text;
 using UnityEngine.Networking;
 
+public enum TypeOfGame
+{
+    matchmaking,
+    roomCode
+}
+
 public class EOSMenuUI : MonoBehaviour
 {
     [Header("Panels")]
@@ -38,6 +44,7 @@ public class EOSMenuUI : MonoBehaviour
     private WaitForSeconds delay;
     private Tweener _rotationTweener;
     private string currentEosId = string.Empty;
+    public static TypeOfGame typeOfCurrentGame;
 
     private void Awake()
     {
@@ -176,6 +183,7 @@ public class EOSMenuUI : MonoBehaviour
                 customManager.SetCurrentRoomCode(roomId);
             }
             Debug.Log($"Комната успешно создана на сервере! Код: {roomId}");
+            typeOfCurrentGame = TypeOfGame.roomCode;
             roomCodeText.gameObject.SetActive(true);
             ShowPlaceholder();
             ClosePanel(uiPanel);
@@ -226,7 +234,8 @@ public class EOSMenuUI : MonoBehaviour
             {
                 MyNetworkManager.singleton.gameObject.SetActive(true);
             }
-            
+
+            typeOfCurrentGame = TypeOfGame.roomCode;
             MyNetworkManager.singleton.networkAddress = roomEosId.Trim();
             MyNetworkManager.singleton.StartClient();
         },
@@ -308,6 +317,7 @@ public class EOSMenuUI : MonoBehaviour
 
     public void OnMatchmakingStart()
     {
+        typeOfCurrentGame = TypeOfGame.matchmaking;
         ShowPlaceholder();
     }
 

@@ -165,29 +165,41 @@ public class GoalHandlerNetwork : NetworkBehaviour
 
         if(score1 >= howManyGoals)
         {
-            playerAMatches++;
-            playerBMatches++;
-            (int newRatingA, int newRatingB) = EloSystemScr.CalculateNewRatings(
-                playerBRating, playerARating, playerBMatches, playerAMatches, score2, score1
-            );
+            if(EOSMenuUI.typeOfCurrentGame == TypeOfGame.matchmaking)
+            {
+                playerAMatches++;
+                playerBMatches++;
+                (int newRatingA, int newRatingB) = EloSystemScr.CalculateNewRatings(
+                    playerBRating, playerARating, playerBMatches, playerAMatches, score2, score1
+                );
 
-            Debug.Log($"Игрок А: {playerARating} -> {newRatingA} (Изменение: {newRatingA - playerARating})");
-            Debug.Log($"Игрок Б: {playerBRating} -> {newRatingB} (Изменение: {newRatingB - playerBRating})");
-
-            RpcWinLose(1, newRatingA, newRatingB, playerAMatches, playerBMatches);
+                Debug.Log($"Игрок А: {playerARating} -> {newRatingA} (Изменение: {newRatingA - playerARating})");
+                Debug.Log($"Игрок Б: {playerBRating} -> {newRatingB} (Изменение: {newRatingB - playerBRating})");
+                
+                RpcWinLose(1, newRatingA, newRatingB, playerAMatches, playerBMatches);
+            } else if(EOSMenuUI.typeOfCurrentGame == TypeOfGame.roomCode)
+            {
+                RpcWinLose(1, -1, -1, -1, -1);
+            }
         } 
         else if(score2 >= howManyGoals)
         {
-            playerAMatches++;
-            playerBMatches++;
-            (int newRatingA, int newRatingB) = EloSystemScr.CalculateNewRatings(
-                playerBRating, playerARating, playerBMatches, playerAMatches, score2, score1
-            );
+            if(EOSMenuUI.typeOfCurrentGame == TypeOfGame.matchmaking)
+            {
+                playerAMatches++;
+                playerBMatches++;
+                (int newRatingA, int newRatingB) = EloSystemScr.CalculateNewRatings(
+                    playerBRating, playerARating, playerBMatches, playerAMatches, score2, score1
+                );
 
-            Debug.Log($"Игрок А: {playerARating} -> {newRatingA} (Изменение: {newRatingA - playerARating})");
-            Debug.Log($"Игрок Б: {playerBRating} -> {newRatingB} (Изменение: {newRatingB - playerBRating})");
-
-            RpcWinLose(2, newRatingA, newRatingB, playerAMatches, playerBMatches);
+                Debug.Log($"Игрок А: {playerARating} -> {newRatingA} (Изменение: {newRatingA - playerARating})");
+                Debug.Log($"Игрок Б: {playerBRating} -> {newRatingB} (Изменение: {newRatingB - playerBRating})");
+                
+                RpcWinLose(2, newRatingA, newRatingB, playerAMatches, playerBMatches);
+            } else if(EOSMenuUI.typeOfCurrentGame == TypeOfGame.roomCode)
+            {
+                RpcWinLose(2, -1, -1, -1, -1);
+            }
         } else
         {
             RpcOnGoalScored(score1, score2);
@@ -207,20 +219,22 @@ public class GoalHandlerNetwork : NetworkBehaviour
     [ClientRpc]
     private void RpcWinLose(int playerIndex, int newRatingA, int newRatingB, int matchesA, int matchesB)
     {
-        if(!isClientOnly)
+        if(newRatingA != -1 || newRatingB != -1 || matchesA != -1 || matchesB != -1)
         {
-            PlayerPrefs.SetInt("MyElo", newRatingA);
-            PlayerPrefs.SetInt("MyMatches", matchesA);
-            StartCoroutine(SendMatchStatsRequest(PlayerPrefs.GetString("Nick", "Ник"), PlayerPrefs.GetString("AccountPassword", ""), newRatingA, matchesA));
+            if(!isClientOnly)
+            {
+                PlayerPrefs.SetInt("MyElo", newRatingA);
+                PlayerPrefs.SetInt("MyMatches", matchesA);
+                StartCoroutine(SendMatchStatsRequest(PlayerPrefs.GetString("Nick", "Ник"), PlayerPrefs.GetString("AccountPassword", ""), newRatingA, matchesA));
+            }
+            else
+            {
+                PlayerPrefs.SetInt("MyElo", newRatingB);
+                PlayerPrefs.SetInt("MyMatches", matchesB);
+                StartCoroutine(SendMatchStatsRequest(PlayerPrefs.GetString("Nick", "Ник"), PlayerPrefs.GetString("AccountPassword", ""), newRatingB, matchesB));
+            } 
+            PlayerPrefs.Save();
         }
-        else
-        {
-            PlayerPrefs.SetInt("MyElo", newRatingB);
-            PlayerPrefs.SetInt("MyMatches", matchesB);
-            StartCoroutine(SendMatchStatsRequest(PlayerPrefs.GetString("Nick", "Ник"), PlayerPrefs.GetString("AccountPassword", ""), newRatingB, matchesB));
-        }
-
-        PlayerPrefs.Save();
 
         if(playerIndex == 1)
         {
@@ -445,8 +459,15 @@ public class GoalHandlerNetwork : NetworkBehaviour
         endSreenPanel.SetActive(true);
         rect.DOScale(new Vector3(1.0f, 1.0f, 1.0f), 0.3f).SetEase(Ease.OutBack);
         winOrLoseText.text = "Победа!";
-        eloText.text = $"Ваш новый эло: {newRating}";
-        matchesText.text = $"Ваши матчи: {matches}";
+        if(newRating != -1 || matches != -1)
+        {
+            eloText.text = $"Ваш новый эло: {newRating}";
+            matchesText.text = $"Ваши матчи: {matches}";
+        } else
+        {
+            eloText.text = "Эло не изменился";
+            matchesText.text = "Матчи не изменились";
+        }
     }
     public void Lose(int newRating, int matches)
     {
@@ -455,8 +476,15 @@ public class GoalHandlerNetwork : NetworkBehaviour
         endSreenPanel.SetActive(true);
         rect.DOScale(new Vector3(1.0f, 1.0f, 1.0f), 0.3f).SetEase(Ease.OutBack);
         winOrLoseText.text = "Поражение!";
-        eloText.text = $"Ваш новый эло: {newRating}";
-        matchesText.text = $"Ваши матчи: {matches}";
+        if(newRating != -1 || matches != -1)
+        {
+            eloText.text = $"Ваш новый эло: {newRating}";
+            matchesText.text = $"Ваши матчи: {matches}";
+        } else
+        {
+            eloText.text = "Эло не изменился";
+            matchesText.text = "Матчи не изменились";
+        }
     }
     public void LoadMainMenu()
     {

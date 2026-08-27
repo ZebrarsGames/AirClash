@@ -41,7 +41,7 @@ public class ProfileHandler : MonoBehaviour
         1900, //Уровень 8
         2250, //Уровень 9
         2600, //Уровень 10
-        3000 //Уровень 11
+        3000 //Уровень Мастер
     };
 
     void Start()
