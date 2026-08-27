@@ -21,6 +21,7 @@ public class PuckScrNetwork : NetworkBehaviour
     private Vector2 targetServerPos;
     private Vector2 targetServerVel;
     private bool hasNetworkTarget = false;
+    private float blockSyncVarUntil = 0f;
 
     private struct PuckState
     {
@@ -91,25 +92,30 @@ public class PuckScrNetwork : NetworkBehaviour
         if(isClient && !isServer)
         {
             NetworkIdentity netId = other.gameObject.GetComponent<NetworkIdentity>();
-            
+                
             if(netId != null && netId.isLocalPlayer)
             {
                 ignoreServerUntil = Time.time + hitCooldown;
                 hasNetworkTarget = false;
 
-                CmdApplyClientHit(puckRb.linearVelocity, other.gameObject.transform.position);
+                CmdApplyClientHit(puckRb.linearVelocity, other.gameObject.transform.position, puckRb.position);
             }
         }
     }
 
     [Command(requiresAuthority = false)]
-    private void CmdApplyClientHit(Vector2 clientPuckVelocity, Vector2 clientMalletPos)
+    private void CmdApplyClientHit(Vector2 clientPuckVelocity, Vector2 clientMalletPos, Vector2 clientPuckPos)
     {
-        float distToMallet = Vector2.Distance(puckRb.position, clientMalletPos);
+        float distToMallet = Vector2.Distance(clientPuckPos, clientMalletPos);
 
         if(distToMallet < 2.5f)
         {
             puckRb.linearVelocity = clientPuckVelocity;
+
+            if(Vector2.Distance(puckRb.position, clientPuckPos) > 1.0f)
+            {
+                puckRb.position = Vector2.Lerp(puckRb.position, clientPuckPos, 0.5f);
+            }
 
             serverState = new PuckState
             {
@@ -120,24 +126,29 @@ public class PuckScrNetwork : NetworkBehaviour
         }
     }
 
+
     private void OnServerStateReceived(PuckState oldState, PuckState newState)
     {
         if(isServer || newState.position == Vector2.zero) return;
+        if(Time.time < blockSyncVarUntil) return;
+        if(newState.serverTime <= oldState.serverTime) return;
 
-        bool isReset = newState.velocity == Vector2.zero;
+        bool isReset = newState.velocity.sqrMagnitude < 0.001f;
 
         if(isReset)
         {
             puckRb.position = newState.position;
             puckRb.linearVelocity = Vector2.zero;
+            targetServerVel = Vector2.zero;
+            targetServerPos = newState.position;
             hasNetworkTarget = false;
-            ignoreServerUntil = 0f;
+            ignoreServerUntil = 0f; 
             return;
         }
 
         if(Time.time < ignoreServerUntil) return;
 
-        float latency = Mathf.Clamp((float)(NetworkTime.time - newState.serverTime), 0f, 0.04f);
+        float latency = Mathf.Clamp((float)(NetworkTime.time - newState.serverTime), 0f, 0.25f);
         
         targetServerPos = newState.position + (newState.velocity * latency);
         targetServerVel = newState.velocity;
@@ -147,6 +158,7 @@ public class PuckScrNetwork : NetworkBehaviour
     public void ClientForceReset(Vector2 newPosition)
     {
         ignoreServerUntil = 0f;
+        blockSyncVarUntil = Time.time + 0.2f; 
         hasNetworkTarget = false;
         targetServerVel = Vector2.zero;
         targetServerPos = newPosition;
@@ -157,6 +169,9 @@ public class PuckScrNetwork : NetworkBehaviour
             puckRb.transform.position = newPosition;
             puckRb.linearVelocity = Vector2.zero;
             puckRb.angularVelocity = 0f;
+            
+            puckRb.Sleep(); 
+            puckRb.WakeUp();
         }
     }
 
