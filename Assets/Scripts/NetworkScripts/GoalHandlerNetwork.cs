@@ -176,10 +176,10 @@ public class GoalHandlerNetwork : NetworkBehaviour
                 Debug.Log($"Игрок А: {playerARating} -> {newRatingA} (Изменение: {newRatingA - playerARating})");
                 Debug.Log($"Игрок Б: {playerBRating} -> {newRatingB} (Изменение: {newRatingB - playerBRating})");
                 
-                RpcWinLose(1, newRatingA, newRatingB, playerAMatches, playerBMatches);
+                RpcWinLose(1, newRatingA, newRatingB, playerAMatches, playerBMatches, playerARating, playerBRating);
             } else if(EOSMenuUI.typeOfCurrentGame == TypeOfGame.roomCode)
             {
-                RpcWinLose(1, -1, -1, -1, -1);
+                RpcWinLose(1, -1, -1, -1, -1, -1, -1);
             }
         } 
         else if(score2 >= howManyGoals)
@@ -195,10 +195,10 @@ public class GoalHandlerNetwork : NetworkBehaviour
                 Debug.Log($"Игрок А: {playerARating} -> {newRatingA} (Изменение: {newRatingA - playerARating})");
                 Debug.Log($"Игрок Б: {playerBRating} -> {newRatingB} (Изменение: {newRatingB - playerBRating})");
                 
-                RpcWinLose(2, newRatingA, newRatingB, playerAMatches, playerBMatches);
+                RpcWinLose(1, newRatingA, newRatingB, playerAMatches, playerBMatches, playerARating, playerBRating);
             } else if(EOSMenuUI.typeOfCurrentGame == TypeOfGame.roomCode)
             {
-                RpcWinLose(2, -1, -1, -1, -1);
+                RpcWinLose(2, -1, -1, -1, -1, -1, -1);
             }
         } else
         {
@@ -217,7 +217,7 @@ public class GoalHandlerNetwork : NetworkBehaviour
     }
 
     [ClientRpc]
-    private void RpcWinLose(int playerIndex, int newRatingA, int newRatingB, int matchesA, int matchesB)
+    private void RpcWinLose(int playerIndex, int newRatingA, int newRatingB, int matchesA, int matchesB, int oldRatingA, int oldRatingB)
     {
         if(newRatingA != -1 || newRatingB != -1 || matchesA != -1 || matchesB != -1)
         {
@@ -240,22 +240,22 @@ public class GoalHandlerNetwork : NetworkBehaviour
         {
             if(isClientOnly)
             {
-                Win(newRatingB, matchesB);
+                Win(newRatingB, matchesB, oldRatingB);
             } 
             else
             {
-                Lose(newRatingA, matchesA);
+                Lose(newRatingA, matchesA, oldRatingA);
             }
         } 
         else if(playerIndex == 2)
         {
             if(isClientOnly)
             {
-                Lose(newRatingB, matchesB);
+                Lose(newRatingB, matchesB, oldRatingB);
             } 
             else
             {
-                Win(newRatingA, matchesA);
+                Win(newRatingA, matchesA, oldRatingA);
             }
         }
     }
@@ -452,7 +452,7 @@ public class GoalHandlerNetwork : NetworkBehaviour
         endSreenPanel.SetActive(false);
     }
 
-    public void Win(int newRating, int matches)
+    public void Win(int newRating, int matches, int oldRating)
     {
         var rect = endSreenPanel.GetComponent<RectTransform>();
         rect.localScale = Vector3.zero;
@@ -461,15 +461,15 @@ public class GoalHandlerNetwork : NetworkBehaviour
         winOrLoseText.text = "Победа!";
         if(newRating != -1 || matches != -1)
         {
-            eloText.text = $"Ваш новый эло: {newRating}";
-            matchesText.text = $"Ваши матчи: {matches}";
+            eloText.text = $"Ваш новый эло: {newRating}<color=#c9c9c999>={oldRating}+{newRating-oldRating}</color>";
+            matchesText.text = $"Ваши матчи: {matches}<color=#c9c9c999>={matches-1}+1</color>";
         } else
         {
             eloText.text = "Эло не изменился";
             matchesText.text = "Матчи не изменились";
         }
     }
-    public void Lose(int newRating, int matches)
+    public void Lose(int newRating, int matches, int oldRating)
     {
         var rect = endSreenPanel.GetComponent<RectTransform>();
         rect.localScale = Vector3.zero;
@@ -478,8 +478,8 @@ public class GoalHandlerNetwork : NetworkBehaviour
         winOrLoseText.text = "Поражение!";
         if(newRating != -1 || matches != -1)
         {
-            eloText.text = $"Ваш новый эло: {newRating}";
-            matchesText.text = $"Ваши матчи: {matches}";
+            eloText.text = $"Ваш новый эло: {newRating}<color=#c9c9c999>={oldRating}+{newRating-oldRating}</color>";
+            matchesText.text = $"Ваши матчи: {matches}<color=#c9c9c999>={matches-1}+1</color>";
         } else
         {
             eloText.text = "Эло не изменился";
