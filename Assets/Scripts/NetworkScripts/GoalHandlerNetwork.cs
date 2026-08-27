@@ -282,13 +282,16 @@ public class GoalHandlerNetwork : NetworkBehaviour
 
     public void RegisterPlayer(GameObject player, string name)
     {
-        if(isServer)
+        if(!(NetworkServer.connections.Count <= 1))
         {
-            RpcStartTimer(); 
-        }
-        else
-        {
-            CmdRequestStartTimer();
+            if(isServer)
+            {
+                RpcStartTimer(); 
+            }
+            else
+            {
+                CmdRequestStartTimer();
+            }
         }
         if(name == "Player1")
         {
