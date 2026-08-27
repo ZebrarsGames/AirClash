@@ -134,8 +134,16 @@ public class GoalHandlerNetwork : NetworkBehaviour
         Debug.Log($"Set Rating for {smallUsername}, playerIndex: {playerIndex}");
         StartCoroutine(GetPlayerEloRequest(smallUsername, (elo) =>
         {
-            if(playerIndex == 1) playerARating = elo;
-            else if(playerIndex == 2) playerBRating = elo;
+            if(playerIndex == 1)
+            {
+                playerARating = elo;
+                GameObject.Find("Player1EloTextTMP").GetComponent<TextMeshProUGUI>().text = $"Эло: {elo}";
+            } 
+            else if(playerIndex == 2)
+            {
+                playerBRating = elo;
+                GameObject.Find("Player2EloTextTMP").GetComponent<TextMeshProUGUI>().text = $"Эло: {elo}";
+            } 
         }));
     }
 
