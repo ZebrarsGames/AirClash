@@ -1558,8 +1558,9 @@ GameObject:
   - component: {fileID: 26142244}
   - component: {fileID: 26142246}
   - component: {fileID: 26142245}
+  - component: {fileID: 26142247}
   m_Layer: 5
-  m_Name: CurrentSkinImage
+  m_Name: CurrentEloImage
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1579,10 +1580,10 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 1264345767}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 1, y: 1}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: -6, y: -6}
+  m_SizeDelta: {x: 200, y: 200}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &26142245
 MonoBehaviour:
@@ -1604,7 +1605,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 7e7d1997b8744a241b88a3d3d4f56819, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 8134a40caf92a7740bedd28496309789, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -1622,6 +1623,20 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 26142243}
   m_CullTransparentMesh: 1
+--- !u!114 &26142247
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 26142243}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 86710e43de46f6f4bac7c8e50813a599, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.AspectRatioFitter
+  m_AspectMode: 2
+  m_AspectRatio: 1
 --- !u!1 &26755620
 GameObject:
   m_ObjectHideFlags: 0
@@ -18174,8 +18189,21 @@ MonoBehaviour:
   moneyText: {fileID: 1228357073}
   goalText: {fileID: 142425497}
   playtimeText: {fileID: 1491260181}
-  currentSkinImage: {fileID: 26142245}
+  eloText: {fileID: 2144961839}
+  eloLevelImg: {fileID: 26142245}
   defaultProfileIcon: {fileID: 2800000, guid: 7c77a89780a589640b80e4ecf1af2739, type: 3}
+  eloLevelsIcons:
+  - {fileID: 21300000, guid: d2c9c0ab3c2b756408b7b91484262fb7, type: 3}
+  - {fileID: 21300000, guid: f759e2302c7343a459575155acd0dae1, type: 3}
+  - {fileID: 21300000, guid: 07220fe337e12154d93fdc77d0bdad7e, type: 3}
+  - {fileID: 21300000, guid: 8ef1545a08ff245499045ba1282ea154, type: 3}
+  - {fileID: 21300000, guid: 1c4b235789bc01648a4571df090b5faf, type: 3}
+  - {fileID: 21300000, guid: 3d5e74f76bb816347a19438eb55ff359, type: 3}
+  - {fileID: 21300000, guid: e92233c2acd9e1d478e0adb6fe6a4b34, type: 3}
+  - {fileID: 21300000, guid: a203245483810ea429cdfcb4278a6b1c, type: 3}
+  - {fileID: 21300000, guid: 15a600cfb2dfade4d861ae04ee32b7a9, type: 3}
+  - {fileID: 21300000, guid: 8134a40caf92a7740bedd28496309789, type: 3}
+  - {fileID: 21300000, guid: 279e47763669bf345983483209e49556, type: 3}
   saveManager: {fileID: 622325057}
 --- !u!4 &412532616
 Transform:
@@ -28746,6 +28774,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: IngameDebugConsole
       objectReference: {fileID: 0}
+    - target: {fileID: 132536, guid: 67117722a812a2e46ab8cb8eafbf5f5e, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 133612, guid: 67117722a812a2e46ab8cb8eafbf5f5e, type: 3}
       propertyPath: m_IsActive
       value: 0
@@ -28813,6 +28845,10 @@ PrefabInstance:
     - target: {fileID: 11452418, guid: 67117722a812a2e46ab8cb8eafbf5f5e, type: 3}
       propertyPath: startMinimized
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 11452418, guid: 67117722a812a2e46ab8cb8eafbf5f5e, type: 3}
+      propertyPath: logItemFontOverride
+      value: 
       objectReference: {fileID: 0}
     - target: {fileID: 11466918, guid: 67117722a812a2e46ab8cb8eafbf5f5e, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.size
@@ -28904,7 +28940,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 22400762, guid: 67117722a812a2e46ab8cb8eafbf5f5e, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -0.000015258789
+      value: 0.000015258789
       objectReference: {fileID: 0}
     - target: {fileID: 22426080, guid: 67117722a812a2e46ab8cb8eafbf5f5e, type: 3}
       propertyPath: m_AnchorMax.x
@@ -55154,8 +55190,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -242.9, y: -35.1}
-  m_SizeDelta: {x: -512.975, y: 63.27}
+  m_AnchoredPosition: {x: -220.88998, y: -35.1}
+  m_SizeDelta: {x: -468.96, y: 63.27}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1228357073
 MonoBehaviour:
@@ -55177,7 +55213,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "\u0414\u0435\u043D\u044C\u0433\u0438: 67"
+  m_text: "\u042D\u043B\u043E: 666"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: ed52afdd85d84d143b1bc5a2d7252e19, type: 2}
   m_sharedMaterial: {fileID: -3796851368825809175, guid: ed52afdd85d84d143b1bc5a2d7252e19, type: 2}
@@ -57120,7 +57156,7 @@ GameObject:
   - component: {fileID: 1264345769}
   - component: {fileID: 1264345768}
   m_Layer: 5
-  m_Name: CurrentSkinPanel
+  m_Name: CurrentEloPanel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -66122,7 +66158,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 77.7
+  m_fontSize: 77.65
   m_fontSizeBase: 36
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -94118,7 +94154,7 @@ GameObject:
   - component: {fileID: 2144961840}
   - component: {fileID: 2144961839}
   m_Layer: 5
-  m_Name: CurrentSkinTextTMP
+  m_Name: CurrentEloTextTMP
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -94138,10 +94174,10 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 1264345767}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: -113, y: 0}
-  m_SizeDelta: {x: 223.21, y: 0.2599945}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: -180, y: 0}
+  m_SizeDelta: {x: 228, y: 200}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &2144961839
 MonoBehaviour:
@@ -94163,7 +94199,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "\u0422\u0435\u043A\u0443\u0449\u0438\u0439 \u0441\u043A\u0438\u043D:"
+  m_text: "\u042D\u043B\u043E: 666"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: ed52afdd85d84d143b1bc5a2d7252e19, type: 2}
   m_sharedMaterial: {fileID: -3796851368825809175, guid: ed52afdd85d84d143b1bc5a2d7252e19, type: 2}
@@ -94190,7 +94226,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 79.6
+  m_fontSize: 107.95
   m_fontSizeBase: 36
   m_fontWeight: 400
   m_enableAutoSizing: 1
