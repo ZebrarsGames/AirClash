@@ -36,6 +36,10 @@ public class EOSMenuUI : MonoBehaviour
     [SerializeField] private float rotationSpeed = 90f; 
     [SerializeField] private float hintChangeInterval = 5f;
 
+    [Header("Audio")]
+    [SerializeField] private AudioSource audioSource;
+    [SerializeField] private AudioClip bgMusic;
+
     [Header("Other")]
     [SerializeField] private RoomManager roomManager;
     [SerializeField] private List<string> hints = new List<string>();
@@ -70,6 +74,10 @@ public class EOSMenuUI : MonoBehaviour
         roomPanel.SetActive(false);
         debugText.gameObject.SetActive(true);
         roomCodeText.gameObject.SetActive(false);
+        audioSource.loop = true;
+        audioSource.clip = bgMusic;
+        audioSource.loop = true;
+        audioSource.Play();
         debugText.text = "Авторизация в Epic Games...";
         StartCoroutine(GetPlayerEloRequest(PlayerPrefs.GetString("Nick", "Ник"), (elo) => eloText.text = $"Ваш эло: {elo}"));
         StartCoroutine(WaitForEOSLoginRoutine());

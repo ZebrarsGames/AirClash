@@ -89,7 +89,7 @@ public class GoalHandlerNetwork : NetworkBehaviour
     public AudioSource audioSourceSfx;
     public AudioSource audioSourceBgMusic;
     public AudioClip puckSound;
-    public AudioClip StartGameSound;
+    public AudioClip startGameSound;
     [SerializeField] private AudioClip[] gameMusics;
 
     [SyncVar(hook = nameof(OnPlayer1RematchChanged))]
@@ -114,9 +114,8 @@ public class GoalHandlerNetwork : NetworkBehaviour
     void Start()
     {        
         PlayerPrefs.SetInt("IsHostDisconnect", 1);
-        timer.TimerStart();
-        audioSourceSfx.PlayOneShot(StartGameSound);
         bool isMusic = PlayerPrefs.GetInt("BgMusicInGame", 1) != 0;
+        audioSourceBgMusic.Stop();
         if(isMusic)
         {
             int rand = UnityEngine.Random.Range(0, gameMusics.Length);
@@ -263,6 +262,7 @@ public class GoalHandlerNetwork : NetworkBehaviour
     [ClientRpc]
     private void RpcStartTimer()
     {
+        audioSourceSfx.PlayOneShot(startGameSound);
         timer.TimerStart();
     }
 
@@ -441,8 +441,8 @@ public class GoalHandlerNetwork : NetworkBehaviour
         scoreText1.text = "0";
         scoreText2.text = "0";
         
-        if(audioSourceSfx && StartGameSound)
-            audioSourceSfx.PlayOneShot(StartGameSound);
+        if(audioSourceSfx && startGameSound)
+            audioSourceSfx.PlayOneShot(startGameSound);
             
         timer.TimerStart();
         

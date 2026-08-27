@@ -745,7 +745,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 22400762, guid: 67117722a812a2e46ab8cb8eafbf5f5e, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 0.000034332275
+      value: -0.000011444092
       objectReference: {fileID: 0}
     - target: {fileID: 22426080, guid: 67117722a812a2e46ab8cb8eafbf5f5e, type: 3}
       propertyPath: m_AnchorMax.x
@@ -2464,7 +2464,7 @@ MonoBehaviour:
   audioSourceSfx: {fileID: 2094474884}
   audioSourceBgMusic: {fileID: 1819573952}
   puckSound: {fileID: 8300000, guid: 8346d24a7b5724c4ba889b8a1d541bf7, type: 3}
-  StartGameSound: {fileID: 8300000, guid: c295a870e60704548a182d990ed27ee7, type: 3}
+  startGameSound: {fileID: 8300000, guid: c295a870e60704548a182d990ed27ee7, type: 3}
   gameMusics:
   - {fileID: 8300000, guid: 865b48fafd8714747a89b9a1585bef23, type: 3}
   - {fileID: 8300000, guid: 56701c4420fd10847ab0a8fb5d64e059, type: 3}
@@ -2621,6 +2621,8 @@ MonoBehaviour:
   eloText: {fileID: 618644570}
   rotationSpeed: 50
   hintChangeInterval: 5
+  audioSource: {fileID: 1819573952}
+  bgMusic: {fileID: 8300000, guid: c70599ea8251fe0489c4ac0eb0f6053c, type: 3}
   roomManager: {fileID: 1884140519}
   hints:
   - "\u0421\u043A\u043E\u0440\u043E\u0441\u0442\u044C \u0448\u0430\u0439\u0431\u044B
@@ -10513,7 +10515,7 @@ AudioSource:
   m_audioClip: {fileID: 0}
   m_Resource: {fileID: 0}
   m_PlayOnAwake: 0
-  m_Volume: 0.5
+  m_Volume: 0.2
   m_Pitch: 1
   Loop: 0
   Mute: 0
