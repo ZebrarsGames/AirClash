@@ -506,6 +506,14 @@ public class GoalHandlerNetwork : NetworkBehaviour
         SceneManager.LoadScene("MainMenu");
     }
 
+    public void PlayCollisionSound()
+    {
+        if(audioSourceSfx != null && puckSound != null)
+        {
+            audioSourceSfx.PlayOneShot(puckSound);
+        }
+    }
+
     IEnumerator GetPlayerEloRequest(string user, Action<int> onEloReceived)
     {   
         string url = "https://airclashserver.onrender.com/getElo";

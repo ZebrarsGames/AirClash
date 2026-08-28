@@ -84,9 +84,12 @@ public class PuckScrNetwork : NetworkBehaviour
 
     void OnCollisionEnter2D(Collision2D other)
     {
-        if(isServer && GoalHandlerNetwork.Instance != null)
+        if(other.gameObject.CompareTag("Wall"))
         {
-            GoalHandlerNetwork.Instance.OnPuckCollisionEnter2D(other);
+            if(GoalHandlerNetwork.Instance != null)
+            {
+                GoalHandlerNetwork.Instance.PlayCollisionSound();
+            }
         }
 
         if(isClient && !isServer)

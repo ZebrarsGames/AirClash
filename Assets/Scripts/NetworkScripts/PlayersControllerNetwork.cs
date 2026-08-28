@@ -247,20 +247,17 @@ public class PlayersControllerNetwork : NetworkBehaviour, IBeginDragHandler, IDr
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        if(collision.gameObject.name.Equals("Puck"))
+        if(collision.gameObject.CompareTag("Puck"))
         {
-            if(isServer && audioSource != null)
-            {
-                RpcPlayPuckSound();
-            }
+            PlayPuckSound();
         }
     }
 
-    [ClientRpc]
-    private void RpcPlayPuckSound()
+    private void PlayPuckSound()
     {
         if(audioSource != null && puckSound != null)
         {
+            audioSource.pitch = UnityEngine.Random.Range(0.95f, 1.05f);
             audioSource.PlayOneShot(puckSound);
         }
     }
