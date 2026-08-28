@@ -745,7 +745,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 22400762, guid: 67117722a812a2e46ab8cb8eafbf5f5e, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 0.000011444092
+      value: 0.0000038146973
       objectReference: {fileID: 0}
     - target: {fileID: 22426080, guid: 67117722a812a2e46ab8cb8eafbf5f5e, type: 3}
       propertyPath: m_AnchorMax.x
@@ -3735,6 +3735,64 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 716370000}
   m_CullTransparentMesh: 1
+--- !u!1 &726664609
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 726664611}
+  - component: {fileID: 726664610}
+  m_Layer: 0
+  m_Name: EOSSDKComponent
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &726664610
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 726664609}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 09c2b9adb023e6547aa45a0e8bf5fcfc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Mirror.Transports::EpicTransport.EOSSDKComponent
+  apiKeys: {fileID: 0}
+  authInterfaceLogin: 0
+  authInterfaceCredentialType: 6
+  devAuthToolPort: 7878
+  devAuthToolCredentialName: 
+  connectInterfaceCredentialType: 10
+  deviceModel: PC Windows 64bit
+  displayName: User
+  epicLoggerLevel: 200
+  collectPlayerMetrics: 1
+  checkForEpicLauncherAndRestart: 0
+  delayedInitialization: 0
+  platformTickIntervalInSeconds: 0
+  tickBudgetInMilliseconds: 0
+--- !u!4 &726664611
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 726664609}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &742541736
 GameObject:
   m_ObjectHideFlags: 0
@@ -8395,9 +8453,9 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-      - m_Target: {fileID: 537742949}
-        m_TargetAssemblyTypeName: EOSMenuUI, Assembly-CSharp
-        m_MethodName: OpenMainMenu
+      - m_Target: {fileID: 2133172708}
+        m_TargetAssemblyTypeName: EloTextAnimScr, Assembly-CSharp
+        m_MethodName: StartAnim
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -13410,6 +13468,7 @@ GameObject:
   - component: {fileID: 2131369129}
   - component: {fileID: 2131369131}
   - component: {fileID: 2131369130}
+  - component: {fileID: 2131369132}
   m_Layer: 5
   m_Name: EloTextTMP
   m_TagString: Untagged
@@ -13536,6 +13595,22 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2131369128}
   m_CullTransparentMesh: 1
+--- !u!114 &2131369132
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2131369128}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: de10ff208e415164b9fa09b84a9bb07c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::EloTextAnimScr
+  eloText: {fileID: 2131369130}
+  slideDuration: 0.5
+  countDuration: 0.7
+  startVerticalOffset: -20
 --- !u!1 &2133172704
 GameObject:
   m_ObjectHideFlags: 0
@@ -13547,6 +13622,7 @@ GameObject:
   - component: {fileID: 2133172705}
   - component: {fileID: 2133172707}
   - component: {fileID: 2133172706}
+  - component: {fileID: 2133172708}
   m_Layer: 5
   m_Name: MultiPlayerTitleText
   m_TagString: Untagged
@@ -13673,6 +13749,22 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2133172704}
   m_CullTransparentMesh: 1
+--- !u!114 &2133172708
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2133172704}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: de10ff208e415164b9fa09b84a9bb07c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::EloTextAnimScr
+  eloText: {fileID: 2133172706}
+  slideDuration: 0.5
+  countDuration: 0.7
+  startVerticalOffset: -20
 --- !u!1 &2139991062
 GameObject:
   m_ObjectHideFlags: 0
@@ -13834,3 +13926,4 @@ SceneRoots:
   - {fileID: 1884140520}
   - {fileID: 528693114}
   - {fileID: 1460922026}
+  - {fileID: 726664611}
