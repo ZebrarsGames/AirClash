@@ -202,7 +202,7 @@ public class GoalHandlerNetwork : NetworkBehaviour
                 Debug.Log($"Игрок А: {playerARating} -> {newRatingA} (Изменение: {newRatingA - playerARating})");
                 Debug.Log($"Игрок Б: {playerBRating} -> {newRatingB} (Изменение: {newRatingB - playerBRating})");
                 
-                RpcWinLose(1, newRatingA, newRatingB, playerAMatches, playerBMatches, playerARating, playerBRating);
+                RpcWinLose(2, newRatingA, newRatingB, playerAMatches, playerBMatches, playerARating, playerBRating);
             } else if(EOSMenuUI.typeOfCurrentGame == TypeOfGame.roomCode)
             {
                 RpcWinLose(2, -1, -1, -1, -1, -1, -1);
@@ -489,7 +489,9 @@ public class GoalHandlerNetwork : NetworkBehaviour
         winOrLoseText.text = "Поражение!";
         if(newRating != -1 || matches != -1)
         {
-            eloText.text = $"Ваш новый эло: {newRating}<color=#c9c9c999>={oldRating}+{newRating-oldRating}</color>";
+            int difference = newRating - oldRating;
+            string sign = difference >= 0 ? "+" : "";
+            eloText.text = $"Ваш новый эло: {newRating}<color=#c9c9c999>={oldRating}{sign}{difference}</color>";
             matchesText.text = $"Ваши матчи: {matches}<color=#c9c9c999>={matches-1}+1</color>";
         } else
         {
