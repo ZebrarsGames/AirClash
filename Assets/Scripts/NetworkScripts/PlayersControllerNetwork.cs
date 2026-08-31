@@ -257,7 +257,6 @@ public class PlayersControllerNetwork : NetworkBehaviour, IBeginDragHandler, IDr
     {
         if(audioSource != null && puckSound != null)
         {
-            audioSource.pitch = UnityEngine.Random.Range(0.95f, 1.05f);
             audioSource.PlayOneShot(puckSound);
         }
     }
