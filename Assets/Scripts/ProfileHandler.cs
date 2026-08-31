@@ -22,6 +22,7 @@ public class ProfileHandler : MonoBehaviour
 
     [Header("Elo Levels Icons")]
     [SerializeField] private Sprite[] eloLevelsIcons;
+    [SerializeField] private Sprite noInternetIcon;
 
     [Header("Scripts")]
     [SerializeField] SaveManager saveManager;
@@ -29,6 +30,7 @@ public class ProfileHandler : MonoBehaviour
     private float _nextUpdate;
     private int _lastRenderedSeconds = -1; 
     private static readonly string PlaytimeTemplate = "Наиграно: {0:00}:{1:00}:{2:00}";
+    private bool isSetElo = true;
 
     private readonly int[] levelThresholds = {
         100,  //Уровень 1
@@ -44,8 +46,22 @@ public class ProfileHandler : MonoBehaviour
         3000 //Уровень Мастер
     };
 
-    void Start()
-    {
+    async void Start()
+    {   if(Application.internetReachability == NetworkReachability.NotReachable)
+        {
+            eloText.text = "Ваш эло: нет подключения к интернету!";
+            eloLevelImg.sprite = noInternetIcon;
+            isSetElo = false;
+        } else
+        {
+            bool isAccountExists = await GetIsExists(PlayerPrefs.GetString("Nick", "Ник"));
+            if(!isAccountExists)
+            {
+                eloText.text = "Ваш эло: аккаунт не создан!";
+                eloLevelImg.sprite = noInternetIcon;
+                isSetElo = false;
+            }
+        }
         SetProfileDataOnStart();
     }
 
@@ -75,7 +91,7 @@ public class ProfileHandler : MonoBehaviour
         saveManager.SaveData();
     }
 
-    public async void SetProfileDataOnStart()
+    public void SetProfileDataOnStart()
     {
         PlayerData currentData = saveManager.GetData();
         avatarPath = Path.Combine(Application.persistentDataPath, "avatar.png");
@@ -84,7 +100,26 @@ public class ProfileHandler : MonoBehaviour
         goalText.text = "Голы: " + currentData.Goals;
         nickText.text = currentData.NickName;
         playtimeText.text = "Наиграно: " + PlaytimeTracker.Instance.GetFormattedPlaytime();
+        if(isSetElo) SetElo();
+        
+        if(File.Exists(avatarPath))
+        {
+            byte[] bytes = File.ReadAllBytes(avatarPath);
+            
+            Texture2D savedTexture = new Texture2D(2, 2);
+            savedTexture.LoadImage(bytes);
 
+            avatarImage.texture = savedTexture;
+            Debug.Log("Сохраненный аватар успешно загружен при старте.");
+        } 
+        else
+        {
+            avatarImage.texture = defaultProfileIcon;
+        }
+    }
+
+    private async void SetElo()
+    {
         eloLevelImg.enabled = false;
 
         string savedNick = PlayerPrefs.GetString("Nick", "Ник");
@@ -136,26 +171,11 @@ public class ProfileHandler : MonoBehaviour
         else 
         {
             eloText.text = "Эло: 100";
-            if (eloLevelsIcons.Length > 0)
+            if(eloLevelsIcons.Length > 0)
             {
                 eloLevelImg.sprite = eloLevelsIcons[0];
                 eloLevelImg.enabled = true;
             }
-        }
-
-        if(File.Exists(avatarPath))
-        {
-            byte[] bytes = File.ReadAllBytes(avatarPath);
-            
-            Texture2D savedTexture = new Texture2D(2, 2);
-            savedTexture.LoadImage(bytes);
-
-            avatarImage.texture = savedTexture;
-            Debug.Log("Сохраненный аватар успешно загружен при старте.");
-        } 
-        else
-        {
-            avatarImage.texture = defaultProfileIcon;
         }
     }
 

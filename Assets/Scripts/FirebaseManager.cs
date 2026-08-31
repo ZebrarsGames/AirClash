@@ -64,7 +64,7 @@ public class FirebaseManager : MonoBehaviour
     void Start()
     {
         DontDestroyOnLoad(gameObject);
-        if(Application.isEditor)
+        if(Application.isEditor && !(Application.internetReachability == NetworkReachability.NotReachable))
         {
             Debug.Log("[FirebaseManager] Запущено в редакторе Unity. Симулируем получение токена...");
             lastSavedToken = "TEST_EDITOR_TOKEN_12345";
@@ -77,6 +77,7 @@ public class FirebaseManager : MonoBehaviour
             {
                 Permission.RequestUserPermission("android.permission.POST_NOTIFICATIONS");
             }
+            if(Application.internetReachability == NetworkReachability.NotReachable) return;
             FirebaseApp.CheckAndFixDependenciesAsync().ContinueWith(task => {
                 var dependencyStatus = task.Result;
                 if(dependencyStatus == DependencyStatus.Available) {

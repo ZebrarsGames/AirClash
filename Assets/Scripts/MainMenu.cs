@@ -34,6 +34,7 @@ public class MainMenu : MonoBehaviour
     [SerializeField] private GameObject cloudPanel;
     [SerializeField] private GameObject modificatorsPanel;
     [SerializeField] private GameObject hostDisconnectedPanel;
+    [SerializeField] private GameObject warningPanel;
 
     [Header("Audio")]
     [SerializeField] private AudioSource audioSource;
@@ -335,7 +336,7 @@ public class MainMenu : MonoBehaviour
         SceneManager.LoadScene(_toScene);
     }
 
-    public void LoadMultiplayer() => SceneManager.LoadScene(SCENE_MULTIPLAYER);
+    private void LoadMultiplayer() => SceneManager.LoadScene(SCENE_MULTIPLAYER);
 
     #endregion
 
@@ -375,6 +376,17 @@ public class MainMenu : MonoBehaviour
     {
         if(coinMover != null)
             coinMover.AddCoins(Vector3.zero, amount);
+    }
+
+    public void OpenMultiplayer()
+    {
+        if(Application.internetReachability == NetworkReachability.NotReachable)
+        {
+            Debug.LogWarning("Нельзя играть в мультиплеер без интернета!");
+            OpenPanel(warningPanel);
+            return;
+        }
+        LoadMultiplayer();
     }
 
     private void UpdateQuests(int amount)
