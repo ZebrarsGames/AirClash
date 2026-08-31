@@ -101,7 +101,7 @@ GameObject:
   - component: {fileID: 1804303414495733925}
   m_Layer: 0
   m_Name: Player2
-  m_TagString: Untagged
+  m_TagString: Player2
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -264,6 +264,7 @@ MonoBehaviour:
   minY: -4.05
   maxY: 4.05
   timer: {fileID: 0}
+  smoothTime: 0.05
   audioSource: {fileID: 0}
   puckSound: {fileID: 8300000, guid: 8346d24a7b5724c4ba889b8a1d541bf7, type: 3}
 --- !u!96 &3017129254939843058

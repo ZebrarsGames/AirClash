@@ -472,7 +472,8 @@ public class GoalHandlerNetwork : NetworkBehaviour
         winOrLoseText.text = "Победа!";
         if(newRating != -1 || matches != -1)
         {
-            eloText.text = $"Ваш новый эло: {newRating}<color=#c9c9c999>={oldRating}+{newRating-oldRating}</color>";
+            int difference = newRating - oldRating;
+            eloText.gameObject.GetComponent<EloTextAnimScr>().AnimateElo(oldRating, newRating, difference);
             matchesText.text = $"Ваши матчи: {matches}<color=#c9c9c999>={matches-1}+1</color>";
         } else
         {
@@ -490,7 +491,7 @@ public class GoalHandlerNetwork : NetworkBehaviour
         if(newRating != -1 || matches != -1)
         {
             int difference = newRating - oldRating;
-            eloText.GetComponent<EloTextAnimScr>().AnimateElo(oldRating, newRating, difference);
+            eloText.gameObject.GetComponent<EloTextAnimScr>().AnimateElo(oldRating, newRating, difference);
             matchesText.text = $"Ваши матчи: {matches}<color=#c9c9c999>={matches-1}+1</color>";
         } else
         {

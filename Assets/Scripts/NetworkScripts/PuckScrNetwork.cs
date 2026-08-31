@@ -7,6 +7,7 @@ public class PuckScrNetwork : NetworkBehaviour
     private Rigidbody2D puckRb;
     public float maxSpeed = 22f;
     [SerializeField] private TimerScr timer;
+    [SerializeField] private AudioSource audioSource;
 
     [Header("Network Smoothing")]
     [SerializeField] private float snapThreshold = 5.0f;
@@ -22,6 +23,12 @@ public class PuckScrNetwork : NetworkBehaviour
     private Vector2 targetServerVel;
     private bool hasNetworkTarget = false;
     private float blockSyncVarUntil = 0f;
+
+    [SyncVar(hook = nameof(OnPlayer1SkinChanged))] private string player1SkinName = "DefSkin";
+    [SyncVar(hook = nameof(OnPlayer2SkinChanged))] private string player2SkinName = "DefSkin";
+
+    private AudioClip player1Sound;
+    private AudioClip player2Sound;
 
     private struct PuckState
     {
@@ -42,6 +49,48 @@ public class PuckScrNetwork : NetworkBehaviour
         puckRb.interpolation = RigidbodyInterpolation2D.Interpolate;
         
         syncInterval = 0.016f;
+    }
+
+    public override void OnStartServer()
+    {
+        base.OnStartServer();
+        player1SkinName = PlayerPrefs.GetString("CurrentSkin", "DefSkin");
+        LoadSoundForPlayer(1, player1SkinName);
+    }
+
+    public override void OnStartClient()
+    {
+        base.OnStartClient();
+        
+        LoadSoundForPlayer(1, player1SkinName);
+        LoadSoundForPlayer(2, player2SkinName);
+
+        if(!isServer)
+        {
+            CmdRegisterClientSkin(PlayerPrefs.GetString("CurrentSkin", "DefSkin"));
+        }
+    }
+
+    [Command(requiresAuthority = false)]
+    private void CmdRegisterClientSkin(string skinName)
+    {
+        player2SkinName = skinName;
+        LoadSoundForPlayer(2, skinName);
+    }
+
+    private void OnPlayer1SkinChanged(string oldSkin, string newSkin) => LoadSoundForPlayer(1, newSkin);
+    private void OnPlayer2SkinChanged(string oldSkin, string newSkin) => LoadSoundForPlayer(2, newSkin);
+
+    private void LoadSoundForPlayer(int playerNum, string skinName)
+    {
+        SkinData skin = Resources.Load<SkinData>(skinName);
+        if(skin == null) skin = Resources.Load<SkinData>("DefSkin");
+
+        if(skin != null)
+        {
+            if (playerNum == 1) player1Sound = skin.sound;
+            else player2Sound = skin.sound;
+        }
     }
 
     void FixedUpdate()
@@ -90,6 +139,14 @@ public class PuckScrNetwork : NetworkBehaviour
             {
                 GoalHandlerNetwork.Instance.PlayCollisionSound();
             }
+        } 
+        else if(other.gameObject.CompareTag("Player1"))
+        {
+            if(player1Sound != null) audioSource.PlayOneShot(player1Sound);
+        } 
+        else if(other.gameObject.CompareTag("Player2"))
+        {
+            if(player2Sound != null) audioSource.PlayOneShot(player2Sound);
         }
 
         if(isClient && !isServer)

@@ -91,6 +91,7 @@ public class PlayersControllerNetwork : NetworkBehaviour, IBeginDragHandler, IDr
         if(newIndex == 1)
         {
             gameObject.name = "Player1";
+            gameObject.tag = "Player1";
             minX = 0.5f;
             maxX = 6.65f;
             SetPlayerPosition(5.186f);
@@ -98,6 +99,7 @@ public class PlayersControllerNetwork : NetworkBehaviour, IBeginDragHandler, IDr
         else if(newIndex == 2)
         {
             gameObject.name = "Player2";
+            gameObject.tag = "Player2";
             minX = -6.65f;
             maxX = -0.5f;
             SetPlayerPosition(-5.186f);
@@ -243,22 +245,6 @@ public class PlayersControllerNetwork : NetworkBehaviour, IBeginDragHandler, IDr
     {
         if(!isLocalPlayer) return;
         isDragging = false;
-    }
-
-    private void OnCollisionEnter2D(Collision2D collision)
-    {
-        if(collision.gameObject.CompareTag("Puck"))
-        {
-            PlayPuckSound();
-        }
-    }
-
-    private void PlayPuckSound()
-    {
-        if(audioSource != null && puckSound != null)
-        {
-            audioSource.PlayOneShot(puckSound);
-        }
     }
 
     public void ApplySkin(SkinData skin)
