@@ -41,7 +41,6 @@ public class FirebaseManager : MonoBehaviour
         public string password;
         public string action;
         public string game_data;
-        public int elo;
     }
 
     [System.Serializable]
@@ -51,7 +50,6 @@ public class FirebaseManager : MonoBehaviour
         public string message;
         public string game_data;
         public string action; 
-        public int elo;
     }
 
     [System.Serializable]
@@ -172,14 +170,12 @@ public class FirebaseManager : MonoBehaviour
 
         string finalJsonToSend = JsonUtility.ToJson(progress);
 
-        int currentElo = progress != null ? progress.elo : 500;
-
-        StartCoroutine(SendSyncRequest(inputUsername, inputPassword, "save", finalJsonToSend, currentElo));
+        StartCoroutine(SendSyncRequest(inputUsername, inputPassword, "save", finalJsonToSend));
     }
 
     public void LoadProgress(string inputUsername, string inputPassword)
     {
-        StartCoroutine(SendSyncRequest(inputUsername, inputPassword, "load", "", 0));
+        StartCoroutine(SendSyncRequest(inputUsername, inputPassword, "load", ""));
     }
 
     IEnumerator SendAuthRequest(string user, string pass)
@@ -240,7 +236,7 @@ public class FirebaseManager : MonoBehaviour
         }
     }
 
-    IEnumerator SendSyncRequest(string user, string pass, string actionType, string gameDataJson, int eloValue)
+    IEnumerator SendSyncRequest(string user, string pass, string actionType, string gameDataJson)
     {
         statusTextEvent.Invoke("Синхронизируемся...");
         isServerProcessEvent.Invoke(true);
@@ -250,8 +246,7 @@ public class FirebaseManager : MonoBehaviour
         data.username = user;
         data.password = pass;
         data.action = actionType;
-        data.game_data = gameDataJson;
-        data.elo = eloValue;
+        data.game_data = gameDataJson;;
 
         string jsonPayload = JsonUtility.ToJson(data);
 
@@ -302,11 +297,6 @@ public class FirebaseManager : MonoBehaviour
                         loadedProgress = JsonUtility.FromJson<PlayerData>(res.game_data);
                     }
 
-                    if(loadedProgress != null)
-                    {
-                        loadedProgress.elo = res.elo;
-                    }
-
                     string updatedJson = JsonUtility.ToJson(loadedProgress);
                     string saveFilePath = Path.Combine(Application.persistentDataPath, "save.json");
                     File.WriteAllText(saveFilePath, updatedJson);
@@ -321,7 +311,7 @@ public class FirebaseManager : MonoBehaviour
                         Debug.Log("[FirebaseManager] Аватарка успешно скачана из облака и сохранена на устройство!");
                     }
 
-                    Debug.Log($"[FirebaseManager] Прогресс успешно скачан из облака! ELO: {res.elo}");
+                    Debug.Log($"[FirebaseManager] Прогресс успешно скачан из облака!");
                     PlayerPrefs.SetString("AccountPassword", pass);
                     PlayerPrefs.SetString("Nick", user);
                     PlayerPrefs.Save();

@@ -2050,7 +2050,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 22400762, guid: 67117722a812a2e46ab8cb8eafbf5f5e, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 0.000011444092
+      value: 0.000019073486
       objectReference: {fileID: 0}
     - target: {fileID: 22426080, guid: 67117722a812a2e46ab8cb8eafbf5f5e, type: 3}
       propertyPath: m_AnchorMax.x
@@ -5635,7 +5635,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
+      - m_Target: {fileID: 994025025}
         m_TargetAssemblyTypeName: PauseHandler, Assembly-CSharp
         m_MethodName: RestartGame
         m_Mode: 1
@@ -7647,7 +7647,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
+      - m_Target: {fileID: 994025025}
         m_TargetAssemblyTypeName: PauseHandler, Assembly-CSharp
         m_MethodName: MainMenu
         m_Mode: 1
@@ -7855,7 +7855,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
+      - m_Target: {fileID: 994025025}
         m_TargetAssemblyTypeName: PauseHandler, Assembly-CSharp
         m_MethodName: TogglePause
         m_Mode: 1
