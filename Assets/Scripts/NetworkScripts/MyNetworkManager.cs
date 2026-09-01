@@ -2,10 +2,7 @@ using UnityEngine;
 using Mirror;
 using System;
 
-public struct OpponentLeftMessage : NetworkMessage
-{
-    
-}
+public struct OpponentLeftMessage : NetworkMessage { }
 
 public class MyNetworkManager : NetworkManager
 {
@@ -43,13 +40,26 @@ public class MyNetworkManager : NetworkManager
 
     public override void OnClientDisconnect()
     {
+        bool iAmHost = NetworkServer.active;
+
         base.OnClientDisconnect();
+
+        if(!iAmHost)
+        {
+            Debug.Log("[NetworkManager] Соединение с сервером потеряно. Оппонент (хост) отключился.");
+            OnOpponentDisconnected?.Invoke();
+        }
+        else
+        {
+            Debug.Log("[NetworkManager] Локальный хост успешно остановил клиента.");
+        }
+        
         OnLocalClientDisconnected?.Invoke();
     }
 
     private void OnOpponentLeftMessageReceived(OpponentLeftMessage msg)
     {
-        Debug.Log("[NetworkManager] Получено сообщение: оппонент вышел.");
+        Debug.Log("[NetworkManager] Получено сообщение от сервера: оппонент вышел.");
         OnOpponentDisconnected?.Invoke();
     }
 
@@ -59,11 +69,16 @@ public class MyNetworkManager : NetworkManager
 
     public override void OnServerDisconnect(NetworkConnectionToClient conn)
     {
-        foreach(var readyConn in NetworkServer.connections.Values)
+        if(NetworkServer.active && conn != NetworkServer.localConnection)
         {
-            if(readyConn != null && readyConn != conn)
+            Debug.Log($"[NetworkManager] Гость {conn.connectionId} покинул матч. Оповещаем остальных.");
+            
+            foreach(var readyConn in NetworkServer.connections.Values)
             {
-                readyConn.Send(new OpponentLeftMessage());
+                if (readyConn != null && readyConn != conn && readyConn != NetworkServer.localConnection)
+                {
+                    readyConn.Send(new OpponentLeftMessage());
+                }
             }
         }
 
@@ -85,12 +100,12 @@ public class MyNetworkManager : NetworkManager
     {
         base.OnServerConnect(conn);
 
-        if(conn != NetworkServer.localConnection)
+        if (conn != NetworkServer.localConnection)
         {
             Debug.Log("[CustomNetworkManager] Гость подключился!");
 
             MatchmakerScr matchmaker = FindAnyObjectByType<MatchmakerScr>();
-            if(matchmaker != null)
+            if (matchmaker != null)
             {
                 matchmaker.OnOpponentJoinedHost();
             }
@@ -99,7 +114,7 @@ public class MyNetworkManager : NetworkManager
 
     private void DeleteRoomFromBackend()
     {
-        if(!string.IsNullOrEmpty(currentRoomCode) && roomManager != null)
+        if (!string.IsNullOrEmpty(currentRoomCode) && roomManager != null)
         {
             string codeToDelete = currentRoomCode;
 

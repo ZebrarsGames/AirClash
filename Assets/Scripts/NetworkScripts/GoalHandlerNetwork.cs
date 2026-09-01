@@ -113,7 +113,6 @@ public class GoalHandlerNetwork : NetworkBehaviour
 
     void Start()
     {        
-        PlayerPrefs.SetInt("IsHostDisconnect", 1);
         bool isMusic = PlayerPrefs.GetInt("BgMusicInGame", 1) != 0;
         audioSourceBgMusic.Stop();
         if(isMusic)
@@ -126,6 +125,21 @@ public class GoalHandlerNetwork : NetworkBehaviour
         }
         howManyGoals = 4;
         puck.GetComponent<TrailRenderer>().enabled = PlayerPrefs.GetInt("PuckTrail", 1) != 0;
+    }
+
+    private void OnEnable()
+    {
+        MyNetworkManager.OnOpponentDisconnected += HandleDisconnect;
+    }
+
+    private void OnDisable()
+    {
+        MyNetworkManager.OnOpponentDisconnected -= HandleDisconnect;
+    }
+
+    private void HandleDisconnect()
+    {
+        PlayerPrefs.SetInt("IsHostDisconnect", 1);
     }
 
     public void SetRating(string username, int playerIndex)
