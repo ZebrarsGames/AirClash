@@ -13,6 +13,7 @@ public class MyNetworkManager : NetworkManager
 
     public static event Action OnOpponentDisconnected;
     public static event Action OnLocalClientDisconnected;
+    public static System.Action OnHostFullyStopped;
 
     public void SetCurrentRoomCode(string code)
     {
@@ -94,6 +95,13 @@ public class MyNetworkManager : NetworkManager
     {
         base.OnStopServer();
         DeleteRoomFromBackend();
+    }
+
+    public override void OnStopHost()
+    {
+        base.OnStopHost();
+        Debug.Log("[MyNetworkManager] Хост полностью остановлен, транспорт свободен.");
+        OnHostFullyStopped?.Invoke();
     }
 
     public override void OnServerConnect(NetworkConnectionToClient conn)

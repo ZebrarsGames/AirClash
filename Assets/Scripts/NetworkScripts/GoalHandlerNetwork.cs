@@ -487,7 +487,7 @@ public class GoalHandlerNetwork : NetworkBehaviour
         if(newRating != -1 || matches != -1)
         {
             int difference = newRating - oldRating;
-            eloText.gameObject.GetComponent<EloTextAnimScr>().AnimateElo(oldRating, newRating, difference);
+            StartCoroutine(AnimateEloRoutine(eloText, oldRating, newRating, difference));
             matchesText.text = $"Ваши матчи: {matches}<color=#c9c9c999>={matches-1}+1</color>";
         } else
         {
@@ -505,13 +505,18 @@ public class GoalHandlerNetwork : NetworkBehaviour
         if(newRating != -1 || matches != -1)
         {
             int difference = newRating - oldRating;
-            eloText.gameObject.GetComponent<EloTextAnimScr>().AnimateElo(oldRating, newRating, difference);
+            StartCoroutine(AnimateEloRoutine(eloText, oldRating, newRating, difference));
             matchesText.text = $"Ваши матчи: {matches}<color=#c9c9c999>={matches-1}+1</color>";
         } else
         {
             eloText.text = "Эло не изменился";
             matchesText.text = "Матчи не изменились";
         }
+    }
+    IEnumerator AnimateEloRoutine(TextMeshProUGUI eloText, int oldRating, int newRating, int difference)
+    {
+        yield return new WaitForSecondsRealtime(1.0f);
+        eloText.gameObject.GetComponent<EloTextAnimScr>().AnimateElo(oldRating, newRating, difference);
     }
     public void LoadMainMenu()
     {

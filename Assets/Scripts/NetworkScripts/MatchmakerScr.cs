@@ -89,6 +89,7 @@ public class MatchmakerScr : MonoBehaviour
     private Coroutine matchmakingCoroutine;
     private bool isSearching = false;
     private bool isHostCreated = false;
+    private string pendingHostEosId = string.Empty;
 
     public UnityEvent<int, int> OnSearchRangeUpdated; // (minElo, maxElo)
     public UnityEvent OnMatchmakingStart;
@@ -314,9 +315,7 @@ public class MatchmakerScr : MonoBehaviour
 
             if(www.result == UnityWebRequest.Result.Success)
             {
-                Debug.Log("[MatchmakerScr] Комната поиска создана. Запускаем Mirror Host в ожидании подключения...");
-                isHostCreated = true;
-                MyNetworkManager.singleton.StartHost();
+                Debug.Log("[MatchmakerScr] Комната поиска создана.");
             }
             else
             {
@@ -348,11 +347,54 @@ public class MatchmakerScr : MonoBehaviour
         isSearching = false;
         if(matchmakingCoroutine != null) StopCoroutine(matchmakingCoroutine);
 
-        Debug.Log("[MatchmakerScr] OnOpponentFound()");
+        Debug.Log($"[MatchmakerScr] OnOpponentFound(). Цель: {hostEosId}");
         OnMatchFound?.Invoke();
 
+        if(NetworkServer.active || NetworkClient.active)
+        {
+            pendingHostEosId = hostEosId;
+
+            MyNetworkManager.OnHostFullyStopped -= ConnectToPendingHost;
+            MyNetworkManager.OnHostFullyStopped += ConnectToPendingHost;
+
+            Debug.Log("[MatchmakerScr] Инициируем StopHost() и ждем колбэка...");
+            MyNetworkManager.singleton.StopHost(); 
+        }
+        else
+        {
+            ConnectToHostDirectly(hostEosId);
+        }
+    }
+
+    private void ConnectToPendingHost()
+    {
+        MyNetworkManager.OnHostFullyStopped -= ConnectToPendingHost;
+
+        if(!string.IsNullOrEmpty(pendingHostEosId))
+        {
+            StartCoroutine(DelayedConnectRoutine(pendingHostEosId));
+        }
+    }
+
+    private void ConnectToHostDirectly(string hostEosId)
+    {
+        StartCoroutine(DelayedConnectRoutine(hostEosId));
+    }
+
+    private IEnumerator DelayedConnectRoutine(string hostEosId)
+    {
+        yield return new WaitForSeconds(0.2f); 
+
+        Debug.Log($"[MatchmakerScr] Безопасный запуск клиента. Подключение к: {hostEosId}");
         MyNetworkManager.singleton.networkAddress = hostEosId;
         MyNetworkManager.singleton.StartClient();
+        
+        pendingHostEosId = string.Empty;
+    }
+
+    private void OnDestroy()
+    {
+        MyNetworkManager.OnHostFullyStopped -= ConnectToPendingHost;
     }
 
     private string GetLocalEosId()

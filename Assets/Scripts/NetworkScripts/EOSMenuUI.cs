@@ -58,6 +58,8 @@ public class EOSMenuUI : MonoBehaviour
 
     void Start()
     {
+        MyNetworkManager.singleton.StopClient();
+        MyNetworkManager.singleton.StopHost();
         float duration = 360f / Mathf.Abs(rotationSpeed);
 
         float targetAngle = rotationSpeed > 0 ? -360f : 360f;
