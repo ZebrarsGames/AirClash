@@ -19,6 +19,7 @@ public class SkinItem : MonoBehaviour
     [Header("UI")]
     [SerializeField] private TextMeshProUGUI skinNameText;
     [SerializeField] private TextMeshProUGUI priceText;
+    [SerializeField] private TextMeshProUGUI descText;
     [SerializeField] private Image skinImage;
 
     [Header("Selection indicators")]
@@ -31,53 +32,54 @@ public class SkinItem : MonoBehaviour
         skinName = skinData.skinName;
         skinPrice = skinData.price;
         guiSkinName = skinData.skinGuiName;
-        skinNameText.text = skinData.skinGuiName.ToString();
+        skinNameText.text = guiSkinName;
+        descText.text = skinData.skinDescripton;
         skinImage.sprite = skinData.sprite;
         switch(skinData.rarity)
         {
-            case 1:
+            case SkinRarity.Def:
                 isCanBuy = true;
                 if(ColorUtility.TryParseHtmlString("#FFFFFF", out Color DefColor))
                 {
                     skinNameText.color = DefColor;
                 }
                 break;
-            case 2:
+            case SkinRarity.Rare:
                 isCanBuy = true;
                 if(ColorUtility.TryParseHtmlString("#B9C24B", out Color RareColor))
                 {
                     skinNameText.color = RareColor;
                 }
                 break;
-            case 3:
+            case SkinRarity.SuperRare:
                 isCanBuy = true;
                 if(ColorUtility.TryParseHtmlString("#90E0EF", out Color SuperRareColor))
                 {
                     skinNameText.color = SuperRareColor;
                 }
                 break;
-            case 4:
+            case SkinRarity.Epic:
                 isCanBuy = true;
                 if(ColorUtility.TryParseHtmlString("#A99AD3", out Color EpicColor))
                 {
                     skinNameText.color = EpicColor;
                 }
                 break;
-            case 5:
+            case SkinRarity.Mythic:
                 isCanBuy = true;
                 if(ColorUtility.TryParseHtmlString("#F94449", out Color MythicColor))
                 {
                     skinNameText.color = MythicColor;
                 }
                 break;
-            case 6:
+            case SkinRarity.Legendary:
                 isCanBuy = true;
                 if(ColorUtility.TryParseHtmlString("#FFE747", out Color LegendaryColor))
                 {
                     skinNameText.color = LegendaryColor;
                 }
                 break;    
-            case 7:
+            case SkinRarity.Special:
                 isCanBuy = false;
                 if(ColorUtility.TryParseHtmlString("#0004ff", out Color XpColor))
                 {
@@ -104,7 +106,7 @@ public class SkinItem : MonoBehaviour
         }
         if(isCanBuy)
         {
-            priceText.text = skinPrice.ToString();
+            priceText.text = $"{skinPrice} <sprite=0>";
         }
     }
 

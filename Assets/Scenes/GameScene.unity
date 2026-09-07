@@ -1051,6 +1051,65 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 255006213}
   m_CullTransparentMesh: 1
+--- !u!1 &320081365
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 320081367}
+  - component: {fileID: 320081366}
+  m_Layer: 0
+  m_Name: XpUiScr
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &320081366
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 320081365}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8fb234d44d89e7f4b9d38650b018b7d5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::XpUiScr
+  xpSlider: {fileID: 1566627848}
+  currentXpText: {fileID: 1888693784}
+  currentLvlText: {fileID: 1326270653}
+  nextLvlText: {fileID: 1029816220}
+  canvasGroup: {fileID: 2136138089}
+  panel: {fileID: 2136138087}
+  audioSource: {fileID: 2094474884}
+  levelUpSounds:
+  - {fileID: 8300000, guid: 1fa01e474b998e34d94aaafaae7cc3e6, type: 3}
+  - {fileID: 8300000, guid: b6543ab4abddac54b985baa6099e5847, type: 3}
+  - {fileID: 8300000, guid: 3d44e2f0e6a5f074ba09177e327d9956, type: 3}
+  - {fileID: 8300000, guid: dcf85bcc3173a42478ab5ee3a1c13332, type: 3}
+  - {fileID: 8300000, guid: 0543620fa7e6b174d8ddb3fbdbf01990, type: 3}
+  - {fileID: 8300000, guid: 2c8fad25d1cabe14184df59f1e0e0b49, type: 3}
+  xpHandler: {fileID: 1563882530}
+--- !u!4 &320081367
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 320081365}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &328978006
 GameObject:
   m_ObjectHideFlags: 0
@@ -5268,7 +5327,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 22400762, guid: 67117722a812a2e46ab8cb8eafbf5f5e, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -0.000011444092
+      value: -0.0000038146973
       objectReference: {fileID: 0}
     - target: {fileID: 22426080, guid: 67117722a812a2e46ab8cb8eafbf5f5e, type: 3}
       propertyPath: m_AnchorMax.x
@@ -5804,7 +5863,6 @@ GameObject:
   - component: {fileID: 1470246514}
   - component: {fileID: 1470246513}
   - component: {fileID: 1470246512}
-  - component: {fileID: 1470246511}
   - component: {fileID: 1470246510}
   m_Layer: 5
   m_Name: EndScreenPanel
@@ -5848,33 +5906,6 @@ CanvasGroup:
   m_Interactable: 1
   m_BlocksRaycasts: 1
   m_IgnoreParentGroups: 0
---- !u!114 &1470246511
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1470246508}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8fb234d44d89e7f4b9d38650b018b7d5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::XpUiScr
-  xpSlider: {fileID: 1566627848}
-  currentXpText: {fileID: 1888693784}
-  currentLvlText: {fileID: 1326270653}
-  nextLvlText: {fileID: 1029816220}
-  canvasGroup: {fileID: 2136138089}
-  panel: {fileID: 2136138087}
-  audioSource: {fileID: 0}
-  levelUpSounds:
-  - {fileID: 8300000, guid: 1fa01e474b998e34d94aaafaae7cc3e6, type: 3}
-  - {fileID: 8300000, guid: b6543ab4abddac54b985baa6099e5847, type: 3}
-  - {fileID: 8300000, guid: 3d44e2f0e6a5f074ba09177e327d9956, type: 3}
-  - {fileID: 8300000, guid: dcf85bcc3173a42478ab5ee3a1c13332, type: 3}
-  - {fileID: 8300000, guid: 0543620fa7e6b174d8ddb3fbdbf01990, type: 3}
-  - {fileID: 8300000, guid: 2c8fad25d1cabe14184df59f1e0e0b49, type: 3}
-  xpHandler: {fileID: 0}
 --- !u!222 &1470246512
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -6235,7 +6266,19 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::XpHandler
   onLevelUp:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 320081366}
+        m_TargetAssemblyTypeName: XpUiScr, Assembly-CSharp
+        m_MethodName: LevelUpAnimStart
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   achievementsHandler: {fileID: 0}
   saveManager: {fileID: 1049358870}
 --- !u!4 &1563882531
@@ -8928,6 +8971,7 @@ SceneRoots:
   - {fileID: 1107313737}
   - {fileID: 742541737}
   - {fileID: 1563882531}
+  - {fileID: 320081367}
   - {fileID: 1106912864}
   - {fileID: 888105965}
   - {fileID: 1049358871}

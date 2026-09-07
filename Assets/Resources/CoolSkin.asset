@@ -14,8 +14,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::SkinData
   skinName: CoolSkin
   skinGuiName: "\u041A\u0440\u0443\u0442\u043E\u0439"
+  skinDescripton: "\u041E\u043D \u043A\u0440\u0443\u0442\u043E\u0439"
   sprite: {fileID: 21300000, guid: f8520931070bc3d46ae689e1620a3c0d, type: 3}
   particles: {fileID: 0}
+  trail: {fileID: 0}
   sound: {fileID: 8300000, guid: 8346d24a7b5724c4ba889b8a1d541bf7, type: 3}
-  rarity: 2
+  rarity: 1
   price: 20

@@ -14,9 +14,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::SkinData
   skinName: CdSkinPl2
   skinGuiName: "\u0414\u0438\u0441\u043A"
+  skinDescripton: "\u041F\u043E\u043C\u043D\u0438\u0448\u044C CD \u0434\u0438\u0441\u043A\u0438?"
   sprite: {fileID: 21300000, guid: 5072d6e12e6df144587ab20e8a1a3f1d, type: 3}
   particles: {fileID: 0}
   trail: {fileID: 0}
   sound: {fileID: 8300000, guid: 8346d24a7b5724c4ba889b8a1d541bf7, type: 3}
-  rarity: 4
+  rarity: 3
   price: 150

@@ -14,8 +14,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::SkinData
   skinName: PixelSkinPl2
   skinGuiName: "\u041F\u0438\u043A\u0441\u0435\u043B\u044C"
+  skinDescripton: "\u041F\u0438\u043A\u0441\u0435\u043B\u044C \u0430\u0440\u0442"
   sprite: {fileID: 21300000, guid: f202bed71c366454c9766c962e85579f, type: 3}
   particles: {fileID: 0}
+  trail: {fileID: 0}
   sound: {fileID: 8300000, guid: 8346d24a7b5724c4ba889b8a1d541bf7, type: 3}
-  rarity: 3
+  rarity: 2
   price: 30

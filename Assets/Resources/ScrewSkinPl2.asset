@@ -14,9 +14,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::SkinData
   skinName: ScrewSkinPl2
   skinGuiName: "\u0412\u0438\u043D\u0442"
+  skinDescripton: "\u0410 \u0433\u0434\u0435 \u043E\u0442\u0432\u0451\u0440\u0442\u043A\u0430?"
   sprite: {fileID: 21300000, guid: c4e691d19ea36454580172e656896a0d, type: 3}
   particles: {fileID: 0}
   trail: {fileID: 2050201133345544691, guid: 15d4c6a28a86d1d4cafea47d8c45cdb7, type: 3}
   sound: {fileID: 8300000, guid: bdb17d159a1c14b4f83bd8a6a3519918, type: 3}
-  rarity: 7
+  rarity: 6
   price: 0

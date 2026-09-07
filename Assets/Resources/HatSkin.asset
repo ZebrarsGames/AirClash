@@ -14,9 +14,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::SkinData
   skinName: HatSkin
   skinGuiName: "\u0428\u043B\u044F\u043F\u0430"
+  skinDescripton: "\u0421\u043D\u0438\u043C\u0430\u044E \u0448\u043B\u044F\u043F\u0443"
   sprite: {fileID: 21300000, guid: 483170ce96d505f4487010e1356bd38b, type: 3}
   particles: {fileID: 0}
   trail: {fileID: 9150835885186126004, guid: 3995790131372ad46b7e987541b865c6, type: 3}
   sound: {fileID: 8300000, guid: 8346d24a7b5724c4ba889b8a1d541bf7, type: 3}
-  rarity: 3
+  rarity: 2
   price: 40
