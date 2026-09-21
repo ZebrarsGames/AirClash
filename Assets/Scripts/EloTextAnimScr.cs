@@ -19,11 +19,6 @@ public class EloTextAnimScr : MonoBehaviour
     
     private Sequence eloSequence; 
 
-    public void StartAnim()
-    {
-        AnimateElo(755, 1562, 807);
-    }
-
     public void AnimateElo(int oldRating, int newRating, int targetDifference)
     {
         eloSequence?.Kill();
@@ -32,36 +27,36 @@ public class EloTextAnimScr : MonoBehaviour
         currentOffset = startVerticalOffset;
         countingDifference = 0;
 
-        UpdateEloTextString(newRating, oldRating, countingDifference);
+        UpdateEloTextString(oldRating, countingDifference);
 
         eloSequence = DOTween.Sequence();
 
         eloSequence.Append(DOTween.To(() => currentOffset, x => currentOffset = x, 0f, slideDuration).SetEase(Ease.OutCubic));
         eloSequence.Join(DOTween.To(() => currentAlpha, x => currentAlpha = x, 1f, slideDuration).SetEase(Ease.OutCubic));
 
-        eloSequence.OnUpdate(() => UpdateEloTextString(newRating, oldRating, countingDifference));
+        eloSequence.OnUpdate(() => UpdateEloTextString(oldRating, countingDifference));
 
         eloSequence.Append(DOTween.To(() => countingDifference, x => countingDifference = x, targetDifference, countDuration)
             .SetEase(Ease.OutQuad)
-            .OnUpdate(() => UpdateEloTextString(newRating, oldRating, countingDifference)));
+            .OnUpdate(() => UpdateEloTextString(oldRating, countingDifference)));
             
         eloSequence.OnComplete(() => {
             countingDifference = targetDifference;
             currentAlpha = 1f;
             currentOffset = 0f;
-            UpdateEloTextString(newRating, oldRating, countingDifference);
+            UpdateEloTextString(oldRating, countingDifference);
         });
     }
 
-
-    private void UpdateEloTextString(int newRating, int oldRating, int diff)
+    private void UpdateEloTextString(int oldRating, int diff)
     {
         int offsetInt = (int)currentOffset;
-        
         int alphaPercent = (int)(currentAlpha * 70);
+        
+        int currentElo = oldRating + diff;
 
-        eloText.SetText("Ваш новый эло: {0}<voffset={1}px><color=#c9c9c9><alpha=#{2:00}>={3}{4:+}</color></voffset>", 
-            newRating, 
+        eloText.SetText("Ваш новый эло: {0}<voffset={1}px><color=#c9c9c9><alpha=#{2:00}>={3}{4:+#;-#;0}</color></voffset>", 
+            currentElo, 
             offsetInt, 
             alphaPercent, 
             oldRating, 

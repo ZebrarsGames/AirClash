@@ -172,62 +172,6 @@ public class GoalHandlerNetwork : NetworkBehaviour
         }));
     }
 
-    [Server] 
-    public void ServerProcessGoal(Collider2D collision)
-    {
-        if(collision.gameObject.CompareTag("GoalTrigger1"))
-        {
-            score1++;
-        }
-        else if(collision.gameObject.CompareTag("GoalTrigger2"))
-        {
-            score2++;
-        }
-
-        if(score1 >= howManyGoals)
-        {
-            if(EOSMenuUI.typeOfCurrentGame == TypeOfGame.matchmaking)
-            {
-                playerAMatches++;
-                playerBMatches++;
-                (int newRatingA, int newRatingB) = EloSystemScr.CalculateNewRatings(
-                    playerBRating, playerARating, playerBMatches, playerAMatches, score2, score1
-                );
-
-                Debug.Log($"Игрок А: {playerARating} -> {newRatingA} (Изменение: {newRatingA - playerARating})");
-                Debug.Log($"Игрок Б: {playerBRating} -> {newRatingB} (Изменение: {newRatingB - playerBRating})");
-                
-                RpcWinLose(1, newRatingA, newRatingB, playerAMatches, playerBMatches, playerARating, playerBRating);
-            } else if(EOSMenuUI.typeOfCurrentGame == TypeOfGame.roomCode)
-            {
-                RpcWinLose(1, -1, -1, -1, -1, -1, -1);
-            }
-        } 
-        else if(score2 >= howManyGoals)
-        {
-            if(EOSMenuUI.typeOfCurrentGame == TypeOfGame.matchmaking)
-            {
-                playerAMatches++;
-                playerBMatches++;
-                (int newRatingA, int newRatingB) = EloSystemScr.CalculateNewRatings(
-                    playerBRating, playerARating, playerBMatches, playerAMatches, score2, score1
-                );
-
-                Debug.Log($"Игрок А: {playerARating} -> {newRatingA} (Изменение: {newRatingA - playerARating})");
-                Debug.Log($"Игрок Б: {playerBRating} -> {newRatingB} (Изменение: {newRatingB - playerBRating})");
-                
-                RpcWinLose(2, newRatingA, newRatingB, playerAMatches, playerBMatches, playerARating, playerBRating);
-            } else if(EOSMenuUI.typeOfCurrentGame == TypeOfGame.roomCode)
-            {
-                RpcWinLose(2, -1, -1, -1, -1, -1, -1);
-            }
-        } else
-        {
-            RpcOnGoalScored(score1, score2);
-            ServerResetPosition();
-        }
-    }
-
     [ClientRpc]
     private void RpcOnGoalScored(int newScore1, int newScore2)
     {
@@ -237,47 +181,80 @@ public class GoalHandlerNetwork : NetworkBehaviour
         timer.Goal();
     }
 
-    [ClientRpc]
-    private void RpcWinLose(int playerIndex, int newRatingA, int newRatingB, int matchesA, int matchesB, int oldRatingA, int oldRatingB)
+    [Server] 
+    public void ServerProcessGoal(Collider2D collision)
     {
-        if(newRatingA != -1 || newRatingB != -1 || matchesA != -1 || matchesB != -1)
+        if(collision.gameObject.CompareTag("GoalTrigger1"))
         {
-            if(!isClientOnly)
-            {
-                PlayerPrefs.SetInt("MyElo", newRatingA);
-                PlayerPrefs.SetInt("MyMatches", matchesA);
-                StartCoroutine(SendMatchStatsRequest(PlayerPrefs.GetString("Nick", "Ник"), PlayerPrefs.GetString("AccountPassword", ""), newRatingA, matchesA));
-            }
-            else
-            {
-                PlayerPrefs.SetInt("MyElo", newRatingB);
-                PlayerPrefs.SetInt("MyMatches", matchesB);
-                StartCoroutine(SendMatchStatsRequest(PlayerPrefs.GetString("Nick", "Ник"), PlayerPrefs.GetString("AccountPassword", ""), newRatingB, matchesB));
-            } 
-            PlayerPrefs.Save();
+            score1++;
+        }
+        else if (collision.gameObject.CompareTag("GoalTrigger2"))
+        {
+            score2++;
         }
 
-        if(playerIndex == 1)
+        if(score2 >= howManyGoals || score1 >= howManyGoals)
         {
-            if(isClientOnly)
+            int winningPlayer = (score2 >= howManyGoals) ? 1 : 2;
+
+            if(EOSMenuUI.typeOfCurrentGame == TypeOfGame.matchmaking)
             {
-                Win(newRatingB, matchesB, oldRatingB);
+                playerAMatches++;
+                playerBMatches++;
+
+                (int newRatingA, int newRatingB) = EloSystemScr.CalculateNewRatings(
+                    playerARating, playerBRating, playerAMatches, playerBMatches, score2, score1
+                );
+
+                Debug.Log($"Игрок 1 (Хост): {playerARating} -> {newRatingA} (Изменение: {newRatingA - playerARating})");
+                Debug.Log($"Игрок 2 (Клиент): {playerBRating} -> {newRatingB} (Изменение: {newRatingB - playerBRating})");
+                
+                RpcWinLose(winningPlayer, newRatingA, newRatingB, playerAMatches, playerBMatches, playerARating, playerBRating);
             } 
-            else
+            else if (EOSMenuUI.typeOfCurrentGame == TypeOfGame.roomCode)
             {
-                Lose(newRatingA, matchesA, oldRatingA);
+                RpcWinLose(winningPlayer, -1, -1, -1, -1, -1, -1);
             }
         } 
-        else if(playerIndex == 2)
+        else
         {
-            if(isClientOnly)
-            {
-                Lose(newRatingB, matchesB, oldRatingB);
-            } 
-            else
-            {
-                Win(newRatingA, matchesA, oldRatingA);
-            }
+            RpcOnGoalScored(score1, score2);
+            ServerResetPosition();
+        }
+    }
+
+    [ClientRpc]
+    private void RpcWinLose(int winnerIndex, int newRatingA, int newRatingB, int matchesA, int matchesB, int oldRatingA, int oldRatingB)
+    {
+        bool isHost = !isClientOnly;
+
+        int myNewRating = isHost ? newRatingA : newRatingB;
+        int myOldRating = isHost ? oldRatingA : oldRatingB;
+        int myMatches   = isHost ? matchesA   : matchesB;
+
+        if(newRatingA != -1 && newRatingB != -1)
+        {
+            PlayerPrefs.SetInt("MyElo", myNewRating);
+            PlayerPrefs.SetInt("MyMatches", myMatches);
+            PlayerPrefs.Save();
+
+            StartCoroutine(SendMatchStatsRequest(
+                PlayerPrefs.GetString("Nick", "Ник"), 
+                PlayerPrefs.GetString("AccountPassword", ""), 
+                myNewRating, 
+                myMatches
+            ));
+        }
+
+        bool iWon = (isHost && winnerIndex == 1) || (!isHost && winnerIndex == 2);
+
+        if(iWon)
+        {
+            Win(myNewRating, myMatches, myOldRating);
+        }
+        else
+        {
+            Lose(myNewRating, myMatches, myOldRating);
         }
     }
 
