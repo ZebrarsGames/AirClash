@@ -138,18 +138,35 @@ public class EOSMenuUI : MonoBehaviour
 
     private IEnumerator WaitForEOSLoginRoutine()
     {
+        float timeout = 15f;
+        float timer = 0f;
+
         while(!EOSSDKComponent.Initialized)
         {
+            timer += 0.2f;
+            if(timer > timeout)
+            {
+                debugText.text = "Ошибка: EOS SDK не инициализировался!";
+                yield break; 
+            }
             yield return new WaitForSeconds(0.2f);
         }
 
+        timer = 0f;
         while(EOSSDKComponent.LocalUserProductId == null || !EOSSDKComponent.LocalUserProductId.IsValid())
         {
+            timer += 0.2f;
+            if(timer > timeout)
+            {
+                debugText.text = "Ошибка: Не удалось получить PUID от Epic (Таймаут)";
+                Debug.LogError("[EOS Menu] Epic не вернул PUID. Проверьте Logcat!");
+                
+                yield break;
+            }
             yield return new WaitForSeconds(0.2f);
         }
 
         currentEosId = EOSSDKComponent.LocalUserProductId.ToString();
-
         debugText.text = "Мой EOS ID: " + currentEosId;
         Debug.Log($"[EOS Menu] Авторизация успешна. EOS ID: {currentEosId}");
     }
