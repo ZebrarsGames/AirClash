@@ -745,7 +745,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 22400762, guid: 67117722a812a2e46ab8cb8eafbf5f5e, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -0.0000038146973
+      value: 0.000019073486
       objectReference: {fileID: 0}
     - target: {fileID: 22426080, guid: 67117722a812a2e46ab8cb8eafbf5f5e, type: 3}
       propertyPath: m_AnchorMax.x
@@ -2640,6 +2640,7 @@ MonoBehaviour:
   initialEloRange: 50
   rangeExpandStep: 50
   expandInterval: 5
+  checkRoomInterval: 2
   maxEloRange: 500
   OnSearchRangeUpdated:
     m_PersistentCalls:
@@ -6958,7 +6959,7 @@ MonoBehaviour:
   connectInterfaceCredentialType: 10
   deviceModel: PC Windows 64bit
   displayName: User1
-  epicLoggerLevel: 200
+  epicLoggerLevel: 300
   collectPlayerMetrics: 1
   checkForEpicLauncherAndRestart: 0
   delayedInitialization: 0
@@ -7034,7 +7035,7 @@ MonoBehaviour:
   networkAddress: localhost
   maxConnections: 100
   disconnectInactiveConnections: 0
-  disconnectInactiveTimeout: 60
+  disconnectInactiveTimeout: 240
   authenticator: {fileID: 0}
   playerPrefab: {fileID: 7199823498111266755, guid: 94ec9e1dcac8c424a8b6e19683daf13f, type: 3}
   autoCreatePlayer: 1
