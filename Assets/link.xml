@@ -1,0 +1,8 @@
+<linker>
+  <assembly fullname="Mirror" preserve="all"/>
+  <assembly fullname="Mirror.Components" preserve="all"/>
+  <assembly fullname="Mirror.Transports" preserve="all"/>
+  
+  <assembly fullname="System" preserve="all"/>
+  <assembly fullname="System.Core" preserve="all"/>
+</linker>

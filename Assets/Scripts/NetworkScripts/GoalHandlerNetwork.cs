@@ -495,13 +495,11 @@ public class GoalHandlerNetwork : NetworkBehaviour
         yield return new WaitForSecondsRealtime(1.0f);
         eloText.gameObject.GetComponent<EloTextAnimScr>().AnimateElo(oldRating, newRating, difference);
     }
-    public void LoadMainMenu()
+    public void StopHostAndClient()
     {
-        PlayerPrefs.SetInt("IsHostDisconnect", 0);
-        PlayerPrefs.Save();
         MyNetworkManager.singleton.StopHost();
         MyNetworkManager.singleton.StopClient();
-        SceneManager.LoadScene("MainMenu");
+        endSreenPanel.SetActive(false);
     }
 
     public void PlayCollisionSound()
