@@ -6,8 +6,11 @@ public class PinokScr : MonoBehaviour
     [Header("Events")]
     [SerializeField] private UnityEvent profilePanelActive;
 
-    void OnEnable()
+    private void OnEnable()
     {
-        profilePanelActive.Invoke();
+        if(profilePanelActive != null)
+        {
+            profilePanelActive.Invoke();
+        }
     }
 }

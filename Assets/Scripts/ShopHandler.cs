@@ -1,12 +1,17 @@
 using System;
 using System.Collections;
-using DG.Tweening;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using TMPro;
+using DG.Tweening;
 
 public class ShopHandler : MonoBehaviour
 {
+    private const string BOUGHT_SKINS_KEY = "AllBuySkins";
+    private const string DEFAULT_SKIN = "DefSkin";
+    private const string CURRENT_SKIN_KEY = "CurrentSkin";
+
     [Header("Economy and Progress")]
     [SerializeField] private MoneyHandler moneyHandler;
     [SerializeField] private TextMeshProUGUI moneyText;
@@ -27,104 +32,201 @@ public class ShopHandler : MonoBehaviour
     [Header("Other")]
     [SerializeField] private SaveManager saveManager;
 
+    private readonly HashSet<string> _boughtSkins = new HashSet<string>();
+
+    private void Awake()
+    {
+        LoadShopData();
+    }
 
     void Start()
     {
-        moneyText.SetText($"{moneyHandler.GetMoney()} <sprite=0>");
-        audioSourceBgMusic.clip = shopMusic;
-        audioSourceBgMusic.loop = true;
-        audioSourceBgMusic.time = PlayerPrefs.GetFloat("ShopMusicTime", 0);
-        audioSourceBgMusic.Play();
-        string currentSkin = PlayerPrefs.GetString("CurrentSkin", "DefSkin");
+        if(moneyText != null && moneyHandler != null)
+        {
+            moneyText.SetText($"{moneyHandler.GetMoney()} <sprite=0>");
+        }
+
+        if(audioSourceBgMusic != null && shopMusic != null)
+        {
+            audioSourceBgMusic.clip = shopMusic;
+            audioSourceBgMusic.loop = true;
+            audioSourceBgMusic.time = PlayerPrefs.GetFloat("ShopMusicTime", 0);
+            audioSourceBgMusic.Play();
+        }
+
+        string currentSkin = PlayerPrefs.GetString(CURRENT_SKIN_KEY, DEFAULT_SKIN);
         EquipSkin(currentSkin);
     }
-    public void CloseShop()
+
+    private void LoadShopData()
     {
-        PlayerPrefs.SetFloat("ShopMusicTime", audioSourceBgMusic.time);
-        PlayerPrefs.Save();
-        SceneManager.LoadScene("MainMenu");
+        _boughtSkins.Clear();
+
+        string savedSkins = PlayerPrefs.GetString(BOUGHT_SKINS_KEY, DEFAULT_SKIN);
+        string[] parts = savedSkins.Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
+
+        foreach(string skin in parts)
+        {
+            _boughtSkins.Add(skin.Trim());
+        }
+
+        _boughtSkins.Add(DEFAULT_SKIN);
+    }
+
+    public bool IsSkinBought(string skinName)
+    {
+        if(string.IsNullOrEmpty(skinName)) return false;
+        return _boughtSkins.Contains(skinName) || PlayerPrefs.GetInt(skinName, 0) == 1;
     }
 
     public bool BuySkin(string skinName, int skinCost)
     {
-        if(moneyHandler.GetMoney() >= skinCost && PlayerPrefs.GetInt(skinName) == 0)
+        if(moneyHandler.GetMoney() >= skinCost && !IsSkinBought(skinName))
         {
-            achievementsHandler.UpdateProgress("large_wardrobe", 1);
-            audioSource.PlayOneShot(buySound);
+            if(achievementsHandler != null)
+            {
+                achievementsHandler.UpdateProgress("large_wardrobe", 1);
+            }
+
+            if(audioSource != null && buySound != null)
+            {
+                audioSource.PlayOneShot(buySound);
+            }
+
             moneyHandler.RemoveMoney(skinCost);
-            PlayerPrefs.SetString("CurrentSkin", skinName);
+
+            PlayerPrefs.SetString(CURRENT_SKIN_KEY, skinName);
             PlayerPrefs.SetInt(skinName, 1);
-            string skins = PlayerPrefs.GetString("AllBuySkins", "DefSkin");
-            skins += "," + skinName;
-            PlayerPrefs.SetString("AllBuySkins", skins);
-            PlayerPrefs.Save();
-            moneyText.SetText($"{moneyHandler.GetMoney()} <sprite=0>");
+
+            _boughtSkins.Add(skinName);
+            SaveBoughtSkins();
+
+            if(moneyText != null)
+            {
+                moneyText.SetText($"{moneyHandler.GetMoney()} <sprite=0>");
+            }
+
             return true;
-        } else
+        }
+        else
         {
-            audioSource.PlayOneShot(cancelSound);
+            PlayCancelSound();
             return false;
-        } 
+        }
     }
 
     public void EquipSkin(string skinName)
     {
-        PlayerPrefs.SetString("CurrentSkin", skinName);
+        PlayerPrefs.SetString(CURRENT_SKIN_KEY, skinName);
         PlayerPrefs.Save();
 
-        foreach (var skin in allSkins)
+        if(allSkins != null)
         {
-            skin.equipArrow.gameObject.SetActive(skin.skinName == skinName);
+            foreach(var skin in allSkins)
+            {
+                if(skin != null && skin.equipArrow != null)
+                {
+                    skin.equipArrow.gameObject.SetActive(skin.skinName == skinName);
+                }
+            }
         }
+    }
+
+    public void CloseShop()
+    {
+        if(audioSourceBgMusic != null)
+        {
+            PlayerPrefs.SetFloat("ShopMusicTime", audioSourceBgMusic.time);
+        }
+        PlayerPrefs.Save();
+        SceneManager.LoadScene("MainMenu");
     }
 
     public void PlayCancelSound()
     {
-        audioSource.PlayOneShot(cancelSound);
+        if(audioSource != null && cancelSound != null)
+        {
+            audioSource.PlayOneShot(cancelSound);
+        }
     }
-
 
     public void RemoveAllMoney()
     {
-        moneyHandler.RemoveMoney(moneyHandler.GetMoney());
-        moneyText.SetText($"{moneyHandler.GetMoney()} <sprite=0>");
-    }
-
-    public void ShowSurePanel()
-    {
-        audioSource.PlayOneShot(warningSound);
-        var rect = surePanel.GetComponent<RectTransform>();
-        rect.localScale = Vector3.zero;
-        surePanel.SetActive(true);
-        rect.DOScale(new Vector3(1.0f, 1.0f, 1.0f), 0.2f).SetEase(Ease.OutBack);
-    }
-    public void HideSurePanel()
-    {
-        StartCoroutine(AnimateSurePanel());
-    }
-    IEnumerator AnimateSurePanel()
-    {
-        var rect = surePanel.GetComponent<RectTransform>();
-        rect.DOScale(Vector3.zero, 0.2f).SetEase(Ease.InBack);
-        yield return new WaitForSeconds(0.35f);
-        surePanel.SetActive(false);
-    }
-    public void DeletePlayerPrefs()
-    {
-        int fps = PlayerPrefs.GetInt("FPS");
-        float musicVoulme = PlayerPrefs.GetFloat("MusicVolume");
-        PlayerPrefs.DeleteAll();
-        PlayerPrefs.SetInt("FPS", fps);
-        Application.targetFrameRate = fps;
-        PlayerPrefs.SetFloat("MusicVolume", musicVoulme);
-        saveManager.DeleteData();
-        PlayerPrefs.Save();
+        if(moneyHandler != null)
+        {
+            moneyHandler.RemoveMoney(moneyHandler.GetMoney());
+            if(moneyText != null)
+            {
+                moneyText.SetText($"{moneyHandler.GetMoney()} <sprite=0>");
+            }
+        }
     }
 
     public void PlusMoney(int money)
     {
-        moneyHandler.AddMoney(money);
-        moneyText.SetText($"{moneyHandler.GetMoney()} <sprite=0>");
+        if(moneyHandler != null)
+        {
+            moneyHandler.AddMoney(money);
+            if(moneyText != null)
+            {
+                moneyText.SetText($"{moneyHandler.GetMoney()} <sprite=0>");
+            }
+        }
     }
 
+    public void ShowSurePanel()
+    {
+        if(audioSource != null && warningSound != null)
+        {
+            audioSource.PlayOneShot(warningSound);
+        }
+
+        if(surePanel != null)
+        {
+            var rect = surePanel.GetComponent<RectTransform>();
+            rect.localScale = Vector3.zero;
+            surePanel.SetActive(true);
+            rect.DOScale(new Vector3(1.0f, 1.0f, 1.0f), 0.2f).SetEase(Ease.OutBack);
+        }
+    }
+
+    public void HideSurePanel()
+    {
+        StartCoroutine(AnimateSurePanel());
+    }
+
+    private IEnumerator AnimateSurePanel()
+    {
+        if(surePanel != null)
+        {
+            var rect = surePanel.GetComponent<RectTransform>();
+            rect.DOScale(Vector3.zero, 0.2f).SetEase(Ease.InBack);
+            yield return new WaitForSeconds(0.35f);
+            surePanel.SetActive(false);
+        }
+    }
+
+    public void DeletePlayerPrefs()
+    {
+        int fps = PlayerPrefs.GetInt("FPS");
+        float musicVolume = PlayerPrefs.GetFloat("MusicVolume");
+        PlayerPrefs.DeleteAll();
+        PlayerPrefs.SetInt("FPS", fps);
+        Application.targetFrameRate = fps;
+        PlayerPrefs.SetFloat("MusicVolume", musicVolume);
+
+        if(saveManager != null)
+        {
+            saveManager.DeleteData();
+        }
+
+        PlayerPrefs.Save();
+    }
+
+    private void SaveBoughtSkins()
+    {
+        string serializedSkins = string.Join(",", _boughtSkins);
+        PlayerPrefs.SetString(BOUGHT_SKINS_KEY, serializedSkins);
+        PlayerPrefs.Save();
+    }
 }

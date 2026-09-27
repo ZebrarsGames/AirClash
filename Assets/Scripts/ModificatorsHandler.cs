@@ -8,6 +8,17 @@ public class ModificatorsHandler : MonoBehaviour
     [Header("UI")]
     [SerializeField] private TextMeshProUGUI moneyMultiplyText;
     [SerializeField] private Toggle[] modificatorsToggles;
+    
+    private ModidficatorToggleItem[] modificatorItems;
+
+    private void Awake()
+    {
+        modificatorItems = new ModidficatorToggleItem[modificatorsToggles.Length];
+        for(int i = 0; i < modificatorsToggles.Length; i++)
+        {
+            modificatorItems[i] = modificatorsToggles[i].GetComponent<ModidficatorToggleItem>();
+        }
+    }
 
     public void SetModificators()
     {
@@ -16,19 +27,15 @@ public class ModificatorsHandler : MonoBehaviour
         {
             if(modificatorsToggles[i].isOn)
             {
-                modificatorsStrings.Add(modificatorsToggles[i].GetComponent<ModidficatorToggleItem>().ModificatorName);
+                modificatorsStrings.Add(modificatorItems[i].ModificatorName);
             }
         }
+        
         string result = string.Join(",", modificatorsStrings);
-        if(result.Equals(""))
-        {
-            PlayerPrefs.SetString("CurrentModificators", "None");
-        } else
-        {
-            PlayerPrefs.SetString("CurrentModificators", result);
-        }
+        PlayerPrefs.SetString("CurrentModificators", string.IsNullOrEmpty(result) ? "None" : result);
         PlayerPrefs.Save();
     }
+
     public void OnToggleClicked(Toggle clickedToggle)
     {
         if(clickedToggle.isOn)
@@ -40,19 +47,17 @@ public class ModificatorsHandler : MonoBehaviour
                 currentModificator.ModificatorOpposite.SetIsOnWithoutNotify(false);
             }
         }
-
         CalculateTotalMoney();
     }
 
     private void CalculateTotalMoney()
     {
-        float modificatorsMultiply = 1;
+        float modificatorsMultiply = 1f;
         for(int i = 0; i < modificatorsToggles.Length; i++)
         {
             if(modificatorsToggles[i].isOn)
             {
-                var currentModificator = modificatorsToggles[i].GetComponent<ModidficatorToggleItem>();
-                modificatorsMultiply += currentModificator.ModificatorXMoney;
+                modificatorsMultiply += modificatorItems[i].ModificatorMultiplyMoney;
             }
         }
 

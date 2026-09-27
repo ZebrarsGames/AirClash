@@ -11,10 +11,30 @@ public class SoundManager : MonoBehaviour
 
     public void PlayClickSound()
     {
+        if(clickSound == null)
+        {
+            Debug.LogWarning("ClickSound равен null!");
+            return;
+        }
+        if(audioSource == null)
+        {
+            Debug.LogWarning("AudioSource равен null!");
+            return;
+        }
         audioSource.PlayOneShot(clickSound);
     }
     public void PlayWhooshSound()
     {
+        if(whooshSound == null)
+        {
+            Debug.LogWarning("WhooshSound равен null!");
+            return;
+        }
+        if(audioSource == null)
+        {
+            Debug.LogWarning("AudioSource равен null!");
+            return;
+        }
         audioSource.PlayOneShot(whooshSound);
     }
 }

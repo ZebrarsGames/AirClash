@@ -14,7 +14,7 @@ public class PlaytimeTracker : MonoBehaviour
 
     void Awake()
     {
-        if (Instance == null)
+        if(Instance == null)
         {
             Instance = this;
             DontDestroyOnLoad(gameObject);
@@ -37,7 +37,7 @@ public class PlaytimeTracker : MonoBehaviour
 
     void Update()
     {
-        if (Time.time >= _nextAutoSaveTime)
+        if(Time.time >= _nextAutoSaveTime)
         {
             _nextAutoSaveTime = Time.time + 90f;
             SavePlaytime(); 
@@ -46,7 +46,7 @@ public class PlaytimeTracker : MonoBehaviour
 
     private void SavePlaytime()
     {
-        if (Instance != this) return;
+        if(Instance != this) return;
 
         float currentSessionDuration = Time.time - _sessionStartTime;
         
@@ -57,7 +57,7 @@ public class PlaytimeTracker : MonoBehaviour
         PlayerPrefs.SetFloat(PlaytimeKey, _totalPlaytimeSeconds);
         PlayerPrefs.Save();
         
-        if (saveManager != null)
+        if(saveManager != null)
         {
             saveManager.SaveData();
         }

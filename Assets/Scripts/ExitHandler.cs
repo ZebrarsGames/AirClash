@@ -1,78 +1,116 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
 using DG.Tweening;
-using System.Collections;
 
-public class ExitHandler : MonoBehaviour
+[DisallowMultipleComponent]
+public sealed class ExitHandler : MonoBehaviour
 {
-    [Header("UI")]
-    [SerializeField] private GameObject exitPanel;
+    [Header("UI References")]
+    [SerializeField] private RectTransform exitPanelRect;
+    
+    [Header("Animation Settings")]
+    [SerializeField] private float animationDuration = 0.3f;
+    [SerializeField] private Ease showEase = Ease.OutBack;
+    [SerializeField] private Ease hideEase = Ease.InBack;
 
-    [Header("Time Settings")]
+    [Header("Input Settings")]
+    [SerializeField] private InputAction exitAction;
     [SerializeField] private float doubleClickDelay = 0.5f;
 
-    [Header("Other")]
+    [Header("Dependencies")]
     [SerializeField] private SaveManager saveManager;
 
-    private float lastClickTime = 0f;
+    private float _lastClickTime;
+    private Tween _fadeTween;
+    private bool _isPanelActive;
 
-    void Start()
+    private void Awake()
     {
-        exitPanel.SetActive(false);
-    }
-    void Update()
-    {
-        if(Keyboard.current.escapeKey.wasPressedThisFrame)
+        if(exitPanelRect != null)
         {
-            if(exitPanel.activeSelf)
-            {
-                HideExitPanel();
-            }
-            else
-            {
-                HandleBackButton();
-            }
+            exitPanelRect.gameObject.SetActive(false);
+            exitPanelRect.localScale = Vector3.zero;
+        }
+        
+        if(exitAction == null || exitAction.bindings.Count == 0)
+        {
+            exitAction = new InputAction(type: InputActionType.Button, binding: "<Keyboard>/escape");
         }
     }
+
+    private void OnEnable() => exitAction.Enable();
+    private void OnDisable() => exitAction.Disable();
+
+    private void Update()
+    {
+        if(!exitAction.WasPressedThisFrame()) return;
+
+        if(_isPanelActive)
+        {
+            HideExitPanel();
+        }
+        else
+        {
+            HandleBackButton();
+        }
+    }
+
     private void HandleBackButton()
     {
-        if(Time.time - lastClickTime < doubleClickDelay)
+        if(Time.time - _lastClickTime < doubleClickDelay)
         {
             ShowExitPanel();
         }
         else
         {
-            lastClickTime = Time.time;
+            _lastClickTime = Time.time;
         }
     }
+
     public void ShowExitPanel()
     {
-        var rect = exitPanel.GetComponent<RectTransform>();
-        rect.localScale = Vector3.zero;
-        exitPanel.SetActive(true);
-        rect.DOScale(new Vector3(1, 1, 1), 0.3f).SetEase(Ease.OutBack);
+        if(_isPanelActive) return;
+        _isPanelActive = true;
+
+        _fadeTween?.Kill();
+
+        exitPanelRect.gameObject.SetActive(true);
+        
+        _fadeTween = exitPanelRect.DOScale(Vector3.one, animationDuration)
+            .SetEase(showEase)
+            .SetLink(gameObject);
     }
+
     public void HideExitPanel()
     {
-        StartCoroutine(AnimateExitPanel());
-    }
-    IEnumerator AnimateExitPanel()
-    {
-        var rect = exitPanel.GetComponent<RectTransform>();
-        rect.DOScale(Vector3.zero, 0.3f).SetEase(Ease.InBack);
-        yield return new WaitForSeconds(0.35f);
-        exitPanel.SetActive(false);
+        if(!_isPanelActive) return;
+        _isPanelActive = false;
+
+        _fadeTween?.Kill();
+
+        _fadeTween = exitPanelRect.DOScale(Vector3.zero, animationDuration)
+            .SetEase(hideEase)
+            .OnComplete(() => exitPanelRect.gameObject.SetActive(false))
+            .SetLink(gameObject);
     }
 
     public void ConfirmExit()
     {
         PlayerPrefs.SetFloat("Music", 0);
         saveManager.SaveData();
+        if(saveManager != null)
+        {
+            saveManager.SaveData();
+        }
+        
         PlayerPrefs.Save();
+        
+#if UNITY_EDITOR
+        UnityEditor.EditorApplication.isPlaying = false;
+#else
         Application.Quit();
+#endif
     }
-    public void CancelExit()
-    {
-        HideExitPanel();
-    }
+
+    public void CancelExit() => HideExitPanel();
 }

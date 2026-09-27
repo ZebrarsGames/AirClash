@@ -1,0 +1,19 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3b83fb69b51920c488da0fe3554e9f60, type: 3}
+  m_Name: thunderstorm_game
+  m_EditorClassIdentifier: Assembly-CSharp::AchievementSO
+  id: thunderstorm_game
+  title: "\u0413\u0440\u043E\u0437\u0430 \u0438\u0433\u0440\u044B"
+  target: 7
+  award: 100
+  icon: {fileID: 21300000, guid: 3b770cd9ec561964e9648866a468365f, type: 3}

@@ -6,10 +6,11 @@ public class MoneyHandler : MonoBehaviour
     private int money;
     private int totalMoney;
 
-    void Awake()
+    private void Awake()
     {
-        money = saveManager.GetData().Money;
-        totalMoney = saveManager.GetData().TotalMoney;
+        var data = saveManager.GetData();
+        money = data.Money;
+        totalMoney = data.TotalMoney;
     }
 
     public void AddMoney(int amount)
@@ -34,20 +35,12 @@ public class MoneyHandler : MonoBehaviour
 
     public void RemoveMoney(int amount)
     {
-        money -= amount;
-        money = Mathf.Max(0, money);
+        money = Mathf.Max(0, money - amount);
         Save();
     }
 
-    public int GetMoney()
-    {
-        return money;
-    }
-
-    public int GetTotalMoney()
-    {
-        return totalMoney;
-    }
+    public int GetMoney() => money;
+    public int GetTotalMoney() => totalMoney;
 
     private void Save()
     {

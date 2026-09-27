@@ -14,7 +14,7 @@ public class PuckScr : MonoBehaviour
 
     void FixedUpdate()
     {
-        if (puckRb.linearVelocity.magnitude > maxSpeed)
+        if(puckRb.linearVelocity.magnitude > maxSpeed)
         {
             puckRb.linearVelocity = Vector3.ClampMagnitude(puckRb.linearVelocity, maxSpeed);
         }
@@ -31,7 +31,9 @@ public class PuckScr : MonoBehaviour
     {
         goalHandler.OnGoalTrigger(collision);
     }
-    private void OnCollisionEnter2D(Collision2D other) {
+
+    private void OnCollisionEnter2D(Collision2D other) 
+    {
         goalHandler.OnPuckCollisionEnter2D(other);
     }
 }

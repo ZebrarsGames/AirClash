@@ -7,127 +7,105 @@ public class SkinItem : MonoBehaviour
 {
     [Header("Skin Data")]
     [SerializeField] private SkinData skinData;
+
+    [Header("Status")]
     public string skinName;
     public string guiSkinName;
     public int skinPrice;
-
-    [Header("Status")]
     public bool isBuy;
-    public bool isCanBuy;
+    public bool isCanBuy = true;
     public ShopHandler shop;
 
-    [Header("UI")]
+    [Header("UI References")]
     [SerializeField] private TextMeshProUGUI skinNameText;
     [SerializeField] private TextMeshProUGUI priceText;
     [SerializeField] private TextMeshProUGUI descText;
     [SerializeField] private Image skinImage;
 
-    [Header("Selection indicators")]
+    [Header("Selection Indicators")]
     public Image checkmark;
     public Image equipArrow;
 
-
-    void Start()
+    private void Start()
     {
+        InitializeSkin();
+    }
+
+    public void InitializeSkin()
+    {
+        if(skinData == null)
+        {
+            Debug.LogError($"[SkinItem] SkinData не назначен на {gameObject.name}!");
+            return;
+        }
+
         skinName = skinData.skinName;
-        skinPrice = skinData.price;
         guiSkinName = skinData.skinGuiName;
-        skinNameText.text = guiSkinName;
-        descText.text = skinData.skinDescripton;
-        skinImage.sprite = skinData.sprite;
-        switch(skinData.rarity)
+        skinPrice = skinData.price;
+
+        if(skinNameText != null)
         {
-            case SkinRarity.Def:
-                isCanBuy = true;
-                if(ColorUtility.TryParseHtmlString("#FFFFFF", out Color DefColor))
-                {
-                    skinNameText.color = DefColor;
-                }
-                break;
-            case SkinRarity.Rare:
-                isCanBuy = true;
-                if(ColorUtility.TryParseHtmlString("#B9C24B", out Color RareColor))
-                {
-                    skinNameText.color = RareColor;
-                }
-                break;
-            case SkinRarity.SuperRare:
-                isCanBuy = true;
-                if(ColorUtility.TryParseHtmlString("#90E0EF", out Color SuperRareColor))
-                {
-                    skinNameText.color = SuperRareColor;
-                }
-                break;
-            case SkinRarity.Epic:
-                isCanBuy = true;
-                if(ColorUtility.TryParseHtmlString("#A99AD3", out Color EpicColor))
-                {
-                    skinNameText.color = EpicColor;
-                }
-                break;
-            case SkinRarity.Mythic:
-                isCanBuy = true;
-                if(ColorUtility.TryParseHtmlString("#F94449", out Color MythicColor))
-                {
-                    skinNameText.color = MythicColor;
-                }
-                break;
-            case SkinRarity.Legendary:
-                isCanBuy = true;
-                if(ColorUtility.TryParseHtmlString("#FFE747", out Color LegendaryColor))
-                {
-                    skinNameText.color = LegendaryColor;
-                }
-                break;    
-            case SkinRarity.Special:
-                isCanBuy = false;
-                if(ColorUtility.TryParseHtmlString("#0004ff", out Color XpColor))
-                {
-                    skinNameText.color = XpColor;
-                }
-                break;   
-            default:
-                break;
+            skinNameText.text = guiSkinName;
+            skinNameText.color = GetRarityColor(skinData.rarity);
         }
-        if(PlayerPrefs.GetInt(skinName, 0) == 1)
+
+        if(descText != null) descText.text = skinData.skinDescription;
+        if(skinImage != null) skinImage.sprite = skinData.sprite;
+
+        isCanBuy = skinData.rarity != SkinRarity.Special;
+
+        isBuy = shop != null && shop.IsSkinBought(skinName);
+
+        if(checkmark != null)
         {
-            isBuy = true;
-            checkmark.gameObject.SetActive(true);
-        }
-        string skins = PlayerPrefs.GetString("AllBuySkins", "DefSkin");
-        string[] parts = skins.Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
-        bool isHasThisSkin = false;
-        for(int i = 0; i < parts.Length; i ++) if(parts[i] == skinName) isHasThisSkin = true;
-        if(PlayerPrefs.GetInt(skinName, 0) == 1 && !isHasThisSkin)
-        {
-            skins += "," + skinName;
-            PlayerPrefs.SetString("AllBuySkins", skins);
-            PlayerPrefs.Save();
-        }
-        if(isCanBuy)
-        {
-            priceText.text = $"{skinPrice} <sprite=0>";
+            checkmark.gameObject.SetActive(isBuy);
         }
     }
 
     public void OnClickBuy() 
     {
+        if(shop == null)
+        {
+            Debug.LogError($"[SkinItem] ShopHandler не привязан к {gameObject.name}!");
+            return;
+        }
+
         if(!isBuy && isCanBuy)
         {
             isBuy = shop.BuySkin(skinName, skinPrice);      
             if(isBuy) 
             {
-                checkmark.gameObject.SetActive(true);
+                if(checkmark != null) checkmark.gameObject.SetActive(true);
                 shop.EquipSkin(skinName);
             }
         } 
         else if(isBuy)
         {
             shop.EquipSkin(skinName);
-        } else if(!isCanBuy)
+        } 
+        else
         {
             shop.PlayCancelSound();
         }
     }  
 
+    private Color GetRarityColor(SkinRarity rarity)
+    {
+        return rarity switch
+        {
+            SkinRarity.Def => Color.white,
+            SkinRarity.Rare => ParseColor("#B9C24B"),
+            SkinRarity.SuperRare => ParseColor("#90E0EF"),
+            SkinRarity.Epic => ParseColor("#A99AD3"),
+            SkinRarity.Mythic => ParseColor("#F94449"),
+            SkinRarity.Legendary => ParseColor("#FFE747"),
+            SkinRarity.Special => ParseColor("#0004FF"),
+            _ => Color.white
+        };
+    }
+
+    private Color ParseColor(string hex)
+    {
+        return ColorUtility.TryParseHtmlString(hex, out Color color) ? color : Color.white;
+    }
 }

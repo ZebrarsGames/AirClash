@@ -8,37 +8,42 @@ public class EndScreen : MonoBehaviour
     [Header("UI")]
     [SerializeField] private TextMeshProUGUI loseOrWinText;
     [SerializeField] private TextMeshProUGUI earnedMoneyText;
+    
     [Header("Scripts")]
     [SerializeField] private GoalHandler goalHandler;
     [SerializeField] private CoinMover coinMover;
+
+    private WaitForSeconds waitTime = new WaitForSeconds(0.3f);
+
     public void StartEndScreen(int howManyXpEarned, int xpBeforeWin)
     {
-        if(SceneManager.GetActiveScene().name.Equals("BotsGame"))
+        string sceneName = SceneManager.GetActiveScene().name;
+        bool player1Wins = goalHandler.score1 >= goalHandler.howManyGoals;
+
+        if(sceneName.Equals("BotsGame"))
         {
-            if(goalHandler.score1 >= goalHandler.howManyGoals) loseOrWinText.text = "Поражение!";
-            else if(goalHandler.score2 >= goalHandler.howManyGoals) loseOrWinText.text = "Победа!";
+            loseOrWinText.text = player1Wins ? "Поражение!" : "Победа!";
             coinMover.AddXp(Vector3.zero, howManyXpEarned, xpBeforeWin);
             StartCoroutine(UpdateText());
-        } else if(SceneManager.GetActiveScene().name.Equals("GameScene"))
+        } 
+        else if(sceneName.Equals("GameScene"))
         {
-            if(goalHandler.score1 >= goalHandler.howManyGoals) loseOrWinText.text = "Игрок 1 выиграл!";
-            else if(goalHandler.score2 >= goalHandler.howManyGoals) loseOrWinText.text = "Игрок 2 выиграл!";
+            loseOrWinText.text = player1Wins ? "Игрок 1 выиграл!" : "Игрок 2 выиграл!";
             earnedMoneyText.text = "Заработанные деньги: 0";
         }
-        
     }
 
-    IEnumerator UpdateText()
+    private IEnumerator UpdateText()
     {
-        for(int i = 0; i <= 2; i++)
+        for(int i = 0; i < 3; i++)
         {
             earnedMoneyText.text = "Заработанные деньги: Считаем.";
-            yield return new WaitForSeconds(0.3f);
+            yield return waitTime;
             earnedMoneyText.text = "Заработанные деньги: Считаем..";
-            yield return new WaitForSeconds(0.3f);
+            yield return waitTime;
             earnedMoneyText.text = "Заработанные деньги: Считаем...";
-            yield return new WaitForSeconds(0.3f);
+            yield return waitTime;
         }
-        earnedMoneyText.text = "Заработанные деньги: " + PlayerPrefs.GetInt("HowMoneyAdds").ToString();
+        earnedMoneyText.text = $"Заработанные деньги: {PlayerPrefs.GetInt("HowMoneyAdds")}";
     }
 }

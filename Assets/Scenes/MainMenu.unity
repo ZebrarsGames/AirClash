@@ -525,8 +525,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::AchievementItem
   achievementsHandler: {fileID: 180572474}
-  Title: professional
+  achievementData: {fileID: 11400000, guid: 87b28b0f6be24f3438d1a6675f228f70, type: 2}
+  titleText: {fileID: 206245411}
   progressText: {fileID: 672510381}
+  iconImage: {fileID: 1068083948}
   unlockedCheckMark: {fileID: 1633467614}
 --- !u!114 &8623769
 MonoBehaviour:
@@ -2679,8 +2681,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::AchievementItem
   achievementsHandler: {fileID: 180572474}
-  Title: game_legend
+  achievementData: {fileID: 11400000, guid: 8a50f5fbc12563045a13853c1a13dec9, type: 2}
+  titleText: {fileID: 1792461224}
   progressText: {fileID: 1417317148}
+  iconImage: {fileID: 504351517}
   unlockedCheckMark: {fileID: 39742014}
 --- !u!114 &51441808
 MonoBehaviour:
@@ -4462,8 +4466,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::AchievementItem
   achievementsHandler: {fileID: 180572474}
-  Title: warm-up
+  achievementData: {fileID: 11400000, guid: 135b51cf69ec43548b4730501f3a0854, type: 2}
+  titleText: {fileID: 80887607}
   progressText: {fileID: 1721587188}
+  iconImage: {fileID: 644897520}
   unlockedCheckMark: {fileID: 1222303631}
 --- !u!114 &103788023
 MonoBehaviour:
@@ -4597,8 +4603,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::AchievementItem
   achievementsHandler: {fileID: 180572474}
-  Title: begginer
+  achievementData: {fileID: 11400000, guid: 37c7937f98ed5d44c853cbe7ac6db006, type: 2}
+  titleText: {fileID: 1106876198}
   progressText: {fileID: 796663693}
+  iconImage: {fileID: 484667741}
   unlockedCheckMark: {fileID: 588073251}
 --- !u!1 &106954283
 GameObject:
@@ -5010,7 +5018,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c56e1da51bfddd248979ddddf18be73e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ExitHandler
-  exitPanel: {fileID: 2114210460}
+  exitPanelRect: {fileID: 2114210461}
+  animationDuration: 0.3
+  showEase: 27
+  hideEase: 26
+  exitAction:
+    m_Name: Exit
+    m_Type: 0
+    m_ExpectedControlType: 
+    m_Id: 3268fb5f-f6da-4b5f-ad29-2cf7b92399b8
+    m_Processors: 
+    m_Interactions: 
+    m_SingletonActionBindings: []
+    m_Flags: 0
   doubleClickDelay: 0.5
   saveManager: {fileID: 622325057}
 --- !u!4 &110364729
@@ -6347,7 +6367,7 @@ GameObject:
   - component: {fileID: 138613518}
   - component: {fileID: 138613517}
   m_Layer: 0
-  m_Name: AnimationsHandler
+  m_Name: AchievementPopup
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -6365,9 +6385,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2fb053fdc1b840642962e774de315887, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::AnimationsHandler
-  achievementPanel: {fileID: 1665956465}
-  achievementText: {fileID: 1944769315}
-  endDotToMoveAchievementPanel: {x: 0, y: -90}
+  panelTransform: {fileID: 1665956466}
+  titleText: {fileID: 1944769315}
+  targetAnchoredPosition: {x: 0, y: -80}
+  moveDuration: 0.5
+  displayDuration: 2.5
+  showEase: 27
+  hideEase: 5
 --- !u!4 &138613518
 Transform:
   m_ObjectHideFlags: 0
@@ -8346,7 +8370,39 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dc4f78b14a449ec429a81d232a07f527, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::AchievementsHandler
-  animationsHandler: {fileID: 138613517}
+  allAchievements:
+  - {fileID: 11400000, guid: 9019ba8a68d7d4848802224fe12f9d23, type: 2}
+  - {fileID: 11400000, guid: 7324a8d4f4e9dca468de57ea5525806a, type: 2}
+  - {fileID: 11400000, guid: 37c7937f98ed5d44c853cbe7ac6db006, type: 2}
+  - {fileID: 11400000, guid: 8bf10fdb1ae11134c9e79ef53cde1e1c, type: 2}
+  - {fileID: 11400000, guid: c39a6940c0c60474a9a0525fa251dd94, type: 2}
+  - {fileID: 11400000, guid: 6fc5aadf50b332b4085c01c842f90579, type: 2}
+  - {fileID: 11400000, guid: 8fcbc1f9ad67ce743b276fd4053e2e38, type: 2}
+  - {fileID: 11400000, guid: 2fcddc53bf7a12842b03dc4774c90d4f, type: 2}
+  - {fileID: 11400000, guid: cc4e3e4aec0f2864cb7dd3af746da7f7, type: 2}
+  - {fileID: 11400000, guid: 8d1f229798acc3d418eb361db88f6ff2, type: 2}
+  - {fileID: 11400000, guid: 1fbc76e4a89cf084696bb735c459fc73, type: 2}
+  - {fileID: 11400000, guid: 8a50f5fbc12563045a13853c1a13dec9, type: 2}
+  - {fileID: 11400000, guid: 0f3a2c92578e577459afedf8fe9b33f8, type: 2}
+  - {fileID: 11400000, guid: 8b2ae0ea192866441a980f8ec76b138f, type: 2}
+  - {fileID: 11400000, guid: 7e832a3310fc1fa4aba27b844cd27ec6, type: 2}
+  - {fileID: 11400000, guid: 64b465030c7b9204b87a4ac84426e0bc, type: 2}
+  - {fileID: 11400000, guid: 93c66676089d8cc43a0314b1383777f5, type: 2}
+  - {fileID: 11400000, guid: 06c699b40d003cc4e9999f784ea57280, type: 2}
+  - {fileID: 11400000, guid: f1cc616dec3beff4db7549bfce5938c4, type: 2}
+  - {fileID: 11400000, guid: 87b28b0f6be24f3438d1a6675f228f70, type: 2}
+  - {fileID: 11400000, guid: 22a7a0795a628534e9a9699f9944c8e4, type: 2}
+  - {fileID: 11400000, guid: 9529330783395324b8d76ab0beabe243, type: 2}
+  - {fileID: 11400000, guid: 74c70a3dbbd2cd24da24b56dbb0a74b0, type: 2}
+  - {fileID: 11400000, guid: ee86d0714356c8a499912194790805c4, type: 2}
+  - {fileID: 11400000, guid: 4967d2ee2633b5c408a294d2d52ecc47, type: 2}
+  - {fileID: 11400000, guid: 44421b8eaf07c234da7254c97b910879, type: 2}
+  - {fileID: 11400000, guid: 381f8ea8809f09a48b574b39156eb76c, type: 2}
+  - {fileID: 11400000, guid: 03f5b55d3c1b06a4d87a6a2afb283bc4, type: 2}
+  - {fileID: 11400000, guid: 135b51cf69ec43548b4730501f3a0854, type: 2}
+  - {fileID: 11400000, guid: 54f4c21a7843d994681753abac958176, type: 2}
+  - {fileID: 11400000, guid: 1b6571d835a192c48b4527301e8cf748, type: 2}
+  achievementPopup: {fileID: 138613517}
 --- !u!4 &180572475
 Transform:
   m_ObjectHideFlags: 0
@@ -12845,8 +12901,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::AchievementItem
   achievementsHandler: {fileID: 180572474}
-  Title: small
+  achievementData: {fileID: 11400000, guid: ee86d0714356c8a499912194790805c4, type: 2}
+  titleText: {fileID: 1018596662}
   progressText: {fileID: 1132622595}
+  iconImage: {fileID: 1553952190}
   unlockedCheckMark: {fileID: 49607498}
 --- !u!114 &279182621
 MonoBehaviour:
@@ -13146,8 +13204,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::AchievementItem
   achievementsHandler: {fileID: 180572474}
-  Title: a_start_has_been_made
+  achievementData: {fileID: 11400000, guid: 9019ba8a68d7d4848802224fe12f9d23, type: 2}
+  titleText: {fileID: 771592430}
   progressText: {fileID: 736573195}
+  iconImage: {fileID: 880498568}
   unlockedCheckMark: {fileID: 410237907}
 --- !u!1 &282046150
 GameObject:
@@ -16702,9 +16762,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b35d257f67d6ca34e8c9545b641dc527, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SessionTimer
-  onMinuteChanged:
-    m_PersistentCalls:
-      m_Calls: []
 --- !u!4 &368995881
 Transform:
   m_ObjectHideFlags: 0
@@ -20803,9 +20860,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 808fa19226bafd74e88dbfdb4f09588d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SessionTimerUIScr
-  warningPanel: {fileID: 1665956465}
+  warningPanel: {fileID: 1665956466}
   warningTextTitle: {fileID: 198172983}
   warningTextBody: {fileID: 1944769315}
+  targetAnchorPosition: {x: 0, y: -90}
+  animationDuration: 2
+  displayDuration: 5
 --- !u!4 &458720057
 Transform:
   m_ObjectHideFlags: 0
@@ -26647,7 +26707,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SaveManager
   xpHandler: {fileID: 695791783}
-  achievementsHandler: {fileID: 180572474}
   moneyHandler: {fileID: 1114898952}
 --- !u!4 &622325058
 Transform:
@@ -27179,8 +27238,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::AchievementItem
   achievementsHandler: {fileID: 180572474}
-  Title: master
+  achievementData: {fileID: 11400000, guid: 64b465030c7b9204b87a4ac84426e0bc, type: 2}
+  titleText: {fileID: 3014889}
   progressText: {fileID: 1570870096}
+  iconImage: {fileID: 457424213}
   unlockedCheckMark: {fileID: 145555796}
 --- !u!114 &629470152
 MonoBehaviour:
@@ -28951,8 +29012,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::AchievementItem
   achievementsHandler: {fileID: 180572474}
-  Title: best_in_the_universe
+  achievementData: {fileID: 11400000, guid: c39a6940c0c60474a9a0525fa251dd94, type: 2}
+  titleText: {fileID: 1668182634}
   progressText: {fileID: 1194782542}
+  iconImage: {fileID: 1443939549}
   unlockedCheckMark: {fileID: 2058281386}
 --- !u!114 &700213891
 MonoBehaviour:
@@ -29307,7 +29370,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 22400762, guid: 67117722a812a2e46ab8cb8eafbf5f5e, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -0.000015258789
+      value: 0.000015258789
       objectReference: {fileID: 0}
     - target: {fileID: 22426080, guid: 67117722a812a2e46ab8cb8eafbf5f5e, type: 3}
       propertyPath: m_AnchorMax.x
@@ -30714,8 +30777,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::AchievementItem
   achievementsHandler: {fileID: 180572474}
-  Title: master_of_goals
+  achievementData: {fileID: 11400000, guid: 93c66676089d8cc43a0314b1383777f5, type: 2}
+  titleText: {fileID: 1416573521}
   progressText: {fileID: 785539579}
+  iconImage: {fileID: 112540301}
   unlockedCheckMark: {fileID: 393828439}
 --- !u!114 &725681869
 MonoBehaviour:
@@ -31644,7 +31709,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ModidficatorToggleItem
   ModificatorName: SmallPlayers
-  ModificatorXMoney: 0.15
+  ModificatorMultiplyMoney: 0
   ModificatorOpposite: {fileID: 875598470}
 --- !u!114 &751310649
 MonoBehaviour:
@@ -36447,8 +36512,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::AchievementItem
   achievementsHandler: {fileID: 180572474}
-  Title: lucky
+  achievementData: {fileID: 11400000, guid: 8b2ae0ea192866441a980f8ec76b138f, type: 2}
+  titleText: {fileID: 1666462791}
   progressText: {fileID: 1924451641}
+  iconImage: {fileID: 1698824489}
   unlockedCheckMark: {fileID: 1537499082}
 --- !u!114 &832136491
 MonoBehaviour:
@@ -38174,7 +38241,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ModidficatorToggleItem
   ModificatorName: BigPlayers
-  ModificatorXMoney: 0.3
+  ModificatorMultiplyMoney: 0
   ModificatorOpposite: {fileID: 751310649}
 --- !u!114 &875598470
 MonoBehaviour:
@@ -39007,8 +39074,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::AchievementItem
   achievementsHandler: {fileID: 180572474}
-  Title: wind
+  achievementData: {fileID: 11400000, guid: 54f4c21a7843d994681753abac958176, type: 2}
+  titleText: {fileID: 403142114}
   progressText: {fileID: 1621174030}
+  iconImage: {fileID: 303525733}
   unlockedCheckMark: {fileID: 1288734646}
 --- !u!114 &895139564
 MonoBehaviour:
@@ -39732,8 +39801,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::AchievementItem
   achievementsHandler: {fileID: 180572474}
-  Title: seriously
+  achievementData: {fileID: 11400000, guid: 9529330783395324b8d76ab0beabe243, type: 2}
+  titleText: {fileID: 266722514}
   progressText: {fileID: 320644188}
+  iconImage: {fileID: 1926015503}
   unlockedCheckMark: {fileID: 1385874116}
 --- !u!114 &899039654
 MonoBehaviour:
@@ -43732,8 +43803,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::AchievementItem
   achievementsHandler: {fileID: 180572474}
-  Title: large_wardrobe
+  achievementData: {fileID: 11400000, guid: 0f3a2c92578e577459afedf8fe9b33f8, type: 2}
+  titleText: {fileID: 707515506}
   progressText: {fileID: 1134002776}
+  iconImage: {fileID: 140949504}
   unlockedCheckMark: {fileID: 231825218}
 --- !u!114 &963584726
 MonoBehaviour:
@@ -44843,7 +44916,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ModidficatorToggleItem
   ModificatorName: Fog
-  ModificatorXMoney: 0.75
+  ModificatorMultiplyMoney: 0
   ModificatorOpposite: {fileID: 0}
 --- !u!1 &998222592
 GameObject:
@@ -45762,7 +45835,7 @@ GameObject:
   - component: {fileID: 1016994373}
   - component: {fileID: 1016994372}
   m_Layer: 0
-  m_Name: AnimManager
+  m_Name: CoinMover
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -48387,8 +48460,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::AchievementItem
   achievementsHandler: {fileID: 180572474}
-  Title: daily
+  achievementData: {fileID: 11400000, guid: cc4e3e4aec0f2864cb7dd3af746da7f7, type: 2}
+  titleText: {fileID: 1594113608}
   progressText: {fileID: 821652065}
+  iconImage: {fileID: 1239072808}
   unlockedCheckMark: {fileID: 239697084}
 --- !u!114 &1112622306
 MonoBehaviour:
@@ -51615,7 +51690,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ModidficatorToggleItem
   ModificatorName: Wind
-  ModificatorXMoney: 0.1
+  ModificatorMultiplyMoney: 0
   ModificatorOpposite: {fileID: 0}
 --- !u!1 &1143092506
 GameObject:
@@ -52388,8 +52463,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::AchievementItem
   achievementsHandler: {fileID: 180572474}
-  Title: coin_master
+  achievementData: {fileID: 11400000, guid: 8fcbc1f9ad67ce743b276fd4053e2e38, type: 2}
+  titleText: {fileID: 2032804668}
   progressText: {fileID: 1345076269}
+  iconImage: {fileID: 755990071}
   unlockedCheckMark: {fileID: 1123827424}
 --- !u!114 &1152835269
 MonoBehaviour:
@@ -52805,8 +52882,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::AchievementItem
   achievementsHandler: {fileID: 180572474}
-  Title: regular_player
+  achievementData: {fileID: 11400000, guid: 22a7a0795a628534e9a9699f9944c8e4, type: 2}
+  titleText: {fileID: 1493515173}
   progressText: {fileID: 1245488596}
+  iconImage: {fileID: 944838931}
   unlockedCheckMark: {fileID: 1179593085}
 --- !u!114 &1162368654
 MonoBehaviour:
@@ -57871,8 +57950,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::AchievementItem
   achievementsHandler: {fileID: 180572474}
-  Title: master_xp
+  achievementData: {fileID: 11400000, guid: 06c699b40d003cc4e9999f784ea57280, type: 2}
+  titleText: {fileID: 1348109244}
   progressText: {fileID: 1507716889}
+  iconImage: {fileID: 753289847}
   unlockedCheckMark: {fileID: 262979910}
 --- !u!114 &1275226751
 MonoBehaviour:
@@ -57968,8 +58049,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::AchievementItem
   achievementsHandler: {fileID: 180572474}
-  Title: six_seven
+  achievementData: {fileID: 11400000, guid: 74c70a3dbbd2cd24da24b56dbb0a74b0, type: 2}
+  titleText: {fileID: 1005970031}
   progressText: {fileID: 2107664935}
+  iconImage: {fileID: 414495932}
   unlockedCheckMark: {fileID: 1558179315}
 --- !u!114 &1281805316
 MonoBehaviour:
@@ -58790,8 +58873,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::AchievementItem
   achievementsHandler: {fileID: 180572474}
-  Title: competitions
+  achievementData: {fileID: 11400000, guid: 2fcddc53bf7a12842b03dc4774c90d4f, type: 2}
+  titleText: {fileID: 1150671985}
   progressText: {fileID: 1883440637}
+  iconImage: {fileID: 1177260938}
   unlockedCheckMark: {fileID: 1860169866}
 --- !u!114 &1296437718
 MonoBehaviour:
@@ -62436,7 +62521,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ModidficatorToggleItem
   ModificatorName: X2PuckSpeed
-  ModificatorXMoney: 0.3
+  ModificatorMultiplyMoney: 0
   ModificatorOpposite: {fileID: 0}
 --- !u!1 &1391396901
 GameObject:
@@ -62631,8 +62716,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::AchievementItem
   achievementsHandler: {fileID: 180572474}
-  Title: thunderstorm_game
+  achievementData: {fileID: 11400000, guid: 381f8ea8809f09a48b574b39156eb76c, type: 2}
+  titleText: {fileID: 377214276}
   progressText: {fileID: 1112343607}
+  iconImage: {fileID: 471981224}
   unlockedCheckMark: {fileID: 1178839671}
 --- !u!114 &1395800368
 MonoBehaviour:
@@ -63120,8 +63207,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::AchievementItem
   achievementsHandler: {fileID: 180572474}
-  Title: ludoman
+  achievementData: {fileID: 11400000, guid: 7e832a3310fc1fa4aba27b844cd27ec6, type: 2}
+  titleText: {fileID: 1950551375}
   progressText: {fileID: 2007385290}
+  iconImage: {fileID: 843674472}
   unlockedCheckMark: {fileID: 1002798122}
 --- !u!114 &1402279549
 MonoBehaviour:
@@ -64580,7 +64669,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ModidficatorToggleItem
   ModificatorName: MoreWalls
-  ModificatorXMoney: 0.4
+  ModificatorMultiplyMoney: 0
   ModificatorOpposite: {fileID: 0}
 --- !u!1 &1436247961
 GameObject:
@@ -65748,7 +65837,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ModidficatorToggleItem
   ModificatorName: BigPuck
-  ModificatorXMoney: 0.25
+  ModificatorMultiplyMoney: 0
   ModificatorOpposite: {fileID: 2105189857}
 --- !u!114 &1461299815
 MonoBehaviour:
@@ -69439,8 +69528,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::AchievementItem
   achievementsHandler: {fileID: 180572474}
-  Title: own_goal
+  achievementData: {fileID: 11400000, guid: f1cc616dec3beff4db7549bfce5938c4, type: 2}
+  titleText: {fileID: 802343814}
   progressText: {fileID: 922216862}
+  iconImage: {fileID: 118718487}
   unlockedCheckMark: {fileID: 1869321792}
 --- !u!114 &1544026063
 MonoBehaviour:
@@ -69536,8 +69627,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::AchievementItem
   achievementsHandler: {fileID: 180572474}
-  Title: best_in_the_galaxy
+  achievementData: {fileID: 11400000, guid: 8bf10fdb1ae11134c9e79ef53cde1e1c, type: 2}
+  titleText: {fileID: 233536280}
   progressText: {fileID: 1993396905}
+  iconImage: {fileID: 1146725242}
   unlockedCheckMark: {fileID: 923690211}
 --- !u!114 &1545026042
 MonoBehaviour:
@@ -72319,8 +72412,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::AchievementItem
   achievementsHandler: {fileID: 180572474}
-  Title: amateur
+  achievementData: {fileID: 11400000, guid: 7324a8d4f4e9dca468de57ea5525806a, type: 2}
+  titleText: {fileID: 2073181408}
   progressText: {fileID: 2089946745}
+  iconImage: {fileID: 1927537239}
   unlockedCheckMark: {fileID: 1750554809}
 --- !u!1 &1600593869
 GameObject:
@@ -74063,8 +74158,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::AchievementItem
   achievementsHandler: {fileID: 180572474}
-  Title: ten
+  achievementData: {fileID: 11400000, guid: 4967d2ee2633b5c408a294d2d52ecc47, type: 2}
+  titleText: {fileID: 1365327965}
   progressText: {fileID: 2073624842}
+  iconImage: {fileID: 998222594}
   unlockedCheckMark: {fileID: 1808754547}
 --- !u!114 &1643153962
 MonoBehaviour:
@@ -74564,8 +74661,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::AchievementItem
   achievementsHandler: {fileID: 180572474}
-  Title: first_steps
+  achievementData: {fileID: 11400000, guid: 1fbc76e4a89cf084696bb735c459fc73, type: 2}
+  titleText: {fileID: 227053590}
   progressText: {fileID: 295449606}
+  iconImage: {fileID: 1797450284}
   unlockedCheckMark: {fileID: 464627690}
 --- !u!114 &1648884673
 MonoBehaviour:
@@ -74907,7 +75006,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &1665956466
 RectTransform:
   m_ObjectHideFlags: 0
@@ -74926,7 +75025,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 100.00003}
+  m_AnchoredPosition: {x: 0, y: 80}
   m_SizeDelta: {x: -980, y: 125}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1665956467
@@ -78271,8 +78370,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::AchievementItem
   achievementsHandler: {fileID: 180572474}
-  Title: fight
+  achievementData: {fileID: 11400000, guid: 8d1f229798acc3d418eb361db88f6ff2, type: 2}
+  titleText: {fileID: 987243691}
   progressText: {fileID: 523054912}
+  iconImage: {fileID: 957298104}
   unlockedCheckMark: {fileID: 2132826272}
 --- !u!114 &1735032700
 MonoBehaviour:
@@ -78639,8 +78740,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::AchievementItem
   achievementsHandler: {fileID: 180572474}
-  Title: the_fog
+  achievementData: {fileID: 11400000, guid: 44421b8eaf07c234da7254c97b910879, type: 2}
+  titleText: {fileID: 334669238}
   progressText: {fileID: 273716475}
+  iconImage: {fileID: 2136773361}
   unlockedCheckMark: {fileID: 2060644840}
 --- !u!114 &1746777362
 MonoBehaviour:
@@ -82544,8 +82647,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::AchievementItem
   achievementsHandler: {fileID: 180572474}
-  Title: world_champion
+  achievementData: {fileID: 11400000, guid: 1b6571d835a192c48b4527301e8cf748, type: 2}
+  titleText: {fileID: 189033213}
   progressText: {fileID: 495363571}
+  iconImage: {fileID: 1488723844}
   unlockedCheckMark: {fileID: 630356761}
 --- !u!114 &1848219014
 MonoBehaviour:
@@ -90666,8 +90771,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::AchievementItem
   achievementsHandler: {fileID: 180572474}
-  Title: training
+  achievementData: {fileID: 11400000, guid: 03f5b55d3c1b06a4d87a6a2afb283bc4, type: 2}
+  titleText: {fileID: 488363926}
   progressText: {fileID: 1346691387}
+  iconImage: {fileID: 425765100}
   unlockedCheckMark: {fileID: 1221763680}
 --- !u!114 &2011637885
 MonoBehaviour:
@@ -94201,7 +94308,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ModidficatorToggleItem
   ModificatorName: SmallPuck
-  ModificatorXMoney: 0.1
+  ModificatorMultiplyMoney: 0
   ModificatorOpposite: {fileID: 1461299815}
 --- !u!1 &2106764718
 GameObject:
@@ -94259,8 +94366,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::AchievementItem
   achievementsHandler: {fileID: 180572474}
-  Title: big
+  achievementData: {fileID: 11400000, guid: 6fc5aadf50b332b4085c01c842f90579, type: 2}
+  titleText: {fileID: 905782986}
   progressText: {fileID: 314625854}
+  iconImage: {fileID: 828267302}
   unlockedCheckMark: {fileID: 1208870196}
 --- !u!114 &2106764721
 MonoBehaviour:

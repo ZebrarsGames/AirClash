@@ -19,11 +19,6 @@ public class EloTextAnimScr : MonoBehaviour
     
     private Sequence eloSequence; 
 
-    public void StartTestAnim()
-    {
-        AnimateElo(1420, 1500, 80);
-    }
-
     public void AnimateElo(int oldRating, int newRating, int targetDifference)
     {
         eloSequence?.Kill();

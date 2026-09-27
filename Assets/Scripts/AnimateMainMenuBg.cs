@@ -11,7 +11,7 @@ public class AnimateMainMenuBg : MonoBehaviour
     private const string AnimBgKey = "isAnimBg";
 
     [Header("Settings")]
-    [SerializeField] private Vector2 speed = new Vector2(0.1f, 0.1f);
+    [SerializeField] private Vector2 speed = new Vector2(-0.06f, -0.06f);
 
     private RawImage rawImage;
     private TweenerCore<Vector2, Vector2, VectorOptions> tween;

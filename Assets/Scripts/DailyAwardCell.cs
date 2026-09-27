@@ -16,13 +16,26 @@ public class DailyAwardCell : MonoBehaviour
     [Header("Scripts")]
     [SerializeField] private DailyAwardHandler dailyAwardHandler;
 
-    void Start()
+    private void Start()
     {
+        if(dailyAwardHandler == null) return;
+
         DailyAwardSO currentSO = dailyAwardHandler.GetDailyAward(day);
-        cellLogo.sprite = currentSO.AwardSprite;
-        dayText.text = "День " + day.ToString();
-        if(dailyAwardHandler.GetDaysPlayed() >= day) isGive = true;
-        else isGive = false;
-        checkMark.SetActive(isGive);
+        if(currentSO != null && cellLogo != null)
+        {
+            cellLogo.sprite = currentSO.AwardSprite;
+        }
+
+        if(dayText != null)
+        {
+            dayText.SetText("День {0}", day);
+        }
+
+        isGive = dailyAwardHandler.GetDaysPlayed() >= day;
+
+        if(checkMark != null)
+        {
+            checkMark.SetActive(isGive);
+        }
     }
 }

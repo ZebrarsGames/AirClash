@@ -7,6 +7,7 @@ using TMPro;
 
 [System.Serializable]
 public class ApplyProfileEvent : UnityEvent<RawImage> { }
+
 public class ProfileUIHandler : MonoBehaviour
 {
     [Header("UI")]
@@ -14,36 +15,44 @@ public class ProfileUIHandler : MonoBehaviour
     [SerializeField] private GameObject editProfilePanel;
     [Header("Other")]
     [SerializeField] private ApplyProfileEvent applyProfileEvent;
+    
     private string avatarPath;
     private RectTransform panelRect;
+    private Texture2D dynamicTexture;
 
     void Awake()
     {
         panelRect = editProfilePanel.GetComponent<RectTransform>();
+        avatarPath = Path.Combine(Application.persistentDataPath, "avatar.png");
     }
 
     void Start()
     {
-        avatarPath = Path.Combine(Application.persistentDataPath, "avatar.png");
         LoadSavedAvatar();
         panelRect.DOKill();
         panelRect.localPosition = Vector2.zero;
     }
 
+    void OnDestroy()
+    {
+        panelRect.DOKill();
+    }
+
     public void OpenGallery()
     {
-        if (NativeGallery.IsMediaPickerBusy()) return;
+        if(NativeGallery.IsMediaPickerBusy()) return;
 
         NativeGallery.GetImageFromGallery((path) =>
         {
             Debug.Log("Путь к файлу: " + path);
             
-            if (path != null)
+            if(path != null)
             {
                 Texture2D texture = NativeGallery.LoadImageAtPath(path, 1024, false);
-                
-                if (texture != null)
+                if(texture != null)
                 {
+                    ClearDisplayTexture();
+                    dynamicTexture = texture;
                     displayImage.texture = texture;
                     SaveAvatarToFile(texture);
                 }
@@ -70,18 +79,11 @@ public class ProfileUIHandler : MonoBehaviour
     {
         try
         {
-            if (File.Exists(avatarPath))
-            {
-                File.Delete(avatarPath);
-                Debug.Log("Старый аватар успешно удален.");
-            }
-
             byte[] bytes = texture.EncodeToPNG();
-
             File.WriteAllBytes(avatarPath, bytes);
             Debug.Log("Новый аватар сохранен по пути: " + avatarPath);
         }
-        catch (System.Exception e)
+        catch(System.Exception e)
         {
             Debug.LogError("Ошибка при сохранении аватара: " + e.Message);
         }
@@ -89,15 +91,34 @@ public class ProfileUIHandler : MonoBehaviour
 
     private void LoadSavedAvatar()
     {
-        if (File.Exists(avatarPath))
+        if(File.Exists(avatarPath))
         {
-            byte[] bytes = File.ReadAllBytes(avatarPath);
-            
-            Texture2D savedTexture = new Texture2D(2, 2);
-            savedTexture.LoadImage(bytes);
+            try
+            {
+                byte[] bytes = File.ReadAllBytes(avatarPath);
+                
+                Texture2D savedTexture = new Texture2D(2, 2);
+                savedTexture.LoadImage(bytes);
 
-            displayImage.texture = savedTexture;
-            Debug.Log("Сохраненный аватар успешно загружен при старте.");
+                ClearDisplayTexture();
+                dynamicTexture = savedTexture;
+                displayImage.texture = savedTexture;
+                Debug.Log("Сохраненный аватар успешно загружен при старте.");
+            }
+            catch(System.Exception e)
+            {
+                Debug.LogError("Ошибка при чтении файла аватары: " + e.Message);
+            }
         }
+    }
+
+    private void ClearDisplayTexture()
+    {
+        if(dynamicTexture != null)
+        {
+            Destroy(dynamicTexture);
+            dynamicTexture = null;
+        }
+        displayImage.texture = null;
     }
 }

@@ -37,180 +37,152 @@ public class RouletteHandler : MonoBehaviour
     [SerializeField] private QuestsHandler questsHandler;
     [SerializeField] private DailyQuestHandler dailyQuestHandler;
 
+    private CanvasGroup roulettePanelGroup;
+    private CanvasGroup choiceRoulettePanelGroup;
+    
+    private Color commonColor;
+    private Color epicColor;
+    private Color legendaryColor;
+
+    private readonly WaitForSeconds wait1_5f = new WaitForSeconds(1.5f);
+    private readonly WaitForSeconds wait1_3f = new WaitForSeconds(1.3f);
+    private readonly WaitForSeconds wait1_0f = new WaitForSeconds(1f);
+    private readonly WaitForSeconds wait0_7f = new WaitForSeconds(0.7f);
+    private readonly WaitForSeconds wait0_3f = new WaitForSeconds(0.3f);
+
+    private void Awake()
+    {
+        roulettePanelGroup = roulettePanel.GetComponent<CanvasGroup>();
+        choiceRoulettePanelGroup = choiceRoulettePanel.GetComponent<CanvasGroup>();
+
+        ColorUtility.TryParseHtmlString("#56A1CC", out commonColor); commonColor.a = 0.39f;
+        ColorUtility.TryParseHtmlString("#ff00d4", out epicColor); epicColor.a = 0.39f;
+        ColorUtility.TryParseHtmlString("#FF0000", out legendaryColor); legendaryColor.a = 0.39f;
+    }
+
     public void StartRoulette(string typeOfRoulette)
     {
+        RouletteItemData[] itemsToUse = null;
+        Color targetColor = default;
+
         switch(typeOfRoulette)
-            {
-                case "Common":
-                    rouletteCost = 25;
-                    break;
-                case "Epic":
-                    rouletteCost = 50;
-                    break;
-                case "Legendary":
-                    rouletteCost = 100;
-                    break;
-                default:
-                    Debug.Log("Неправильный typeOfRoulette! (" + typeOfRoulette + ")");
-                    break;
-            }
+        {
+            case "Common":
+                rouletteCost = 25;
+                itemsToUse = rouletteItems;
+                targetColor = commonColor;
+                break;
+            case "Epic":
+                rouletteCost = 50;
+                itemsToUse = rareRouletteItems;
+                targetColor = epicColor;
+                break;
+            case "Legendary":
+                rouletteCost = 100;
+                itemsToUse = veryRareRouletteItems;
+                targetColor = legendaryColor;
+                break;
+            default:
+                Debug.Log($"Неправильный typeOfRoulette! ({typeOfRoulette})");
+                return;
+        }
+
         if(moneyHandler.GetMoney() >= rouletteCost)
         {
             roulettePanel.SetActive(true);
             achievementsHandler.UpdateProgress("ludoman", 1);
-            switch(typeOfRoulette)
+            
+            for(int i = 0; i < rouletteCells.Length; i++)
             {
-                case "Common":
-                    for(int i = 0; i < rouletteCells.Length; i++)
-                    {
-                        int randomIndex = Random.Range(0, rouletteItems.Length);
-                        rouletteCells[i].SetData(rouletteItems[randomIndex]);
-                        if (ColorUtility.TryParseHtmlString("#56A1CC", out Color cellColor))
-                        {
-                            cellColor.a = 0.39f;
-                            rouletteCells[i].cellBg.color = cellColor;
-                        }
-                    }
-                    break;
-                case "Epic":
-                    for(int i = 0; i < rouletteCells.Length; i++)
-                    {
-                        int randomIndex = Random.Range(0, rareRouletteItems.Length);
-                        rouletteCells[i].SetData(rareRouletteItems[randomIndex]);
-                        if (ColorUtility.TryParseHtmlString("#ff00d4", out Color cellColor))
-                        {
-                            cellColor.a = 0.39f;
-                            rouletteCells[i].cellBg.color = cellColor;
-                        }
-                    }
-                    break;
-                case "Legendary":
-                    for(int i = 0; i < rouletteCells.Length; i++)
-                    {
-                        int randomIndex = Random.Range(0, veryRareRouletteItems.Length);
-                        rouletteCells[i].SetData(veryRareRouletteItems[randomIndex]);
-                        if (ColorUtility.TryParseHtmlString("#FF0000", out Color cellColor))
-                        {
-                            cellColor.a = 0.39f;
-                            rouletteCells[i].cellBg.color = cellColor;
-                        }
-                    }
-                    break;
-                default:
-                    Debug.Log("Неправильный typeOfRoulette! (" + typeOfRoulette + ")");
-                    break;
+                int randomIndex = Random.Range(0, itemsToUse.Length);
+                rouletteCells[i].SetData(itemsToUse[randomIndex]);
+                rouletteCells[i].cellBg.color = targetColor;
             }
+
             stopRouletteBtn.interactable = false;
             awardText.gameObject.SetActive(false);
-            roulettePanel.GetComponent<CanvasGroup>().alpha = 0;
-            roulettePanel.GetComponent<CanvasGroup>().DOFade(1f, 1f);
+            roulettePanelGroup.alpha = 0;
+            roulettePanelGroup.DOFade(1f, 1f);
+            
             moneyHandler.RemoveMoney(rouletteCost);
             moneyText.SetText($"{moneyHandler.GetMoney()} <sprite=0>");
-            switch(typeOfRoulette)
-            {
-                case "Common":
-                    StartCoroutine(SpinCommonRoulette());
-                    dailyQuestHandler.UpdateQuestProgress("open_roulette", 1);
-                    break;
-                case "Epic":
-                    StartCoroutine(SpinEpicRoulette());
-                    dailyQuestHandler.UpdateQuestProgress("open_roulette", 1);
-                    break;
-                case "Legendary":
-                    StartCoroutine(SpinLegendaryRoulette());
-                    dailyQuestHandler.UpdateQuestProgress("open_legendary_roulette", 1);
-                    dailyQuestHandler.UpdateQuestProgress("open_roulette", 1);
-                    break;
-                default:
-                    Debug.Log("Неправильный typeOfRoulette! (" + typeOfRoulette + ")");
-                    break;
-            }
-        } else
+
+            StartCoroutine(SpinRouletteRoutine(typeOfRoulette));
+        }
+        else
         {
             audioSource.PlayOneShot(cancelSound);
         }
-        
     }
 
-    IEnumerator SpinCommonRoulette()
+    IEnumerator SpinRouletteRoutine(string typeOfRoulette)
     {
-        yield return new WaitForSeconds(1.5f);
-        StartCoroutine(MoveRouletteItems("Common"));
-    }
-    IEnumerator SpinEpicRoulette()
-    {
-        yield return new WaitForSeconds(1.5f);
-        StartCoroutine(MoveRouletteItems("Epic"));
-    }
-    IEnumerator SpinLegendaryRoulette()
-    {
-        yield return new WaitForSeconds(1.5f);
-        StartCoroutine(MoveRouletteItems("Legendary"));
+        yield return wait1_5f;
+        
+        if(typeOfRoulette.Equals("Common") || typeOfRoulette.Equals("Epic") || typeOfRoulette.Equals("Legendary"))
+        {
+            dailyQuestHandler.UpdateQuestProgress("open_roulette", 1);
+            if(typeOfRoulette.Equals("Legendary"))
+            {
+                dailyQuestHandler.UpdateQuestProgress("open_legendary_roulette", 1);
+            }
+        }
+        
+        StartCoroutine(MoveRouletteItems(typeOfRoulette));
     }
 
     IEnumerator MoveRouletteItems(string typeOfRoulette)
     {
         int totalSteps = Random.Range(40, 100);
         int randKoof = 0;
-        for (int step = 0; step < totalSteps; step++)
+        
+        for(int step = 0; step < totalSteps; step++)
         {
-            if (this == null || !gameObject.activeInHierarchy) yield break;
+            if(this == null || !gameObject.activeInHierarchy) yield break;
+            
             audioSource.PlayOneShot(rouletteSound);
             float delay = Mathf.Lerp(0.05f, 0.2f, (float)step / totalSteps);
             yield return new WaitForSeconds(delay);
 
-            for (int i = 0; i < rouletteCells.Length - 1; i++)
+            for(int i = 0; i < rouletteCells.Length - 1; i++)
             {
                 rouletteCells[i].SetData(rouletteCells[i + 1].currentData);
                 rouletteCells[i].cellBg.color = rouletteCells[i + 1].cellBg.color;
             }
+
             switch(typeOfRoulette)
             {
-                case "Common":
-                    randKoof = Random.Range(0, 17);
-                    break;
-                case "Epic":
-                    randKoof = Random.Range(14, 24);
-                    break;
-                case "Legendary":
-                    randKoof = Random.Range(23, 28);
-                    break;
+                case "Common": randKoof = Random.Range(0, 17); break;
+                case "Epic": randKoof = Random.Range(14, 24); break;
+                case "Legendary": randKoof = Random.Range(23, 28); break;
             }
-            if (randKoof >= 0 && randKoof <= 15)
+
+            RouletteCell lastCell = rouletteCells[rouletteCells.Length - 1];
+
+            if(randKoof <= 15)
             {
-                rouletteCells[rouletteCells.Length - 1].SetData(rouletteItems[Random.Range(0, rouletteItems.Length)]);
-                if (ColorUtility.TryParseHtmlString("#56A1CC", out Color cellColor))
-                {
-                    cellColor.a = 0.39f;
-                    rouletteCells[rouletteCells.Length - 1].cellBg.color = cellColor;
-                }
+                lastCell.SetData(rouletteItems[Random.Range(0, rouletteItems.Length)]);
+                lastCell.cellBg.color = commonColor;
             }
-            else if (randKoof >= 16 && randKoof <= 23)
+            else if(randKoof <= 23)
             {
-                rouletteCells[rouletteCells.Length - 1].SetData(rareRouletteItems[Random.Range(0, rareRouletteItems.Length)]);
-                if (ColorUtility.TryParseHtmlString("#ff00d4", out Color cellColor))
-                {
-                    cellColor.a = 0.39f;
-                    rouletteCells[rouletteCells.Length - 1].cellBg.color = cellColor;
-                }
+                lastCell.SetData(rareRouletteItems[Random.Range(0, rareRouletteItems.Length)]);
+                lastCell.cellBg.color = epicColor;
             }
-            else if (randKoof >= 24)
+            else
             {
-                rouletteCells[rouletteCells.Length - 1].SetData(veryRareRouletteItems[Random.Range(0, veryRareRouletteItems.Length)]);
-                if (ColorUtility.TryParseHtmlString("#FF0000", out Color cellColor))
-                {
-                    cellColor.a = 0.39f;
-                    rouletteCells[rouletteCells.Length - 1].cellBg.color = cellColor;
-                }
+                lastCell.SetData(veryRareRouletteItems[Random.Range(0, veryRareRouletteItems.Length)]);
+                lastCell.cellBg.color = legendaryColor;
             }
-            foreach (var cell in rouletteCells)
+
+            foreach(var cell in rouletteCells)
             {
                 cell.rectTransform.DOComplete(); 
                 cell.rectTransform.DOPunchScale(new Vector3(0.05f, 0.05f, 0.05f), 0.05f, 1, 0.5f);
             }
-
         }
-        yield return new WaitForSeconds(0.7f);
+        
+        yield return wait0_7f;
         stopRouletteBtn.interactable = true;
     }
 
@@ -223,47 +195,53 @@ public class RouletteHandler : MonoBehaviour
     {
         audioSource.PlayOneShot(endSound);
         stopRouletteBtn.interactable = false;
+        
         RouletteCell bestCell = null;
         float minDistance = float.MaxValue;
 
-        foreach (var cell in rouletteCells)
+        foreach(var cell in rouletteCells)
         {
             float dist = Vector3.Distance(cell.transform.position, centerMarker.position);
-            if (dist < minDistance)
+            if(dist < minDistance)
             {
                 minDistance = dist;
                 bestCell = cell;
             }
         }
 
-        if (bestCell != null && bestCell.currentData != null)
+        if(bestCell != null && bestCell.currentData != null)
         {
             awardText.gameObject.SetActive(true);
-            switch(bestCell.currentData.typeOfAward)
+            var data = bestCell.currentData;
+
+            switch(data.typeOfAward)
             {
                 case "Money":
-                    if(bestCell.currentData.award == 67) achievementsHandler.UpdateProgress("six_seven", 1);
-                    awardText.text = "ВЫИГРЫШ: " + bestCell.currentData.award + " монет";
-                    moneyHandler.AddMoney(bestCell.currentData.award);
-                    UpdateQuests(bestCell.currentData.award);
+                    if(data.award == 67) achievementsHandler.UpdateProgress("six_seven", 1);
+                    awardText.text = $"ВЫИГРЫШ: {data.award} монет";
+                    moneyHandler.AddMoney(data.award);
+                    UpdateQuests(data.award);
                     moneyText.SetText($"{moneyHandler.GetMoney()} <sprite=0>");
                     break;
+                    
                 case "Skin":
                     foreach(var i in skins)
                     {
-                        if(i.skinName == bestCell.currentData.skinAward)
+                        if(i.skinName == data.skinAward)
                         {
                             if(i.isBuy)
                             {
-                                awardText.text = "ВЫИГРЫШ: " + i.skinPrice + " монет (скин уже получен)";
+                                awardText.text = $"ВЫИГРЫШ: {i.skinPrice} монет (скин уже получен)";
                                 moneyHandler.AddMoney(i.skinPrice);
                                 UpdateQuests(i.skinPrice);
                                 moneyText.SetText($"{moneyHandler.GetMoney()} <sprite=0>");
-                            } else
+                            }
+                            else
                             {
                                 achievementsHandler.UpdateProgress("large_wardrobe", 1);
-                                awardText.text = "ВЫИГРЫШ: " + i.guiSkinName;
+                                awardText.text = $"ВЫИГРЫШ: {i.guiSkinName}";
                                 if(i.skinName.Equals("GoldSkin")) achievementsHandler.UpdateProgress("lucky", 1);
+                                
                                 i.isBuy = true;
                                 i.checkmark.gameObject.SetActive(true);
                                 PlayerPrefs.SetInt(i.skinName, 1);
@@ -273,42 +251,48 @@ public class RouletteHandler : MonoBehaviour
                         }
                     } 
                     break;
+                    
                 case "Xp":
-                    xpHandler.AddXp(bestCell.currentData.award);
-                    awardText.text = "ВЫИГРЫШ: " + bestCell.currentData.award + " XP";
-                    UpdateXpQuests(bestCell.currentData.award);
-                    break;    
+                    xpHandler.AddXp(data.award);
+                    awardText.text = $"ВЫИГРЫШ: {data.award} XP";
+                    UpdateXpQuests(data.award);
+                    break; 
+                    
                 default:
                     awardText.text = "Неправильный typeOFAward!";
-                    break;   
+                    break; 
             }
-            yield return new WaitForSeconds(1.3f);
-            roulettePanel.GetComponent<CanvasGroup>().alpha = 1f;
-            roulettePanel.GetComponent<CanvasGroup>().DOFade(0f, 1f);
-            yield return new WaitForSeconds(1f);
+            
+            yield return wait1_3f;
+            roulettePanelGroup.alpha = 1f;
+            roulettePanelGroup.DOFade(0f, 1f);
+            
+            yield return wait1_0f;
             awardText.gameObject.SetActive(false);
             roulettePanel.SetActive(false);
         }
-        
     }
 
     public void CloseChoiceRoulettePanel()
     {
         StartCoroutine(CloseChoiceRoulettePanelAnim());
     }
+
     IEnumerator CloseChoiceRoulettePanelAnim()
     {
-        choiceRoulettePanel.GetComponent<CanvasGroup>().alpha = 1;
-        choiceRoulettePanel.GetComponent<CanvasGroup>().DOFade(0.0f, 0.2f);
-        yield return new WaitForSeconds(0.3f);
+        choiceRoulettePanelGroup.alpha = 1;
+        choiceRoulettePanelGroup.DOFade(0.0f, 0.2f);
+        yield return wait0_3f;
         choiceRoulettePanel.SetActive(false);
     }
+
     public void OpenChoiceRoulettePanel()
     {
         choiceRoulettePanel.SetActive(true);
-        choiceRoulettePanel.GetComponent<CanvasGroup>().alpha = 0;
-        choiceRoulettePanel.GetComponent<CanvasGroup>().DOFade(1.0f, 0.2f);
+        choiceRoulettePanelGroup.alpha = 0;
+        choiceRoulettePanelGroup.DOFade(1.0f, 0.2f);
     }
+
     private void UpdateQuests(int amount)
     {
         questsHandler.UpdateQuestProgress("money10", amount);
@@ -321,6 +305,7 @@ public class RouletteHandler : MonoBehaviour
         dailyQuestHandler.UpdateQuestProgress("money70", amount);
         dailyQuestHandler.UpdateQuestProgress("money100", amount);
     }
+
     private void UpdateXpQuests(int amount)
     {
         questsHandler.UpdateQuestProgress("xp100", amount);

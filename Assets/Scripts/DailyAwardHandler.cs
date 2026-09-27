@@ -1,4 +1,5 @@
 using System;
+using System.Globalization;
 using UnityEngine;
 
 public class DailyAwardHandler : MonoBehaviour
@@ -23,7 +24,7 @@ public class DailyAwardHandler : MonoBehaviour
     private const string FirstTimePlayKey = "FirstTimePlayed";
     private bool isInitialized;
 
-    void Awake()
+    private void Awake()
     {
         Initialize();
     }
@@ -34,7 +35,8 @@ public class DailyAwardHandler : MonoBehaviour
 
         if(PlayerPrefs.HasKey(FirstTimePlayKey))
         {
-            if(!DateTime.TryParse(PlayerPrefs.GetString(FirstTimePlayKey), out firstTimePlay))
+            string dateStr = PlayerPrefs.GetString(FirstTimePlayKey);
+            if(!DateTime.TryParse(dateStr, CultureInfo.InvariantCulture, DateTimeStyles.None, out firstTimePlay))
             {
                 ResetFirstTime();
             }
@@ -50,41 +52,42 @@ public class DailyAwardHandler : MonoBehaviour
     private void ResetFirstTime()
     {
         firstTimePlay = DateTime.Today;
-        PlayerPrefs.SetString(FirstTimePlayKey, firstTimePlay.ToString());
+        PlayerPrefs.SetString(FirstTimePlayKey, firstTimePlay.ToString("o", CultureInfo.InvariantCulture));
         PlayerPrefs.Save();
     }
 
     public void OnDayChanged()
     {
-        int daysPlayed = (DateTime.Today - firstTimePlay).Days + 1;
-        if(daysPlayed > maxDays) return;
+        int daysPlayed = GetDaysPlayed();
+        if(daysPlayed > maxDays || dailyAwards == null) return;
 
-        for (int i = 0; i < dailyAwards.Length; i++)
+        for(int i = 0; i < dailyAwards.Length; i++)
         {
-            if (dailyAwards[i].Day == daysPlayed)
+            if(dailyAwards[i] != null && dailyAwards[i].Day == daysPlayed)
             {
-                awardsPanel.SetActive(true);
+                if(awardsPanel != null) awardsPanel.SetActive(true);
                 GiveAward(dailyAwards[i]);
                 break;
             }
         }
-    } 
+    }
 
     public void GiveAward(DailyAwardSO award)
     {
-        Debug.Log("Выдаём награду за " + award.Day + " день");
+        if(award == null) return;
+
         switch(award.AwardType)
         {
             case AwardType.Money:
                 UpdateMoneyQuests(award.Award);
-                moneyHandler.AddMoney(award.Award);
+                if(moneyHandler != null) moneyHandler.AddMoney(award.Award);
                 break;
             case AwardType.Xp:
                 UpdateXpQuests(award.Award);
-                xpHandler.AddXp(award.Award);
+                if(xpHandler != null) xpHandler.AddXp(award.Award);
                 break;
             case AwardType.Skin:
-                achievementsHandler.UpdateProgress("large_wardrobe", 1);
+                if(achievementsHandler != null) achievementsHandler.UpdateProgress("large_wardrobe", 1);
                 PlayerPrefs.SetInt(award.SkinAward, 1);
                 PlayerPrefs.Save();
                 break;
@@ -93,14 +96,16 @@ public class DailyAwardHandler : MonoBehaviour
 
     public DailyAwardSO GetDailyAward(int day)
     {
-        for (int i = 0; i < dailyAwards.Length; i++)
+        if(dailyAwards == null) return null;
+
+        for(int i = 0; i < dailyAwards.Length; i++)
         {
-            if (dailyAwards[i].Day == day)
+            if(dailyAwards[i] != null && dailyAwards[i].Day == day)
             {
                 return dailyAwards[i];
             }
         }
-        return new DailyAwardSO();
+        return null;
     }
 
     public int GetDaysPlayed()
@@ -110,25 +115,39 @@ public class DailyAwardHandler : MonoBehaviour
 
     private void UpdateXpQuests(int amount)
     {
-        questsHandler.UpdateQuestProgress("xp100", amount);
-        questsHandler.UpdateQuestProgress("xp200", amount);
-        questsHandler.UpdateQuestProgress("xp400", amount);
-        questsHandler.UpdateQuestProgress("xp500", amount);
-        questsHandler.UpdateQuestProgress("xp700", amount);
-        questsHandler.UpdateQuestProgress("xp1000", amount);
-        dailyQuestHandler.UpdateQuestProgress("xp50", amount);
+        if(questsHandler != null)
+        {
+            questsHandler.UpdateQuestProgress("xp100", amount);
+            questsHandler.UpdateQuestProgress("xp200", amount);
+            questsHandler.UpdateQuestProgress("xp400", amount);
+            questsHandler.UpdateQuestProgress("xp500", amount);
+            questsHandler.UpdateQuestProgress("xp700", amount);
+            questsHandler.UpdateQuestProgress("xp1000", amount);
+        }
+
+        if(dailyQuestHandler != null)
+        {
+            dailyQuestHandler.UpdateQuestProgress("xp50", amount);
+        }
     }
 
     private void UpdateMoneyQuests(int amount)
     {
-        questsHandler.UpdateQuestProgress("money10", amount);
-        questsHandler.UpdateQuestProgress("money50", amount);
-        questsHandler.UpdateQuestProgress("money100", amount);
-        questsHandler.UpdateQuestProgress("money200", amount);
-        questsHandler.UpdateQuestProgress("money300", amount);
-        questsHandler.UpdateQuestProgress("money500", amount);
-        dailyQuestHandler.UpdateQuestProgress("daily_money50", amount);
-        dailyQuestHandler.UpdateQuestProgress("money70", amount);
-        dailyQuestHandler.UpdateQuestProgress("daily_money100", amount);
+        if(questsHandler != null)
+        {
+            questsHandler.UpdateQuestProgress("money10", amount);
+            questsHandler.UpdateQuestProgress("money50", amount);
+            questsHandler.UpdateQuestProgress("money100", amount);
+            questsHandler.UpdateQuestProgress("money200", amount);
+            questsHandler.UpdateQuestProgress("money300", amount);
+            questsHandler.UpdateQuestProgress("money500", amount);
+        }
+
+        if(dailyQuestHandler != null)
+        {
+            dailyQuestHandler.UpdateQuestProgress("daily_money50", amount);
+            dailyQuestHandler.UpdateQuestProgress("money70", amount);
+            dailyQuestHandler.UpdateQuestProgress("daily_money100", amount);
+        }
     }
 }

@@ -5,8 +5,6 @@ using TMPro;
 using UnityEngine.UI;
 using DG.Tweening;
 using System.Text;
-using System.Text.RegularExpressions;
-using System.Linq;
 
 public class CloudUIScr : MonoBehaviour
 {
@@ -38,54 +36,82 @@ public class CloudUIScr : MonoBehaviour
     [SerializeField] private FirebaseManager firebaseManager;
 
     private HashSet<string> forbiddenWords = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+    private RectTransform surePanelRect;
+    private RectTransform cloudPanelRect;
+    private StringBuilder stringBuilder = new StringBuilder(64);
 
-    void Start()
+    private static readonly string[] MoneyQuests = new string[] { "money10", "money50", "money100", "money200", "money300", "money500" };
+    private static readonly string[] MoneyDailyQuests = new string[] { "daily_money50", "money70", "daily_money100" };
+    private static readonly string[] XpQuests = new string[] { "xp100", "xp200", "xp400", "xp500", "xp700", "xp1000" };
+    private static readonly string[] GoalQuests = new string[] { "goal10", "goal50", "goal100", "goal200", "goal300", "goal500" };
+
+    private void Awake()
+    {
+        if(surePanel != null)
+        {
+            surePanelRect = surePanel.GetComponent<RectTransform>();
+        }
+        if(cloudPanel != null)
+        {
+            cloudPanelRect = cloudPanel.GetComponent<RectTransform>();
+        }
+    }
+
+    private void Start()
     {
         usernameInput.text = saveManager.GetData().NickName;
         LoadBadWords();
     }
 
+    private void OnDestroy()
+    {
+        if(surePanelRect != null) surePanelRect.DOKill();
+        if(cloudPanelRect != null) cloudPanelRect.DOKill();
+    }
+
     public void OnClickLoginOrRegister()
     {
-        bool isTextValid = IsTextValid();
-        if(!isTextValid) return;
+        if(!IsTextValid()) return;
         firebaseManager.AccountAuth(usernameInput.text, passwordInput.text);
     }
 
     public void OnClickSave()
     {
-        bool isTextValid = IsTextValid();
-        if(!isTextValid) return;
+        if(!IsTextValid()) return;
         firebaseManager.SaveProgress(usernameInput.text, passwordInput.text);
     }
 
     public void OnClickLoad()
     {
-        bool isTextValid = IsTextValid();
-        if(!isTextValid) return;
+        if(!IsTextValid()) return;
         firebaseManager.LoadProgress(usernameInput.text, passwordInput.text);
     }
 
     public void OnInputField()
     {
-        cloudPanel.GetComponent<RectTransform>().DOLocalMoveY(228, 0.3f).SetEase(Ease.OutSine);
+        cloudPanelRect.DOKill();
+        cloudPanelRect.DOLocalMoveY(228f, 0.3f).SetEase(Ease.OutSine);
     }
 
     public void OnInputFieldEnd()
     {
-        cloudPanel.GetComponent<RectTransform>().DOLocalMoveY(0, 0.3f).SetEase(Ease.OutSine);
+        cloudPanelRect.DOKill();
+        cloudPanelRect.DOLocalMoveY(0f, 0.3f).SetEase(Ease.OutSine);
     }
 
     public void SetStatusText(string status)
     {
-        statusText.text = "Статус: " + status;
+        stringBuilder.Clear();
+        stringBuilder.Append("Статус: ").Append(status);
+        statusText.text = stringBuilder.ToString();
     }
 
     public void SetActiveBtns(bool isActive)
     {
+        bool interactableState = !isActive;
         for(int i = 0; i < buttons.Length; i++)
         {
-            buttons[i].interactable = !isActive;
+            buttons[i].interactable = interactableState;
         }
     }
 
@@ -96,9 +122,11 @@ public class CloudUIScr : MonoBehaviour
             SetMoneyQuests(playerData.TotalMoney);
             SetXpQuests(playerData.TotalXP);
             SetGoalQuests(playerData.Goals);
+
             PlayerPrefs.SetString("Nick", usernameInput.text);
             PlayerPrefs.SetInt("TotalGoals", playerData.Goals);
             PlayerPrefs.SetString("CurrentSkin", playerData.CurrentSkinName);
+
             moneyHandler.SetMoney(playerData.Money);
             moneyHandler.SetTotalMoney(playerData.TotalMoney);
             xpHandler.SetLevel(playerData.XpLevel);
@@ -122,7 +150,8 @@ public class CloudUIScr : MonoBehaviour
 
             PlayerPrefs.Save();
             saveManager.SaveData();
-        } else
+        }
+        else
         {
             saveManager.SaveDefaultData();
         }
@@ -131,59 +160,52 @@ public class CloudUIScr : MonoBehaviour
     public void ShowSurePanel()
     {
         audioSource.PlayOneShot(sureSound);
-        var rect = surePanel.GetComponent<RectTransform>();
-        rect.localScale = Vector3.zero;
+        surePanelRect.DOKill();
+        surePanelRect.localScale = Vector3.zero;
         surePanel.SetActive(true);
-        rect.DOScale(Vector3.one, 0.2f).SetEase(Ease.OutBack);
+        surePanelRect.DOScale(Vector3.one, 0.2f).SetEase(Ease.OutBack);
     }
 
     public void NoSurePanel()
     {
-        var rect = surePanel.GetComponent<RectTransform>();
-        rect.DOScale(Vector3.zero, 0.2f).SetEase(Ease.InBack).OnComplete(() => surePanel.SetActive(false));
-        rect.localScale = Vector3.one;
+        surePanelRect.DOKill();
+        surePanelRect.DOScale(Vector3.zero, 0.2f).SetEase(Ease.InBack).OnComplete(() => surePanel.SetActive(false));
     }
 
     public void YesSurePanel()
     {
         firebaseManager.DeleteAccount(usernameInput.text, passwordInput.text);
-        var rect = surePanel.GetComponent<RectTransform>();
-        rect.DOScale(Vector3.zero, 0.2f).SetEase(Ease.InBack).OnComplete(() => surePanel.SetActive(false));
-        rect.localScale = Vector3.one;
+        surePanelRect.DOKill();
+        surePanelRect.DOScale(Vector3.zero, 0.2f).SetEase(Ease.InBack).OnComplete(() => surePanel.SetActive(false));
     }
 
     private void SetMoneyQuests(int amount)
     {
-        questsHandler.SetQuestProgress("money10", amount);
-        questsHandler.SetQuestProgress("money50", amount);
-        questsHandler.SetQuestProgress("money100", amount);
-        questsHandler.SetQuestProgress("money200", amount);
-        questsHandler.SetQuestProgress("money300", amount);
-        questsHandler.SetQuestProgress("money500", amount);
-        dailyQuestHandler.UpdateQuestProgress("daily_money50", amount);
-        dailyQuestHandler.UpdateQuestProgress("money70", amount);
-        dailyQuestHandler.UpdateQuestProgress("daily_money100", amount);
+        for(int i = 0; i < MoneyQuests.Length; i++)
+        {
+            questsHandler.SetQuestProgress(MoneyQuests[i], amount);
+        }
+        for(int i = 0; i < MoneyDailyQuests.Length; i++)
+        {
+            dailyQuestHandler.UpdateQuestProgress(MoneyDailyQuests[i], amount);
+        }
     }
 
     private void SetXpQuests(int amount)
     {
-        questsHandler.SetQuestProgress("xp100", amount);
-        questsHandler.SetQuestProgress("xp200", amount);
-        questsHandler.SetQuestProgress("xp400", amount);
-        questsHandler.SetQuestProgress("xp500", amount);
-        questsHandler.SetQuestProgress("xp700", amount);
-        questsHandler.SetQuestProgress("xp1000", amount);
+        for(int i = 0; i < XpQuests.Length; i++)
+        {
+            questsHandler.SetQuestProgress(XpQuests[i], amount);
+        }
         dailyQuestHandler.UpdateQuestProgress("xp50", amount);
     }
 
     private void SetGoalQuests(int amount)
     {
-        questsHandler.SetQuestProgress("goal10", amount);
-        questsHandler.SetQuestProgress("goal50", amount);
-        questsHandler.SetQuestProgress("goal100", amount);
-        questsHandler.SetQuestProgress("goal200", amount);
-        questsHandler.SetQuestProgress("goal300", amount);
-        questsHandler.SetQuestProgress("goal500", amount);
+        for(int i = 0; i < GoalQuests.Length; i++)
+        {
+            questsHandler.SetQuestProgress(GoalQuests[i], amount);
+        }
         dailyQuestHandler.UpdateQuestProgress("goal20", amount);
     }
 
@@ -192,8 +214,9 @@ public class CloudUIScr : MonoBehaviour
         string username = usernameInput.text;
         string password = passwordInput.text;
 
-        foreach(char c in username)
+        for(int i = 0; i < username.Length; i++)
         {
+            char c = username[i];
             if(!char.IsLetterOrDigit(c) && c != '_' && c != ' ')
             {
                 Debug.LogWarning($"Найден запрещенный символ в логине: {c}");
@@ -226,7 +249,7 @@ public class CloudUIScr : MonoBehaviour
     private void LoadBadWords()
     {
         TextAsset textAsset = Resources.Load<TextAsset>("network_config");
-        
+
         if(textAsset != null)
         {
             try
@@ -235,24 +258,27 @@ public class CloudUIScr : MonoBehaviour
                 string decodedText = Encoding.UTF8.GetString(decodedBytes);
 
                 string[] lines = decodedText.Split(new[] { "\r\n", "\r", "\n" }, StringSplitOptions.RemoveEmptyEntries);
-                
-                HashSet<string> uniqueWords = new HashSet<string>();
+                HashSet<string> uniqueWords = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
 
-                foreach(var word in lines)
+                for(int i = 0; i < lines.Length; i++)
                 {
-                    string preparedBadWord = PrepareText(word);
-                    if (!string.IsNullOrEmpty(preparedBadWord) && preparedBadWord.Length > 2)
+                    string preparedBadWord = PrepareText(lines[i]);
+                    if(!string.IsNullOrEmpty(preparedBadWord) && preparedBadWord.Length > 2)
                     {
                         uniqueWords.Add(preparedBadWord);
                     }
                 }
-                
+
                 forbiddenWords = uniqueWords;
                 Debug.Log($"[System] База сети загружена. Оптимизированных элементов: {forbiddenWords.Count}");
             }
             catch(Exception e)
             {
                 Debug.LogError($"Ошибка чтения конфигурации сети: {e.Message}");
+            }
+            finally
+            {
+                Resources.UnloadAsset(textAsset);
             }
         }
         else
@@ -263,34 +289,56 @@ public class CloudUIScr : MonoBehaviour
 
     private string PrepareText(string input)
     {
-        if(string.IsNullOrEmpty(input)) return "";
+        if(string.IsNullOrEmpty(input)) return string.Empty;
 
-        string text = input.ToLowerInvariant();
+        stringBuilder.Clear();
 
-        text = text.Replace("@", "а")
-                .Replace("$", "с")
-                .Replace("0", "о")
-                .Replace("1", "и")
-                .Replace("3", "з")
-                .Replace("4", "ч")
-                .Replace("5", "с")
-                .Replace("6", "б")
-                .Replace("9", "д")
-                .Replace("a", "а")
-                .Replace("o", "о")
-                .Replace("e", "е")
-                .Replace("c", "с")
-                .Replace("p", "р")
-                .Replace("x", "х")
-                .Replace("y", "у")
-                .Replace("k", "к")
-                .Replace("m", "м")
-                .Replace("t", "т");
+        for(int i = 0; i < input.Length; i++)
+        {
+            char c = char.ToLowerInvariant(input[i]);
 
-        text = new string(text.Where(char.IsLetterOrDigit).ToArray());
+            switch(c)
+            {
+                case '@': c = 'а'; break;
+                case '$': c = 'с'; break;
+                case '0': c = 'о'; break;
+                case '1': c = 'и'; break;
+                case '3': c = 'з'; break;
+                case '4': c = 'ч'; break;
+                case '5': c = 'с'; break;
+                case '6': c = 'б'; break;
+                case '9': c = 'д'; break;
+                case 'a': c = 'а'; break;
+                case 'o': c = 'о'; break;
+                case 'e': c = 'е'; break;
+                case 'c': c = 'с'; break;
+                case 'p': c = 'р'; break;
+                case 'x': c = 'х'; break;
+                case 'y': c = 'у'; break;
+                case 'k': c = 'к'; break;
+                case 'm': c = 'м'; break;
+                case 't': c = 'т'; break;
+            }
 
-        text = Regex.Replace(text, @"(.)\1+", "$1");
+            if(char.IsLetterOrDigit(c))
+            {
+                stringBuilder.Append(c);
+            }
+        }
 
-        return text;
+        if(stringBuilder.Length <= 1) return stringBuilder.ToString();
+
+        int writeIndex = 1;
+        for(int readIndex = 1; readIndex < stringBuilder.Length; readIndex++)
+        {
+            if(stringBuilder[readIndex] != stringBuilder[readIndex - 1])
+            {
+                stringBuilder[writeIndex] = stringBuilder[readIndex];
+                writeIndex++;
+            }
+        }
+
+        stringBuilder.Length = writeIndex;
+        return stringBuilder.ToString();
     }
 }

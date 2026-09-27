@@ -8,30 +8,46 @@ public class ConsoleSettingsScr : MonoBehaviour
 
     private RectTransform rect;
 
-    void Awake()
+    private void Awake()
     {
-        rect = console.GetComponent<RectTransform>();
+        if(console != null)
+        {
+            rect = console.GetComponent<RectTransform>();
+        }
     }
 
-    void Start()
+    private void Start()
     {
         bool isActive = PlayerPrefs.GetInt("IsShowConsole", 0) != 0;
-        console.SetActive(isActive);
+        if(console != null)
+        {
+            console.SetActive(isActive);
+        }
+    }
+
+    private void OnDestroy()
+    {
+        if(rect != null)
+        {
+            rect.DOKill();
+        }
     }
 
     public void SetConsoleVisibility(bool active)
     {
+        if(rect == null || console == null) return;
+
+        rect.DOKill();
+
         if(active)
         {
-            rect.DOKill();
             rect.localScale = Vector3.zero;
             console.SetActive(true);
             rect.DOScale(Vector3.one, 0.3f).SetEase(Ease.OutBack);
-        } else
+        }
+        else
         {
-            rect.DOKill();
             rect.localScale = Vector3.one;
-            console.SetActive(true);
             rect.DOScale(Vector3.zero, 0.3f).SetEase(Ease.InBack).OnComplete(() => console.SetActive(false));
         }
     }

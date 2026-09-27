@@ -21,7 +21,7 @@ public class TimerScr : MonoBehaviour
     [HideInInspector] public bool TimerOn = false;
     private int TimeLeft;
 
-    private static readonly string[] CachedNumbers = { "0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10" };
+    private static readonly string[] CachedNumbers = { "0", "1", "2", "3" };
     private static readonly string GoalText = "GOAL";
     private Coroutine timerCoroutine;
 

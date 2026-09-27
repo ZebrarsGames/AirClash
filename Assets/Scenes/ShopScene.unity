@@ -15976,7 +15976,39 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dc4f78b14a449ec429a81d232a07f527, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::AchievementsHandler
-  animationsHandler: {fileID: 1358771901}
+  allAchievements:
+  - {fileID: 11400000, guid: 9019ba8a68d7d4848802224fe12f9d23, type: 2}
+  - {fileID: 11400000, guid: 7324a8d4f4e9dca468de57ea5525806a, type: 2}
+  - {fileID: 11400000, guid: 37c7937f98ed5d44c853cbe7ac6db006, type: 2}
+  - {fileID: 11400000, guid: 8bf10fdb1ae11134c9e79ef53cde1e1c, type: 2}
+  - {fileID: 11400000, guid: c39a6940c0c60474a9a0525fa251dd94, type: 2}
+  - {fileID: 11400000, guid: 6fc5aadf50b332b4085c01c842f90579, type: 2}
+  - {fileID: 11400000, guid: 8fcbc1f9ad67ce743b276fd4053e2e38, type: 2}
+  - {fileID: 11400000, guid: 2fcddc53bf7a12842b03dc4774c90d4f, type: 2}
+  - {fileID: 11400000, guid: cc4e3e4aec0f2864cb7dd3af746da7f7, type: 2}
+  - {fileID: 11400000, guid: 8d1f229798acc3d418eb361db88f6ff2, type: 2}
+  - {fileID: 11400000, guid: 1fbc76e4a89cf084696bb735c459fc73, type: 2}
+  - {fileID: 11400000, guid: 8a50f5fbc12563045a13853c1a13dec9, type: 2}
+  - {fileID: 11400000, guid: 0f3a2c92578e577459afedf8fe9b33f8, type: 2}
+  - {fileID: 11400000, guid: 8b2ae0ea192866441a980f8ec76b138f, type: 2}
+  - {fileID: 11400000, guid: 7e832a3310fc1fa4aba27b844cd27ec6, type: 2}
+  - {fileID: 11400000, guid: 64b465030c7b9204b87a4ac84426e0bc, type: 2}
+  - {fileID: 11400000, guid: 93c66676089d8cc43a0314b1383777f5, type: 2}
+  - {fileID: 11400000, guid: 06c699b40d003cc4e9999f784ea57280, type: 2}
+  - {fileID: 11400000, guid: f1cc616dec3beff4db7549bfce5938c4, type: 2}
+  - {fileID: 11400000, guid: 87b28b0f6be24f3438d1a6675f228f70, type: 2}
+  - {fileID: 11400000, guid: 22a7a0795a628534e9a9699f9944c8e4, type: 2}
+  - {fileID: 11400000, guid: 9529330783395324b8d76ab0beabe243, type: 2}
+  - {fileID: 11400000, guid: 74c70a3dbbd2cd24da24b56dbb0a74b0, type: 2}
+  - {fileID: 11400000, guid: ee86d0714356c8a499912194790805c4, type: 2}
+  - {fileID: 11400000, guid: 4967d2ee2633b5c408a294d2d52ecc47, type: 2}
+  - {fileID: 11400000, guid: 44421b8eaf07c234da7254c97b910879, type: 2}
+  - {fileID: 11400000, guid: 381f8ea8809f09a48b574b39156eb76c, type: 2}
+  - {fileID: 11400000, guid: 03f5b55d3c1b06a4d87a6a2afb283bc4, type: 2}
+  - {fileID: 11400000, guid: 135b51cf69ec43548b4730501f3a0854, type: 2}
+  - {fileID: 11400000, guid: 54f4c21a7843d994681753abac958176, type: 2}
+  - {fileID: 11400000, guid: 1b6571d835a192c48b4527301e8cf748, type: 2}
+  achievementPopup: {fileID: 1358771901}
 --- !u!4 &1029591087
 Transform:
   m_ObjectHideFlags: 0
@@ -19811,7 +19843,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SaveManager
   xpHandler: {fileID: 1512294405}
-  achievementsHandler: {fileID: 1029591086}
   moneyHandler: {fileID: 2065031118}
 --- !u!4 &1251573711
 Transform:
@@ -20997,7 +21028,7 @@ GameObject:
   - component: {fileID: 1358771902}
   - component: {fileID: 1358771901}
   m_Layer: 0
-  m_Name: AnimationsHandler
+  m_Name: AchievementPopup
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -21015,9 +21046,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2fb053fdc1b840642962e774de315887, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::AnimationsHandler
-  achievementPanel: {fileID: 2062009225}
-  achievementText: {fileID: 468995931}
-  endDotToMoveAchievementPanel: {x: 0, y: -90}
+  panelTransform: {fileID: 2062009226}
+  titleText: {fileID: 468995931}
+  targetAnchoredPosition: {x: 0, y: -80}
+  moveDuration: 0.5
+  displayDuration: 2.5
+  showEase: 27
+  hideEase: 5
 --- !u!4 &1358771902
 Transform:
   m_ObjectHideFlags: 0
@@ -22801,9 +22836,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 808fa19226bafd74e88dbfdb4f09588d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SessionTimerUIScr
-  warningPanel: {fileID: 2062009225}
+  warningPanel: {fileID: 2062009226}
   warningTextTitle: {fileID: 2141811641}
   warningTextBody: {fileID: 468995931}
+  targetAnchorPosition: {x: 0, y: -90}
+  animationDuration: 2
+  displayDuration: 5
 --- !u!4 &1495359637
 Transform:
   m_ObjectHideFlags: 0
@@ -24205,9 +24243,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b35d257f67d6ca34e8c9545b641dc527, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SessionTimer
-  onMinuteChanged:
-    m_PersistentCalls:
-      m_Calls: []
 --- !u!4 &1598077384
 Transform:
   m_ObjectHideFlags: 0
@@ -31510,7 +31545,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &2062009226
 RectTransform:
   m_ObjectHideFlags: 0
@@ -32883,7 +32918,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 22400762, guid: 67117722a812a2e46ab8cb8eafbf5f5e, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -0.000015258789
+      value: 0.000015258789
       objectReference: {fileID: 0}
     - target: {fileID: 22426080, guid: 67117722a812a2e46ab8cb8eafbf5f5e, type: 3}
       propertyPath: m_AnchorMax.x

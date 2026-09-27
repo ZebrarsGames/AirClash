@@ -15,12 +15,19 @@ public class QuestItem : MonoBehaviour
     [Header("Scripts")]
     [SerializeField] private QuestsHandler questsHandler;
 
-    void Start() 
+    void Start()
     {
+        if(questsHandler == null) return;
+
         questNameText.text = questsHandler.GetQuestName(questId);
         questDescriptionText.text = questsHandler.GetQuestDescription(questId);
-        if(questsHandler.GetQuestProgress(questId) > questsHandler.GetQuestTarget(questId)) targetText.text = questsHandler.GetQuestTarget(questId) + "/" + questsHandler.GetQuestTarget(questId);
-        else targetText.text = questsHandler.GetQuestProgress(questId) + "/" + questsHandler.GetQuestTarget(questId);
+        
+        int progress = questsHandler.GetQuestProgress(questId);
+        int target = questsHandler.GetQuestTarget(questId);
+        int currentProgress = Mathf.Min(progress, target);
+
+        targetText.SetText("{0}/{1}", currentProgress, target);
+        
         questLogo.sprite = questsHandler.GetQuestIcon(questId);
         completeArrow.SetActive(QuestSaveSystem.GetIsCompleted(questId));
     }

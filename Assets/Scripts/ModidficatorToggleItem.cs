@@ -5,6 +5,6 @@ public class ModidficatorToggleItem : MonoBehaviour
 {
     [Header("Modificator Info")]
     public string ModificatorName;
-    public float ModificatorXMoney;
+    public float ModificatorMultiplyMoney;
     public Toggle ModificatorOpposite;
 }

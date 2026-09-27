@@ -10,50 +10,34 @@ public class QuestsUIScr : MonoBehaviour
 
     public void OnClickMoneyBtn()
     {
-        for (int i = 0; i < moneyQuests.Length; i++)
-        {
-            if (moneyQuests[i].activeSelf)
-            {
-                moneyQuests[i].SetActive(false);
-                
-                int nextIndex = (i + 1) % moneyQuests.Length;
-                
-                moneyQuests[nextIndex].SetActive(true);
-                moneyQuests[nextIndex].GetComponent<RectTransform>().DOScale(1.05f, 0.1f).OnComplete(() => moneyQuests[nextIndex].GetComponent<RectTransform>().DOScale(1f, 0.1f));
-                break;
-            }
-        }
+        CycleQuestArray(moneyQuests);
     }
 
     public void OnClickGoalBtn()
     {
-        for (int i = 0; i < goalsQuests.Length; i++)
-        {
-            if (goalsQuests[i].activeSelf)
-            {
-                goalsQuests[i].SetActive(false);
-                
-                int nextIndex = (i + 1) % goalsQuests.Length;
-                
-                goalsQuests[nextIndex].SetActive(true);
-                goalsQuests[nextIndex].GetComponent<RectTransform>().DOScale(1.05f, 0.1f).OnComplete(() => goalsQuests[nextIndex].GetComponent<RectTransform>().DOScale(1f, 0.1f));
-                break;
-            }
-        }
+        CycleQuestArray(goalsQuests);
     }
 
     public void OnClickXpBtn()
     {
-        for (int i = 0; i < xpQuests.Length; i++)
+        CycleQuestArray(xpQuests);
+    }
+
+    private void CycleQuestArray(GameObject[] quests)
+    {
+        for(int i = 0; i < quests.Length; i++)
         {
-            if (xpQuests[i].activeSelf)
+            if(quests[i].activeSelf)
             {
-                xpQuests[i].SetActive(false);
+                quests[i].SetActive(false);
                 
-                int nextIndex = (i + 1) % xpQuests.Length;
+                int nextIndex = (i + 1) % quests.Length;
                 
-                xpQuests[nextIndex].SetActive(true);
-                xpQuests[nextIndex].GetComponent<RectTransform>().DOScale(1.05f, 0.1f).OnComplete(() => xpQuests[nextIndex].GetComponent<RectTransform>().DOScale(1f, 0.1f));
+                quests[nextIndex].SetActive(true);
+                
+                Transform nextTransform = quests[nextIndex].transform; 
+                nextTransform.DOScale(1.05f, 0.1f).OnComplete(() => nextTransform.DOScale(1f, 0.1f));
+                
                 break;
             }
         }

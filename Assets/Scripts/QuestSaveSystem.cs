@@ -1,45 +1,82 @@
-using UnityEngine;
+using System.Collections.Generic;
 
 public static class QuestSaveSystem
 {
-    private const string CompletedSuffix = "_completed";
+    private static Dictionary<string, QuestData> _cachedSaves;
+
+    private static Dictionary<string, QuestData> Saves
+    {
+        get
+        {
+            if(_cachedSaves == null)
+            {
+                _cachedSaves = GlobalSaveManager.Data.quests.ToDictionary();
+            }
+            return _cachedSaves;
+        }
+    }
+
+    private static QuestData GetOrCreateQuest(string questId)
+    {
+        if (!Saves.TryGetValue(questId, out var questData))
+        {
+            questData = new QuestData();
+            Saves[questId] = questData;
+        }
+        return questData;
+    }
+
     public static void SetProgress(string questId, int progress)
     {
-        PlayerPrefs.SetInt(questId, progress);
-        PlayerPrefs.Save();
+        QuestData quest = GetOrCreateQuest(questId);
+        quest.progress = progress;
+        SaveToGlobal();
     }
+
     public static void PlusProgress(string questId, int progress)
     {
-        int oldProgress = PlayerPrefs.GetInt(questId, 0);
-        PlayerPrefs.SetInt(questId, oldProgress + progress);
-        PlayerPrefs.Save();
+        QuestData quest = GetOrCreateQuest(questId);
+        quest.progress += progress;
+        SaveToGlobal();
     }
+
     public static int GetProgress(string questId)
     {
-        int progress = PlayerPrefs.GetInt(questId, 0);
-        return progress;
+        if(Saves.TryGetValue(questId, out var questData))
+        {
+            return questData.progress;
+        }
+        return 0;
     }
+
     public static bool GetIsCompleted(string questId)
     {
-        bool isCompleted;
-        if(PlayerPrefs.GetInt(questId + CompletedSuffix, 0) == 0)
+        if(Saves.TryGetValue(questId, out var questData))
         {
-            isCompleted = false;
-        } else
-        {
-            isCompleted = true;
+            return questData.isCompleted;
         }
-        return isCompleted;
+        return false;
     }
+
     public static void SetCompleted(string questId)
     {
-        PlayerPrefs.SetInt(questId + CompletedSuffix, 1);
-        PlayerPrefs.Save();
+        QuestData quest = GetOrCreateQuest(questId);
+        quest.isCompleted = true;
+        SaveToGlobal();
     }
+
     public static void RemoveQuest(string questId)
     {
-        PlayerPrefs.DeleteKey(questId);
-        PlayerPrefs.DeleteKey(questId + CompletedSuffix);
-        PlayerPrefs.Save();
+        if(Saves.ContainsKey(questId))
+        {
+            Saves.Remove(questId);
+            SaveToGlobal();
+        }
+    }
+
+    private static void SaveToGlobal()
+    {
+        GlobalSaveManager.Data.quests.FromDictionary(Saves);
+        GlobalSaveManager.MarkAsDirty(); 
     }
 }

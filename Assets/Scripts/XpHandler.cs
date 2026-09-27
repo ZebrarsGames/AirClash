@@ -9,14 +9,10 @@ public class XpHandler : MonoBehaviour
     private int oldXp = 0;
     private int xpToNextLevel = 100;
     private int level = 1;
+    
     public UnityEvent onLevelUp; 
     [SerializeField] private AchievementsHandler achievementsHandler;
     [SerializeField] private SaveManager saveManager;
-    public int GetXP() => currentXP;
-    public int GetOldXP() => oldXp;
-    public int GetXpToNextLevel() => xpToNextLevel;
-    public int GetLevel() => level;
-    public int GetTotalXP() => totalXP;
 
     public class XpAward
     {
@@ -29,14 +25,13 @@ public class XpHandler : MonoBehaviour
 
     private Dictionary<string, XpAward> xpAwards = new Dictionary<string, XpAward>();
 
-    void Awake()
+    private void Awake()
     {
-        currentXP = saveManager.GetData().XP;
-        if(saveManager.GetData().XpLevel == 0) level = 1;
-        else level = saveManager.GetData().XpLevel;
-        if(saveManager.GetData().XpToNextLevel == 0) xpToNextLevel = 100;
-        else xpToNextLevel = saveManager.GetData().XpToNextLevel;
-        totalXP = saveManager.GetData().TotalXP;
+        var data = saveManager.GetData();
+        currentXP = data.XP;
+        level = data.XpLevel == 0 ? 1 : data.XpLevel;
+        xpToNextLevel = data.XpToNextLevel == 0 ? 100 : data.XpToNextLevel;
+        totalXP = data.TotalXP;
         Log();
 
         xpAwards.Add("AwardFor1Level", new XpAward { TypeOfAward = "Money", Award = 10, RequiredLevel = 1 });
@@ -52,9 +47,10 @@ public class XpHandler : MonoBehaviour
         xpAwards.Add("AwardFor9Level", new XpAward { TypeOfAward = "Money", Award = 170, RequiredLevel = 9 });
         xpAwards.Add("AwardFor10Level", new XpAward { TypeOfAward = "Money", Award = 200, RequiredLevel = 10 });
         xpAwards.Add("AwardFor10LevelSkin", new XpAward { TypeOfAward = "Skin", SkinAward = "FireSkin", GuiSkinName = "Огонь", RequiredLevel = 10 });
+        
         for(int i = 11; i <= 30; i++)
         {
-            xpAwards.Add("AwardFor" + i + "Level", new XpAward { TypeOfAward = "Money", Award = i*15, RequiredLevel = i });
+            xpAwards.Add($"AwardFor{i}Level", new XpAward { TypeOfAward = "Money", Award = i * 15, RequiredLevel = i });
         }
     }
 
@@ -72,108 +68,58 @@ public class XpHandler : MonoBehaviour
         Log();
     }
 
-    public void SetXp(int amount)
-    {
-        currentXP = amount;
-        Save();
-        Log();
-    }
-
-    public void SetLevel(int amount)
-    {
-        level = amount;
-        Save();
-        Log();
-    }
-
-    public void SetTotalXp(int amount)
-    {
-        totalXP = amount;
-        Save();
-        Log();
-    }
-
-    public void SetXpToNextLevel(int amount)
-    {
-        xpToNextLevel = amount;
-        Save();
-        Log();
-    }
-
     private void LevelUp()
     {
         onLevelUp.Invoke();
         level++;
         xpToNextLevel += 50;
         UpdateAchievements();
-        foreach(var pair in xpAwards)
+
+        foreach(var xpAward in xpAwards.Values)
         {
-            XpAward xpAward = pair.Value;
             if(xpAward.RequiredLevel == level)
             {
                 switch(xpAward.TypeOfAward)
                 {
                     case "Money":
                         PlayerPrefs.SetInt("HowMoneyAdds", PlayerPrefs.GetInt("HowMoneyAdds") + xpAward.Award);
-                        PlayerPrefs.Save();
                         break;
-                    case "Skin" :
+                    case "Skin":
                         achievementsHandler.UpdateProgress("large_wardrobe", 1);
                         PlayerPrefs.SetInt(xpAward.SkinAward, 1);
-                        PlayerPrefs.Save();
                         break;   
                 }
             }
         }
+        PlayerPrefs.Save();
         Save();
         Log();
     }
 
-    public float GetXPProgress()
-    {
-        return (float)currentXP / xpToNextLevel;
-    }
-
-    public float GetOldXPProgress()
-    {
-        return (float)oldXp / xpToNextLevel;
-    }
-
-    public float GetXPProgress(int _currentXP, int _xpToNextLevel)
-    {
-        return (float)_currentXP / _xpToNextLevel;
-    }
-
-    public float GetXPProgress(int _currentXP)
-    {
-        return (float)_currentXP / xpToNextLevel;
-    }
-
-    private void Save()
-    {
-        saveManager.SaveData();
-    }
-
-    private void Log()
-    {
-        Debug.Log("Current Xp: " + currentXP);
-        Debug.Log("Current level: " + level);
-    }
-    public void ResetOldXp() 
-    {
-        oldXp = currentXP; 
-    }
+    public int GetXP() => currentXP;
+    public int GetOldXP() => oldXp;
+    public int GetXpToNextLevel() => xpToNextLevel;
+    public int GetLevel() => level;
+    public int GetTotalXP() => totalXP;
+    public void SetXp(int amount) { currentXP = amount; Save(); Log(); }
+    public void SetLevel(int amount) { level = amount; Save(); Log(); }
+    public void SetTotalXp(int amount) { totalXP = amount; Save(); Log(); }
+    public void SetXpToNextLevel(int amount) { xpToNextLevel = amount; Save(); Log(); }
+    public float GetXPProgress() => (float)currentXP / xpToNextLevel;
+    public float GetOldXPProgress() => (float)oldXp / xpToNextLevel;
+    public float GetXPProgress(int _currentXP, int _xpToNextLevel) => (float)_currentXP / _xpToNextLevel;
+    public float GetXPProgress(int _currentXP) => (float)_currentXP / xpToNextLevel;
+    public void ResetOldXp() { oldXp = currentXP; }
     
-    public XpAward GetMoneyAwardForNextLevel()
-    {
-        return xpAwards[$"AwardFor{level + 1}Level"];
-    }
-
+    public XpAward GetMoneyAwardForNextLevel() => xpAwards[$"AwardFor{level + 1}Level"];
     public XpAward GetSkinAwardForNextLevel()
     {
         xpAwards.TryGetValue($"AwardFor{level + 1}LevelSkin", out var award);
         return award;
     }
+
+    private void Save() => saveManager.SaveData();
+    private void Log() { /* Debug.Log($"Current Xp: {currentXP} | Current level: {level}"); */ }
 
     private void UpdateAchievements()
     {

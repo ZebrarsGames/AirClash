@@ -10,23 +10,42 @@ using UnityEngine.Events;
 using System;
 using System.Threading.Tasks;
 
-[System.Serializable]
-public class StatusTextEvent : UnityEvent<string> { }
-[System.Serializable]
-public class IsServerProcessEvent : UnityEvent<bool> { }
-[System.Serializable]
-public class DataLoadFromCloudEvent : UnityEvent<PlayerData> { }
+[Serializable] public class StatusTextEvent : UnityEvent<string> { }
+[Serializable] public class IsServerProcessEvent : UnityEvent<bool> { }
+[Serializable] public class DataLoadFromCloudEvent : UnityEvent<PlayerData> { }
 
 public class FirebaseManager : MonoBehaviour
 {
-    private string lastSavedToken = "";
+    [Header("Events")]
     public StatusTextEvent statusTextEvent;
     public IsServerProcessEvent isServerProcessEvent;
     public DataLoadFromCloudEvent dataLoadFromCloudEvent;
+    
+    [Header("References")]
     public SaveManager saveManager;
 
-    [System.Serializable]
-    public class AuthData
+    // Кешированные данные для минимизации GC.Alloc
+    private string lastSavedToken = "";
+    private string saveFilePath;
+    private string avatarPath;
+    
+    // Кеш объектов для запросов (избегаем постоянных new)
+    private readonly AuthData authDataPayload = new AuthData();
+    private readonly SyncData syncDataPayload = new SyncData();
+    
+    // Кеш для корутин
+    private readonly WaitForSeconds waitOneSec = new WaitForSeconds(1f);
+    private readonly WaitForSeconds waitHalfSec = new WaitForSeconds(0.5f);
+    private readonly WaitForSeconds waitSmall = new WaitForSeconds(0.7f);
+
+    // Константы
+    private const string SERVER_URL = "https://airclashserver.onrender.com/";
+    private const string HEADER_SECRET = "x-game-secret";
+    private const string CONTENT_TYPE = "application/json";
+
+    #region Data Models
+    [Serializable]
+    private class AuthData
     {
         public string username;
         public string password;
@@ -34,8 +53,8 @@ public class FirebaseManager : MonoBehaviour
         public int timezone_offset;
     }
 
-    [System.Serializable]
-    public class SyncData
+    [Serializable]
+    private class SyncData
     {
         public string username;
         public string password;
@@ -43,8 +62,8 @@ public class FirebaseManager : MonoBehaviour
         public string game_data;
     }
 
-    [System.Serializable]
-    public class ServerResponse
+    [Serializable]
+    private class ServerResponse
     {
         public string status;
         public string message;
@@ -52,210 +71,216 @@ public class FirebaseManager : MonoBehaviour
         public string action; 
     }
 
-    [System.Serializable]
-    public class CheckUserResponse
+    [Serializable]
+    private class CheckUserResponse
     {
         public string status;
         public bool exists;
     }
+    #endregion
+
+    void Awake()
+    {
+        // Кешируем пути к файлам один раз при создании скрипта
+        saveFilePath = Path.Combine(Application.persistentDataPath, "save.json");
+        avatarPath = Path.Combine(Application.persistentDataPath, "avatar.png");
+    }
 
     void Start()
     {
-        DontDestroyOnLoad(gameObject);
-        if(Application.isEditor && !(Application.internetReachability == NetworkReachability.NotReachable))
+        if(Application.isEditor && Application.internetReachability != NetworkReachability.NotReachable)
         {
             Debug.Log("[FirebaseManager] Запущено в редакторе Unity. Симулируем получение токена...");
             lastSavedToken = "TEST_EDITOR_TOKEN_12345";
-            string fakeDeviceId = "Editor_Computer_" + SystemInfo.deviceUniqueIdentifier.Substring(0, 5);
+            string fakeDeviceId = "Editor_" + SystemInfo.deviceUniqueIdentifier.Substring(0, 5);
             StartCoroutine(SendTokenToServer(fakeDeviceId, lastSavedToken));
+            return;
         }
-        else 
+        
+        if(!Permission.HasUserAuthorizedPermission("android.permission.POST_NOTIFICATIONS"))
         {
-            if(!Permission.HasUserAuthorizedPermission("android.permission.POST_NOTIFICATIONS"))
-            {
-                Permission.RequestUserPermission("android.permission.POST_NOTIFICATIONS");
-            }
-            if(Application.internetReachability == NetworkReachability.NotReachable) return;
-            FirebaseApp.CheckAndFixDependenciesAsync().ContinueWith(task => {
-                var dependencyStatus = task.Result;
-                if(dependencyStatus == DependencyStatus.Available) {
-                    InitializeFirebase();
-                } else {
-                    Debug.LogError($"[FirebaseManager] Не удалось запустить Firebase: {dependencyStatus}");
-                }
-            });
+            Permission.RequestUserPermission("android.permission.POST_NOTIFICATIONS");
         }
+
+        if(Application.internetReachability == NetworkReachability.NotReachable) return;
+
+        FirebaseApp.CheckAndFixDependenciesAsync().ContinueWith(task => 
+        {
+            if(task.Result == DependencyStatus.Available)
+            {
+                InitializeFirebase();
+            }
+            else
+            {
+                Debug.LogError($"[FirebaseManager] Не удалось запустить Firebase: {task.Result}");
+            }
+        });
     }
 
-    void InitializeFirebase()
+    private void InitializeFirebase()
     {
         FirebaseMessaging.TokenReceived += OnTokenReceived;
         FirebaseMessaging.RequestPermissionAsync();
     }
 
-    void OnTokenReceived(object sender, TokenReceivedEventArgs token)
+    private void OnTokenReceived(object sender, TokenReceivedEventArgs token)
     {
         Debug.Log($"[Android] Токен устройства получен: {token.Token}");
         lastSavedToken = token.Token;
     }
 
-    IEnumerator SendTokenToServer(string deviceId, string token)
-    {
-        string url = "https://airclashserver.onrender.com/saveToken"; 
-        string jsonPayload = $"{ItemsString(deviceId, token)}";
-
-        using(UnityWebRequest www = new UnityWebRequest(url, "POST"))
-        {
-            byte[] bodyRaw = System.Text.Encoding.UTF8.GetBytes(jsonPayload);
-            www.uploadHandler = new UploadHandlerRaw(bodyRaw);
-            www.downloadHandler = new DownloadHandlerBuffer();
-            www.SetRequestHeader("Content-Type", "application/json");
-            www.SetRequestHeader("x-game-secret", GameConfig.ApiSecret);
-
-            yield return www.SendWebRequest();
-
-            if(www.result != UnityWebRequest.Result.Success) {
-                Debug.LogError($"[FirebaseManager] Ошибка отправки токена: {www.error}");
-            } else {
-                Debug.Log("[FirebaseManager] Успех! Токен привязан к устройству.");
-            }
-        }
-    }
-
-    private string ItemsString(string deviceId, string token)
-    {
-        return $"{{\"device_id\":\"{deviceId}\",\"fcm_token\":\"{token}\",\"timezone_offset\":{(int)System.TimeZoneInfo.Local.GetUtcOffset(System.DateTime.Now).TotalMinutes}}}";
-    }
-
+    #region Public API
     public void AccountAuth(string inputUsername, string inputPassword)
     {
-        StartCoroutine(SendAuthRequest(inputUsername, inputPassword));
+        StartCoroutine(ProcessAuth(inputUsername, inputPassword));
     }
 
     public void SaveProgress(string inputUsername, string inputPassword)
     {
-        string saveFilePath = Path.Combine(Application.persistentDataPath, "save.json");
-        string avatarPath = Path.Combine(Application.persistentDataPath, "avatar.png");
+        GlobalSaveManager.SaveToDisk();
 
-        if(!File.Exists(saveFilePath))
+        string jsonPayload = GlobalSaveManager.GetCloudJson();
+
+        if(string.IsNullOrEmpty(jsonPayload))
         {
-            Debug.LogError("[FirebaseManager] Локальный файл сохранения не найден!");
-            statusTextEvent.Invoke("Локальный файл сохранения не найден!");
-            isServerProcessEvent.Invoke(false);
+            Debug.LogError("[FirebaseManager] Ошибка: JSON сохранений пуст!");
+            UpdateStatus("Ошибка: Нет данных для сохранения!", false);
             return;
         }
 
-        string localJsonData = File.ReadAllText(saveFilePath);
-        
-        PlayerData progress = JsonUtility.FromJson<PlayerData>(localJsonData);
-
-        if(File.Exists(avatarPath))
-        {
-            byte[] rawPngBytes = File.ReadAllBytes(avatarPath);
-
-            Texture2D tex = new Texture2D(2, 2);
-            if(tex.LoadImage(rawPngBytes))
-            {
-                byte[] compressedJpgBytes = tex.EncodeToJPG(75);
-                
-                progress.avatarBase64 = System.Convert.ToBase64String(compressedJpgBytes);
-                Debug.Log($"[FirebaseManager] Аватарка сжата в JPG. Размер: {compressedJpgBytes.Length / 1024} КБ");
-            }
-            Destroy(tex);
-        }
-        else
-        {
-            progress.avatarBase64 = "";
-        }
-
-        string finalJsonToSend = JsonUtility.ToJson(progress);
-
-        StartCoroutine(SendSyncRequest(inputUsername, inputPassword, "save", finalJsonToSend));
+        StartCoroutine(ProcessSync(inputUsername, inputPassword, "save", jsonPayload));
     }
 
     public void LoadProgress(string inputUsername, string inputPassword)
     {
-        StartCoroutine(SendSyncRequest(inputUsername, inputPassword, "load", ""));
+        StartCoroutine(ProcessSync(inputUsername, inputPassword, "load", ""));
     }
 
-    IEnumerator SendAuthRequest(string user, string pass)
+    public void DeleteAccount(string inputUsername, string inputPassword)
     {
-        statusTextEvent.Invoke("Заходим в аккаунт...");
-        isServerProcessEvent.Invoke(true);
-        string url = "https://airclashserver.onrender.com/registerOrLogin";
+        StartCoroutine(ProcessDelete(inputUsername, inputPassword));
+    }
+    #endregion
 
-        AuthData data = new AuthData();
-        data.username = user;
-        data.password = pass;
-        data.fcm_token = lastSavedToken;
-        data.timezone_offset = (int)System.TimeZoneInfo.Local.GetUtcOffset(System.DateTime.Now).TotalMinutes;
+    #region Core Logic Coroutines
+    private IEnumerator ProcessAuth(string user, string pass)
+    {
+        UpdateStatus("Заходим в аккаунт...", true);
 
-        string jsonPayload = JsonUtility.ToJson(data);
+        authDataPayload.username = user;
+        authDataPayload.password = pass;
+        authDataPayload.fcm_token = lastSavedToken;
+        authDataPayload.timezone_offset = (int)TimeZoneInfo.Local.GetUtcOffset(DateTime.Now).TotalMinutes;
 
-        using(UnityWebRequest www = new UnityWebRequest(url, "POST"))
+        yield return SendPostRequest<ServerResponse>("registerOrLogin", authDataPayload, res => 
         {
-            byte[] bodyRaw = System.Text.Encoding.UTF8.GetBytes(jsonPayload);
-            www.uploadHandler = new UploadHandlerRaw(bodyRaw);
-            www.downloadHandler = new DownloadHandlerBuffer();
-            www.SetRequestHeader("Content-Type", "application/json");
-            www.SetRequestHeader("x-game-secret", GameConfig.ApiSecret);
-
-            yield return www.SendWebRequest();
-
-            if(www.result != UnityWebRequest.Result.Success)
+            if(res.action == "register" || res.action == "login")
             {
-                HandleServerError(www.downloadHandler.text);
+                SaveCredentials(user, pass);
+                string msg = res.action == "register" ? "Аккаунт успешно создан!" : $"Добро пожаловать, {user}!";
+                Debug.Log($"[FirebaseManager] {msg}");
+                UpdateStatus(msg, false);
             }
             else
             {
-                ServerResponse res = JsonUtility.FromJson<ServerResponse>(www.downloadHandler.text);
-
-                if(res.action == "register")
-                {
-                    Debug.Log("[FirebaseManager] Аккаунт успешно создан!");
-                    PlayerPrefs.SetString("AccountPassword", pass);
-                    PlayerPrefs.SetString("Nick", user);
-                    PlayerPrefs.Save();
-                    statusTextEvent.Invoke("Аккаунт успешно создан!");
-                }
-                else if(res.action == "login")
-                {
-                    Debug.Log("[FirebaseManager] Успешный вход в аккаунт!");
-                    PlayerPrefs.SetString("AccountPassword", pass);
-                    PlayerPrefs.SetString("Nick", user);
-                    PlayerPrefs.Save();
-                    statusTextEvent.Invoke($"Добро пожаловать, {user}!");
-                }
-                else
-                {
-                    statusTextEvent.Invoke($"Авторизация: {res.message}");
-                }
-
-                isServerProcessEvent.Invoke(false);
+                UpdateStatus($"Авторизация: {res.message}", false);
             }
-        }
+        });
     }
 
-    IEnumerator SendSyncRequest(string user, string pass, string actionType, string gameDataJson)
+    private IEnumerator ProcessSync(string user, string pass, string actionType, string gameDataJson)
     {
-        statusTextEvent.Invoke("Синхронизируемся...");
-        isServerProcessEvent.Invoke(true);
-        string url = "https://airclashserver.onrender.com/syncProgress";
+        UpdateStatus("Синхронизируемся...", true);
 
-        SyncData data = new SyncData();
-        data.username = user;
-        data.password = pass;
-        data.action = actionType;
-        data.game_data = gameDataJson;;
+        syncDataPayload.username = user;
+        syncDataPayload.password = pass;
+        syncDataPayload.action = actionType;
+        syncDataPayload.game_data = gameDataJson;
 
-        string jsonPayload = JsonUtility.ToJson(data);
+        yield return SendPostRequest<ServerResponse>("syncProgress", syncDataPayload, res => 
+        {
+            if(actionType == "save")
+            {
+                SaveCredentials(user, pass);
+                Debug.Log("[FirebaseManager] Прогресс успешно загружен на сервер!");
+                UpdateStatus("Прогресс успешно загружен на сервер!", false);
+            }
+            else if(actionType == "load")
+            {
+                StartCoroutine(HandleLoadSuccess(user, pass, res));
+            }
+        });
+    }
 
-        using(UnityWebRequest www = new UnityWebRequest(url, "POST"))
-        { 
-            byte[] bodyRaw = System.Text.Encoding.UTF8.GetBytes(jsonPayload);
+    private IEnumerator HandleLoadSuccess(string user, string pass, ServerResponse res)
+    {
+        PlayerData loadedProgress;
+
+        if(string.IsNullOrEmpty(res.game_data) || res.game_data == "{}")
+        {
+            Debug.LogWarning("[FirebaseManager] res.game_data пуст! Генерируем стандартные данные...");
+            statusTextEvent.Invoke("Данные на сервере отсутствуют!");
+            yield return waitOneSec;
+            
+            statusTextEvent.Invoke("Генерируем стандартные данные...");
+            yield return waitOneSec;
+
+            GlobalSaveManager.OverwriteFromCloud(JsonUtility.ToJson(new GlobalSaveData()));
+            loadedProgress = saveManager.GetDefaultData();
+        }
+        else
+        {
+            GlobalSaveManager.OverwriteFromCloud(res.game_data);
+
+            loadedProgress = JsonUtility.FromJson<PlayerData>(res.game_data);
+        }
+
+        if(loadedProgress != null && !string.IsNullOrEmpty(loadedProgress.avatarBase64))
+        {
+            byte[] avatarBytes = Convert.FromBase64String(loadedProgress.avatarBase64);
+            File.WriteAllBytes(avatarPath, avatarBytes);
+            Debug.Log("[FirebaseManager] Аватарка успешно скачана из облака и сохранена на устройство!");
+        }
+
+        SaveCredentials(user, pass);
+        Debug.Log("[FirebaseManager] Прогресс успешно скачан из облака!");
+        UpdateStatus("Прогресс успешно скачан из облака и перезаписан на телефоне!", false);
+        
+        dataLoadFromCloudEvent.Invoke(loadedProgress);
+        
+        yield return waitSmall;
+        statusTextEvent.Invoke("Перезагружаем игру...");
+        yield return waitHalfSec;
+        
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+    }
+
+    private IEnumerator ProcessDelete(string user, string pass)
+    {
+        UpdateStatus("Удаление аккаунта...", true);
+
+        authDataPayload.username = user;
+        authDataPayload.password = pass;
+
+        yield return SendPostRequest<ServerResponse>("deleteAccount", authDataPayload, res => 
+        {
+            Debug.Log($"[FirebaseManager] Аккаунт полностью удалён: {res.message}");
+            UpdateStatus("Ваш аккаунт успешно удалён с серверов.", false);
+        });
+    }
+    #endregion
+
+    #region Universal Network Methods
+    private IEnumerator SendPostRequest<T>(string endpoint, object payload, Action<T> onSuccess)
+    {
+        string jsonPayload = JsonUtility.ToJson(payload);
+        byte[] bodyRaw = System.Text.Encoding.UTF8.GetBytes(jsonPayload);
+
+        using(UnityWebRequest www = new UnityWebRequest(SERVER_URL + endpoint, "POST"))
+        {
             www.uploadHandler = new UploadHandlerRaw(bodyRaw);
             www.downloadHandler = new DownloadHandlerBuffer();
-            www.SetRequestHeader("Content-Type", "application/json");
+            www.SetRequestHeader("Content-Type", CONTENT_TYPE);
             www.SetRequestHeader("x-game-secret", GameConfig.ApiSecret);
 
             yield return www.SendWebRequest();
@@ -263,142 +288,58 @@ public class FirebaseManager : MonoBehaviour
             if(www.result != UnityWebRequest.Result.Success)
             {
                 Debug.LogWarning($"[FirebaseManager] HTTP Код ошибки: {www.responseCode}");
-                HandleServerError(www.downloadHandler.text);
-                statusTextEvent.Invoke("Ошибка синхронизации! Проверьте интернет." + $" (HTTP Код ошибки: {www.responseCode})");
-                isServerProcessEvent.Invoke(false);
+                HandleServerError(www.downloadHandler.text, www.responseCode);
             }
             else
             {
-                ServerResponse res = JsonUtility.FromJson<ServerResponse>(www.downloadHandler.text);
-                
-                if(actionType == "save")
+                try
                 {
-                    Debug.Log("[FirebaseManager] Прогресс успешно загружен на сервер!");
-                    PlayerPrefs.SetString("AccountPassword", pass);
-                    PlayerPrefs.SetString("Nick", user);
-                    PlayerPrefs.Save();
-                    statusTextEvent.Invoke("Прогресс успешно загружен на сервер!");
-                    isServerProcessEvent.Invoke(false);
+                    T responseData = JsonUtility.FromJson<T>(www.downloadHandler.text);
+                    onSuccess?.Invoke(responseData);
                 }
-                else if(actionType == "load")
+                catch(Exception e)
                 {
-                    PlayerData loadedProgress;
-
-                    if(res.game_data == "{}")
-                    {
-                        Debug.LogWarning("[FirebaseManager] res.game_data равно ничему!");
-                        statusTextEvent.Invoke("Данные на сервере равны ничему!");
-                        yield return new WaitForSeconds(1.0f);
-                        statusTextEvent.Invoke("Генерируем стандартные данные...");
-                        yield return new WaitForSeconds(1.0f);
-                        loadedProgress = saveManager.GetDefaultData();
-                    } else
-                    {
-                        loadedProgress = JsonUtility.FromJson<PlayerData>(res.game_data);
-                    }
-
-                    string updatedJson = JsonUtility.ToJson(loadedProgress);
-                    string saveFilePath = Path.Combine(Application.persistentDataPath, "save.json");
-                    File.WriteAllText(saveFilePath, updatedJson);
-
-                    if(loadedProgress != null && !string.IsNullOrEmpty(loadedProgress.avatarBase64))
-                    {
-                        byte[] avatarBytes = System.Convert.FromBase64String(loadedProgress.avatarBase64);
-                        
-                        string avatarPath = Path.Combine(Application.persistentDataPath, "avatar.png");
-                        File.WriteAllBytes(avatarPath, avatarBytes);
-                        
-                        Debug.Log("[FirebaseManager] Аватарка успешно скачана из облака и сохранена на устройство!");
-                    }
-
-                    Debug.Log($"[FirebaseManager] Прогресс успешно скачан из облака!");
-                    PlayerPrefs.SetString("AccountPassword", pass);
-                    PlayerPrefs.SetString("Nick", user);
-                    PlayerPrefs.Save();
-                    statusTextEvent.Invoke("Прогресс успешно скачан из облака и перезаписан на телефоне!");
-                    dataLoadFromCloudEvent.Invoke(loadedProgress);
-                    isServerProcessEvent.Invoke(false);
-                    yield return new WaitForSeconds(0.7f);
-                    statusTextEvent.Invoke("Перезагружаем игру...");
-                    yield return new WaitForSeconds(0.5f);
-                    int currentSceneIndex = SceneManager.GetActiveScene().buildIndex;
-                    SceneManager.LoadScene(currentSceneIndex);
+                    Debug.LogError($"[FirebaseManager] Ошибка парсинга JSON: {e.Message}");
+                    UpdateStatus("Ошибка обработки данных с сервера.", false);
                 }
             }
         }
     }
 
-    public void DeleteAccount(string inputUsername, string inputPassword)
+    private IEnumerator SendTokenToServer(string deviceId, string token)
     {
-        StartCoroutine(SendDeleteRequest(inputUsername, inputPassword));
-    }
+        string jsonPayload = $"{{\"device_id\":\"{deviceId}\",\"fcm_token\":\"{token}\",\"timezone_offset\":{(int)TimeZoneInfo.Local.GetUtcOffset(DateTime.Now).TotalMinutes}}}";
+        byte[] bodyRaw = System.Text.Encoding.UTF8.GetBytes(jsonPayload);
 
-    IEnumerator SendDeleteRequest(string user, string pass)
-    {
-        statusTextEvent.Invoke("Удаление аккаунта...");
-        isServerProcessEvent.Invoke(true);
-        
-        string url = "https://airclashserver.onrender.com/deleteAccount";
-
-        AuthData data = new AuthData();
-        data.username = user;
-        data.password = pass;
-
-        string jsonPayload = JsonUtility.ToJson(data);
-
-        using(UnityWebRequest www = new UnityWebRequest(url, "POST"))
+        using(UnityWebRequest www = new UnityWebRequest(SERVER_URL + "saveToken", "POST"))
         {
-            byte[] bodyRaw = System.Text.Encoding.UTF8.GetBytes(jsonPayload);
             www.uploadHandler = new UploadHandlerRaw(bodyRaw);
             www.downloadHandler = new DownloadHandlerBuffer();
-            www.SetRequestHeader("Content-Type", "application/json");
+            www.SetRequestHeader("Content-Type", CONTENT_TYPE);
             www.SetRequestHeader("x-game-secret", GameConfig.ApiSecret);
 
             yield return www.SendWebRequest();
 
             if(www.result != UnityWebRequest.Result.Success)
             {
-                HandleServerError(www.downloadHandler.text);
-                isServerProcessEvent.Invoke(false);
+                Debug.LogError($"[FirebaseManager] Ошибка отправки токена: {www.error}");
             }
             else
             {
-                ServerResponse res = JsonUtility.FromJson<ServerResponse>(www.downloadHandler.text);
-                Debug.Log($"[FirebaseManager] Аккаунт полностью удалён: {res.message}");
-                statusTextEvent.Invoke("Ваш аккаунт успешно удалён с серверов.");
-
-                isServerProcessEvent.Invoke(false);
-                
-                yield return new WaitForSeconds(1.5f);
+                Debug.Log("[FirebaseManager] Успех! Токен привязан к устройству.");
             }
-        }
-    }
-
-    void HandleServerError(string responseText)
-    {
-        try
-        {
-            ServerResponse res = JsonUtility.FromJson<ServerResponse>(responseText);
-            Debug.LogWarning($"[FirebaseManager] Ошибка сервера: {res.message}");
-            statusTextEvent.Invoke($"Ошибка сервера: {res.message}");
-            isServerProcessEvent.Invoke(false);
-        }
-        catch
-        {
-            Debug.LogWarning("[FirebaseManager] Неизвестная ошибка сети или сервера.");
-            statusTextEvent.Invoke("Неизвестная ошибка сети или сервера.");
-            isServerProcessEvent.Invoke(false);
         }
     }
 
     public static async Task<bool> CheckUserExistsAsync(string username)
     {
-        string url = $"https://airclashserver.onrender.com/checkUser?username={UnityWebRequest.EscapeURL(username)}";
+        string url = $"{SERVER_URL}checkUser?username={UnityWebRequest.EscapeURL(username)}";
 
         using(UnityWebRequest www = UnityWebRequest.Get(url))
         {
-            www.SetRequestHeader("x-game-secret", GameConfig.ApiSecret);
+            www.SetRequestHeader(HEADER_SECRET, GameConfig.ApiSecret);
             var operation = www.SendWebRequest();
+            
             while(!operation.isDone)
             {
                 await Task.Yield();
@@ -422,4 +363,53 @@ public class FirebaseManager : MonoBehaviour
             }
         }
     }
+    #endregion
+
+    #region Helpers
+    private void HandleServerError(string responseText, long responseCode)
+    {
+        try
+        {
+            ServerResponse res = JsonUtility.FromJson<ServerResponse>(responseText);
+            string msg = res != null && !string.IsNullOrEmpty(res.message) ? res.message : $"HTTP {responseCode}";
+            UpdateStatus($"Ошибка сервера: {msg}", false);
+        }
+        catch
+        {
+            UpdateStatus("Неизвестная ошибка сети или сервера.", false);
+        }
+    }
+
+    private void UpdateStatus(string message, bool isProcessing)
+    {
+        statusTextEvent?.Invoke(message);
+        isServerProcessEvent?.Invoke(isProcessing);
+    }
+
+    private void SaveCredentials(string user, string pass)
+    {
+        PlayerPrefs.SetString("AccountPassword", pass);
+        PlayerPrefs.SetString("Nick", user);
+        PlayerPrefs.Save();
+    }
+
+    private string GetCompressedAvatarBase64()
+    {
+        if(!File.Exists(avatarPath)) return "";
+
+        byte[] rawPngBytes = File.ReadAllBytes(avatarPath);
+        Texture2D tex = new Texture2D(2, 2);
+        string base64 = "";
+
+        if(tex.LoadImage(rawPngBytes))
+        {
+            byte[] compressedJpgBytes = tex.EncodeToJPG(75);
+            base64 = Convert.ToBase64String(compressedJpgBytes);
+            Debug.Log($"[FirebaseManager] Аватарка сжата в JPG. Размер: {compressedJpgBytes.Length / 1024} КБ");
+        }
+        
+        Destroy(tex);
+        return base64;
+    }
+    #endregion
 }

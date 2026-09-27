@@ -107,8 +107,6 @@ public class MainMenu : MonoBehaviour
         _wobbleTweener?.Kill();
     }
 
-    #region Initialization Logic
-
     private void CachePanels()
     {
         _allPanels = new List<GameObject>
@@ -185,10 +183,6 @@ public class MainMenu : MonoBehaviour
         }
     }
 
-    #endregion
-
-    #region Panel Management
-
     public void CloseAllPanels()
     {
         for(int i = 0; i < _allPanels.Count; i++)
@@ -223,10 +217,6 @@ public class MainMenu : MonoBehaviour
                 rect.localScale = Vector3.one;
             });
     }
-
-    #endregion
-
-    #region Game Modes & Difficulty Logic
 
     public void PlayBots(string difficultyKey)
     {
@@ -304,10 +294,6 @@ public class MainMenu : MonoBehaviour
     public void OnGoalsSliderChanged() => goalsText.SetText(goalsSlider.value.ToString("F0"));
     public void OnSpeedSliderChanged() => speedText.SetText(speedSlider.value.ToString("F1"));
 
-    #endregion
-
-    #region Navigation & Scene Loading
-
     public void OpenShop()
     {
         if(audioSource != null)
@@ -338,10 +324,6 @@ public class MainMenu : MonoBehaviour
 
     private void LoadMultiplayer() => SceneManager.LoadScene(SCENE_MULTIPLAYER);
 
-    #endregion
-
-    #region Simple Panel Switches
-
     public void SwitchToQuestPanel() => TogglePanels(dailyQuestPanel, questPanel);
     public void OpenDailyQuestPanel() => TogglePanels(questPanel, dailyQuestPanel);
     public void SwitchToEditProfilePanel() => TogglePanels(profilePanel, editProfilePanel);
@@ -367,10 +349,6 @@ public class MainMenu : MonoBehaviour
         if(hidePanel != null) hidePanel.SetActive(false);
         if(showPanel != null) showPanel.SetActive(true);
     }
-
-    #endregion
-
-    #region Helpers
 
     public void AddMoney(int amount)
     {
@@ -403,6 +381,4 @@ public class MainMenu : MonoBehaviour
                 dailyQuestHandler.UpdateQuestProgress(key, amount);
         }
     }
-
-    #endregion
 }

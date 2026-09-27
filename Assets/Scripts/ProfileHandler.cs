@@ -11,58 +11,82 @@ using System.Threading.Tasks;
 public class ProfileHandler : MonoBehaviour
 {
     [Header("UI")]
-    [SerializeField] RawImage avatarImage;
-    [SerializeField] TextMeshProUGUI nickText;
-    [SerializeField] TextMeshProUGUI moneyText;
-    [SerializeField] TextMeshProUGUI goalText;
-    [SerializeField] TextMeshProUGUI playtimeText;
-    [SerializeField] TextMeshProUGUI eloText;
-    [SerializeField] Image eloLevelImg;
-    [SerializeField] Texture defaultProfileIcon;
+    [SerializeField] private RawImage avatarImage;
+    [SerializeField] private TextMeshProUGUI nickText;
+    [SerializeField] private TextMeshProUGUI moneyText;
+    [SerializeField] private TextMeshProUGUI goalText;
+    [SerializeField] private TextMeshProUGUI playtimeText;
+    [SerializeField] private TextMeshProUGUI eloText;
+    [SerializeField] private Image eloLevelImg;
+    [SerializeField] private Texture defaultProfileIcon;
 
     [Header("Elo Levels Icons")]
     [SerializeField] private Sprite[] eloLevelsIcons;
     [SerializeField] private Sprite noInternetIcon;
 
     [Header("Scripts")]
-    [SerializeField] SaveManager saveManager;
+    [SerializeField] private SaveManager saveManager;
+
     private string avatarPath;
     private float _nextUpdate;
     private int _lastRenderedSeconds = -1; 
     private static readonly string PlaytimeTemplate = "Наиграно: {0:00}:{1:00}:{2:00}";
-    private bool isSetElo = true;
 
-    private readonly int[] levelThresholds = {
-        100,  //Уровень 1
-        400,  //Уровень 2
-        600,  //Уровень 3
-        800,  //Уровень 4
-        1050, //Уровень 5
-        1300, //Уровень 6
-        1600, //Уровень 7
-        1900, //Уровень 8
-        2250, //Уровень 9
-        2600, //Уровень 10
-        3000 //Уровень Мастер
+    private RectTransform _eloLevelRect;
+    private AspectRatioFitter _eloLevelFitter;
+    private RectTransform _eloTextRect;
+
+    private static readonly int[] LevelThresholds = {
+        100,  // Уровень 1
+        400,  // Уровень 2
+        600,  // Уровень 3
+        800,  // Уровень 4
+        1050, // Уровень 5
+        1300, // Уровень 6
+        1600, // Уровень 7
+        1900, // Уровень 8
+        2250, // Уровень 9
+        2600, // Уровень 10
+        3000  // Уровень Мастер
     };
 
+    void Awake()
+    {
+        avatarPath = Path.Combine(Application.persistentDataPath, "avatar.png");
+        
+        if(eloLevelImg != null)
+        {
+            _eloLevelRect = eloLevelImg.GetComponent<RectTransform>();
+            _eloLevelFitter = eloLevelImg.GetComponent<AspectRatioFitter>();
+        }
+        if(eloText != null)
+        {
+            _eloTextRect = eloText.GetComponent<RectTransform>();
+        }
+    }
+
     async void Start()
-    {   if(Application.internetReachability == NetworkReachability.NotReachable)
+    {   
+        bool isAccountExists = false;
+
+        if(Application.internetReachability == NetworkReachability.NotReachable)
         {
             eloText.text = "Ваш эло: нет подключения к интернету!";
             eloLevelImg.sprite = noInternetIcon;
-            isSetElo = false;
-        } else
+        } 
+        else
         {
-            bool isAccountExists = await GetIsExists(PlayerPrefs.GetString("Nick", "Ник"));
+            string nick = PlayerPrefs.GetString("Nick", "Ник");
+            isAccountExists = await GetIsExists(nick);
+            
             if(!isAccountExists)
             {
                 eloText.text = "Ваш эло: аккаунт не создан!";
                 eloLevelImg.sprite = noInternetIcon;
-                isSetElo = false;
             }
         }
-        SetProfileDataOnStart();
+
+        SetProfileDataOnStart(isAccountExists);
     }
 
     void Update()
@@ -91,17 +115,71 @@ public class ProfileHandler : MonoBehaviour
         saveManager.SaveData();
     }
 
-    public void SetProfileDataOnStart()
+    public void SetProfileDataOnStart(bool isAccountExists)
     {
         PlayerData currentData = saveManager.GetData();
-        avatarPath = Path.Combine(Application.persistentDataPath, "avatar.png");
         
-        moneyText.text = "Общие деньги: " + currentData.TotalMoney;
-        goalText.text = "Голы: " + currentData.Goals;
+        moneyText.SetText("Общие деньги: {0}", currentData.TotalMoney);
+        goalText.SetText("Голы: {0}", currentData.Goals);
         nickText.text = currentData.NickName;
         playtimeText.text = "Наиграно: " + PlaytimeTracker.Instance.GetFormattedPlaytime();
-        if(isSetElo) SetElo();
         
+        if(isAccountExists)
+        {
+            SetElo();
+        }
+
+        LoadAvatar();
+    }
+
+    private void SetElo()
+    {
+        eloLevelImg.enabled = false;
+        string savedNick = PlayerPrefs.GetString("Nick", "Ник");
+
+        StartCoroutine(GetPlayerEloRequest(savedNick, (elo) => {
+            if(elo < 100) 
+            {
+                eloText.text = "Эло: Ошибка сети";
+                return;
+            }
+
+            eloText.SetText("Эло: {0}", elo);
+            int targetIndex = 0;
+
+            for(int i = LevelThresholds.Length - 1; i >= 0; i--)
+            {
+                if(elo >= LevelThresholds[i])
+                {
+                    targetIndex = i;
+                    break;
+                }
+            }
+
+            if(targetIndex < eloLevelsIcons.Length)
+            {
+                eloLevelImg.sprite = eloLevelsIcons[targetIndex];
+                eloLevelImg.enabled = true;
+
+                bool isMaxLevel = (targetIndex == LevelThresholds.Length - 1);
+                if(isMaxLevel)
+                {
+                    if(_eloLevelFitter != null) _eloLevelFitter.aspectRatio = 2;
+                    if(_eloLevelRect != null) _eloLevelRect.localPosition = new Vector2(-50, 0);
+                    if(_eloTextRect != null) _eloTextRect.localPosition = new Vector3(-270, 0);
+                } 
+                else
+                {
+                    if(_eloLevelFitter != null) _eloLevelFitter.aspectRatio = 1;
+                    if(_eloLevelRect != null) _eloLevelRect.localPosition = Vector2.zero;
+                    if(_eloTextRect != null) _eloTextRect.localPosition = new Vector3(-180, 0);
+                }
+            }
+        }));
+    }
+
+    private void LoadAvatar()
+    {
         if(File.Exists(avatarPath))
         {
             byte[] bytes = File.ReadAllBytes(avatarPath);
@@ -109,6 +187,7 @@ public class ProfileHandler : MonoBehaviour
             Texture2D savedTexture = new Texture2D(2, 2);
             savedTexture.LoadImage(bytes);
 
+            ClearAvatarTexture();
             avatarImage.texture = savedTexture;
             Debug.Log("Сохраненный аватар успешно загружен при старте.");
         } 
@@ -118,64 +197,12 @@ public class ProfileHandler : MonoBehaviour
         }
     }
 
-    private async void SetElo()
+    private void ClearAvatarTexture()
     {
-        eloLevelImg.enabled = false;
-
-        string savedNick = PlayerPrefs.GetString("Nick", "Ник");
-        bool isAccountExists = await GetIsExists(savedNick);
-        
-        if(isAccountExists)
+        if(avatarImage.texture != null && avatarImage.texture != defaultProfileIcon)
         {
-            StartCoroutine(GetPlayerEloRequest(savedNick, (elo) => {
-                if(elo < 100) 
-                {
-                    eloText.text = "Эло: Ошибка сети";
-                    return;
-                }
-
-                eloText.text = $"Эло: {elo}";
-                int targetIndex = 0;
-
-                for(int i = levelThresholds.Length - 1; i >= 0; i--)
-                {
-                    if(elo >= levelThresholds[i])
-                    {
-                        targetIndex = i;
-                        break;
-                    }
-                }
-
-                if(targetIndex < eloLevelsIcons.Length)
-                {
-                    eloLevelImg.sprite = eloLevelsIcons[targetIndex];
-                    eloLevelImg.enabled = true;
-
-                    bool isMaxLevel = (targetIndex == levelThresholds.Length - 1);
-                    if(isMaxLevel)
-                    {
-                        eloLevelImg.gameObject.GetComponent<AspectRatioFitter>().aspectRatio = 2;
-                        eloLevelImg.gameObject.GetComponent<RectTransform>().localPosition = new Vector2(-50, 0);
-                        eloText.gameObject.GetComponent<RectTransform>().localPosition = new Vector3(-270, 0);
-                    } 
-                    else
-                    {
-                        eloLevelImg.gameObject.GetComponent<AspectRatioFitter>().aspectRatio = 1;
-                        eloLevelImg.gameObject.GetComponent<RectTransform>().localPosition = Vector2.zero;
-                        eloText.gameObject.GetComponent<RectTransform>().localPosition = new Vector3(-180, 0);
-                    }
-                    
-                }
-            }));
-        } 
-        else 
-        {
-            eloText.text = "Эло: 100";
-            if(eloLevelsIcons.Length > 0)
-            {
-                eloLevelImg.sprite = eloLevelsIcons[0];
-                eloLevelImg.enabled = true;
-            }
+            Destroy(avatarImage.texture);
+            avatarImage.texture = null;
         }
     }
 

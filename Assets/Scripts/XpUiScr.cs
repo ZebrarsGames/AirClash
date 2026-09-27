@@ -9,7 +9,6 @@ public class XpUiScr : MonoBehaviour
 {
     [Header("UI")]
     [SerializeField] private Slider xpSlider;
-    // [SerializeField] private Text awardForNextLevel;
     [SerializeField] private TextMeshProUGUI currentXpText;
     [SerializeField] private TextMeshProUGUI currentLvlText;
     [SerializeField] private TextMeshProUGUI nextLvlText;
@@ -24,47 +23,55 @@ public class XpUiScr : MonoBehaviour
     [SerializeField] private XpHandler xpHandler;
 
     private bool isAnim;
+    
+    private readonly WaitForSeconds wait1_1f = new WaitForSeconds(1.1f);
+    private readonly WaitForSeconds wait0_2f = new WaitForSeconds(0.2f);
+
     public bool GetIsAnim() => isAnim;
+
     void Start()
     {
-        if(SceneManager.GetActiveScene().name.Equals("BotsGame"))
+        string sceneName = SceneManager.GetActiveScene().name;
+        
+        if(sceneName.Equals("BotsGame"))
         {
             SetOldProgress(xpHandler.GetOldXPProgress());
-        } else if(SceneManager.GetActiveScene().name.Equals("GameScene"))
+        }
+        else if(sceneName.Equals("GameScene"))
         {
             SetProgress(xpHandler.GetXPProgress());
-        } else
+        }
+        else
         {
             SetProgress(xpHandler.GetXPProgress());
-            // if(xpHandler.GetSkinAwardForNextLevel() != null)
-            // {
-            //     awardForNextLevel.text = "Награда за следующий уровень: " + xpHandler.GetMoneyAwardForNextLevel().Award + " монет и скин " + xpHandler.GetSkinAwardForNextLevel().GuiSkinName ;
-            // } else
-            // {
-            //     awardForNextLevel.text = "Награда за следующий уровень: " + xpHandler.GetMoneyAwardForNextLevel().Award + " монет";
-            // }
         }
     }
 
     public void SetProgress(float progress)
     {
         xpSlider.value = progress;
-        currentXpText.text = xpHandler.GetXP().ToString() + " / " + xpHandler.GetXpToNextLevel().ToString() + " XP";
+        currentXpText.text = $"{xpHandler.GetXP()} / {xpHandler.GetXpToNextLevel()} XP";
         currentLvlText.text = xpHandler.GetLevel().ToString();
         nextLvlText.text = (xpHandler.GetLevel() + 1).ToString();
     }
+
     public void SetProgress(float progress, int currentXP)
     {
         xpSlider.value = progress;
-        currentXpText.text = currentXP.ToString() + " / " + xpHandler.GetXpToNextLevel().ToString() + " XP";
+        currentXpText.text = $"{currentXP} / {xpHandler.GetXpToNextLevel()} XP";
         currentLvlText.text = xpHandler.GetLevel().ToString();
         nextLvlText.text = (xpHandler.GetLevel() + 1).ToString();
     }
+
     public void SetOldProgress(float progress)
     {
         xpSlider.value = progress;
-        if(currentXpText == null) {Debug.Log("currentXpText = null"); return;}
-        currentXpText.text = xpHandler.GetOldXP().ToString() + " / " + xpHandler.GetXpToNextLevel().ToString() + " XP";
+        if(currentXpText == null) 
+        {
+            Debug.Log("currentXpText = null"); 
+            return;
+        }
+        currentXpText.text = $"{xpHandler.GetOldXP()} / {xpHandler.GetXpToNextLevel()} XP";
         currentLvlText.text = xpHandler.GetLevel().ToString();
         nextLvlText.text = (xpHandler.GetLevel() + 1).ToString();
     }
@@ -77,14 +84,16 @@ public class XpUiScr : MonoBehaviour
     IEnumerator LevelUpAnim()
     {
         isAnim = true;
-        yield return new WaitForSeconds(1.1f);
+        yield return wait1_1f;
+        
         int rand = UnityEngine.Random.Range(0, levelUpSounds.Length);
         audioSource.PlayOneShot(levelUpSounds[rand]);
+        
         panel.transform.DOScale(1.5f, 0.4f).OnComplete(() => panel.transform.DOScale(1.0f, 0.2f));
         canvasGroup.DOFade(1.0f, 0.4f).OnComplete(() => canvasGroup.DOFade(0f, 0.2f));
-        yield return new WaitForSeconds(0.2f);
+        
+        yield return wait0_2f;
         SetProgress(xpHandler.GetXPProgress());
         isAnim = false;
     }
 }
-

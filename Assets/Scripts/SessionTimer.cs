@@ -1,51 +1,74 @@
+using System;
+using System.Collections;
 using UnityEngine;
-using UnityEngine.Events;
 
-public class SessionTimer : MonoBehaviour
+[DisallowMultipleComponent]
+public sealed class SessionTimer : MonoBehaviour
 {
     public static SessionTimer Instance { get; private set; }
-    [Header("Events")]
-    [HideInInspector] public UnityEvent<int> onMinuteChanged = new UnityEvent<int>();
-    private float sessionStartTime;
-    private int lastTriggeredMinute = -1; 
 
-    void Awake()
+    public event Action<int> OnMinuteChanged;
+
+    private float _sessionStartTime;
+    private int _lastTriggeredMinute = -1;
+    private Coroutine _timerCoroutine;
+    
+    private readonly WaitForSeconds _oneSecondDelay = new WaitForSeconds(1.0f);
+
+    public int CurrentSessionMinutes { get; private set; }
+
+    private void Awake()
     {
-        if (Instance != null && Instance != this)
+        InitializeSingleton();
+    }
+
+    private void Start()
+    {
+        _sessionStartTime = Time.unscaledTime;
+        _timerCoroutine = StartCoroutine(TimerRoutine());
+    }
+
+    private void OnDestroy()
+    {
+        if(_timerCoroutine != null)
+        {
+            StopCoroutine(_timerCoroutine);
+        }
+    }
+
+    private IEnumerator TimerRoutine()
+    {
+        while(true)
+        {
+            UpdateSessionTime();
+            yield return _oneSecondDelay;
+        }
+    }
+
+    private void UpdateSessionTime()
+    {
+        float elapsedSeconds = Time.unscaledTime - _sessionStartTime;
+        
+        int currentMinute = (int)(elapsedSeconds / 60f);
+
+        if(currentMinute == _lastTriggeredMinute) return;
+        
+        _lastTriggeredMinute = currentMinute;
+        CurrentSessionMinutes = currentMinute;
+
+        OnMinuteChanged?.Invoke(currentMinute);
+    }
+
+    private void InitializeSingleton()
+    {
+        if(Instance != null && Instance != this)
         {
             Destroy(gameObject);
             return;
         }
 
         Instance = this;
+        transform.SetParent(null);
         DontDestroyOnLoad(gameObject);
-
-        sessionStartTime = Time.realtimeSinceStartup;
-    }
-
-    void FixedUpdate()
-    {
-        CheckSessionWarnings();
-    }
-
-    public int GetSessionTimeMinutes()
-    {
-        float currentSessionTime = Time.realtimeSinceStartup - sessionStartTime;
-
-        int minutes = Mathf.FloorToInt(currentSessionTime / 60f);
-
-        return minutes;
-    } 
-
-    private void CheckSessionWarnings()
-    {
-        int currentMinute = GetSessionTimeMinutes();
-
-        if (currentMinute != lastTriggeredMinute)
-        {
-            lastTriggeredMinute = currentMinute;
-            
-            onMinuteChanged.Invoke(currentMinute);
-        }
     }
 }

@@ -18,6 +18,9 @@ public class BotsAI : MonoBehaviour
     [SerializeField] private float minY;
     [SerializeField] private float maxY;
 
+    [Header("Human-like Behavior")]
+    [SerializeField] private float reactionSpeed = 15f;
+
     private Transform puckTransform;
     private TrailRenderer trailRenderer;
     private float baseSpeed;
@@ -25,6 +28,10 @@ public class BotsAI : MonoBehaviour
     private float botOffsetY;
     private int score1;
     private int score2;
+
+    private Vector2 currentTargetDestination;
+    private float decisionTimer;
+    private float currentWanderOffset;
 
     void Start()
     {
@@ -46,6 +53,8 @@ public class BotsAI : MonoBehaviour
         {
             trailRenderer.enabled = PlayerPrefs.GetInt("Trail", 1) == 1;
         }
+
+        currentTargetDestination = botStartPos;
     }
 
     void FixedUpdate()
@@ -59,55 +68,63 @@ public class BotsAI : MonoBehaviour
 
         Vector2 puckPos = puckTransform.position;
         Vector2 currentBotPos = botRb.position;
-        Vector2 targetDestination = currentBotPos;
+        Vector2 idealDestination = currentBotPos;
         float currentSpeed = moveSpeed;
 
         if(puckPos.x > 0 && puckPos.x < 2f)
         {
-            puckPos.x = (-puckPos.x) - botOffsetX;
-            puckPos.y += (Random.value > 0.5f) ? botOffsetY : -botOffsetY;
+            idealDestination.x = (-puckPos.x) - botOffsetX;
             
-            targetDestination = puckPos;          
+            decisionTimer += Time.fixedDeltaTime;
+            if(decisionTimer > 0.4f)
+            {
+                currentWanderOffset = (Random.value > 0.5f) ? botOffsetY : -botOffsetY;
+                decisionTimer = 0f;
+            }
+            
+            idealDestination.y = puckPos.y + currentWanderOffset;
             currentSpeed = moveSpeed * 0.25f;
         } 
         else if(puckPos.x > 2f)
         {
-            targetDestination = botStartPos;
+            idealDestination = botStartPos;
             currentSpeed = moveSpeed * 0.33f;
         } 
         else if((puckPos.x < 0 && (puckPos.y > 4f || puckPos.y < -4f)) || (puckPos.x < -6f && (puckPos.y > 3.5f || puckPos.y < -3.5f)))
         {
-            targetDestination = botStartPos;
+            idealDestination = botStartPos;
             currentSpeed = moveSpeed * 0.25f;
         } 
         else if(puckPos.x < -6f)
         {
-            targetDestination = puckPos;
+            idealDestination = puckPos;
             currentSpeed = moveSpeed * 1.5f;
         } 
         else
         {
+            idealDestination.x = puckPos.x - puckKoof.x;
+            
             if(puckPos.y > 0)
             {
-                Vector2 offset = new Vector2(puckKoof.x, puckKoof.y + 0.5f);
-                targetDestination = puckPos - offset;
+                idealDestination.y = puckPos.y - (puckKoof.y + 0.5f);
             } 
             else if(puckPos.y < 0)
             {
-                Vector2 offset = new Vector2(puckKoof.x, puckKoof.y - 0.5f);
-                targetDestination = puckPos - offset;
+                idealDestination.y = puckPos.y - (puckKoof.y - 0.5f);
             } 
             else
             {
-                targetDestination = puckPos;
+                idealDestination.y = puckPos.y;
             }
             currentSpeed = moveSpeed;
         }
 
-        targetDestination.x = Mathf.Clamp(targetDestination.x, minX, maxX);
-        targetDestination.y = Mathf.Clamp(targetDestination.y, minY, maxY);
+        idealDestination.x = Mathf.Clamp(idealDestination.x, minX, maxX);
+        idealDestination.y = Mathf.Clamp(idealDestination.y, minY, maxY);
 
-        Vector2 direction = targetDestination - currentBotPos;
+        currentTargetDestination = Vector2.Lerp(currentTargetDestination, idealDestination, Time.fixedDeltaTime * reactionSpeed);
+
+        Vector2 direction = currentTargetDestination - currentBotPos;
         float sqrDistance = direction.sqrMagnitude;
 
         if(sqrDistance > 0.0001f)
@@ -118,7 +135,7 @@ public class BotsAI : MonoBehaviour
             float maxSpeedPossible = fixedDelta > 0f ? (distance / fixedDelta) : currentSpeed;
             float speedThisFrame = Mathf.Min(currentSpeed, maxSpeedPossible);
             
-            botRb.linearVelocity = direction / distance * speedThisFrame;
+            botRb.linearVelocity = (direction / distance) * speedThisFrame;
         }
         else
         {
