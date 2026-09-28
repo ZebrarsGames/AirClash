@@ -117,7 +117,11 @@ public class SettingsHandler : MonoBehaviour
 
     public void OnDebugConsoleToggleChanged() => PlayerPrefs.SetInt(KeyIsShowConsole, debugConsoleToggle.isOn ? 1 : 0);
 
-    public void OnVibrationToggleChanged() => PlayerPrefs.SetInt(KeyVibration, vibrationToggle.isOn ? 1 : 0);
+    public void OnVibrationToggleChanged() 
+    {
+        PlayerPrefs.SetInt(KeyVibration, vibrationToggle.isOn ? 1 : 0);
+        VibrationHandler.SetVibrationEnabled(vibrationToggle.isOn);
+    }
 
     public void ShowTelegram() => Application.OpenURL(UrlTelegram);
     public void ShowGitHub() => Application.OpenURL(UrlGitHub);
