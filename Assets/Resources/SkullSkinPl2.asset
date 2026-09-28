@@ -14,10 +14,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::SkinData
   skinName: SkullSkinPl2
   skinGuiName: "\u0421\u043A\u0435\u043B\u0435\u0442"
-  skinDescripton: "\u0421\u0442\u0440\u0430\u0448\u043D\u043E?"
+  skinDescription: "\u0421\u0442\u0440\u0430\u0448\u043D\u043E?"
   sprite: {fileID: 21300000, guid: 193c4a156062df343b416ee92c019f34, type: 3}
+  rarity: 2
+  price: 50
   particles: {fileID: 0}
   trail: {fileID: 0}
   sound: {fileID: 8300000, guid: 8346d24a7b5724c4ba889b8a1d541bf7, type: 3}
-  rarity: 2
-  price: 50

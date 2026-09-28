@@ -14,10 +14,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::SkinData
   skinName: RadiationSkin
   skinGuiName: "\u0420\u0430\u0434\u0438\u0430\u0446\u0438\u044F"
-  skinDescripton: "26 \u0430\u043F\u0440\u0435\u043B\u044F 1986 \u0433\u043E\u0434\u0430."
+  skinDescription: "\u0412\u043E\u0437\u043C\u043E\u0436\u043D\u043E \u043C\u0443\u0442\u0438\u0440\u043E\u0432\u0430\u043D\u0438\u0435
+    \u0414\u041D\u041A"
   sprite: {fileID: 21300000, guid: e1f0a6ed810f25c4a97f2ef0d110d41c, type: 3}
+  rarity: 3
+  price: 120
   particles: {fileID: 0}
   trail: {fileID: 781314714706163791, guid: 425051b7e4d2c324ca54de950c114a5d, type: 3}
   sound: {fileID: 8300000, guid: 8346d24a7b5724c4ba889b8a1d541bf7, type: 3}
-  rarity: 3
-  price: 120

@@ -14,11 +14,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::SkinData
   skinName: ZebraSkin
   skinGuiName: "\u0417\u0435\u0431\u0440\u0430"
-  skinDescripton: "\u0413\u0434\u0435-\u0442\u043E \u044F \u0443\u0436\u0435 \u0432\u0438\u0434\u0435\u043B
+  skinDescription: "\u0413\u0434\u0435-\u0442\u043E \u044F \u0443\u0436\u0435 \u0432\u0438\u0434\u0435\u043B
     \u0437\u0435\u0431\u0440\u0443..."
   sprite: {fileID: 21300000, guid: 00f83c487c67f4040960c5e9c3ed1760, type: 3}
+  rarity: 1
+  price: 30
   particles: {fileID: 0}
   trail: {fileID: 6490042533495927846, guid: 1dc40912b3567ae499fa531a907b87c7, type: 3}
   sound: {fileID: 8300000, guid: 8346d24a7b5724c4ba889b8a1d541bf7, type: 3}
-  rarity: 1
-  price: 30

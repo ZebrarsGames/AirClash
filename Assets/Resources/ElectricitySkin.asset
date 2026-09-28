@@ -14,10 +14,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::SkinData
   skinName: ElectricitySkin
   skinGuiName: "\u042D\u043B\u0435\u043A\u0442\u0440\u0438\u0447\u0435\u0441\u0442\u0432\u043E"
-  skinDescripton: "220 \u0432\u043E\u043B\u044C\u0442!"
+  skinDescription: "220 \u0432\u043E\u043B\u044C\u0442!"
   sprite: {fileID: 21300000, guid: d8da9ab44f1efbe438a4522e892b1e81, type: 3}
+  rarity: 4
+  price: 220
   particles: {fileID: 0}
   trail: {fileID: 6524300441249125066, guid: b464ba128f70ec448bd8ed673b761d52, type: 3}
   sound: {fileID: 8300000, guid: 982b33b702aae444b99862a7ead4b734, type: 3}
-  rarity: 4
-  price: 220

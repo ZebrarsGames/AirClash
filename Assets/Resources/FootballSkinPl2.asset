@@ -14,10 +14,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::SkinData
   skinName: FootballSkinPl2
   skinGuiName: "\u041C\u044F\u0447"
-  skinDescripton: "\u0421\u044B\u0433\u0440\u0430\u0435\u043C \u0432 \u0444\u0443\u0442\u0431\u043E\u043B?"
+  skinDescription: "\u0421\u044B\u0433\u0440\u0430\u0435\u043C \u0432 \u0444\u0443\u0442\u0431\u043E\u043B?"
   sprite: {fileID: 21300000, guid: 5fb30d813e6841f43bba3fdb10ddcb5b, type: 3}
+  rarity: 3
+  price: 100
   particles: {fileID: 0}
   trail: {fileID: 0}
   sound: {fileID: 8300000, guid: 8346d24a7b5724c4ba889b8a1d541bf7, type: 3}
-  rarity: 3
-  price: 100
