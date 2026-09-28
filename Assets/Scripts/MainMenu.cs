@@ -113,7 +113,6 @@ public class MainMenu : MonoBehaviour
 
     private void Start()
     {
-        Debug.Log("Версия до обновления Unity");
         InitAudio();
         InitMainMenuAnimation();
         InitGameStateAndMoney();

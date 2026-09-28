@@ -49,7 +49,6 @@ public class CoinMover : MonoBehaviour
     private void Start()
     {
         _currentCoinsCount = moneyHandler.GetMoney();
-        UpdateUI();
     }
 
     public void AddCoins(Vector3 spawnPosition, int amount)
