@@ -49,6 +49,9 @@ public class SettingsHandler : MonoBehaviour
     private const string UrlTelegram = "https://t.me/airclash_dev";
     private const string UrlGitHub = "https://github.com/ZebrarsGames/AirClash";
     private const string UrlWebSite = "https://zebrarsgames.github.io/AirClash/";
+    private const string UrlYouTube = "https://www.youtube.com/@AirClash-Official";
+    private const string UrlTikTok = "https://www.tiktok.com/@airclash_dev";
+    private const string UrlItchIo = "https://zebraaar.itch.io/airclash";
 
     private void Start() 
     {
@@ -126,6 +129,9 @@ public class SettingsHandler : MonoBehaviour
     public void ShowTelegram() => Application.OpenURL(UrlTelegram);
     public void ShowGitHub() => Application.OpenURL(UrlGitHub);
     public void ShowWebSite() => Application.OpenURL(UrlWebSite);
+    public void ShowYouTube() => Application.OpenURL(UrlYouTube);
+    public void ShowTikTok() => Application.OpenURL(UrlTikTok);
+    public void ShowItchIo() => Application.OpenURL(UrlItchIo);
 
     public void SaveSettings()
     {
