@@ -24,26 +24,21 @@ public class FirebaseManager : MonoBehaviour
     [Header("References")]
     public SaveManager saveManager;
 
-    // Кешированные данные для минимизации GC.Alloc
     private string lastSavedToken = "";
     private string saveFilePath;
     private string avatarPath;
     
-    // Кеш объектов для запросов (избегаем постоянных new)
     private readonly AuthData authDataPayload = new AuthData();
     private readonly SyncData syncDataPayload = new SyncData();
     
-    // Кеш для корутин
     private readonly WaitForSeconds waitOneSec = new WaitForSeconds(1f);
     private readonly WaitForSeconds waitHalfSec = new WaitForSeconds(0.5f);
     private readonly WaitForSeconds waitSmall = new WaitForSeconds(0.7f);
 
-    // Константы
     private const string SERVER_URL = "https://airclashserver.onrender.com/";
     private const string HEADER_SECRET = "x-game-secret";
     private const string CONTENT_TYPE = "application/json";
 
-    #region Data Models
     [Serializable]
     private class AuthData
     {
@@ -77,7 +72,6 @@ public class FirebaseManager : MonoBehaviour
         public string status;
         public bool exists;
     }
-    #endregion
 
     void Awake()
     {
@@ -129,7 +123,6 @@ public class FirebaseManager : MonoBehaviour
         lastSavedToken = token.Token;
     }
 
-    #region Public API
     public void AccountAuth(string inputUsername, string inputPassword)
     {
         StartCoroutine(ProcessAuth(inputUsername, inputPassword));
@@ -160,9 +153,7 @@ public class FirebaseManager : MonoBehaviour
     {
         StartCoroutine(ProcessDelete(inputUsername, inputPassword));
     }
-    #endregion
 
-    #region Core Logic Coroutines
     private IEnumerator ProcessAuth(string user, string pass)
     {
         UpdateStatus("Заходим в аккаунт...", true);
@@ -232,21 +223,14 @@ public class FirebaseManager : MonoBehaviour
         {
             GlobalSaveManager.OverwriteFromCloud(res.game_data);
 
-            loadedProgress = JsonUtility.FromJson<PlayerData>(res.game_data);
-        }
-
-        if(loadedProgress != null && !string.IsNullOrEmpty(loadedProgress.avatarBase64))
-        {
-            byte[] avatarBytes = Convert.FromBase64String(loadedProgress.avatarBase64);
-            File.WriteAllBytes(avatarPath, avatarBytes);
-            Debug.Log("[FirebaseManager] Аватарка успешно скачана из облака и сохранена на устройство!");
+            loadedProgress = GlobalSaveManager.Data.playerData;
         }
 
         SaveCredentials(user, pass);
         Debug.Log("[FirebaseManager] Прогресс успешно скачан из облака!");
         UpdateStatus("Прогресс успешно скачан из облака и перезаписан на телефоне!", false);
         
-        dataLoadFromCloudEvent.Invoke(loadedProgress);
+        dataLoadFromCloudEvent.Invoke(loadedProgress); 
         
         yield return waitSmall;
         statusTextEvent.Invoke("Перезагружаем игру...");
@@ -268,9 +252,7 @@ public class FirebaseManager : MonoBehaviour
             UpdateStatus("Ваш аккаунт успешно удалён с серверов.", false);
         });
     }
-    #endregion
 
-    #region Universal Network Methods
     private IEnumerator SendPostRequest<T>(string endpoint, object payload, Action<T> onSuccess)
     {
         string jsonPayload = JsonUtility.ToJson(payload);
@@ -363,9 +345,7 @@ public class FirebaseManager : MonoBehaviour
             }
         }
     }
-    #endregion
 
-    #region Helpers
     private void HandleServerError(string responseText, long responseCode)
     {
         try
@@ -411,5 +391,4 @@ public class FirebaseManager : MonoBehaviour
         Destroy(tex);
         return base64;
     }
-    #endregion
 }

@@ -136,10 +136,33 @@ public class CloudUIScr : MonoBehaviour
             PlaytimeTracker.Instance.SetSecondsPlaytime(playerData.Playtime);
 
             int achievementsCount = achievementsHandler.GetCountOfAchievements();
-            for(int i = 0; i < achievementsCount; i++)
+
+            var savedAchievements = GlobalSaveManager.Data.achievements.list;
+
+            if(savedAchievements != null)
             {
-                string id = achievementsHandler.GetStringId(i);
-                achievementsHandler.SetProgress(id, playerData.AchievementsProgress[i]);
+                for(int i = 0; i < achievementsCount; i++)
+                {
+                    string id = achievementsHandler.GetStringId(i);
+                    
+                    if(!string.IsNullOrEmpty(id))
+                    {
+                        var foundAchievement = savedAchievements.Find(a => a.id == id);
+                        
+                        if(foundAchievement != null)
+                        {
+                            achievementsHandler.SetProgress(id, foundAchievement.progress);
+                        }
+                        else
+                        {
+                            achievementsHandler.SetProgress(id, 0);
+                        }
+                    }
+                }
+            }
+            else
+            {
+                Debug.LogWarning("GlobalSaveManager.Data.achievements.list равен null!");
             }
 
             string[] parts = playerData.AllBuySkins;
@@ -160,6 +183,7 @@ public class CloudUIScr : MonoBehaviour
     public void ShowSurePanel()
     {
         audioSource.PlayOneShot(sureSound);
+        VibrationHandler.Vibrate(500, 255);
         surePanelRect.DOKill();
         surePanelRect.localScale = Vector3.zero;
         surePanel.SetActive(true);

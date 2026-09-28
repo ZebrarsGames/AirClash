@@ -5,10 +5,6 @@ using UnityEngine.Events;
 using UnityEngine.Audio;
 using TMPro;
 
-[System.Serializable]
-public class IsAnimToggleEvent : UnityEvent<bool> { }
-[System.Serializable]
-public class IsFpsCounterEvent : UnityEvent<bool> { }
 public class SettingsHandler : MonoBehaviour
 {
     [Header("Sliders")]
@@ -27,120 +23,120 @@ public class SettingsHandler : MonoBehaviour
     [SerializeField] private Toggle fpsCounterToggle;
     [SerializeField] private Toggle bgMusicInGameToggle;
     [SerializeField] private Toggle debugConsoleToggle;
+    [SerializeField] private Toggle vibrationToggle;
 
     [Header("Other")]
     [SerializeField] private AudioMixer audioMixer;
-    [SerializeField] private IsAnimToggleEvent isAnimToggleEvent;
-    [SerializeField] private IsFpsCounterEvent isFpsCounterEvent;
+    [SerializeField] private UnityEvent<bool> isAnimToggleEvent;
+    [SerializeField] private UnityEvent<bool> isFpsCounterEvent;
 
-    private const string mixerParameterNameMaster = "Master";
-    private const string mixerParameterNameSFX = "SFX";
-    private const string mixerParameterNameBgMusic = "BgMusic";
+    private static readonly string NameMaster = "Master";
+    private static readonly string NameSFX = "SFX";
+    private static readonly string NameBgMusic = "BgMusic";
 
-    void Start() 
+    private static readonly string KeyFps = "FPS";
+    private static readonly string KeyMasterVol = "MasterVolume";
+    private static readonly string KeySFXVol = "SFXVolume";
+    private static readonly string KeyBgMusicVol = "BgMusicVolume";
+    private static readonly string KeyTrail = "Trail";
+    private static readonly string KeyIsAnimBg = "isAnimBg";
+    private static readonly string KeyPuckTrail = "PuckTrail";
+    private static readonly string KeyFpsCounter = "FpsCounter";
+    private static readonly string KeyBgMusicInGame = "BgMusicInGame";
+    private static readonly string KeyVibration = "Vibration";
+    private static readonly string KeyIsShowConsole = "IsShowConsole";
+
+    private const string UrlTelegram = "https://t.me/airclash_dev";
+    private const string UrlGitHub = "https://github.com/ZebrarsGames/AirClash";
+    private const string UrlWebSite = "https://zebrarsgames.github.io/AirClash/";
+
+    private void Start() 
     {
         QualitySettings.vSyncCount = 0;
-        Application.targetFrameRate = PlayerPrefs.GetInt("FPS", 60);
-        float masterVol = PlayerPrefs.GetFloat("MasterVolume", 1.0f);
-        float sfxVol = PlayerPrefs.GetFloat("SFXVolume", 1.0f);
-        float bgMusicVol = PlayerPrefs.GetFloat("BgMusicVolume", 1.0f);
+        
+        int savedFps = PlayerPrefs.GetInt(KeyFps, 60);
+        float masterVol = PlayerPrefs.GetFloat(KeyMasterVol, 1.0f);
+        float sfxVol = PlayerPrefs.GetFloat(KeySFXVol, 1.0f);
+        float bgMusicVol = PlayerPrefs.GetFloat(KeyBgMusicVol, 1.0f);
 
-        audioMixer.SetFloat(mixerParameterNameMaster, Mathf.Log10(masterVol) * 20);
-        audioMixer.SetFloat(mixerParameterNameSFX, Mathf.Log10(sfxVol) * 20);
-        audioMixer.SetFloat(mixerParameterNameBgMusic, Mathf.Log10(bgMusicVol) * 20);
+        Application.targetFrameRate = savedFps;
+
+        audioMixer.SetFloat(NameMaster, ConvertLinearToDb(masterVol));
+        audioMixer.SetFloat(NameSFX, ConvertLinearToDb(sfxVol));
+        audioMixer.SetFloat(NameBgMusic, ConvertLinearToDb(bgMusicVol));
 
         masterVolumeSlider.value = masterVol;
         bgMusicSlider.value = bgMusicVol;
         sfxVolumeSlider.value = sfxVol;
-        fpsSlider.value = PlayerPrefs.GetInt("FPS", 60);
-        trailToggle.isOn = PlayerPrefs.GetInt("Trail", 1) != 0;
-        animBgToggle.isOn = PlayerPrefs.GetInt("isAnimBg", 1) != 0;
-        puckTrailToggle.isOn = PlayerPrefs.GetInt("PuckTrail", 1) != 0;
-        fpsCounterToggle.isOn = PlayerPrefs.GetInt("FpsCounter", 0) != 0;
-        bgMusicInGameToggle.isOn = PlayerPrefs.GetInt("BgMusicInGame", 1) != 0;
-        debugConsoleToggle.SetIsOnWithoutNotify(PlayerPrefs.GetInt("IsShowConsole", 0) != 0);
+        fpsSlider.value = savedFps;
+        
+        trailToggle.SetIsOnWithoutNotify(PlayerPrefs.GetInt(KeyTrail, 1) != 0);
+        animBgToggle.SetIsOnWithoutNotify(PlayerPrefs.GetInt(KeyIsAnimBg, 1) != 0);
+        puckTrailToggle.SetIsOnWithoutNotify(PlayerPrefs.GetInt(KeyPuckTrail, 1) != 0);
+        fpsCounterToggle.SetIsOnWithoutNotify(PlayerPrefs.GetInt(KeyFpsCounter, 0) != 0);
+        bgMusicInGameToggle.SetIsOnWithoutNotify(PlayerPrefs.GetInt(KeyBgMusicInGame, 1) != 0);
+        vibrationToggle.SetIsOnWithoutNotify(PlayerPrefs.GetInt(KeyVibration, 1) != 0);
+        debugConsoleToggle.SetIsOnWithoutNotify(PlayerPrefs.GetInt(KeyIsShowConsole, 0) != 0);
+
+        UpdateFpsText(savedFps);
     }
 
-    public void OnVolumeSliderChanged() {
-        float sliderValue = masterVolumeSlider.value;
-        float dbValue = Mathf.Log10(sliderValue) * 20;
-        audioMixer.SetFloat(mixerParameterNameMaster, dbValue);
-    }
-    public void OnBgMusicVolumeSliderChanged() {
-        float sliderValue = bgMusicSlider.value;
-        float dbValue = Mathf.Log10(sliderValue) * 20;
-        audioMixer.SetFloat(mixerParameterNameBgMusic, dbValue);
-    }
-    public void OnSoundEffectsSliderChanged() {
-        float sliderValue = sfxVolumeSlider.value;
-        float dbValue = Mathf.Log10(sliderValue) * 20;
-        audioMixer.SetFloat(mixerParameterNameSFX, dbValue);
-    }
+    public void OnVolumeSliderChanged() => 
+        audioMixer.SetFloat(NameMaster, ConvertLinearToDb(masterVolumeSlider.value));
+
+    public void OnBgMusicVolumeSliderChanged() => 
+        audioMixer.SetFloat(NameBgMusic, ConvertLinearToDb(bgMusicSlider.value));
+
+    public void OnSoundEffectsSliderChanged() => 
+        audioMixer.SetFloat(NameSFX, ConvertLinearToDb(sfxVolumeSlider.value));
+
     public void OnFpsSliderChanged()
     {
-        fpsText.text = fpsSlider.value.ToString();
-        Application.targetFrameRate = Convert.ToInt32(fpsSlider.value);
+        int fpsValue = Mathf.RoundToInt(fpsSlider.value);
+        UpdateFpsText(fpsValue);
+        Application.targetFrameRate = fpsValue;
     }
 
-    public void OnTrailToggleChanged()
-    {
-        PlayerPrefs.SetInt("Trail", trailToggle.isOn ? 1 : 0);
-        PlayerPrefs.Save();
-    }
+    public void OnTrailToggleChanged() => PlayerPrefs.SetInt(KeyTrail, trailToggle.isOn ? 1 : 0);
 
     public void OnAnimBgToggleChanged()
     {
-        PlayerPrefs.SetInt("isAnimBg", animBgToggle.isOn ? 1 : 0);
-        PlayerPrefs.Save();
+        PlayerPrefs.SetInt(KeyIsAnimBg, animBgToggle.isOn ? 1 : 0);
         isAnimToggleEvent.Invoke(animBgToggle.isOn);
     }
 
-    public void OnPuckTrailToggleChanged()
-    {
-        PlayerPrefs.SetInt("PuckTrail", puckTrailToggle.isOn ? 1 : 0);
-        PlayerPrefs.Save();
-    }
+    public void OnPuckTrailToggleChanged() => PlayerPrefs.SetInt(KeyPuckTrail, puckTrailToggle.isOn ? 1 : 0);
 
     public void OnFPSCounterToggleChanged()
     {
-        PlayerPrefs.SetInt("FpsCounter", fpsCounterToggle.isOn ? 1 : 0);
-        PlayerPrefs.Save();
+        PlayerPrefs.SetInt(KeyFpsCounter, fpsCounterToggle.isOn ? 1 : 0);
         isFpsCounterEvent.Invoke(fpsCounterToggle.isOn);
     }
 
-    public void OnBgMusicInGameToggleChanged()
-    {
-        PlayerPrefs.SetInt("BgMusicInGame", bgMusicInGameToggle.isOn ? 1 : 0);
-        PlayerPrefs.Save();
-    }
+    public void OnBgMusicInGameToggleChanged() => PlayerPrefs.SetInt(KeyBgMusicInGame, bgMusicInGameToggle.isOn ? 1 : 0);
 
-    public void OnDebugConsoleToggleChanged()
-    {
-        PlayerPrefs.SetInt("IsShowConsole", debugConsoleToggle.isOn ? 1 : 0);
-        PlayerPrefs.Save();
-    }
+    public void OnDebugConsoleToggleChanged() => PlayerPrefs.SetInt(KeyIsShowConsole, debugConsoleToggle.isOn ? 1 : 0);
 
-    public void ShowTelegram()
-    {
-        Application.OpenURL("https://t.me/airclash_dev");
-    }
+    public void OnVibrationToggleChanged() => PlayerPrefs.SetInt(KeyVibration, vibrationToggle.isOn ? 1 : 0);
 
-    public void ShowGitHub()
-    {
-        Application.OpenURL("https://github.com/ZebrarsGames/AirClash");
-    }
-
-    public void ShowWebSite()
-    {
-        Application.OpenURL("https://zebrarsgames.github.io/AirClash/");
-    }
+    public void ShowTelegram() => Application.OpenURL(UrlTelegram);
+    public void ShowGitHub() => Application.OpenURL(UrlGitHub);
+    public void ShowWebSite() => Application.OpenURL(UrlWebSite);
 
     public void SaveSettings()
     {
-        PlayerPrefs.SetInt("FPS", Convert.ToInt32(fpsSlider.value));
-        PlayerPrefs.SetFloat("SFXVolume", sfxVolumeSlider.value);
-        PlayerPrefs.SetFloat("BgMusicVolume", bgMusicSlider.value);
-        PlayerPrefs.SetFloat("MasterVolume", masterVolumeSlider.value);
+        PlayerPrefs.SetInt(KeyFps, Mathf.RoundToInt(fpsSlider.value));
+        PlayerPrefs.SetFloat(KeySFXVol, sfxVolumeSlider.value);
+        PlayerPrefs.SetFloat(KeyBgMusicVol, bgMusicSlider.value);
+        PlayerPrefs.SetFloat(KeyMasterVol, masterVolumeSlider.value);
         PlayerPrefs.Save();
+    }
+
+    private static float ConvertLinearToDb(float linear) => 
+        linear > 0.0001f ? Mathf.Log10(linear) * 20f : -80f;
+
+    private void UpdateFpsText(int value)
+    {
+        fpsText.SetText("{0}", value);
     }
 }

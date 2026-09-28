@@ -18,7 +18,6 @@ public class GoalHandler : MonoBehaviour
     private const float PUCK_MAX_SPEED_X2 = 40f;
     private const string BOTS_SCENE_NAME = "BotsGame";
 
-    // Кэшированные строки для счета, чтобы избежать выделения памяти через .ToString() при каждом голе
     private readonly string[] scoreStrings = { "0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20" };
     private readonly Color DEFAULT_CAM_COLOR = new Color(0f, 0.243f, 0.6f); // #003E99
 
@@ -167,6 +166,7 @@ public class GoalHandler : MonoBehaviour
 
     public void OnGoalTrigger(Collider2D collision)
     {
+        VibrationHandler.Vibrate(35, 20);
         if(collision.gameObject.CompareTag("GoalTrigger1"))
         {
             if(lastCollisionGO == player1 && isBotsGame) 
@@ -237,6 +237,7 @@ public class GoalHandler : MonoBehaviour
     public void OnPuckCollisionEnter2D(Collision2D collision) 
     {
         lastCollisionGO = collision.gameObject;
+        VibrationHandler.Vibrate(10, 15);
         
         if(lastCollisionGO != player1 && lastCollisionGO != player2)
         {
@@ -286,6 +287,7 @@ public class GoalHandler : MonoBehaviour
 
     public void Win()
     {
+        VibrationHandler.Vibrate(200, 45);
         if(isBotsGame)
         {
             int xpBefore = xpHandler.GetXP();   

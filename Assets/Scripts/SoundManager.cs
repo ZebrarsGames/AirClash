@@ -22,6 +22,7 @@ public class SoundManager : MonoBehaviour
             return;
         }
         audioSource.PlayOneShot(clickSound);
+        VibrationHandler.Vibrate(2, 2);
     }
     public void PlayWhooshSound()
     {

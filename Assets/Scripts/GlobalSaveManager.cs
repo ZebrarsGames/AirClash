@@ -3,8 +3,6 @@ using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
 
-#region Save Data Structures
-
 [Serializable]
 public class GlobalSaveData
 {
@@ -61,11 +59,11 @@ public class QuestSaveWrapper
         return dictionary;
     }
 }
-#endregion
 
 public static class GlobalSaveManager
 {
     private static readonly string SavePath = Path.Combine(Application.persistentDataPath, "global_save.json");
+    private static readonly string AvatarPath = Path.Combine(Application.persistentDataPath, "avatar.png");
     
     private static GlobalSaveData _data;
     private static bool _isDirty = false;
@@ -101,6 +99,8 @@ public static class GlobalSaveManager
     {
         if(!_isDirty || _data == null) return;
 
+        _data.playerData.avatarBase64 = string.Empty;
+
         string json = JsonUtility.ToJson(_data);
         File.WriteAllText(SavePath, json);
         _isDirty = false;
@@ -108,7 +108,34 @@ public static class GlobalSaveManager
 
     public static string GetCloudJson()
     {
-        return JsonUtility.ToJson(Data);
+        if(File.Exists(AvatarPath))
+        {
+            try
+            {
+                byte[] fileData = File.ReadAllBytes(AvatarPath);
+                Texture2D tex = new Texture2D(2, 2);
+                if(tex.LoadImage(fileData)) 
+                {
+                    byte[] compressedData = tex.EncodeToJPG(10); 
+                    Data.playerData.avatarBase64 = Convert.ToBase64String(compressedData);
+                }
+                onetimeTextureCleanup(tex);
+            }
+            catch(Exception e)
+            {
+                Debug.LogError($"[GlobalSaveManager] Ошибка сжатия аватарки: {e.Message}");
+                Data.playerData.avatarBase64 = string.Empty;
+            }
+        }
+        else
+        {
+            Data.playerData.avatarBase64 = string.Empty;
+        }
+
+        string cloudJson = JsonUtility.ToJson(Data);
+        Data.playerData.avatarBase64 = string.Empty; 
+
+        return cloudJson;
     }
 
     public static void OverwriteFromCloud(string cloudJson)
@@ -116,7 +143,31 @@ public static class GlobalSaveManager
         if(string.IsNullOrEmpty(cloudJson)) return;
         
         _data = JsonUtility.FromJson<GlobalSaveData>(cloudJson) ?? new GlobalSaveData();
+
+        if(!string.IsNullOrEmpty(_data.playerData.avatarBase64))
+        {
+            try
+            {
+                byte[] avatarBytes = Convert.FromBase64String(_data.playerData.avatarBase64);
+                File.WriteAllBytes(AvatarPath, avatarBytes);
+                Debug.Log($"[GlobalSaveManager] Аватарка успешно сохранена по пути: {AvatarPath}. Размер: {avatarBytes.Length} байт.");
+            }
+            catch(Exception e)
+            {
+                Debug.LogError($"[GlobalSaveManager] Ошибка восстановления аватарки: {e.Message}");
+            }
+        }
+
         MarkAsDirty();
         SaveToDisk();
+    }
+
+    private static void onetimeTextureCleanup(Texture2D tex)
+    {
+        if(tex != null)
+        {
+            if (Application.isPlaying) UnityEngine.Object.Destroy(tex);
+            else UnityEngine.Object.DestroyImmediate(tex);
+        }
     }
 }

@@ -179,6 +179,7 @@ public class RouletteHandler : MonoBehaviour
             {
                 cell.rectTransform.DOComplete(); 
                 cell.rectTransform.DOPunchScale(new Vector3(0.05f, 0.05f, 0.05f), 0.05f, 1, 0.5f);
+                VibrationHandler.Vibrate(15, 35);
             }
         }
         

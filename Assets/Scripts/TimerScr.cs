@@ -72,6 +72,7 @@ public class TimerScr : MonoBehaviour
             if(audioSource != null && timerSound != null)
             {
                 audioSource.PlayOneShot(timerSound);
+                VibrationHandler.Vibrate(15, 10);
             }
 
             yield return WaitForSecondsCache.Wait(1f);

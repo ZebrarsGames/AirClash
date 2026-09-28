@@ -14,52 +14,65 @@ public class CoinMover : MonoBehaviour
     [SerializeField] private Transform canvasParent;
 
     [Header("Settings")]
-    [SerializeField] private float duration = 2f;
-    [SerializeField] private float delayBetween = 0.05f;
+    [SerializeField] private float duration = 1.5f;
+    [SerializeField] private float delayBetween = 0.03f;
+    [SerializeField] private int maxVisualCount = 50;
+    [SerializeField] private float minIntervalBetweenSounds = 0.05f;
+
+    [Header("Audio")]
+    [SerializeField] private AudioSource audioSource;
     [SerializeField] private AudioClip coinSound;
 
-    [Header("Scripts")]
+    [Header("External Handlers")]
     [SerializeField] private MoneyHandler moneyHandler;
     [SerializeField] private XpUiScr xpUiScr;
     [SerializeField] private XpHandler xpHandler;
 
-    private AudioSource audioSource;
-    private int currentCoinsCount = 0;
-    private WaitForSeconds delayWait;
-    private WaitForSeconds xpStartDelayWait = new WaitForSeconds(0.7f);
+    private int _currentCoinsCount;
+    private float _nextSoundTime;
+    
+    private WaitForSeconds _delayWait;
+    private readonly WaitForSeconds _xpStartDelayWait = new(0.5f);
 
-    private Queue<GameObject> coinPool = new Queue<GameObject>();
-    private Queue<GameObject> xpPool = new Queue<GameObject>();
+    private readonly Queue<GameObject> _coinPool = new();
+    private readonly Queue<GameObject> _xpPool = new();
 
     private void Awake()
     {
-        audioSource = gameObject.AddComponent<AudioSource>();
-        delayWait = new WaitForSeconds(delayBetween);
+        _delayWait = new WaitForSeconds(delayBetween);
+        if (audioSource == null) audioSource = gameObject.AddComponent<AudioSource>();
+        
+        PrewarmPool(_coinPool, coinPrefab, maxVisualCount);
+        PrewarmPool(_xpPool, xpPrefab, maxVisualCount);
     }
 
     private void Start()
     {
-        currentCoinsCount = moneyHandler.GetMoney();
+        _currentCoinsCount = moneyHandler.GetMoney();
+        UpdateUI();
     }
 
     public void AddCoins(Vector3 spawnPosition, int amount)
     {
-        StartCoroutine(AnimateCoins(spawnPosition, amount));
+        if(amount <= 0) return;
+        moneyHandler.AddMoney(amount);
+        StartCoroutine(AnimateCoinsRoutine(spawnPosition, amount));
     }
 
     public void AddXp(Vector3 spawnPosition, int amount, int startValue)
     {
-        if(xpUiScr.GetIsAnim()) return;
-        StartCoroutine(AnimateXP(spawnPosition, amount, startValue));
+        if(amount <= 0 || xpUiScr.GetIsAnim()) return;
+        StartCoroutine(AnimateXPRoutine(spawnPosition, amount, startValue));
     }
 
-    private IEnumerator AnimateCoins(Vector3 spawnPosition, int amount)
+    private IEnumerator AnimateCoinsRoutine(Vector3 spawnPosition, int amount)
     {
-        moneyHandler.AddMoney(amount);
+        int spawnCount = Mathf.Min(amount, maxVisualCount);
+        int coinsPerVisual = Mathf.CeilToInt((float)amount / spawnCount);
 
-        for(int i = 0; i < amount; i++)
+        for(int i = 0; i < spawnCount; i++)
         {
-            GameObject coin = GetFromPool(coinPool, coinPrefab);
+            GameObject coin = GetFromPool(_coinPool, coinPrefab);
             Transform coinTransform = coin.transform;
             coinTransform.position = spawnPosition;
             coinTransform.localScale = Vector3.zero;
@@ -67,90 +80,106 @@ public class CoinMover : MonoBehaviour
             Vector2 randomCircle = Random.insideUnitCircle * 6f;
             Vector3 targetOffset = spawnPosition + new Vector3(randomCircle.x, randomCircle.y, 0f);
 
-            coinTransform.DOScale(1f, 0.2f);
-            coinTransform.DOMove(targetOffset, 0.2f);
+            Sequence coinSequence = DOTween.Sequence();
+            coinSequence.Append(coinTransform.DOScale(1f, 0.2f))
+                        .Join(coinTransform.DOMove(targetOffset, 0.2f))
+                        .Append(coinTransform.DOMove(targetPosition.position, duration).SetEase(Ease.InBack))
+                        .OnComplete(() =>
+                        {
+                            _currentCoinsCount += coinsPerVisual;
+                            UpdateUI();
+                            TryPlayEffects();
+                            AnimateTargetPunch();
+                            ReturnToPool(_coinPool, coin);
+                        });
 
-            coinTransform.DOMove(targetPosition.position, duration)
-                .SetDelay(0.2f)
-                .SetEase(Ease.InBack)
-                .OnComplete(() => {
-                    currentCoinsCount++;
-                    UpdateUI();
-                    PlayCoinSound();
-
-                    targetPosition.DOKill();
-                    targetPosition.DOScale(1.2f, 0.1f).OnComplete(() => targetPosition.DOScale(1f, 0.1f));
-
-                    ReturnToPool(coinPool, coin);
-                });
-
-            yield return delayWait;
+            yield return _delayWait;
         }
     }
 
-    private IEnumerator AnimateXP(Vector3 spawnPosition, int amount, int startValue)
+    private IEnumerator AnimateXPRoutine(Vector3 spawnPosition, int amount, int startValue)
     {
-        yield return xpStartDelayWait;
+        yield return _xpStartDelayWait;
 
-        for(int i = 1; i <= amount; i++)
+        int spawnCount = Mathf.Min(amount, maxVisualCount);
+        float step = (float)amount / spawnCount;
+
+        for(int i = 0; i < spawnCount; i++)
         {
-            GameObject xp = GetFromPool(xpPool, xpPrefab);
+            GameObject xp = GetFromPool(_xpPool, xpPrefab);
             Transform xpTransform = xp.transform;
             xpTransform.position = spawnPosition;
             xpTransform.localScale = Vector3.zero;
 
-            int valueForThisCoin = startValue + i;
+            int currentStepIndex = Mathf.RoundToInt((i + 1) * step);
+            int valueForThisCoin = startValue + currentStepIndex;
 
             Vector2 randomCircle = Random.insideUnitCircle * 6f;
             Vector3 targetOffset = spawnPosition + new Vector3(randomCircle.x, randomCircle.y, 0f);
 
-            xpTransform.DOScale(1f, 0.2f);
-            xpTransform.DOMove(targetOffset, 0.2f);
+            Sequence xpSequence = DOTween.Sequence();
+            xpSequence.Append(xpTransform.DOScale(1f, 0.2f))
+                      .Join(xpTransform.DOMove(targetOffset, 0.2f))
+                      .Append(xpTransform.DOMove(targetPosition.position, duration).SetEase(Ease.InBack))
+                      .OnComplete(() =>
+                      {
+                          TryPlayEffects();
+                          xpUiScr.SetProgress(xpHandler.GetXPProgress(valueForThisCoin), valueForThisCoin);
+                          AnimateTargetPunch();
+                          ReturnToPool(_xpPool, xp);
+                      });
 
-            xpTransform.DOMove(targetPosition.position, duration)
-                .SetDelay(0.2f)
-                .SetEase(Ease.InBack)
-                .OnComplete(() => {
-                    PlayCoinSound();
-                    xpUiScr.SetProgress(xpHandler.GetXPProgress(valueForThisCoin), valueForThisCoin);
-
-                    targetPosition.DOKill();
-                    targetPosition.DOScale(1.1f, 0.1f).OnComplete(() => targetPosition.DOScale(1f, 0.1f));
-
-                    ReturnToPool(xpPool, xp);
-                });
-
-            yield return delayWait;
+            yield return _delayWait;
         }
     }
 
     private void UpdateUI()
     {
-        coinText.SetText($"{currentCoinsCount} <sprite=0>");
+        coinText.SetText("{0} <sprite=0>", _currentCoinsCount);
     }
 
-    private void PlayCoinSound()
+    private void AnimateTargetPunch()
     {
+        targetPosition.DOComplete(); 
+        targetPosition.DOPunchScale(Vector3.one * 0.15f, 0.15f, 1, 0.5f);
+    }
+
+    private void TryPlayEffects()
+    {
+        if(Time.time < _nextSoundTime) return;
+        _nextSoundTime = Time.time + minIntervalBetweenSounds;
+
         if(coinSound != null)
         {
-            audioSource.pitch = 1f + (currentCoinsCount % 10 * 0.05f);
+            audioSource.pitch = 1f + ((_currentCoinsCount % 10) * 0.03f);
             audioSource.PlayOneShot(coinSound);
+        }
+        
+        if(_currentCoinsCount % 3 == 0)
+        {
+            VibrationHandler.Vibrate(2, 2);
+        }
+    }
+
+    private void PrewarmPool(Queue<GameObject> pool, GameObject prefab, int count)
+    {
+        for (int i = 0; i < count; i++)
+        {
+            GameObject obj = Instantiate(prefab, canvasParent);
+            obj.SetActive(false);
+            pool.Enqueue(obj);
         }
     }
 
     private GameObject GetFromPool(Queue<GameObject> pool, GameObject prefab)
     {
-        GameObject obj;
         if(pool.Count > 0)
         {
-            obj = pool.Dequeue();
+            GameObject obj = pool.Dequeue();
             obj.SetActive(true);
+            return obj;
         }
-        else
-        {
-            obj = Instantiate(prefab, canvasParent);
-        }
-        return obj;
+        return Instantiate(prefab, canvasParent);
     }
 
     private void ReturnToPool(Queue<GameObject> pool, GameObject obj)

@@ -176,6 +176,7 @@ public class ShopHandler : MonoBehaviour
 
     public void ShowSurePanel()
     {
+        VibrationHandler.Vibrate(500, 255);
         if(audioSource != null && warningSound != null)
         {
             audioSource.PlayOneShot(warningSound);
@@ -192,18 +193,8 @@ public class ShopHandler : MonoBehaviour
 
     public void HideSurePanel()
     {
-        StartCoroutine(AnimateSurePanel());
-    }
-
-    private IEnumerator AnimateSurePanel()
-    {
-        if(surePanel != null)
-        {
-            var rect = surePanel.GetComponent<RectTransform>();
-            rect.DOScale(Vector3.zero, 0.2f).SetEase(Ease.InBack);
-            yield return new WaitForSeconds(0.35f);
-            surePanel.SetActive(false);
-        }
+        var rect = surePanel.GetComponent<RectTransform>();
+        rect.DOScale(Vector3.zero, 0.2f).SetEase(Ease.InBack).OnComplete(() => surePanel.SetActive(false));
     }
 
     public void DeletePlayerPrefs()

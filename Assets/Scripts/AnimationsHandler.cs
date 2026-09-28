@@ -32,6 +32,8 @@ public class AchievementPopup : MonoBehaviour
 
         titleText.text = achievementTitle;
 
+        VibrationHandler.Vibrate(250, 30);
+
         _animationSequence = DOTween.Sequence()
             .Append(panelTransform.DOAnchorPos(targetAnchoredPosition, moveDuration).SetEase(showEase))
             .AppendInterval(displayDuration)
