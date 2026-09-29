@@ -75,7 +75,6 @@ public class FirebaseManager : MonoBehaviour
 
     void Awake()
     {
-        // Кешируем пути к файлам один раз при создании скрипта
         saveFilePath = Path.Combine(Application.persistentDataPath, "save.json");
         avatarPath = Path.Combine(Application.persistentDataPath, "avatar.png");
     }
