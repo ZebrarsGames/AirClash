@@ -17,6 +17,7 @@ public class TimerScr : MonoBehaviour
 
     [Header("Settings")]
     [SerializeField] private int startSeconds = 4;
+    public UnityEngine.Events.UnityEvent OnTimerEnd;
 
     [HideInInspector] public bool TimerOn = false;
     private int TimeLeft;
@@ -86,6 +87,7 @@ public class TimerScr : MonoBehaviour
 
         timerPanel.SetActive(false);
         TimerOn = false;
+        OnTimerEnd.Invoke();
         if(pauseBtn != null) pauseBtn.interactable = true;
         timerCoroutine = null;
     }

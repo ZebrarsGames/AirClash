@@ -130,11 +130,21 @@ public class GoalHandlerNetwork : NetworkBehaviour
     private void OnEnable()
     {
         MyNetworkManager.OnOpponentDisconnected += HandleDisconnect;
+
+        if(timer != null)
+        {
+            timer.OnTimerEnd.AddListener(OnTimerFinished);
+        }
     }
 
     private void OnDisable()
     {
         MyNetworkManager.OnOpponentDisconnected -= HandleDisconnect;
+
+        if(timer != null)
+        {
+            timer.OnTimerEnd.RemoveListener(OnTimerFinished);
+        }
     }
 
     private void HandleDisconnect()
@@ -291,6 +301,38 @@ public class GoalHandlerNetwork : NetworkBehaviour
         else if(name == "Player2")
         {
             player2 = player;
+        }
+    }
+
+    private void OnTimerFinished()
+    {
+        if(isServer)
+        {
+            ServerUnblockAllPlayers();
+        }
+        else
+        {
+            CmdRequestUnblockPlayers();
+        }
+    }
+
+    [Command(requiresAuthority = false)]
+    private void CmdRequestUnblockPlayers()
+    {
+        ServerUnblockAllPlayers();
+    }
+
+    [Server]
+    public void ServerUnblockAllPlayers()
+    {
+        if(player1 != null && player1.TryGetComponent<PlayersControllerNetwork>(out var p1))
+        {
+            p1.SetMovementBlocked(false);
+        }
+
+        if(player2 != null && player2.TryGetComponent<PlayersControllerNetwork>(out var p2))
+        {
+            p2.SetMovementBlocked(false);
         }
     }
 

@@ -35,7 +35,7 @@ public class PlayersControllerNetwork : NetworkBehaviour, IBeginDragHandler, IDr
     [SyncVar(hook = nameof(OnPlayerIndexChanged))]
     private int netPlayerIndex = 0;
     [SyncVar]
-    private bool isMovementBlocked = false;
+    private bool isMovementBlocked = true;
     [SyncVar(hook = nameof(OnSkinChanged))]
     private string netSkinName = "";
     [SyncVar(hook = nameof(OnNickChanged))]
@@ -353,6 +353,12 @@ public class PlayersControllerNetwork : NetworkBehaviour, IBeginDragHandler, IDr
         {
             isMovementBlocked = false; 
         }
+    }
+
+    [Server]
+    public void SetMovementBlocked(bool blocked)
+    {
+        isMovementBlocked = blocked;
     }
 
     [ClientRpc]
