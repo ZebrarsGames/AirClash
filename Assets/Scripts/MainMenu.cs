@@ -50,10 +50,6 @@ public class MainMenu : MonoBehaviour
     [SerializeField] private GameObject userGamemodeBtn;
     [SerializeField] private GameObject speedPanel;
     [SerializeField] private GameObject modificatorsMultiplyText;
-    [SerializeField] private Slider vibrateLenghtSlider;
-    [SerializeField] private Slider vibratePowerSlider;
-    [SerializeField] private TextMeshProUGUI vibrateLenghtText;
-    [SerializeField] private TextMeshProUGUI vibratePowerText;
 
     [Header("Scripts")]
     [SerializeField] private MoneyHandler moneyHandler;
@@ -94,21 +90,6 @@ public class MainMenu : MonoBehaviour
     {
         CachePanels();
         HandleFirstLaunch();
-    }
-
-    public void OnLenghtSlider()
-    {
-        vibrateLenghtText.SetText("{0}", vibrateLenghtSlider.value);
-    }
-
-    public void OnPowerSlider()
-    {
-        vibratePowerText.SetText("{0}", vibratePowerSlider.value);
-    }
-
-    public void PlayVibrate()
-    {
-        VibrationHandler.Vibrate((long)vibrateLenghtSlider.value, (int)vibratePowerSlider.value);
     }
 
     private void Start()
