@@ -166,7 +166,7 @@ public static class GlobalSaveManager
     {
         if(tex != null)
         {
-            if (Application.isPlaying) UnityEngine.Object.Destroy(tex);
+            if(Application.isPlaying) UnityEngine.Object.Destroy(tex);
             else UnityEngine.Object.DestroyImmediate(tex);
         }
     }

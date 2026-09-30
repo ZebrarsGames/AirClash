@@ -6,7 +6,6 @@ using UnityEngine.Networking;
 using EpicTransport;
 using Mirror;
 
-#region DTOs for Matchmaking
 [Serializable]
 public class CreateMMRoomRequest
 {
@@ -84,7 +83,6 @@ public class EloResponseData
     public string message;
     public int elo;
 }
-#endregion
 
 public class MatchmakerScr : MonoBehaviour
 {

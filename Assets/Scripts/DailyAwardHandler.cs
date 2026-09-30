@@ -1,153 +1,188 @@
 using System;
-using System.Globalization;
+using System.Collections;
 using UnityEngine;
+using UnityEngine.Networking;
+using TMPro;
+using DG.Tweening;
+using System.Threading.Tasks;
+using NUnit.Framework;
 
 public class DailyAwardHandler : MonoBehaviour
 {
-    [Header("Arrays")]
-    [SerializeField] private DailyAwardSO[] dailyAwards;
+    [Header("UI")]
+    [SerializeField] private GameObject rewardPanel;
+    [SerializeField] private TextMeshProUGUI warningText;
+    [SerializeField] private TextMeshProUGUI moneyText;
+    [SerializeField] private TextMeshProUGUI xpText;
+    [SerializeField] private RectTransform skinImage;
+
+    [Header("Audio")]
+    [SerializeField] private AudioSource audioSource;
+    [SerializeField] private AudioClip whooshSfx;
 
     [Header("Scripts")]
     [SerializeField] private MoneyHandler moneyHandler;
     [SerializeField] private XpHandler xpHandler;
-    [SerializeField] private QuestsHandler questsHandler;
-    [SerializeField] private DailyQuestHandler dailyQuestHandler;
-    [SerializeField] private AchievementsHandler achievementsHandler;
 
-    [Header("Floats")]
-    [SerializeField] private int maxDays = 7;
+    private Sequence rewardSequence;
+    private const string serverUrl = "https://airclashserver.onrender.com/claimDailyReward";
 
-    [Header("UI")]
-    [SerializeField] private GameObject awardsPanel;
-
-    private DateTime firstTimePlay;
-    private const string FirstTimePlayKey = "FirstTimePlayed";
-    private bool isInitialized;
-
-    private void Awake()
+    [Serializable]
+    public class RewardData
     {
-        Initialize();
+        public string rarity;
+        public int coins;
+        public int xp;
+        public string skin_id;
     }
 
-    private void Initialize()
+    [Serializable]
+    public class DailyRewardResponse
     {
-        if(isInitialized) return;
+        public string status;
+        public string message;
+        public long remaining_ms;
+        public RewardData reward;
+    }
 
-        if(PlayerPrefs.HasKey(FirstTimePlayKey))
+    [Serializable]
+    public class DailyClaimRequest
+    {
+        public string username;
+    }
+
+    private void Start()
+    {
+        if(rewardPanel != null) rewardPanel.SetActive(false);
+        if(warningText != null) warningText.SetText("Загружаем...");
+        if(moneyText != null) moneyText.gameObject.SetActive(false);
+        if(xpText != null) xpText.gameObject.SetActive(false);
+        if(skinImage != null) skinImage.gameObject.SetActive(false);
+    }
+
+    public async void CheckReward()
+    {
+        string nickname = PlayerPrefs.GetString("Nick", "Ник");
+        bool isAccountExists = await FirebaseManager.CheckUserExistsAsync(nickname);
+        if(!isAccountExists)
         {
-            string dateStr = PlayerPrefs.GetString(FirstTimePlayKey);
-            if(!DateTime.TryParse(dateStr, CultureInfo.InvariantCulture, DateTimeStyles.None, out firstTimePlay))
+            Debug.LogWarning("Нельзя получить награды без аккаунта!");
+            warningText.SetText("Нельзя получить награды без аккаунта!");
+            warningText.gameObject.SetActive(true);
+            return;
+        }
+        StartCoroutine(SendClaimRequestRoutine(nickname));
+    }
+
+    private IEnumerator SendClaimRequestRoutine(string username)
+    {
+        DailyClaimRequest requestData = new DailyClaimRequest { username = username };
+        string jsonBody = JsonUtility.ToJson(requestData);
+
+        using(UnityWebRequest www = new UnityWebRequest(serverUrl, "POST"))
+        {
+            byte[] bodyRaw = System.Text.Encoding.UTF8.GetBytes(jsonBody);
+            www.uploadHandler = new UploadHandlerRaw(bodyRaw);
+            www.downloadHandler = new DownloadHandlerBuffer();
+            www.SetRequestHeader("Content-Type", "application/json");
+            www.SetRequestHeader("x-game-secret", GameConfig.ApiSecret);
+
+            yield return www.SendWebRequest();
+
+            if(www.result == UnityWebRequest.Result.Success)
             {
-                ResetFirstTime();
+                DailyRewardResponse response = JsonUtility.FromJson<DailyRewardResponse>(www.downloadHandler.text);
+
+                if(response.status == "success" && response.reward != null)
+                {
+                    moneyHandler.AddMoney(response.reward.coins);
+                    xpHandler.AddXp(response.reward.xp);
+                    bool isSkin = false;
+                    if(!string.IsNullOrEmpty(response.reward.skin_id))
+                    {
+                        isSkin = true;
+                        string skins = PlayerPrefs.GetString("AllBuySkins", "DefSkin");
+                        string[] parts = skins.Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
+                        string[] new_parts = new string[parts.Length+1];
+                        new_parts[parts.Length+1] = response.reward.skin_id;
+                        string serializedSkins = string.Join(",", new_parts);
+                        PlayerPrefs.SetString("AllBuySkins", serializedSkins);
+                        PlayerPrefs.Save();
+                    }
+                    warningText.gameObject.SetActive(false);
+                    ShowRewards(response.reward.coins, response.reward.xp, isSkin);
+                }
+                else if(response.status == "already_claimed")
+                {
+                    TimeSpan t = TimeSpan.FromMilliseconds(response.remaining_ms);
+                    Debug.Log($"Награда уже забрана! До сброса: {t.Hours}ч {t.Minutes}мин {t.Seconds}сек");
+                    warningText.SetText("Награда уже забрана! До сброса: {0}ч {1}мин {2}сек", t.Hours, t.Minutes, t.Seconds);
+                }
+            }
+            else
+            {
+                Debug.LogError($"Ошибка сети при получении награды: {www.error}");
             }
         }
-        else
-        {
-            ResetFirstTime();
-        }
-
-        isInitialized = true;
     }
 
-    private void ResetFirstTime()
+    public void ShowRewards(int coins, int xp, bool isSkin)
     {
-        firstTimePlay = DateTime.Today;
-        PlayerPrefs.SetString(FirstTimePlayKey, firstTimePlay.ToString("o", CultureInfo.InvariantCulture));
-        PlayerPrefs.Save();
-    }
+        rewardSequence?.Kill(true);
+        
+        moneyText.SetText($"{coins} <sprite=0>");
+        xpText.SetText($"{xp} <sprite=0>");
+        if(isSkin) skinImage.gameObject.SetActive(true);
 
-    public void OnDayChanged()
-    {
-        int daysPlayed = GetDaysPlayed();
-        if(daysPlayed > maxDays || dailyAwards == null) return;
+        moneyText.transform.localScale = Vector3.zero;
+        xpText.transform.localScale = Vector3.zero;
 
-        for(int i = 0; i < dailyAwards.Length; i++)
+        moneyText.gameObject.SetActive(true);
+        xpText.gameObject.SetActive(true);
+
+        rewardSequence = DOTween.Sequence();
+
+        if(!isSkin)
         {
-            if(dailyAwards[i] != null && dailyAwards[i].Day == daysPlayed)
-            {
-                if(awardsPanel != null) awardsPanel.SetActive(true);
-                GiveAward(dailyAwards[i]);
-                break;
-            }
-        }
-    }
+            rewardSequence
+            .Append(moneyText.transform.DOScale(Vector3.one, 0.3f).SetEase(Ease.OutBack))
+            .AppendCallback(() => PlaySound())
+            
+            .AppendInterval(0.2f)
+            .Append(xpText.transform.DOScale(Vector3.one, 0.3f).SetEase(Ease.OutBack))
+            .AppendCallback(() => PlaySound())
 
-    public void GiveAward(DailyAwardSO award)
-    {
-        if(award == null) return;
-
-        switch(award.AwardType)
+            .SetUpdate(UpdateType.Normal, true)
+            .OnKill(() => rewardSequence = null);
+        } else
         {
-            case AwardType.Money:
-                UpdateMoneyQuests(award.Award);
-                if(moneyHandler != null) moneyHandler.AddMoney(award.Award);
-                break;
-            case AwardType.Xp:
-                UpdateXpQuests(award.Award);
-                if(xpHandler != null) xpHandler.AddXp(award.Award);
-                break;
-            case AwardType.Skin:
-                if(achievementsHandler != null) achievementsHandler.UpdateProgress("large_wardrobe", 1);
-                PlayerPrefs.SetInt(award.SkinAward, 1);
-                PlayerPrefs.Save();
-                break;
+            rewardSequence
+                .Append(moneyText.transform.DOScale(Vector3.one, 0.3f).SetEase(Ease.OutBack))
+                .AppendCallback(() => PlaySound())
+                
+                .AppendInterval(0.2f)
+                .Append(xpText.transform.DOScale(Vector3.one, 0.3f).SetEase(Ease.OutBack))
+                .AppendCallback(() => PlaySound())
+
+                .AppendInterval(0.2f)
+                .Append(skinImage.DOScale(Vector3.one, 0.3f).SetEase(Ease.OutBack))
+                .AppendCallback(() => PlaySound())
+
+                .SetUpdate(UpdateType.Normal, true)
+                .OnKill(() => rewardSequence = null);
         }
     }
 
-    public DailyAwardSO GetDailyAward(int day)
+    private void PlaySound()
     {
-        if(dailyAwards == null) return null;
-
-        for(int i = 0; i < dailyAwards.Length; i++)
+        if(audioSource && whooshSfx)
         {
-            if(dailyAwards[i] != null && dailyAwards[i].Day == day)
-            {
-                return dailyAwards[i];
-            }
-        }
-        return null;
-    }
-
-    public int GetDaysPlayed()
-    {
-        return (DateTime.Today - firstTimePlay).Days + 1;
-    }
-
-    private void UpdateXpQuests(int amount)
-    {
-        if(questsHandler != null)
-        {
-            questsHandler.UpdateQuestProgress("xp100", amount);
-            questsHandler.UpdateQuestProgress("xp200", amount);
-            questsHandler.UpdateQuestProgress("xp400", amount);
-            questsHandler.UpdateQuestProgress("xp500", amount);
-            questsHandler.UpdateQuestProgress("xp700", amount);
-            questsHandler.UpdateQuestProgress("xp1000", amount);
-        }
-
-        if(dailyQuestHandler != null)
-        {
-            dailyQuestHandler.UpdateQuestProgress("xp50", amount);
+            audioSource.PlayOneShot(whooshSfx);
         }
     }
 
-    private void UpdateMoneyQuests(int amount)
+    private void OnDestroy()
     {
-        if(questsHandler != null)
-        {
-            questsHandler.UpdateQuestProgress("money10", amount);
-            questsHandler.UpdateQuestProgress("money50", amount);
-            questsHandler.UpdateQuestProgress("money100", amount);
-            questsHandler.UpdateQuestProgress("money200", amount);
-            questsHandler.UpdateQuestProgress("money300", amount);
-            questsHandler.UpdateQuestProgress("money500", amount);
-        }
-
-        if(dailyQuestHandler != null)
-        {
-            dailyQuestHandler.UpdateQuestProgress("daily_money50", amount);
-            dailyQuestHandler.UpdateQuestProgress("money70", amount);
-            dailyQuestHandler.UpdateQuestProgress("daily_money100", amount);
-        }
+        rewardSequence?.Kill();
     }
 }
