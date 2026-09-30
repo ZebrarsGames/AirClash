@@ -29766,7 +29766,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 22400762, guid: 67117722a812a2e46ab8cb8eafbf5f5e, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -0.0000038146973
+      value: 0.00005340576
       objectReference: {fileID: 0}
     - target: {fileID: 22426080, guid: 67117722a812a2e46ab8cb8eafbf5f5e, type: 3}
       propertyPath: m_AnchorMax.x
@@ -32975,7 +32975,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ModidficatorToggleItem
   ModificatorName: SmallPlayers
-  ModificatorMultiplyMoney: 0
+  ModificatorMultiplyMoney: 0.15
   ModificatorOpposite: {fileID: 875598470}
 --- !u!114 &751310649
 MonoBehaviour:
@@ -39908,7 +39908,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ModidficatorToggleItem
   ModificatorName: BigPlayers
-  ModificatorMultiplyMoney: 0
+  ModificatorMultiplyMoney: 0.3
   ModificatorOpposite: {fileID: 751310649}
 --- !u!114 &875598470
 MonoBehaviour:
@@ -46233,7 +46233,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ModidficatorToggleItem
   ModificatorName: Fog
-  ModificatorMultiplyMoney: 0
+  ModificatorMultiplyMoney: 0.75
   ModificatorOpposite: {fileID: 0}
 --- !u!1 &998222592
 GameObject:
@@ -53360,7 +53360,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ModidficatorToggleItem
   ModificatorName: Wind
-  ModificatorMultiplyMoney: 0
+  ModificatorMultiplyMoney: 0.1
   ModificatorOpposite: {fileID: 0}
 --- !u!1 &1143092506
 GameObject:
@@ -65067,7 +65067,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ModidficatorToggleItem
   ModificatorName: X2PuckSpeed
-  ModificatorMultiplyMoney: 0
+  ModificatorMultiplyMoney: 0.3
   ModificatorOpposite: {fileID: 0}
 --- !u!1 &1391396901
 GameObject:
@@ -67277,7 +67277,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ModidficatorToggleItem
   ModificatorName: MoreWalls
-  ModificatorMultiplyMoney: 0
+  ModificatorMultiplyMoney: 0.4
   ModificatorOpposite: {fileID: 0}
 --- !u!1 &1436247961
 GameObject:
@@ -68445,7 +68445,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ModidficatorToggleItem
   ModificatorName: BigPuck
-  ModificatorMultiplyMoney: 0
+  ModificatorMultiplyMoney: 0.25
   ModificatorOpposite: {fileID: 2105189857}
 --- !u!114 &1461299815
 MonoBehaviour:
@@ -97722,7 +97722,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ModidficatorToggleItem
   ModificatorName: SmallPuck
-  ModificatorMultiplyMoney: 0
+  ModificatorMultiplyMoney: 0.1
   ModificatorOpposite: {fileID: 1461299815}
 --- !u!1 &2106764718
 GameObject:
