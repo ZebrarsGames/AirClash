@@ -23,9 +23,15 @@ public class DailyAwardHandler : MonoBehaviour
     [Header("Scripts")]
     [SerializeField] private MoneyHandler moneyHandler;
     [SerializeField] private XpHandler xpHandler;
+    [SerializeField] private QuestsHandler questsHandler; 
+    [SerializeField] private DailyQuestHandler dailyQuestHandler;
 
     private Sequence rewardSequence;
     private const string serverUrl = "https://airclashserver.onrender.com/claimDailyReward";
+    private static readonly string[] MoneyQuestKeys = { "money10", "money50", "money100", "money200", "money300", "money500" };
+    private static readonly string[] MoneyDailyQuestKeys = { "daily_money50", "money70", "daily_money100" };
+    private static readonly string[] XpQuestKeys = { "xp100", "xp200", "xp400", "xp500", "xp700", "xp1000" };
+    private static readonly string[] XpDailyQuestKeys = { "xp50" };
 
     [Serializable]
     public class RewardData
@@ -62,6 +68,16 @@ public class DailyAwardHandler : MonoBehaviour
 
     public async void CheckReward()
     {
+        if(Application.internetReachability == NetworkReachability.NotReachable)
+        {
+            if(warningText != null)
+            {
+                warningText.gameObject.SetActive(true);
+                warningText.SetText("Нельзя получить награды без интернета!");
+                Debug.LogWarning("Нельзя получить награды без интернета!");
+                return;
+            }
+        }
         string nickname = PlayerPrefs.GetString("Nick", "Ник");
         bool isAccountExists = await FirebaseManager.CheckUserExistsAsync(nickname);
         if(!isAccountExists)
@@ -97,6 +113,8 @@ public class DailyAwardHandler : MonoBehaviour
                 {
                     moneyHandler.AddMoney(response.reward.coins);
                     xpHandler.AddXp(response.reward.xp);
+                    UpdateMoneyQuests(response.reward.coins);
+                    UpdateXpQuests(response.reward.xp);
                     bool isSkin = false;
                     if(!string.IsNullOrEmpty(response.reward.skin_id))
                     {
@@ -178,6 +196,36 @@ public class DailyAwardHandler : MonoBehaviour
         if(audioSource && whooshSfx)
         {
             audioSource.PlayOneShot(whooshSfx);
+        }
+    }
+
+    private void UpdateXpQuests(int amount)
+    {
+        if(questsHandler != null)
+        {
+            foreach(var key in XpQuestKeys)
+                questsHandler.UpdateQuestProgress(key, amount);
+        }
+
+        if(dailyQuestHandler != null)
+        {
+            foreach(var key in XpDailyQuestKeys)
+                dailyQuestHandler.UpdateQuestProgress(key, amount);
+        }
+    }
+
+    private void UpdateMoneyQuests(int amount)
+    {
+        if(questsHandler != null)
+        {
+            foreach(var key in MoneyQuestKeys)
+                questsHandler.UpdateQuestProgress(key, amount);
+        }
+
+        if(dailyQuestHandler != null)
+        {
+            foreach(var key in MoneyDailyQuestKeys)
+                dailyQuestHandler.UpdateQuestProgress(key, amount);
         }
     }
 

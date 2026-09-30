@@ -53,7 +53,6 @@ public class GoalHandler : MonoBehaviour
     [SerializeField] private TimerScr timer;
     [SerializeField] private EndScreen endScreen;
     
-    // Оптимизация: вместо string храним ссылку на последний объект
     private GameObject lastCollisionGO; 
     private bool isBotsGame;
     private float currentDifficulty;
@@ -96,6 +95,12 @@ public class GoalHandler : MonoBehaviour
     private bool isBigPlayer = false;
     private bool isSmallPlayer = false;
     private Camera mainCamera;
+    private static readonly string[] XpQuestKeys = { "xp100", "xp200", "xp400", "xp500", "xp700", "xp1000" };
+    private static readonly string[] XpDailyQuestKeys = { "xp50" };
+    private static readonly string[] WinDailyQuestKeys = { "win_1_matches", "win_3_matches", "win_5_matches", "win_7_matches", "win_10_matches" };
+    private static readonly string[] GoalQuestKeys = { "goal10", "goal50", "goal100", "goal200", "goal300", "goal500" };
+    private static readonly string[] GoalDailyQuestKeys = { "goal20" };
+    private static readonly string[] AchievementsKeys = { "a_start_has_been_made", "begginer", "amateur", "professional", "master", "world_champion", "best_in_the_galaxy", "best_in_the_universe" };
 
     void Awake()
     {
@@ -456,48 +461,53 @@ public class GoalHandler : MonoBehaviour
         }
     }
 
-    public void UpdateAchievements()
+    private void UpdateXpQuests(int amount)
     {
-        PlayerPrefs.SetInt("TotalGoals", PlayerPrefs.GetInt("TotalGoals", 0) + 1);
-        PlayerPrefs.Save();
-        achievementsHandler.UpdateProgress("a_start_has_been_made", 1);
-        achievementsHandler.UpdateProgress("begginer", 1);
-        achievementsHandler.UpdateProgress("amateur", 1);
-        achievementsHandler.UpdateProgress("professional", 1);
-        achievementsHandler.UpdateProgress("master", 1);
-        achievementsHandler.UpdateProgress("world_champion", 1);
-        achievementsHandler.UpdateProgress("best_in_the_galaxy", 1);
-        achievementsHandler.UpdateProgress("best_in_the_universe", 1);
-    }
+        if(questsHandler != null)
+        {
+            foreach(var key in XpQuestKeys)
+                questsHandler.UpdateQuestProgress(key, amount);
+        }
 
-    private void UpdateWinQuests()
-    {
-        dailyQuestHandler.UpdateQuestProgress("win_1_matches", 1);
-        dailyQuestHandler.UpdateQuestProgress("win_3_matches", 1);
-        dailyQuestHandler.UpdateQuestProgress("win_5_matches", 1);
-        dailyQuestHandler.UpdateQuestProgress("win_7_matches", 1);
-        dailyQuestHandler.UpdateQuestProgress("win_10_matches", 1);
+        if(dailyQuestHandler != null)
+        {
+            foreach(var key in XpDailyQuestKeys)
+                dailyQuestHandler.UpdateQuestProgress(key, amount);
+        }
     }
 
     private void UpdateGoalQuests()
     {
-        questsHandler.UpdateQuestProgress("goal10", 1);
-        questsHandler.UpdateQuestProgress("goal50", 1);
-        questsHandler.UpdateQuestProgress("goal100", 1);
-        questsHandler.UpdateQuestProgress("goal200", 1);
-        questsHandler.UpdateQuestProgress("goal300", 1);
-        questsHandler.UpdateQuestProgress("goal500", 1);
-        dailyQuestHandler.UpdateQuestProgress("goal20", 1);
+        if(questsHandler != null)
+        {
+            foreach(var key in GoalQuestKeys)
+                questsHandler.UpdateQuestProgress(key, 1);
+        }
+
+        if(dailyQuestHandler != null)
+        {
+            foreach(var key in GoalDailyQuestKeys)
+                dailyQuestHandler.UpdateQuestProgress(key, 1);
+        }
     }
 
-    private void UpdateXpQuests(int amount)
+    private void UpdateWinQuests()
     {
-        questsHandler.UpdateQuestProgress("xp100", amount);
-        questsHandler.UpdateQuestProgress("xp200", amount);
-        questsHandler.UpdateQuestProgress("xp400", amount);
-        questsHandler.UpdateQuestProgress("xp500", amount);
-        questsHandler.UpdateQuestProgress("xp700", amount);
-        questsHandler.UpdateQuestProgress("xp1000", amount);
-        dailyQuestHandler.UpdateQuestProgress("xp50", amount);
+        if(dailyQuestHandler != null)
+        {
+            foreach(var key in WinDailyQuestKeys)
+                dailyQuestHandler.UpdateQuestProgress(key, 1);
+        }
+    }
+
+    private void UpdateAchievements()
+    {
+        PlayerPrefs.SetInt("TotalGoals", PlayerPrefs.GetInt("TotalGoals", 0) + 1);
+        PlayerPrefs.Save();
+        if(achievementsHandler != null)
+        {
+            foreach(var key in AchievementsKeys)
+                achievementsHandler.UpdateProgress(key, 1);
+        }
     }
 }

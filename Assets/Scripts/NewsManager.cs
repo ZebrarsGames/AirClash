@@ -21,6 +21,16 @@ public class NewsManager : MonoBehaviour
 
     private IEnumerator FetchNewsCoroutine()
     {
+        if(Application.internetReachability == NetworkReachability.NotReachable)
+        {
+            if(emptyText != null)
+            {
+                emptyText.gameObject.SetActive(true);
+                emptyText.SetText("Нельзя прочитать новости без интернета!");
+                Debug.LogWarning("Нельзя прочитать новости без интернета!");
+                yield break;
+            }
+        }
         if(loadingIndicator != null) loadingIndicator.SetActive(true);
         if(emptyText != null) emptyText.gameObject.SetActive(false);
 

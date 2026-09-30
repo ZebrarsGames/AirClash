@@ -24,6 +24,7 @@ public class XpHandler : MonoBehaviour
     }
 
     private Dictionary<string, XpAward> xpAwards = new Dictionary<string, XpAward>();
+    private static readonly string[] AchievementsKeys = { "first_steps", "regular_player", "thunderstorm_game", "game_legend" };
 
     private void Awake()
     {
@@ -123,9 +124,10 @@ public class XpHandler : MonoBehaviour
 
     private void UpdateAchievements()
     {
-        achievementsHandler.UpdateProgress("first_steps", 1);
-        achievementsHandler.UpdateProgress("regular_player", 1);
-        achievementsHandler.UpdateProgress("thunderstorm_game", 1);
-        achievementsHandler.UpdateProgress("game_legend", 1);
+        if(achievementsHandler != null)
+        {
+            foreach(var key in AchievementsKeys)
+                achievementsHandler.UpdateProgress(key, 1);
+        }
     }
 }

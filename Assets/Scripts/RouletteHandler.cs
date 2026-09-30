@@ -49,6 +49,10 @@ public class RouletteHandler : MonoBehaviour
     private readonly WaitForSeconds wait1_0f = new WaitForSeconds(1f);
     private readonly WaitForSeconds wait0_7f = new WaitForSeconds(0.7f);
     private readonly WaitForSeconds wait0_3f = new WaitForSeconds(0.3f);
+    private static readonly string[] MoneyQuestKeys = { "money10", "money50", "money100", "money200", "money300", "money500" };
+    private static readonly string[] MoneyDailyQuestKeys = { "daily_money50", "money70", "daily_money100" };
+    private static readonly string[] XpQuestKeys = { "xp100", "xp200", "xp400", "xp500", "xp700", "xp1000" };
+    private static readonly string[] XpDailyQuestKeys = { "xp50" };
 
     private void Awake()
     {
@@ -221,7 +225,7 @@ public class RouletteHandler : MonoBehaviour
                     if(data.award == 67) achievementsHandler.UpdateProgress("six_seven", 1);
                     awardText.text = $"ВЫИГРЫШ: {data.award} монет";
                     moneyHandler.AddMoney(data.award);
-                    UpdateQuests(data.award);
+                    UpdateMoneyQuests(data.award);
                     moneyText.SetText($"{moneyHandler.GetMoney()} <sprite=0>");
                     break;
                     
@@ -234,7 +238,7 @@ public class RouletteHandler : MonoBehaviour
                             {
                                 awardText.text = $"ВЫИГРЫШ: {i.skinPrice} монет (скин уже получен)";
                                 moneyHandler.AddMoney(i.skinPrice);
-                                UpdateQuests(i.skinPrice);
+                                UpdateMoneyQuests(i.skinPrice);
                                 moneyText.SetText($"{moneyHandler.GetMoney()} <sprite=0>");
                             }
                             else
@@ -294,27 +298,33 @@ public class RouletteHandler : MonoBehaviour
         choiceRoulettePanelGroup.DOFade(1.0f, 0.2f);
     }
 
-    private void UpdateQuests(int amount)
-    {
-        questsHandler.UpdateQuestProgress("money10", amount);
-        questsHandler.UpdateQuestProgress("money50", amount);
-        questsHandler.UpdateQuestProgress("money100", amount);
-        questsHandler.UpdateQuestProgress("money200", amount);
-        questsHandler.UpdateQuestProgress("money300", amount);
-        questsHandler.UpdateQuestProgress("money500", amount);
-        dailyQuestHandler.UpdateQuestProgress("money50", amount);
-        dailyQuestHandler.UpdateQuestProgress("money70", amount);
-        dailyQuestHandler.UpdateQuestProgress("money100", amount);
-    }
-
     private void UpdateXpQuests(int amount)
     {
-        questsHandler.UpdateQuestProgress("xp100", amount);
-        questsHandler.UpdateQuestProgress("xp200", amount);
-        questsHandler.UpdateQuestProgress("xp400", amount);
-        questsHandler.UpdateQuestProgress("xp500", amount);
-        questsHandler.UpdateQuestProgress("xp700", amount);
-        questsHandler.UpdateQuestProgress("xp1000", amount);
-        dailyQuestHandler.UpdateQuestProgress("xp50", amount);
+        if(questsHandler != null)
+        {
+            foreach(var key in XpQuestKeys)
+                questsHandler.UpdateQuestProgress(key, amount);
+        }
+
+        if(dailyQuestHandler != null)
+        {
+            foreach(var key in XpDailyQuestKeys)
+                dailyQuestHandler.UpdateQuestProgress(key, amount);
+        }
+    }
+
+    private void UpdateMoneyQuests(int amount)
+    {
+        if(questsHandler != null)
+        {
+            foreach(var key in MoneyQuestKeys)
+                questsHandler.UpdateQuestProgress(key, amount);
+        }
+
+        if(dailyQuestHandler != null)
+        {
+            foreach(var key in MoneyDailyQuestKeys)
+                dailyQuestHandler.UpdateQuestProgress(key, amount);
+        }
     }
 }
