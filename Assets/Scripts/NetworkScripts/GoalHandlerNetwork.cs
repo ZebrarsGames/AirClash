@@ -84,6 +84,7 @@ public class GoalHandlerNetwork : NetworkBehaviour
     private int score2 = 0;
     public int howManyGoals;
     [SerializeField] private TimerScr timer;
+    [SerializeField] private EloSystemScr eloSystemScr;
 
     [Header("Audio")]
     public AudioSource audioSourceSfx;
@@ -191,7 +192,7 @@ public class GoalHandlerNetwork : NetworkBehaviour
         timer.Goal();
     }
 
-    [Server] 
+    [Server]
     public void ServerProcessGoal(Collider2D collision)
     {
         if(collision.gameObject.CompareTag("GoalTrigger1"))
@@ -212,16 +213,23 @@ public class GoalHandlerNetwork : NetworkBehaviour
                 playerAMatches++;
                 playerBMatches++;
 
-                (int newRatingA, int newRatingB) = EloSystemScr.CalculateNewRatings(
-                    playerARating, playerBRating, playerAMatches, playerBMatches, score2, score1
+                eloSystemScr.CalculateNewRatings(
+                    playerARating, playerBRating, playerAMatches, playerBMatches, score2, score1, (response) => {
+                        
+                        int newRatingA = response.newRatingA;
+                        int newRatingB = response.newRatingB;
+                        
+                        Debug.Log("[GoalHandlerNetwork] Эло успешно получен с сервера");
+                        
+                        RpcWinLose(winningPlayer, newRatingA, newRatingB, playerAMatches, playerBMatches, playerARating, playerBRating);
+                    },
+                    (error) => {
+                        Debug.LogError(error);
+                        RpcWinLose(winningPlayer, playerARating, playerBRating, playerAMatches, playerBMatches, playerARating, playerBRating);
+                    }
                 );
-
-                Debug.Log($"Игрок 1 (Хост): {playerARating} -> {newRatingA} (Изменение: {newRatingA - playerARating})");
-                Debug.Log($"Игрок 2 (Клиент): {playerBRating} -> {newRatingB} (Изменение: {newRatingB - playerBRating})");
-                
-                RpcWinLose(winningPlayer, newRatingA, newRatingB, playerAMatches, playerBMatches, playerARating, playerBRating);
             } 
-            else if (EOSMenuUI.typeOfCurrentGame == TypeOfGame.roomCode)
+            else if(EOSMenuUI.typeOfCurrentGame == TypeOfGame.roomCode)
             {
                 RpcWinLose(winningPlayer, -1, -1, -1, -1, -1, -1);
             }

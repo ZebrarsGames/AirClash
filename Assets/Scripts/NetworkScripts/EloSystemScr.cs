@@ -1,42 +1,80 @@
 using System;
+using System.Collections;
+using UnityEngine;
+using UnityEngine.Networking;
 
-public static class EloSystemScr
+public class EloSystemScr : MonoBehaviour
 {
-    private const double MinimumRating = 100.0;
+    private const string ServerUrl = "https://airclashserver.onrender.com/mm/calculateElo";
 
-    private static int GetKFactor(double rating, int matchesPlayed)
+    [System.Serializable]
+    public class EloRequestData
     {
-        if(matchesPlayed < 15) return 40;
-        if(rating < 1800) return 25;
-        return 15;
+        public double ratingA;
+        public double ratingB;
+        public int matchesA;
+        public int matchesB;
+        public int goalsA;
+        public int goalsB;
     }
 
-    public static (int newRatingA, int newRatingB) CalculateNewRatings(
-        double ratingA, double ratingB, 
-        int matchesA, int matchesB, 
-        int goalsA, int goalsB)
+    [System.Serializable]
+    public class EloResponseData
     {
-        double scoreA = goalsA > goalsB ? 1.0 : 0.0;
-        double scoreB = 1.0 - scoreA;
+        public string status;
+        public int newRatingA;
+        public int newRatingB;
+        public int deltaA;
+        public int deltaB;
+    }
 
-        double expectedA = 1.0 / (1.0 + Math.Pow(10.0, (ratingB - ratingA) / 400.0));
-        double expectedB = 1.0 - expectedA;
+    public void CalculateNewRatings(double ratingA, double ratingB, int matchesA, int matchesB, int goalsA, int goalsB, Action<EloResponseData> onSuccess, Action<string> onError = null)
+    {
+        StartCoroutine(SendEloCalculationRoutine(ratingA, ratingB, matchesA, matchesB, goalsA, goalsB, onSuccess, onError));
+    }
 
-        int goalDifference = Math.Abs(goalsA - goalsB);
-        double marginOfVictoryMultiplier = 1.0 + (Math.Sqrt(goalDifference) - 1.0) * 0.5;
+    private IEnumerator SendEloCalculationRoutine(double ratingA, double ratingB, int matchesA, int matchesB, int goalsA, int goalsB, Action<EloResponseData> onSuccess, Action<string> onError)
+    {
+        EloRequestData requestData = new EloRequestData
+        {
+            ratingA = ratingA,
+            ratingB = ratingB,
+            matchesA = matchesA,
+            matchesB = matchesB,
+            goalsA = goalsA,
+            goalsB = goalsB
+        };
 
-        int kA = GetKFactor(ratingA, matchesA);
-        int kB = GetKFactor(ratingB, matchesB);
+        string jsonBody = JsonUtility.ToJson(requestData);
 
-        double deltaA = kA * (scoreA - expectedA) * marginOfVictoryMultiplier;
-        double deltaB = kB * (scoreB - expectedB) * marginOfVictoryMultiplier;
+        using(UnityWebRequest www = new UnityWebRequest(ServerUrl, "POST"))
+        {
+            byte[] bodyRaw = System.Text.Encoding.UTF8.GetBytes(jsonBody);
+            www.uploadHandler = new UploadHandlerRaw(bodyRaw);
+            www.downloadHandler = new DownloadHandlerBuffer();
+            www.SetRequestHeader("Content-Type", "application/json");
+            www.SetRequestHeader("x-game-secret", GameConfig.ApiSecret);
 
-        double finalA = Math.Max(MinimumRating, ratingA + deltaA);
-        double finalB = Math.Max(MinimumRating, ratingB + deltaB);
+            Debug.Log("[EloSystemScr] Отправка запроса на Render.com...");
+            yield return www.SendWebRequest();
+            Debug.Log($"[EloSystemScr] Ответ получен! Результат: {www.result}");
 
-        int newRatingA = (int)Math.Round(finalA, MidpointRounding.AwayFromZero);
-        int newRatingB = (int)Math.Round(finalB, MidpointRounding.AwayFromZero);
-
-        return (newRatingA, newRatingB);
+            if(www.result == UnityWebRequest.Result.Success)
+            {
+                EloResponseData response = JsonUtility.FromJson<EloResponseData>(www.downloadHandler.text);
+                if(response.status == "success")
+                {
+                    onSuccess?.Invoke(response);
+                }
+                else
+                {
+                    onError?.Invoke("[EloSystemScr] Не удалось получить эло с сервера");
+                }
+            }
+            else
+            {
+                onError?.Invoke(www.error);
+            }
+        }
     }
 }
