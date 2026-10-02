@@ -25572,7 +25572,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 22400762, guid: 67117722a812a2e46ab8cb8eafbf5f5e, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 0.000049591064
+      value: 0.000034332275
       objectReference: {fileID: 0}
     - target: {fileID: 22426080, guid: 67117722a812a2e46ab8cb8eafbf5f5e, type: 3}
       propertyPath: m_AnchorMax.x
@@ -27192,8 +27192,8 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 359697133}
   m_HandleRect: {fileID: 359697132}
   m_Direction: 2
-  m_Value: 0.9999963
-  m_Size: 0.30762336
+  m_Value: 0.5
+  m_Size: 0.30846405
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -29026,7 +29026,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 100}
+  m_AnchoredPosition: {x: 0, y: 100.00003}
   m_SizeDelta: {x: -980, y: 125}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1836137307
@@ -29092,6 +29092,8 @@ GameObject:
   m_Component:
   - component: {fileID: 1836931572}
   - component: {fileID: 1836931573}
+  - component: {fileID: 1836931575}
+  - component: {fileID: 1836931574}
   m_Layer: 5
   m_Name: Content
   m_TagString: Untagged
@@ -29116,8 +29118,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: -674.13}
-  m_SizeDelta: {x: 0, y: 1348.27}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &1836931573
 CanvasRenderer:
@@ -29127,6 +29129,46 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1836931571}
   m_CullTransparentMesh: 1
+--- !u!114 &1836931574
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1836931571}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3245ec927659c4140ac4f8d17403cc18, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.ContentSizeFitter
+  m_HorizontalFit: 0
+  m_VerticalFit: 2
+--- !u!114 &1836931575
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1836931571}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 59f8146938fff824cb5fd77236b75775, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.VerticalLayoutGroup
+  m_Padding:
+    m_Left: 0
+    m_Right: 0
+    m_Top: 0
+    m_Bottom: 0
+  m_ChildAlignment: 0
+  m_Spacing: 0
+  m_ChildForceExpandWidth: 1
+  m_ChildForceExpandHeight: 1
+  m_ChildControlWidth: 1
+  m_ChildControlHeight: 1
+  m_ChildScaleWidth: 0
+  m_ChildScaleHeight: 0
+  m_ReverseArrangement: 0
 --- !u!1 &1837143833
 GameObject:
   m_ObjectHideFlags: 0
@@ -30333,6 +30375,7 @@ GameObject:
   - component: {fileID: 1933418525}
   - component: {fileID: 1933418524}
   - component: {fileID: 1933418526}
+  - component: {fileID: 1933418527}
   m_Layer: 5
   m_Name: SkinsPanel
   m_TagString: Untagged
@@ -30381,10 +30424,10 @@ RectTransform:
   - {fileID: 1961064478}
   m_Father: {fileID: 1836931572}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 895.8695, y: -971}
+  m_SizeDelta: {x: 1791.739, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1933418524
 MonoBehaviour:
@@ -30448,6 +30491,20 @@ MonoBehaviour:
   m_Spacing: {x: 35, y: 20}
   m_Constraint: 0
   m_ConstraintCount: 44
+--- !u!114 &1933418527
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1933418522}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3245ec927659c4140ac4f8d17403cc18, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.ContentSizeFitter
+  m_HorizontalFit: 0
+  m_VerticalFit: 2
 --- !u!1 &1934516807
 GameObject:
   m_ObjectHideFlags: 0
@@ -32341,7 +32398,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 100}
+  m_AnchoredPosition: {x: 0, y: 100.00003}
   m_SizeDelta: {x: -980, y: 125}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &2062009227
@@ -33142,6 +33199,7 @@ GameObject:
   - component: {fileID: 2112752285}
   - component: {fileID: 2112752284}
   - component: {fileID: 2112752283}
+  - component: {fileID: 2112752286}
   m_Layer: 5
   m_Name: SkinsScrollView
   m_TagString: Untagged
@@ -33238,6 +33296,18 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2112752281}
   m_CullTransparentMesh: 1
+--- !u!114 &2112752286
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2112752281}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: db3380668d77df243aeb48c4d6715395, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ScrollResetter
 --- !u!1 &2112929382
 GameObject:
   m_ObjectHideFlags: 0
