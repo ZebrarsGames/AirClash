@@ -22,14 +22,14 @@ public class EndScreen : MonoBehaviour
 
         if(sceneName.Equals("BotsGame"))
         {
-            loseOrWinText.text = player1Wins ? "Поражение!" : "Победа!";
+            loseOrWinText.SetText(player1Wins ? "Поражение!" : "Победа!");
             coinMover.AddXp(Vector3.zero, howManyXpEarned, xpBeforeWin);
             StartCoroutine(UpdateText());
         } 
         else if(sceneName.Equals("GameScene"))
         {
-            loseOrWinText.text = player1Wins ? "Игрок 1 выиграл!" : "Игрок 2 выиграл!";
-            earnedMoneyText.text = "Заработанные деньги: 0";
+            loseOrWinText.SetText(player1Wins ? "Игрок 1 выиграл!" : "Игрок 2 выиграл!");
+            earnedMoneyText.SetText("Заработанные деньги: 0");
         }
     }
 
@@ -37,13 +37,13 @@ public class EndScreen : MonoBehaviour
     {
         for(int i = 0; i < 3; i++)
         {
-            earnedMoneyText.text = "Заработанные деньги: Считаем.";
+            earnedMoneyText.SetText("Заработанные деньги: Считаем.");
             yield return waitTime;
-            earnedMoneyText.text = "Заработанные деньги: Считаем..";
+            earnedMoneyText.SetText("Заработанные деньги: Считаем..");
             yield return waitTime;
-            earnedMoneyText.text = "Заработанные деньги: Считаем...";
+            earnedMoneyText.SetText("Заработанные деньги: Считаем...");
             yield return waitTime;
         }
-        earnedMoneyText.text = $"Заработанные деньги: {PlayerPrefs.GetInt("HowMoneyAdds")}";
+        earnedMoneyText.SetText("Заработанные деньги: {0}", PlayerPrefs.GetInt("HowMoneyAdds"));
     }
 }

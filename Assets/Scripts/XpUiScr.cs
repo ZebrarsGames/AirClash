@@ -78,6 +78,7 @@ public class XpUiScr : MonoBehaviour
 
     public void LevelUpAnimStart()
     {
+        if(panel == null) return;
         StartCoroutine(LevelUpAnim());
     }
 

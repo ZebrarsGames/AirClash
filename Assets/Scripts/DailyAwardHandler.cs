@@ -13,6 +13,7 @@ public class DailyAwardHandler : MonoBehaviour
     [SerializeField] private GameObject rewardPanel;
     [SerializeField] private TextMeshProUGUI warningText;
     [SerializeField] private TextMeshProUGUI moneyText;
+    [SerializeField] private TextMeshProUGUI globalMoneyText;
     [SerializeField] private TextMeshProUGUI xpText;
     [SerializeField] private RectTransform skinImage;
 
@@ -25,6 +26,7 @@ public class DailyAwardHandler : MonoBehaviour
     [SerializeField] private XpHandler xpHandler;
     [SerializeField] private QuestsHandler questsHandler; 
     [SerializeField] private DailyQuestHandler dailyQuestHandler;
+    [SerializeField] private XpUiScr xpUiScr;
 
     private Sequence rewardSequence;
     private const string serverUrl = "https://airclashserver.onrender.com/claimDailyReward";
@@ -148,8 +150,10 @@ public class DailyAwardHandler : MonoBehaviour
     {
         rewardSequence?.Kill(true);
         
-        moneyText.SetText($"{coins} <sprite=0>");
-        xpText.SetText($"{xp} <sprite=0>");
+        globalMoneyText.SetText("{0} <sprite=0>", moneyHandler.GetMoney());
+        xpUiScr.SetProgress(xpHandler.GetXPProgress());
+        moneyText.SetText("{0} <sprite=0>", coins);
+        xpText.SetText("{0} <sprite=0>", xp);
         if(isSkin) skinImage.gameObject.SetActive(true);
 
         moneyText.transform.localScale = Vector3.zero;

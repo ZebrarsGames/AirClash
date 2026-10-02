@@ -8142,7 +8142,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 22400762, guid: 67117722a812a2e46ab8cb8eafbf5f5e, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 0.0000038146973
+      value: -0.0000038146973
       objectReference: {fileID: 0}
     - target: {fileID: 22426080, guid: 67117722a812a2e46ab8cb8eafbf5f5e, type: 3}
       propertyPath: m_AnchorMax.x
@@ -10637,9 +10637,9 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-      - m_Target: {fileID: 528693112}
-        m_TargetAssemblyTypeName: MatchmakerScr, Assembly-CSharp
-        m_MethodName: CancelMatchmaking
+      - m_Target: {fileID: 537742949}
+        m_TargetAssemblyTypeName: EOSMenuUI, Assembly-CSharp
+        m_MethodName: DeleteRoom
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
