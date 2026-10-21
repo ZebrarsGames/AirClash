@@ -29,7 +29,6 @@ public class PlayersControllerNetwork : NetworkBehaviour, IBeginDragHandler, IDr
     private Vector2 targetPos; 
     private bool isDragging = false;
     private Color particleColor;
-    private GameObject particles;
     private Vector2 networkVelocity;
 
     [SyncVar(hook = nameof(OnPlayerIndexChanged))]
@@ -40,8 +39,6 @@ public class PlayersControllerNetwork : NetworkBehaviour, IBeginDragHandler, IDr
     private string netSkinName = "";
     [SyncVar(hook = nameof(OnNickChanged))]
     private string netNickName = "";
-    [SyncVar]
-    private Vector2 netLinearVelocity;
 
     void Awake()
     {
@@ -66,14 +63,11 @@ public class PlayersControllerNetwork : NetworkBehaviour, IBeginDragHandler, IDr
     {
         base.OnStartServer();
 
-        if(NetworkServer.connections.Count <= 1)
-        {
-            netPlayerIndex = 1;
-        }
-        else
-        {
-            netPlayerIndex = 2;
-        }
+        int currentCount = NetworkServer.connections.Count;
+        if(currentCount <= 1) netPlayerIndex = 1;
+        else if(currentCount == 2) netPlayerIndex = 2;
+        else if(currentCount == 3) netPlayerIndex = 3;
+        else netPlayerIndex = 4;
     }
 
     public override void OnStartLocalPlayer()
@@ -92,16 +86,28 @@ public class PlayersControllerNetwork : NetworkBehaviour, IBeginDragHandler, IDr
         {
             gameObject.name = "Player1";
             gameObject.tag = "Player1";
-            minX = 0.5f;
-            maxX = 6.65f;
+            minX = 0.5f; maxX = 6.65f;
             SetPlayerPosition(5.186f);
         }
         else if(newIndex == 2)
         {
             gameObject.name = "Player2";
             gameObject.tag = "Player2";
-            minX = -6.65f;
-            maxX = -0.5f;
+            minX = -6.65f; maxX = -0.5f;
+            SetPlayerPosition(-5.186f);
+        }
+        else if(newIndex == 3)
+        {
+            gameObject.name = "Player3";
+            gameObject.tag = "Player3";
+            minX = 0.5f; maxX = 6.65f;
+            SetPlayerPosition(5.186f);
+        }
+        else if(newIndex == 4)
+        {
+            gameObject.name = "Player4";
+            gameObject.tag = "Player4";
+            minX = -6.65f; maxX = -0.5f;
             SetPlayerPosition(-5.186f);
         }
 
@@ -119,7 +125,25 @@ public class PlayersControllerNetwork : NetworkBehaviour, IBeginDragHandler, IDr
 
     private void SetPlayerPosition(float xPos)
     {
-        Vector3 newPos = new Vector3(xPos, transform.position.y, transform.position.z);
+        Vector3 newPos;
+        switch(netPlayerIndex)
+        {
+            case 1:
+                newPos = new Vector3(xPos, 0, 0);
+                break;
+            case 2:
+                newPos = new Vector3(xPos, 0, 0);
+                break;
+            case 3:
+                newPos = new Vector3(xPos, 2, 0);
+                break;
+            case 4:
+                newPos = new Vector3(xPos, -2, 0);
+                break;
+            default:
+                newPos = new Vector3(xPos, transform.position.y, 0);
+                break;
+        }
         transform.position = newPos;
         if(rb != null) 
         {
@@ -129,48 +153,40 @@ public class PlayersControllerNetwork : NetworkBehaviour, IBeginDragHandler, IDr
     }
 
     [Command]
-    private void CmdRequestSkin(string skinName)
-    {
-        netSkinName = skinName;
-    }
+    private void CmdRequestSkin(string skinName) => netSkinName = skinName;
 
     private void OnSkinChanged(string oldSkin, string newSkin)
     {
-        if(string.IsNullOrEmpty(newSkin)) return;
-
-        if(netPlayerIndex == 0) return;
-        
+        if(string.IsNullOrEmpty(newSkin) || netPlayerIndex == 0) return;
         SkinData currentSkin = Resources.Load<SkinData>(newSkin);
         ApplySkin(currentSkin);
     }
 
     [Command]
-    private void CmdRequestNick(string nickName)
-    {
-        netNickName = nickName;
-    }
+    private void CmdRequestNick(string nickName) => netNickName = nickName;
 
     private void OnNickChanged(string oldSkin, string nickName)
     {
-        if(string.IsNullOrEmpty(nickName)) return;
-
-        if(netPlayerIndex == 0) return;
-        if(netPlayerIndex == 1)
+        if(string.IsNullOrEmpty(nickName) || netPlayerIndex == 0) return;
+        
+        string nickTextMeshName = $"Player{netPlayerIndex}NickTextTMP";
+        GameObject nickObj = GameObject.Find(nickTextMeshName);
+        if(nickObj != null && nickObj.TryGetComponent<TextMeshProUGUI>(out var tmp))
         {
-            GameObject.Find("Player1NickTextTMP").GetComponent<TextMeshProUGUI>().text = nickName;
-        } else if(netPlayerIndex == 2)
-        {
-            GameObject.Find("Player2NickTextTMP").GetComponent<TextMeshProUGUI>().text = nickName;
+            tmp.text = nickName;
         }
+
         var goalHandlerNetwork = FindAnyObjectByType<GoalHandlerNetwork>();
-        goalHandlerNetwork.SetRating(nickName, netPlayerIndex);
-        goalHandlerNetwork.SetPlayedMatches(nickName, netPlayerIndex);
+        if(goalHandlerNetwork != null)
+        {
+            goalHandlerNetwork.SetRating(nickName, netPlayerIndex);
+            goalHandlerNetwork.SetPlayedMatches(nickName, netPlayerIndex);
+        }
     }
 
     public void OnBeginDrag(PointerEventData eventData)
     {
         if(!isLocalPlayer) return; 
-
         Vector3 mousePos = cam.ScreenToWorldPoint(eventData.position);
         offset = (Vector2)transform.position - (Vector2)mousePos;
         isDragging = true;
@@ -189,28 +205,19 @@ public class PlayersControllerNetwork : NetworkBehaviour, IBeginDragHandler, IDr
         calculatedPos.y = Mathf.Clamp(calculatedPos.y, minY, maxY);
 
         targetPos = calculatedPos;
-
         CmdUpdatePosition(calculatedPos);
     }
 
     private void FixedUpdate()
     {
-        if(isLocalPlayer)
-        {
-            MoveRigidbodyPhysically(targetPos);
-        }
-        else
-        {
-            SmoothNetworkMovement();
-        }
+        if(isLocalPlayer) MoveRigidbodyPhysically(targetPos);
+        else SmoothNetworkMovement();
     }
 
     private void MoveRigidbodyPhysically(Vector2 target)
     {
         Vector2 desiredVelocity = (target - rb.position) / Time.fixedDeltaTime;
-
         rb.linearVelocity = desiredVelocity;
-
         rb.MovePosition(target);
     }
 
@@ -218,10 +225,8 @@ public class PlayersControllerNetwork : NetworkBehaviour, IBeginDragHandler, IDr
     private void CmdUpdatePosition(Vector2 requestedPos)
     {
         if(isMovementBlocked) return;
-
         requestedPos.x = Mathf.Clamp(requestedPos.x, minX, maxX);
         requestedPos.y = Mathf.Clamp(requestedPos.y, minY, maxY);
-
         MoveRigidbodyPhysically(requestedPos);
     }
 
@@ -236,7 +241,6 @@ public class PlayersControllerNetwork : NetworkBehaviour, IBeginDragHandler, IDr
         }
 
         Vector2 smoothedPos = Vector2.SmoothDamp(rb.position, targetPos, ref networkVelocity, smoothTime, Mathf.Infinity, Time.fixedDeltaTime);
-        
         rb.linearVelocity = networkVelocity;
         rb.MovePosition(smoothedPos);
     }
@@ -251,7 +255,7 @@ public class PlayersControllerNetwork : NetworkBehaviour, IBeginDragHandler, IDr
     {
         if(skin == null || netPlayerIndex == 0) return;
 
-        if(netPlayerIndex == 2) 
+        if(netPlayerIndex % 2 == 0) 
         {
             SkinData pl2Skin = Resources.Load<SkinData>(skin.name + "Pl2");
             if(pl2Skin != null) skin = pl2Skin;
@@ -267,10 +271,10 @@ public class PlayersControllerNetwork : NetworkBehaviour, IBeginDragHandler, IDr
 
             var ps = newParticles.GetComponent<ParticleSystem>();
             var psMain = ps.main;
-            if(netPlayerIndex == 2 && ColorUtility.TryParseHtmlString("#ff6a6a", out particleColor))
+            if(netPlayerIndex % 2 == 0 && ColorUtility.TryParseHtmlString("#ff6a6a", out particleColor))
             {
                 psMain.startColor = particleColor;
-            } else if(netPlayerIndex == 1 && ColorUtility.TryParseHtmlString("#9abaf5", out particleColor))
+            } else if(ColorUtility.TryParseHtmlString("#9abaf5", out particleColor))
             {
                 psMain.startColor = particleColor;
             }
@@ -308,7 +312,7 @@ public class PlayersControllerNetwork : NetworkBehaviour, IBeginDragHandler, IDr
         {
             if(gameObject.GetComponent<TrailRenderer>()) 
             {
-                if(netPlayerIndex == 2)
+                if(netPlayerIndex % 2 == 0)
                 {
                     var trailRenderer = GetComponent<TrailRenderer>();
                     Color startColor;
@@ -340,48 +344,26 @@ public class PlayersControllerNetwork : NetworkBehaviour, IBeginDragHandler, IDr
             rb.transform.position = newStartPos;
         }
         
-        if(netIdentity != null)
-        {
-            RpcForceTeleportClient(newStartPos);
-        }
+        if(netIdentity != null) RpcForceTeleportClient(newStartPos);
 
-        if(gameObject.activeInHierarchy)
-        {
-            StartCoroutine(UnblockMovement());
-        }
-        else
-        {
-            isMovementBlocked = false; 
-        }
+        if(gameObject.activeInHierarchy) StartCoroutine(UnblockMovement());
+        else isMovementBlocked = false; 
     }
 
     [Server]
-    public void SetMovementBlocked(bool blocked)
-    {
-        isMovementBlocked = blocked;
-    }
+    public void SetMovementBlocked(bool blocked) => isMovementBlocked = blocked;
 
     [ClientRpc]
     private void RpcForceTeleportClient(Vector2 newStartPos)
     {
-        if(isLocalPlayer)
-        {
-            isDragging = false; 
-        }
-
+        if(isLocalPlayer) isDragging = false; 
         targetPos = newStartPos;
-
         if(rb != null)
         {
             rb.linearVelocity = Vector2.zero;
             rb.angularVelocity = 0f;
             rb.position = newStartPos;
             rb.transform.position = newStartPos;
-        }
-
-        if(TryGetComponent<NetworkTransformBase>(out var netTransform))
-        {
-            netTransform.Reset();
         }
     }
 

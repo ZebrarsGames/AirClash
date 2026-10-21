@@ -2,8 +2,6 @@ using DG.Tweening;
 using Mirror;
 using TMPro;
 using UnityEngine;
-using UnityEngine.Rendering.Universal;
-using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using System;
 using System.Collections;
@@ -58,6 +56,7 @@ public class GoalHandlerNetwork : NetworkBehaviour
 
         public static GoalHandlerNetwork Instance;
 
+
     [Header("UI Elements")]
     public TextMeshProUGUI scoreText1;
     public TextMeshProUGUI scoreText2;
@@ -72,11 +71,15 @@ public class GoalHandlerNetwork : NetworkBehaviour
     [Header("Players & Puck")]
     [SerializeField] private GameObject player1;
     [SerializeField] private GameObject player2;
+    [SerializeField] private GameObject player3;
+    [SerializeField] private GameObject player4;
     public GameObject puck;
 
     [Header("Positions")]
     private Vector2 player1startPos;
     private Vector2 player2startPos;
+    private Vector2 player3startPos;
+    private Vector2 player4startPos;
     private Vector2 puckStartPos;
 
     [Header("Game Logic & Scoring")]
@@ -93,11 +96,8 @@ public class GoalHandlerNetwork : NetworkBehaviour
     public AudioClip startGameSound;
     [SerializeField] private AudioClip[] gameMusics;
 
-    [SyncVar(hook = nameof(OnPlayer1RematchChanged))]
-    private bool player1Ready = false;
-
-    [SyncVar(hook = nameof(OnPlayer2RematchChanged))]
-    private bool player2Ready = false;
+    [SyncVar] private bool player1Ready = false;
+    [SyncVar] private bool player2Ready = false;
 
     private int playerARating, playerBRating;
     private int playerAMatches, playerBMatches;
@@ -105,27 +105,25 @@ public class GoalHandlerNetwork : NetworkBehaviour
     void Awake()
     {
         Instance = this;
-        player1startPos = player1.transform.position;
-        player2startPos = player2.transform.position;
+        player1startPos = player1 != null ? (Vector2)player1.transform.position : Vector2.zero;
+        player2startPos = player2 != null ? (Vector2)player2.transform.position : Vector2.zero;
+        if(player3 != null) player3startPos = player3.transform.position;
+        if(player4 != null) player4startPos = player4.transform.position;
         puckStartPos = puck.transform.position;
-        player1.GetComponentInChildren<Light2D>().intensity = 0;
-        player2.GetComponentInChildren<Light2D>().intensity = 0;
     }
 
     void Start()
     {        
         bool isMusic = PlayerPrefs.GetInt("BgMusicInGame", 1) != 0;
         audioSourceBgMusic.Stop();
-        if(isMusic)
+        if(isMusic && gameMusics.Length > 0)
         {
             int rand = UnityEngine.Random.Range(0, gameMusics.Length);
             audioSourceBgMusic.clip = gameMusics[rand];
             audioSourceBgMusic.loop = true;
-            audioSourceBgMusic.time = 0;
             audioSourceBgMusic.Play();
         }
         howManyGoals = 4;
-        puck.GetComponent<TrailRenderer>().enabled = PlayerPrefs.GetInt("PuckTrail", 1) != 0;
     }
 
     private void OnEnable()
@@ -168,6 +166,14 @@ public class GoalHandlerNetwork : NetworkBehaviour
             {
                 playerBRating = elo;
                 GameObject.Find("Player2EloTextTMP").GetComponent<TextMeshProUGUI>().text = $"Эло: {elo}";
+            } else if(playerIndex == 3)
+            {
+                playerBRating = elo;
+                GameObject.Find("Player3EloTextTMP").GetComponent<TextMeshProUGUI>().text = $"Эло: {elo}";
+            } else if(playerIndex == 4)
+            {
+                playerBRating = elo;
+                GameObject.Find("Player4EloTextTMP").GetComponent<TextMeshProUGUI>().text = $"Эло: {elo}";
             } 
         }));
     }
@@ -291,24 +297,14 @@ public class GoalHandlerNetwork : NetworkBehaviour
 
     public void RegisterPlayer(GameObject player, string name)
     {
-        if(!(NetworkServer.connections.Count <= 1))
+        if(name == "Player1") player1 = player;
+        else if(name == "Player2") player2 = player;
+        else if(name == "Player3") player3 = player;
+        else if(name == "Player4") player4 = player;
+
+        if(NetworkServer.connections.Count > 1 && isServer)
         {
-            if(isServer)
-            {
-                RpcStartTimer(); 
-            }
-            else
-            {
-                CmdRequestStartTimer();
-            }
-        }
-        if(name == "Player1")
-        {
-            player1 = player;
-        }
-        else if(name == "Player2")
-        {
-            player2 = player;
+            RpcStartTimer();
         }
     }
 
@@ -333,15 +329,10 @@ public class GoalHandlerNetwork : NetworkBehaviour
     [Server]
     public void ServerUnblockAllPlayers()
     {
-        if(player1 != null && player1.TryGetComponent<PlayersControllerNetwork>(out var p1))
-        {
-            p1.SetMovementBlocked(false);
-        }
-
-        if(player2 != null && player2.TryGetComponent<PlayersControllerNetwork>(out var p2))
-        {
-            p2.SetMovementBlocked(false);
-        }
+        if(player1 && player1.TryGetComponent<PlayersControllerNetwork>(out var p1)) p1.SetMovementBlocked(false);
+        if(player2 && player2.TryGetComponent<PlayersControllerNetwork>(out var p2)) p2.SetMovementBlocked(false);
+        if(player3 && player3.TryGetComponent<PlayersControllerNetwork>(out var p3)) p3.SetMovementBlocked(false);
+        if(player4 && player4.TryGetComponent<PlayersControllerNetwork>(out var p4)) p4.SetMovementBlocked(false);
     }
 
     public void OnPuckCollisionEnter2D(Collision2D collision) 

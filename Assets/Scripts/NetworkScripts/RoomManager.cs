@@ -7,6 +7,7 @@ using UnityEngine.Networking;
 public class CreateRoomRequest
 {
     public string eos_id;
+    public int max_players;
 }
 
 [Serializable]
@@ -15,6 +16,7 @@ public class CreateRoomResponse
     public string status;
     public string room_code;
     public string eos_id;
+    public int max_players;
     public string message;
 }
 
@@ -29,6 +31,8 @@ public class GetRoomResponse
 {
     public string status;
     public string eos_id;
+    public string[] players;
+    public int max_players;
     public string message;
 }
 
@@ -49,9 +53,9 @@ public class RoomManager : MonoBehaviour
 {
     private const string BASE_URL = "https://airclashserver.onrender.com";
 
-    public void CreateRoom(string eosId, Action<string> onSuccess, Action<string> onError)
+    public void CreateRoom(string eosId, int maxPlayers, Action<string> onSuccess, Action<string> onError)
     {
-        StartCoroutine(CreateRoomRoutine(eosId, onSuccess, onError));
+        StartCoroutine(CreateRoomRoutine(eosId, maxPlayers, onSuccess, onError));
     }
 
     public void JoinRoom(string roomCode, Action<string> onSuccess, Action<string> onError)
@@ -64,11 +68,11 @@ public class RoomManager : MonoBehaviour
         StartCoroutine(DeleteRoomRoutine(roomCode, onSuccess, onError));
     }
 
-    private IEnumerator CreateRoomRoutine(string eosId, Action<string> onSuccess, Action<string> onError)
+    private IEnumerator CreateRoomRoutine(string eosId, int maxPlayers, Action<string> onSuccess, Action<string> onError)
     {
-        Debug.Log($"[Room] EOS ID: {eosId}");
+        Debug.Log($"[Room] EOS ID: {eosId}, Max Players: {maxPlayers}");
         string url = BASE_URL + "/createRoom";
-        CreateRoomRequest requestData = new CreateRoomRequest { eos_id = eosId };
+        CreateRoomRequest requestData = new CreateRoomRequest { eos_id = eosId, max_players = maxPlayers };
         string json = JsonUtility.ToJson(requestData);
 
         using(UnityWebRequest www = new UnityWebRequest(url, "POST"))

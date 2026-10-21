@@ -14,6 +14,19 @@ public enum TypeOfGame
     matchmaking,
     roomCode
 }
+[Serializable]
+public class EloRequestData
+{
+    public string username;
+}
+
+[Serializable]
+public class EloResponseData
+{
+    public string status;
+    public int elo;
+    public string message;
+}
 
 public class EOSMenuUI : MonoBehaviour
 {
@@ -78,7 +91,6 @@ public class EOSMenuUI : MonoBehaviour
         roomCodeText.gameObject.SetActive(false);
         audioSource.loop = true;
         audioSource.clip = bgMusic;
-        audioSource.loop = true;
         audioSource.Play();
         debugText.text = "Авторизация в Epic Games...";
         StartCoroutine(GetPlayerEloRequest(PlayerPrefs.GetString("Nick", "Ник"), (elo) => eloText.text = $"Ваш эло: {elo}"));
@@ -160,7 +172,6 @@ public class EOSMenuUI : MonoBehaviour
             {
                 debugText.text = "Ошибка: Не удалось получить PUID от Epic (Таймаут)";
                 Debug.LogError("[EOS Menu] Epic не вернул PUID. Проверьте Logcat!");
-                
                 yield break;
             }
             yield return new WaitForSeconds(0.2f);
@@ -168,35 +179,39 @@ public class EOSMenuUI : MonoBehaviour
 
         currentEosId = EOSSDKComponent.LocalUserProductId.ToString();
         debugText.text = "Мой EOS ID: " + currentEosId;
-        Debug.Log($"[EOS Menu] Авторизация успешна. EOS ID: {currentEosId}");
     }
 
     public void StartHostGame()
     {
+        StartHostGameCustom(2);
+    }
+
+    public void StartHostGame4Players()
+    {
+        StartHostGameCustom(4);
+    }
+
+    private void StartHostGameCustom(int maxPlayers)
+    {
         if(EOSSDKComponent.LocalUserProductId == null || !EOSSDKComponent.LocalUserProductId.IsValid())
         {
             debugText.text = "Подождите, идёт авторизация EOS...";
-            Debug.LogWarning("Попытка создать комнату до завершения авторизации Epic!");
             return;
         }
 
         currentEosId = EOSSDKComponent.LocalUserProductId.ToString();
         debugText.text = "Создание комнаты...";
 
-        roomManager.CreateRoom(currentEosId, 
+        roomManager.CreateRoom(currentEosId, maxPlayers, 
         (roomId) =>
         {
             if(MyNetworkManager.singleton == null)
             {
                 var foundManager = FindAnyObjectByType<MyNetworkManager>();
-                if(foundManager != null)
-                {
-                    foundManager.gameObject.SetActive(true);
-                }
+                if(foundManager != null) foundManager.gameObject.SetActive(true);
                 else
                 {
                     debugText.text = "Ошибка: Сетевой менеджер не найден!";
-                    Debug.LogError("Критическая ошибка: Компонент MyNetworkManager отсутствует на сцене!");
                     return;
                 }
             }
@@ -204,12 +219,13 @@ public class EOSMenuUI : MonoBehaviour
             {
                 MyNetworkManager.singleton.gameObject.SetActive(true);
             }
+            
             roomCodeText.text = "Код комнаты: " + roomId;
             if(MyNetworkManager.singleton is MyNetworkManager customManager)
             {
                 customManager.SetCurrentRoomCode(roomId);
             }
-            Debug.Log($"Комната успешно создана на сервере! Код: {roomId}");
+            
             typeOfCurrentGame = TypeOfGame.roomCode;
             roomCodeText.gameObject.SetActive(true);
             ShowPlaceholder();
@@ -220,7 +236,6 @@ public class EOSMenuUI : MonoBehaviour
         (errorText) =>
         {
             debugText.text = "Ошибка создания: " + errorText;
-            Debug.LogError($"Ошибка сервера Firebase: {errorText}");
         });
     }
 
@@ -240,20 +255,15 @@ public class EOSMenuUI : MonoBehaviour
         (roomEosId) =>
         {
             debugText.text = "Подключение к " + inputCode + "...";
-            Debug.Log($"Успешно получен EOS ID хоста: {roomEosId}");
             OnMatchFound();
 
             if(MyNetworkManager.singleton == null)
             {
                 var foundManager = FindAnyObjectByType<MyNetworkManager>();
-                if (foundManager != null)
-                {
-                    foundManager.gameObject.SetActive(true);
-                }
+                if (foundManager != null) foundManager.gameObject.SetActive(true);
                 else
                 {
                     debugText.text = "Ошибка: Сетевой менеджер не найден!";
-                    Debug.LogError("Критическая ошибка: Компонент MyNetworkManager отсутствует на сцене!");
                     return;
                 }
             }
@@ -269,7 +279,6 @@ public class EOSMenuUI : MonoBehaviour
         (errorText) =>
         {
             debugText.text = "Комната не найдена: " + errorText;
-            Debug.LogError($"Ошибка при поиске комнаты: {errorText}");
         });
     }
 
@@ -286,22 +295,12 @@ public class EOSMenuUI : MonoBehaviour
             () =>
             {
                 debugText.text = $"Комната {roomCode} успешно удалена";
-                Debug.Log($"Комната {roomCode} успешно удалена");
                 HidePlaceholder();
 
                 if(MyNetworkManager.singleton == null)
                 {
                     var foundManager = FindAnyObjectByType<MyNetworkManager>();
-                    if (foundManager != null)
-                    {
-                        foundManager.gameObject.SetActive(true);
-                    }
-                    else
-                    {
-                        debugText.text = "Ошибка: Сетевой менеджер не найден!";
-                        Debug.LogError("Критическая ошибка: Компонент MyNetworkManager отсутствует на сцене!");
-                        return;
-                    }
+                    if (foundManager != null) foundManager.gameObject.SetActive(true);
                 }
                 else if(!MyNetworkManager.singleton.gameObject.activeInHierarchy)
                 {
@@ -314,7 +313,6 @@ public class EOSMenuUI : MonoBehaviour
             (errorText) =>
             {
                 debugText.text = "Комната не найдена: " + errorText;
-                Debug.LogError($"Ошибка при поиске комнаты: {errorText}");
             });
         }
     }
@@ -356,7 +354,6 @@ public class EOSMenuUI : MonoBehaviour
     public void OpenPanel(GameObject panel)
     {
         if(panel == null) return;
-
         CanvasGroup group = panel.GetComponent<CanvasGroup>();
         group.DOKill();
         group.alpha = 0;
@@ -367,7 +364,6 @@ public class EOSMenuUI : MonoBehaviour
     public void ClosePanel(GameObject panel)
     {
         if(panel == null) return;
-
         CanvasGroup group = panel.GetComponent<CanvasGroup>();
         group.DOKill();
         group.alpha = 1;
@@ -391,47 +387,14 @@ public class EOSMenuUI : MonoBehaviour
     {
         if(Application.internetReachability == NetworkReachability.NotReachable)
         {
-            Debug.LogWarning("Нельзя играть в мультиплеер без интернета!");
             var rect = warningPanel.GetComponent<RectTransform>();
             rect.localScale = Vector3.zero;
             warningPanel.SetActive(true);
             rect.DOScale(Vector3.one, 0.3f).SetEase(Ease.OutBack);
-
             await Task.Delay(5000);
-
             MyNetworkManager.singleton.StopClient();
             MyNetworkManager.singleton.StopHost();
             UnityEngine.SceneManagement.SceneManager.LoadScene("MainMenu");
-        }
-        bool isAccountExists = await GetIsExists(PlayerPrefs.GetString("Nick", "Ник"));
-        if(!isAccountExists)
-        {
-            Debug.LogWarning("Нельзя играть в мультиплеер без аккаунта!");
-            var rect = warningPanel.GetComponent<RectTransform>();
-            rect.localScale = Vector3.zero;
-            warningPanel.SetActive(true);
-            rect.DOScale(Vector3.one, 0.3f).SetEase(Ease.OutBack);
-
-            await Task.Delay(5000);
-
-            MyNetworkManager.singleton.StopClient();
-            MyNetworkManager.singleton.StopHost();
-            UnityEngine.SceneManagement.SceneManager.LoadScene("MainMenu");
-        }
-
-        await Task.Delay(10000);
-
-        if(!CheckEOSID()) UnityEngine.SceneManagement.SceneManager.LoadScene(UnityEngine.SceneManagement.SceneManager.GetActiveScene().buildIndex);
-    }
-
-    private bool CheckEOSID()
-    {
-        if(EOSSDKComponent.LocalUserProductId == null || !EOSSDKComponent.LocalUserProductId.IsValid())
-        {
-            return false;
-        } else
-        {
-            return true;
         }
     }
 
@@ -440,8 +403,7 @@ public class EOSMenuUI : MonoBehaviour
         string user = bigUser.ToLower();
         string url = "https://airclashserver.onrender.com/getElo";
 
-        EloRequestData data = new EloRequestData();
-        data.username = user;
+        EloRequestData data = new EloRequestData { username = user };
         string jsonPayload = JsonUtility.ToJson(data);
 
         using(UnityWebRequest www = new UnityWebRequest(url, "POST"))
@@ -456,22 +418,13 @@ public class EOSMenuUI : MonoBehaviour
 
             if(www.result != UnityWebRequest.Result.Success)
             {
-                Debug.LogWarning($"HTTP Код ошибки: {www.responseCode}");
                 onEloReceived?.Invoke(-1);
             }
             else
             {
                 EloResponseData res = JsonUtility.FromJson<EloResponseData>(www.downloadHandler.text);
-                
-                if(res.status == "success")
-                {
-                    Debug.Log($"ELO успешно получено для {user}: {res.elo}");
-                    onEloReceived?.Invoke(res.elo);
-                }
-                else
-                {
-                    Debug.LogWarning($"Сервер вернул ошибку: {res.message}");
-                }
+                if(res.status == "success") onEloReceived?.Invoke(res.elo);
+                else onEloReceived?.Invoke(-1);
             }
         }
     }

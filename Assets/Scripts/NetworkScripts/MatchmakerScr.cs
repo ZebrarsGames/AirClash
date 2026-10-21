@@ -12,6 +12,7 @@ public class CreateMMRoomRequest
     public string eos_id;
     public int elo;
     public int played_matches; 
+    public int max_players;
 }
 
 [Serializable]
@@ -21,6 +22,7 @@ public class CreateMMRoomResponse
     public string message;
     public string host_eos_id;
     public int elo;
+    public int max_players;
 }
 
 [Serializable]
@@ -30,14 +32,17 @@ public class FindOpponentRequest
     public int elo;
     public int played_matches;
     public int max_elo_diff;
+    public int max_players;
 }
 
 [Serializable]
 public class FindOpponentResponse
 {
-    public string status; // "found" | "not_found" | "error"
+    public string status; // "found" | "joined" | "not_found" | "error"
     public string room_id;
     public string host_eos_id;
+    public string guest_eos_id;
+    public string[] players;
     public string opponent_eos_id;
     public string message;
 }
@@ -54,6 +59,7 @@ public class CheckRoomStatusResponse
     public string status; // "waiting" | "matched" | "cancelled" | "error"
     public string host_eos_id;
     public string guest_eos_id;
+    public string[] players;
     public string message;
 }
 
@@ -68,20 +74,6 @@ public class CancelSearchResponse
 {
     public string status;
     public string message;
-}
-
-[System.Serializable]
-public class EloRequestData
-{
-    public string username;
-}
-
-[System.Serializable]
-public class EloResponseData
-{
-    public string status;
-    public string message;
-    public int elo;
 }
 
 public class MatchmakerScr : MonoBehaviour
@@ -171,7 +163,7 @@ public class MatchmakerScr : MonoBehaviour
 
     public void OnOpponentJoinedHost()
     {
-        Debug.Log("[MatchmakerScr] Гость успешно подключился к нашему Хосту!");
+        Debug.Log("[MatchmakerScr] Игроки успешно подключились к нашему Хосту!");
 
         StopAllMatchmakingRoutines();
 
@@ -179,6 +171,16 @@ public class MatchmakerScr : MonoBehaviour
     }
 
     public void StartMatchmaking()
+    {
+        StartMatchmakingInternal(2);
+    }
+
+    public void StartMatchmaking4Players()
+    {
+        StartMatchmakingInternal(4);
+    }
+
+    private void StartMatchmakingInternal(int maxPlayers)
     {
         if(isSearching) return;
 
@@ -195,8 +197,8 @@ public class MatchmakerScr : MonoBehaviour
 
         OnMatchmakingStart?.Invoke();
 
-        matchmakingCoroutine = StartCoroutine(SearchRoutine(localEosId));
-        Debug.Log($"[MatchmakerScr] Поиск начат. Ваш Elo: {currentElo}");
+        matchmakingCoroutine = StartCoroutine(SearchRoutine(localEosId, maxPlayers));
+        Debug.Log($"[MatchmakerScr] Поиск на {maxPlayers} игроков начат. Ваш Elo: {currentElo}");
     }
 
     public void CancelMatchmaking()
@@ -215,7 +217,10 @@ public class MatchmakerScr : MonoBehaviour
 
         if(isHostCreated)
         {
-            MyNetworkManager.singleton.StopHost();
+            if (MyNetworkManager.singleton != null)
+            {
+                MyNetworkManager.singleton.StopHost();
+            }
             isHostCreated = false;
         }
 
@@ -240,7 +245,7 @@ public class MatchmakerScr : MonoBehaviour
         }
     }
 
-    private IEnumerator SearchRoutine(string localEosId)
+    private IEnumerator SearchRoutine(string localEosId, int maxPlayers)
     {
         while(isSearching)
         {
@@ -248,23 +253,36 @@ public class MatchmakerScr : MonoBehaviour
             int maxElo = currentElo + currentRange;
 
             OnSearchRangeUpdated?.Invoke(minElo, maxElo);
-            Debug.Log($"[MatchmakerScr] Ищем соперника (Elo: {currentElo}, Допуск: ±{currentRange})...");
+            Debug.Log($"[MatchmakerScr] Ищем комнату для {maxPlayers} игроков (Elo: {currentElo}, Допуск: ±{currentRange})...");
 
-            // 1. Пытаемся найти уже созданную комнату
-            yield return StartCoroutine(FindOpponentRoutine(localEosId, currentRange, (assignedHostId) =>
+            bool handledByFind = false;
+
+            yield return StartCoroutine(FindOpponentRoutine(localEosId, currentRange, maxPlayers, (response) =>
             {
-                if(!string.IsNullOrEmpty(assignedHostId))
+                if(response != null)
                 {
-                    Debug.Log($"[MatchmakerScr] Матч найден через FindOpponent! Назначенный хост: {assignedHostId}");
-                    OnMatchFoundByServer(assignedHostId, localEosId);
+                    if(response.status == "found")
+                    {
+                        Debug.Log($"[MatchmakerScr] Комната заполнена! Назначенный хост: {response.host_eos_id}");
+                        handledByFind = true;
+                        OnMatchFoundByServer(response.host_eos_id, localEosId);
+                    }
+                    else if(response.status == "joined")
+                    {
+                        Debug.Log($"[MatchmakerScr] Успешно присоединились к комнате ожидания. Ждем остальных игроков...");
+                        handledByFind = true;
+                        isHostCreated = true;
+                        checkStatusCoroutine = StartCoroutine(CheckRoomStatusRoutine(localEosId));
+                    }
                 }
             }));
 
             if(!isSearching) yield break;
+            if(handledByFind) yield break;
 
             if(!isHostCreated)
             {
-                yield return StartCoroutine(CreateRoomRoutine(localEosId));
+                yield return StartCoroutine(CreateRoomRoutine(localEosId, maxPlayers));
                 
                 if(isSearching && isHostCreated)
                 {
@@ -281,7 +299,7 @@ public class MatchmakerScr : MonoBehaviour
         }
     }
 
-    private IEnumerator FindOpponentRoutine(string localEosId, int maxDiff, Action<string> onResult)
+    private IEnumerator FindOpponentRoutine(string localEosId, int maxDiff, int maxPlayers, Action<FindOpponentResponse> onResult)
     {
         string url = BASE_URL + "/mm/findOpponent";
         FindOpponentRequest requestData = new FindOpponentRequest
@@ -289,7 +307,8 @@ public class MatchmakerScr : MonoBehaviour
             eos_id = localEosId,
             elo = currentElo,
             played_matches = currentPlayedMatches,
-            max_elo_diff = maxDiff
+            max_elo_diff = maxDiff,
+            max_players = maxPlayers
         };
 
         string json = JsonUtility.ToJson(requestData);
@@ -308,9 +327,9 @@ public class MatchmakerScr : MonoBehaviour
             {
                 FindOpponentResponse res = JsonUtility.FromJson<FindOpponentResponse>(www.downloadHandler.text);
 
-                if(res.status == "found")
+                if(res.status == "found" || res.status == "joined")
                 {
-                    onResult?.Invoke(res.host_eos_id);
+                    onResult?.Invoke(res);
                     yield break;
                 }
             }
@@ -323,14 +342,15 @@ public class MatchmakerScr : MonoBehaviour
         onResult?.Invoke(null);
     }
 
-    private IEnumerator CreateRoomRoutine(string localEosId)
+    private IEnumerator CreateRoomRoutine(string localEosId, int maxPlayers)
     {
         string url = BASE_URL + "/mm/createRoom";
         CreateMMRoomRequest requestData = new CreateMMRoomRequest
         {
             eos_id = localEosId,
             elo = currentElo,
-            played_matches = currentPlayedMatches 
+            played_matches = currentPlayedMatches,
+            max_players = maxPlayers
         };
 
         string json = JsonUtility.ToJson(requestData);
@@ -348,7 +368,7 @@ public class MatchmakerScr : MonoBehaviour
             if(www.result == UnityWebRequest.Result.Success)
             {
                 isHostCreated = true;
-                Debug.Log("[MatchmakerScr] Комната поиска создана на сервере. Ожидание соперника...");
+                Debug.Log($"[MatchmakerScr] Комната поиска на {maxPlayers} игроков создана на сервере. Ожидание участников...");
             }
             else
             {
@@ -383,7 +403,7 @@ public class MatchmakerScr : MonoBehaviour
 
                     if(res.status == "matched")
                     {
-                        Debug.Log($"[MatchmakerScr] Игрок найден! Назначенный сервером хост: {res.host_eos_id}");
+                        Debug.Log($"[MatchmakerScr] Комната полностью заполнена! Назначенный хост: {res.host_eos_id}");
                         OnMatchFoundByServer(res.host_eos_id, localEosId);
                         yield break;
                     }
@@ -425,12 +445,12 @@ public class MatchmakerScr : MonoBehaviour
 
         if(iAmHost)
         {
-            Debug.Log("[MatchmakerScr] РЕЗУЛЬТАТ ЖЕРЕБЬЁВКИ СЕРВЕРА: Я назначен ХОСТОМ. Запуск сервера...");
+            Debug.Log("[MatchmakerScr] РЕЗУЛЬТАТ ЖЕРЕБЬЁВКИ: Я назначен ХОСТОМ. Запуск сервера...");
             MyNetworkManager.singleton.StartHost();
         }
         else
         {
-            Debug.Log("[MatchmakerScr] РЕЗУЛЬТАТ ЖЕРЕБЬЁВКИ СЕРВЕРА: Я назначен КЛИЕНТОМ. Подключение к хосту...");
+            Debug.Log("[MatchmakerScr] РЕЗУЛЬТАТ ЖЕРЕБЬЁВКИ: Я назначен КЛИЕНТОМ. Подключение к хосту...");
             StartCoroutine(DelayedConnectToHost(assignedHostEosId));
         }
     }
