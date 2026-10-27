@@ -4,7 +4,6 @@ using System.Collections.Generic;
 [System.Serializable]
 public class NewsItem
 {
-    public string id;
     public string title;
     public string content;
     public string tag;

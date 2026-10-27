@@ -148,10 +148,12 @@ public class MatchmakerScr : MonoBehaviour
                 {
                     currentElo = res.elo;
                     Debug.Log($"[MatchmakerScr] Актуальный ELO для {username} успешно получен: {currentElo}");
+
                 }
                 else
                 {
                     Debug.LogError($"[MatchmakerScr] Ошибка сервера: {res.message}");
+
                 }
             }
             else
