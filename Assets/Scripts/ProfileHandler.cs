@@ -121,9 +121,9 @@ public class ProfileHandler : MonoBehaviour
         
         moneyText.SetText("Общие деньги: {0}", currentData.TotalMoney);
         goalText.SetText("Голы: {0}", currentData.Goals);
-        nickText.text = currentData.NickName;
-        playtimeText.text = "Наиграно: " + PlaytimeTracker.Instance.GetFormattedPlaytime();
-        
+        nickText.SetText(currentData.NickName);
+        playtimeText.SetText($"Наиграно: {PlaytimeTracker.Instance.GetFormattedPlaytime()}");
+
         if(isAccountExists)
         {
             SetElo();

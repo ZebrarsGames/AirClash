@@ -60,13 +60,13 @@ public class LeaderboardHandler : MonoBehaviour
 
                         if(card != null)
                         {
-                            card.Setup(username, 0);
+                            card.Setup(username, 0, Array.IndexOf(response.leaderboard, username) + 1);
 
                             StartCoroutine(GetPlayerEloRequest(username, elo =>
                             {
                                 if (card != null)
                                 {
-                                    card.Setup(username, elo);
+                                    card.Setup(username, elo, Array.IndexOf(response.leaderboard, username) + 1);
                                 }
                             }));
                         }
@@ -75,7 +75,7 @@ public class LeaderboardHandler : MonoBehaviour
                     RectTransform rectTransform = contentParent.GetComponent<RectTransform>();
                     if(rectTransform != null)
                     {
-                        float cardHeight = 165;
+                        float cardHeight = 200;
                         rectTransform.sizeDelta = new Vector2(rectTransform.sizeDelta.x, response.leaderboard.Length * cardHeight);
                     }
                 }

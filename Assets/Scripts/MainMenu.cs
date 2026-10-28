@@ -35,6 +35,10 @@ public class MainMenu : MonoBehaviour
     [SerializeField] private GameObject modificatorsPanel;
     [SerializeField] private GameObject hostDisconnectedPanel;
     [SerializeField] private GameObject warningPanel;
+    [SerializeField] private GameObject friendsPanel;
+    [SerializeField] private GameObject friendsListPanel;
+    [SerializeField] private GameObject friendsRequestsPanel;
+    [SerializeField] private GameObject leaderboardPanel;
 
     [Header("Audio")]
     [SerializeField] private AudioSource audioSource;
@@ -113,7 +117,8 @@ public class MainMenu : MonoBehaviour
         {
             settingsPanel, botPanel, mentionsPanel, achievementsPanel, gamemodesPanel,
             userGamemodePanel, xpPanel, questPanel, dailyQuestPanel, profilePanel,
-            editProfilePanel, cloudPanel, modificatorsPanel
+            editProfilePanel, cloudPanel, modificatorsPanel, friendsPanel, leaderboardPanel,
+            hostDisconnectedPanel, warningPanel, friendsListPanel, friendsRequestsPanel
         };
     }
 
@@ -327,11 +332,28 @@ public class MainMenu : MonoBehaviour
     public void SwitchToQuestPanel() => TogglePanels(dailyQuestPanel, questPanel);
     public void OpenDailyQuestPanel() => TogglePanels(questPanel, dailyQuestPanel);
     public void SwitchToEditProfilePanel() => TogglePanels(profilePanel, editProfilePanel);
-    
+    public void SwitchToFriendsRequestsPanel() => TogglePanels(friendsListPanel, friendsRequestsPanel);
+    public void SwitchToFriendsPanel()
+    {
+        profilePanel.SetActive(false);
+        friendsListPanel.SetActive(false);
+        friendsRequestsPanel.SetActive(false);
+        friendsPanel.SetActive(true);
+    }
+    public void SwitchToFriendsListPanel() 
+    {
+        friendsPanel.SetActive(false);
+        friendsRequestsPanel.SetActive(false);
+        friendsListPanel.SetActive(true);
+    }
+
     public void SwithcToProfilePanel()
     {
         editProfilePanel.SetActive(false);
         cloudPanel.SetActive(false);
+        friendsPanel.SetActive(false);
+        friendsListPanel.SetActive(false);
+        friendsRequestsPanel.SetActive(false);
         profilePanel.SetActive(true);
     }
 
