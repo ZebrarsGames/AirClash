@@ -14,6 +14,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::AchievementSO
   id: competitions
   title: "\u0421\u043E\u0440\u0435\u0432\u043D\u043E\u0432\u0430\u043D\u0438\u044F"
+  description: "\u0412\u044B\u0438\u0433\u0440\u0430\u0439\u0442\u0435 \u0431\u043E\u0442\u0430
+    \u043D\u0430 \u044D\u043A\u0441\u0442\u0440\u0438\u043C\u0430\u043B\u044C\u043D\u043E\u0439
+    \u0443\u0440\u043E\u0432\u043D\u0435 \u0441\u043B\u043E\u0436\u043D\u043E\u0441\u0442\u0438"
   target: 1
   award: 100
   icon: {fileID: 21300000, guid: f198d7bb2c05949459027f01fa25a9d2, type: 3}

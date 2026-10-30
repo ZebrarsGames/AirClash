@@ -14,6 +14,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::AchievementSO
   id: amateur
   title: "\u041B\u044E\u0431\u0438\u0442\u0435\u043B\u044C"
+  description: "\u0417\u0430\u0431\u0435\u0439\u0442\u0435 30 \u0433\u043E\u043B\u043E\u0432
+    \u0432 \u0440\u0435\u0436\u0438\u043C\u0435 \u043F\u0440\u043E\u0442\u0438\u0432
+    \u0431\u043E\u0442\u0430"
   target: 30
   award: 20
   icon: {fileID: 21300000, guid: e5632c499c2fa66479a52ea2dd39b269, type: 3}

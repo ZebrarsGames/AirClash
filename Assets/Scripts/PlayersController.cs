@@ -1,10 +1,10 @@
 using UnityEngine;
 using UnityEngine.EventSystems;
 
+public enum PlayerType { Player1, Player2 }
+
 public class PlayersController : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler
 {
-    public enum PlayerType { Player1, Player2 }
-
     [Header("Settings")]
     public PlayerType playerType;
     
@@ -58,7 +58,7 @@ public class PlayersController : MonoBehaviour, IBeginDragHandler, IDragHandler,
         string skinPath = playerType == PlayerType.Player1 ? baseSkin : baseSkin + "Pl2";
         
         SkinData currentSkin = Resources.Load<SkinData>(skinPath);
-        if (currentSkin != null)
+        if(currentSkin != null)
         {
             ApplySkin(currentSkin);
         }

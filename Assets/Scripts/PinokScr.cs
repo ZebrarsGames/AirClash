@@ -1,16 +1,28 @@
 using UnityEngine;
 using UnityEngine.Events;
 
-public class PinokScr : MonoBehaviour
+public sealed class PinokScr : MonoBehaviour
 {
     [Header("Events")]
-    [SerializeField] private UnityEvent profilePanelActive;
+    [SerializeField] private UnityEvent OnPanelActive;
+
+    private System.Action OnPanelActiveRuntime;
+
+    private void Awake()
+    {
+        if(OnPanelActive != null)
+        {
+            if(OnPanelActive.GetPersistentEventCount() > 0)
+            {
+                OnPanelActiveRuntime = OnPanelActive.Invoke;
+            }
+            
+            OnPanelActive = null;
+        }
+    }
 
     private void OnEnable()
     {
-        if(profilePanelActive != null)
-        {
-            profilePanelActive.Invoke();
-        }
+        OnPanelActiveRuntime?.Invoke();
     }
 }

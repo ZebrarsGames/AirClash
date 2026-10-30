@@ -16147,6 +16147,16 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 135b51cf69ec43548b4730501f3a0854, type: 2}
   - {fileID: 11400000, guid: 54f4c21a7843d994681753abac958176, type: 2}
   - {fileID: 11400000, guid: 1b6571d835a192c48b4527301e8cf748, type: 2}
+  - {fileID: 11400000, guid: 20bccccfc86ac9049a9fe6931e0b0e99, type: 2}
+  - {fileID: 11400000, guid: fcdf6f9d8a5079648a6a5a5243f8868d, type: 2}
+  - {fileID: 11400000, guid: 528303d383c6dc54384889905366d767, type: 2}
+  - {fileID: 11400000, guid: c4f4ea37be141e247ab1dffc3e50a6d3, type: 2}
+  - {fileID: 11400000, guid: 9ea92b2dea7c81942878cdfbdf072c9c, type: 2}
+  - {fileID: 11400000, guid: e2a2d90e64c9aab4e9c1a7084968d7ae, type: 2}
+  - {fileID: 11400000, guid: bf7422916021e94419f7462adc1069c7, type: 2}
+  - {fileID: 11400000, guid: 628865bd1024b5b4cb60efaef53c8abd, type: 2}
+  - {fileID: 11400000, guid: bb184c4fc223af54cb6d2b7c02a6b55a, type: 2}
+  - {fileID: 11400000, guid: 83b15d9b69a8c204e9a0f4155108cc50, type: 2}
   achievementPopup: {fileID: 1358771901}
 --- !u!4 &1029591087
 Transform:
@@ -19983,6 +19993,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::SaveManager
   xpHandler: {fileID: 1512294405}
   moneyHandler: {fileID: 2065031118}
+  clickerHandler: {fileID: 0}
 --- !u!4 &1251573711
 Transform:
   m_ObjectHideFlags: 0
@@ -25572,7 +25583,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 22400762, guid: 67117722a812a2e46ab8cb8eafbf5f5e, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 0.000034332275
+      value: 0.0000076293945
       objectReference: {fileID: 0}
     - target: {fileID: 22426080, guid: 67117722a812a2e46ab8cb8eafbf5f5e, type: 3}
       propertyPath: m_AnchorMax.x
@@ -27192,8 +27203,8 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 359697133}
   m_HandleRect: {fileID: 359697132}
   m_Direction: 2
-  m_Value: 0.5
-  m_Size: 0.30846405
+  m_Value: 0.49999994
+  m_Size: 0.30864254
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -27797,7 +27808,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 216.95
+  m_fontSize: 216.7
   m_fontSizeBase: 36
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -30426,8 +30437,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 895.8695, y: -971}
-  m_SizeDelta: {x: 1791.739, y: 0}
+  m_AnchoredPosition: {x: 895.52277, y: -971}
+  m_SizeDelta: {x: 1791.0455, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1933418524
 MonoBehaviour:

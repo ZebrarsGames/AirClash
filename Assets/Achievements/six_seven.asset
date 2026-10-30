@@ -14,6 +14,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::AchievementSO
   id: six_seven
   title: "\u0421\u0438\u043A\u0441 \u0441\u0435\u0432\u0435\u043D"
+  description: "\u0412\u044B\u0431\u0435\u0439\u0442\u0435 \u0432 \u0440\u0443\u043B\u0435\u0442\u043A\u0435
+    3 \u0440\u0430\u0437\u0430 \u043D\u0430\u0433\u0440\u0430\u0434\u0443 \xAB67
+    \u043C\u043E\u043D\u0435\u0442\xBB"
   target: 3
   award: 50
   icon: {fileID: 21300000, guid: b3e34e86b37e09143a57189f26e95214, type: 3}

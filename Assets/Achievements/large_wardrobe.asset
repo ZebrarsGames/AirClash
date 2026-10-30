@@ -14,6 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::AchievementSO
   id: large_wardrobe
   title: "\u0411\u043E\u043B\u044C\u0448\u043E\u0439 \u0433\u0430\u0440\u0434\u0435\u0440\u043E\u0431"
+  description: "\u041F\u043E\u043B\u0443\u0447\u0438\u0442\u0435 \u0432\u0441\u0435
+    \u0441\u043A\u0438\u043D\u044B"
   target: 26
   award: 600
   icon: {fileID: 21300000, guid: 3791fea15cf3dd3449a6ef10cd317654, type: 3}

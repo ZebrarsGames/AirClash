@@ -9,6 +9,7 @@ public class PlayerData
     public int XpLevel;
     public int XpToNextLevel;
     public int Goals;
+    public int TotalClicks;
     public string CurrentSkinName;
     public float Playtime;
     public string[] AchievementsIds;

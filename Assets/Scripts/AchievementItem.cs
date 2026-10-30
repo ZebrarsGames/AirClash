@@ -10,6 +10,7 @@ public class AchievementItem : MonoBehaviour
 
     [Header("UI Components")]
     [SerializeField] private TextMeshProUGUI titleText;
+    [SerializeField] private TextMeshProUGUI descriptionText;
     [SerializeField] private TextMeshProUGUI progressText;
     [SerializeField] private Image iconImage;
     [SerializeField] private GameObject unlockedCheckMark;
@@ -31,6 +32,7 @@ public class AchievementItem : MonoBehaviour
         int target = achievementData.Target;
 
         if(titleText != null) titleText.SetText(achievementData.Title);
+        if(descriptionText != null) descriptionText.SetText(achievementData.Description);
         if(iconImage != null && achievementData.Icon != null) iconImage.sprite = achievementData.Icon;
 
         int clampedProgress = progress > target ? target : progress;
@@ -44,5 +46,18 @@ public class AchievementItem : MonoBehaviour
         achievementData = data;
         achievementsHandler = handler;
         UpdateUI();
+    }
+
+    public void UpdateAllUI()
+    {
+        AchievementItem[] items = FindObjectsByType<AchievementItem>(FindObjectsInactive.Exclude);
+        
+        foreach(AchievementItem item in items)
+        {
+            if(item != null)
+            {
+                item.UpdateUI();
+            }
+        }
     }
 }

@@ -6,6 +6,7 @@ public class SaveManager : MonoBehaviour
 {
     [SerializeField] private XpHandler xpHandler;
     [SerializeField] private MoneyHandler moneyHandler;
+    [SerializeField] private ClickerHandler clickerHandler;
 
     public void SaveData()
     {
@@ -16,6 +17,7 @@ public class SaveManager : MonoBehaviour
         playerData.XpLevel = xpHandler.GetLevel();
         playerData.XpToNextLevel = xpHandler.GetXpToNextLevel();
         playerData.Goals = PlayerPrefs.GetInt("TotalGoals", 0);
+        if(clickerHandler != null) playerData.TotalClicks = clickerHandler.GetClickCount();
         playerData.NickName = PlayerPrefs.GetString("Nick", playerData.NickName);
         playerData.CurrentSkinName = PlayerPrefs.GetString("CurrentSkin", "DefSkin");
         playerData.Playtime = PlaytimeTracker.Instance.GetSecondsPlaytime();
@@ -67,6 +69,7 @@ public class SaveManager : MonoBehaviour
         playerData.XpLevel = PlayerPrefs.GetInt("XpLevel", 1);
         playerData.XpToNextLevel = PlayerPrefs.GetInt("XpToNextLevel", 100);
         playerData.Goals = 0;
+        playerData.TotalClicks = 0;
         playerData.NickName = "Ник";
         playerData.CurrentSkinName = PlayerPrefs.GetString("CurrentSkin", "DefSkin");
         playerData.Playtime = 0;
@@ -92,6 +95,7 @@ public class SaveManager : MonoBehaviour
         playerData.XpLevel = PlayerPrefs.GetInt("XpLevel", 1);
         playerData.XpToNextLevel = PlayerPrefs.GetInt("XpToNextLevel", 100);
         playerData.Goals = 0;
+        playerData.TotalClicks = 0;
         playerData.NickName = "Ник";
         playerData.CurrentSkinName = PlayerPrefs.GetString("CurrentSkin", "DefSkin");
         playerData.Playtime = 0;

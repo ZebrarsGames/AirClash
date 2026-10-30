@@ -14,6 +14,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::AchievementSO
   id: the_fog
   title: The Fog
+  description: "\u041F\u043E\u0431\u0435\u0434\u0438\u0442\u0435 2 \u0440\u0430\u0437\u0430
+    \u0431\u043E\u0442\u0430 \u0441 \u043C\u043E\u0434\u0438\u0444\u0438\u043A\u0430\u0442\u043E\u0440\u043E\u043C
+    \xAB\u0422\u0443\u043C\u0430\u043D\xBB"
   target: 2
   award: 75
   icon: {fileID: 21300000, guid: b6ebbd8032b300e49af6aa645bf738f0, type: 3}

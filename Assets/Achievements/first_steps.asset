@@ -14,6 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::AchievementSO
   id: first_steps
   title: "\u041F\u0435\u0440\u0432\u044B\u0435 \u0448\u0430\u0433\u0438"
+  description: "\u041F\u043E\u043B\u0443\u0447\u0438\u0442\u0435 \u0432\u0442\u043E\u0440\u043E\u0439
+    \u0443\u0440\u043E\u0432\u0435\u043D\u044C XP"
   target: 2
   award: 30
   icon: {fileID: 21300000, guid: 0ca4fb5bb56959f46ab453de7fa84eaf, type: 3}

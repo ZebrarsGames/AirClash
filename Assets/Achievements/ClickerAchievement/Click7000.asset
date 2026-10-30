@@ -1,0 +1,22 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3b83fb69b51920c488da0fe3554e9f60, type: 3}
+  m_Name: Click7000
+  m_EditorClassIdentifier: Assembly-CSharp::AchievementSO
+  id: click_7000
+  title: "\u0410\u0432\u0442\u043E\u043A\u043B\u0438\u043A\u0435\u0440"
+  description: "\u041D\u0430\u0436\u043C\u0438\u0442\u0435 7000 \u0440\u0430\u0437
+    \u043D\u0430 \u0441\u0432\u043E\u0439 \u0441\u043A\u0438\u043D \u0432 \u0433\u043B\u0430\u0432\u043D\u043E\u043C
+    \u043C\u0435\u043D\u044E"
+  target: 7000
+  award: 100
+  icon: {fileID: 21300000, guid: b7c0b89dea9ad084fa313afb90cd3d53, type: 3}

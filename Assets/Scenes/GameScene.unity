@@ -4250,6 +4250,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::SaveManager
   xpHandler: {fileID: 1563882530}
   moneyHandler: {fileID: 0}
+  clickerHandler: {fileID: 0}
 --- !u!4 &1049358871
 Transform:
   m_ObjectHideFlags: 0
@@ -5563,7 +5564,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 22400762, guid: 67117722a812a2e46ab8cb8eafbf5f5e, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -0.000019073486
+      value: -0.0000038146973
       objectReference: {fileID: 0}
     - target: {fileID: 22426080, guid: 67117722a812a2e46ab8cb8eafbf5f5e, type: 3}
       propertyPath: m_AnchorMax.x
@@ -7857,6 +7858,16 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 135b51cf69ec43548b4730501f3a0854, type: 2}
   - {fileID: 11400000, guid: 54f4c21a7843d994681753abac958176, type: 2}
   - {fileID: 11400000, guid: 1b6571d835a192c48b4527301e8cf748, type: 2}
+  - {fileID: 11400000, guid: 20bccccfc86ac9049a9fe6931e0b0e99, type: 2}
+  - {fileID: 11400000, guid: fcdf6f9d8a5079648a6a5a5243f8868d, type: 2}
+  - {fileID: 11400000, guid: 528303d383c6dc54384889905366d767, type: 2}
+  - {fileID: 11400000, guid: c4f4ea37be141e247ab1dffc3e50a6d3, type: 2}
+  - {fileID: 11400000, guid: 9ea92b2dea7c81942878cdfbdf072c9c, type: 2}
+  - {fileID: 11400000, guid: e2a2d90e64c9aab4e9c1a7084968d7ae, type: 2}
+  - {fileID: 11400000, guid: bf7422916021e94419f7462adc1069c7, type: 2}
+  - {fileID: 11400000, guid: 628865bd1024b5b4cb60efaef53c8abd, type: 2}
+  - {fileID: 11400000, guid: bb184c4fc223af54cb6d2b7c02a6b55a, type: 2}
+  - {fileID: 11400000, guid: 83b15d9b69a8c204e9a0f4155108cc50, type: 2}
   achievementPopup: {fileID: 0}
 --- !u!4 &1794041899
 Transform:
