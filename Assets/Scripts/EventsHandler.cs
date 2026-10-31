@@ -14,7 +14,9 @@ public class EventsHandler : MonoBehaviour
     [SerializeField] private RawImage[] eventIconRawImages;
 
     [Header("Buttons & Outlines")]
-    [SerializeField] private Button[] eventButtons;           
+    [SerializeField] private Button[] eventButtons;   
+    [SerializeField] private Image[] panels;
+    [SerializeField] private Outline[] panelsOutlines;
     [SerializeField] private Outline[] eventOutlines;         
 
     [Header("Audio")]
@@ -229,7 +231,7 @@ public class EventsHandler : MonoBehaviour
         }
 
         Color highlightedColor = ChangeColorBrightness(btnColor, 0.1f);
-        Color pressedColor = ChangeColorBrightness(btnColor, -0.2f);
+        Color pressedColor = ChangeColorBrightness(btnColor, -0.1f);
 
         if(eventButtons != null)
         {
@@ -250,6 +252,28 @@ public class EventsHandler : MonoBehaviour
         if(eventOutlines != null)
         {
             foreach(var outline in eventOutlines)
+            {
+                if(outline != null)
+                {
+                    outline.effectColor = outColor;
+                }
+            }
+        }
+
+        if(panels != null)
+        {
+            foreach(var panel in panels)
+            {
+                if(panel != null)
+                {
+                    panel.color = btnColor;
+                }
+            }
+        }
+
+        if(panelsOutlines != null)
+        {
+            foreach(var outline in panelsOutlines)
             {
                 if(outline != null)
                 {
