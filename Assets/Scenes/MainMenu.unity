@@ -1751,9 +1751,9 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 1264345767}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 139.55, y: 0}
+  m_AnchorMin: {x: 1, y: 0.5}
+  m_AnchorMax: {x: 1, y: 0.5}
+  m_AnchoredPosition: {x: -107.45, y: 0}
   m_SizeDelta: {x: 200, y: 200}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &26142245
@@ -68856,8 +68856,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 396, y: -0.12998962}
-  m_SizeDelta: {x: -804, y: -6}
+  m_AnchoredPosition: {x: 451.52, y: -0.12998962}
+  m_SizeDelta: {x: -915.02, y: -6}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1264345768
 MonoBehaviour:
@@ -101887,6 +101887,9 @@ RectTransform:
   - {fileID: 788529099}
   - {fileID: 1497557596}
   - {fileID: 1845859211}
+  - {fileID: 1838607838}
+  - {fileID: 621963904}
+  - {fileID: 1321590281}
   - {fileID: 1665956466}
   - {fileID: 1707658689}
   - {fileID: 1439479959}
@@ -101911,9 +101914,6 @@ RectTransform:
   - {fileID: 84907146}
   - {fileID: 828556767}
   - {fileID: 2114210461}
-  - {fileID: 1838607838}
-  - {fileID: 621963904}
-  - {fileID: 1321590281}
   - {fileID: 1112793989}
   - {fileID: 677659082}
   m_Father: {fileID: 0}
@@ -113188,10 +113188,10 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 1264345767}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -80.98, y: 0}
-  m_SizeDelta: {x: 228, y: 200}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 166.01999, y: 0}
+  m_SizeDelta: {x: 228, y: -62}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &2144961839
 MonoBehaviour:
@@ -113240,7 +113240,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 107.95
+  m_fontSize: 108.05
   m_fontSizeBase: 36
   m_fontWeight: 400
   m_enableAutoSizing: 1

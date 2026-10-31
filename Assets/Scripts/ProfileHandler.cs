@@ -171,7 +171,7 @@ public class ProfileHandler : MonoBehaviour
                 else
                 {
                     if(_eloLevelFitter != null) _eloLevelFitter.aspectRatio = 1;
-                    if(_eloLevelRect != null) _eloLevelRect.localPosition = Vector2.zero;
+                    if(_eloLevelRect != null) _eloLevelRect.localPosition = new Vector2(50, 0);;
                     if(_eloTextRect != null) _eloTextRect.localPosition = new Vector3(-180, 0);
                 }
             }
