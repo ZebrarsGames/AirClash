@@ -174,11 +174,19 @@ public class MatchmakerScr : MonoBehaviour
 
     public void StartMatchmaking()
     {
+        GameObject.Find("Player3EloTextTMP").SetActive(false);
+        GameObject.Find("Player4EloTextTMP").SetActive(false);
+        GameObject.Find("Player3NickTextTMP").SetActive(false);
+        GameObject.Find("Player4NickTextTMP").SetActive(false);
         StartMatchmakingInternal(2);
     }
 
     public void StartMatchmaking4Players()
     {
+        GameObject.Find("Player3EloTextTMP").SetActive(true);
+        GameObject.Find("Player4EloTextTMP").SetActive(true);
+        GameObject.Find("Player3NickTextTMP").SetActive(true);
+        GameObject.Find("Player4NickTextTMP").SetActive(true);
         StartMatchmakingInternal(4);
     }
 
