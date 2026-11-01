@@ -160,20 +160,20 @@ public class GoalHandlerNetwork : NetworkBehaviour
             if(playerIndex == 1)
             {
                 playerARating = elo;
-                GameObject.Find("Player1EloTextTMP").GetComponent<TextMeshProUGUI>().text = $"Эло: {elo}";
+                GameObject.Find("Player1EloTextTMP").GetComponent<TextMeshProUGUI>().SetText("Эло: {0}", elo);
             } 
             else if(playerIndex == 2)
             {
                 playerBRating = elo;
-                GameObject.Find("Player2EloTextTMP").GetComponent<TextMeshProUGUI>().text = $"Эло: {elo}";
+                GameObject.Find("Player2EloTextTMP").GetComponent<TextMeshProUGUI>().SetText("Эло: {0}", elo);
             } else if(playerIndex == 3)
             {
                 playerBRating = elo;
-                GameObject.Find("Player3EloTextTMP").GetComponent<TextMeshProUGUI>().text = $"Эло: {elo}";
+                GameObject.Find("Player3EloTextTMP").GetComponent<TextMeshProUGUI>().SetText("Эло: {0}", elo);
             } else if(playerIndex == 4)
             {
                 playerBRating = elo;
-                GameObject.Find("Player4EloTextTMP").GetComponent<TextMeshProUGUI>().text = $"Эло: {elo}";
+                GameObject.Find("Player4EloTextTMP").GetComponent<TextMeshProUGUI>().SetText("Эло: {0}", elo);
             } 
         }));
     }
@@ -193,8 +193,8 @@ public class GoalHandlerNetwork : NetworkBehaviour
     private void RpcOnGoalScored(int newScore1, int newScore2)
     {
         Debug.Log($"Сервер сообщил: Забит гол! Текущий счет: {newScore1} {newScore2}");
-        scoreText1.text = newScore1.ToString(); 
-        scoreText2.text = newScore2.ToString(); 
+        scoreText1.GetComponent<TextMeshProUGUI>().SetText("{0}", newScore1);
+        scoreText2.GetComponent<TextMeshProUGUI>().SetText("{0}", newScore2);
         timer.Goal();
     }
 

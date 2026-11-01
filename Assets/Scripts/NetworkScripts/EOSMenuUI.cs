@@ -183,11 +183,19 @@ public class EOSMenuUI : MonoBehaviour
 
     public void StartHostGame()
     {
+        GameObject.Find("Player3EloTextTMP").SetActive(false);
+        GameObject.Find("Player4EloTextTMP").SetActive(false);
+        GameObject.Find("Player3NickTextTMP").SetActive(false);
+        GameObject.Find("Player4NickTextTMP").SetActive(false);
         StartHostGameCustom(2);
     }
 
     public void StartHostGame4Players()
     {
+        GameObject.Find("Player3EloTextTMP").SetActive(true);
+        GameObject.Find("Player4EloTextTMP").SetActive(true);
+        GameObject.Find("Player3NickTextTMP").SetActive(true);
+        GameObject.Find("Player4NickTextTMP").SetActive(true);
         StartHostGameCustom(4);
     }
 
