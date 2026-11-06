@@ -172,6 +172,8 @@ public class ClickerHandler : MonoBehaviour, IPointerDownHandler, IPointerUpHand
         _rotatingTweener?.Kill();
         _scaleTweener?.Kill();
         
+        if(saveManager != null) saveManager.SaveData();
+
         for(int i = 0; i < _textPool.Count; i++)
         {
             if(_textPool[i] != null) _textPool[i].transform.DOKill();

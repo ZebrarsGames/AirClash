@@ -34,7 +34,6 @@ public class EventsHandler : MonoBehaviour
     private const string LAST_SEEN_EVENT_KEY = "LastSeenEventId";
 
     private int _activeDownloadsCount = 0;
-    private bool _isDataApplied = false;
 
     private void Start()
     {
