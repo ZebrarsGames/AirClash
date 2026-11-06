@@ -42,6 +42,7 @@ public class EOSMenuUI : MonoBehaviour
     [SerializeField] private TextMeshProUGUI debugText;
     [SerializeField] private TextMeshProUGUI roomCodeText;
     [SerializeField] private TextMeshProUGUI hintText;
+    [SerializeField] private TextMeshProUGUI waitForOtherPlayerText;
     [SerializeField] private RectTransform imageTransform;
     [SerializeField] private TextMeshProUGUI eloText;
 
@@ -187,6 +188,7 @@ public class EOSMenuUI : MonoBehaviour
         GameObject.Find("Player4EloTextTMP").SetActive(false);
         GameObject.Find("Player3NickTextTMP").SetActive(false);
         GameObject.Find("Player4NickTextTMP").SetActive(false);
+        waitForOtherPlayerText.SetText("Ожидание второго игрока...");
         StartHostGameCustom(2);
     }
 
@@ -196,6 +198,7 @@ public class EOSMenuUI : MonoBehaviour
         GameObject.Find("Player4EloTextTMP").SetActive(true);
         GameObject.Find("Player3NickTextTMP").SetActive(true);
         GameObject.Find("Player4NickTextTMP").SetActive(true);
+        waitForOtherPlayerText.SetText("Ожидание других игроков...");
         StartHostGameCustom(4);
     }
 

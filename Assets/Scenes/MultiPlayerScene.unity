@@ -2764,6 +2764,7 @@ MonoBehaviour:
   expandInterval: 5
   checkRoomInterval: 2
   maxEloRange: 500
+  waitForOtherPlayerText: {fileID: 352798860}
   OnSearchRangeUpdated:
     m_PersistentCalls:
       m_Calls: []
@@ -3014,6 +3015,7 @@ MonoBehaviour:
   debugText: {fileID: 1547583139}
   roomCodeText: {fileID: 978510233}
   hintText: {fileID: 284724398}
+  waitForOtherPlayerText: {fileID: 352798860}
   imageTransform: {fileID: 646150768}
   eloText: {fileID: 618644570}
   rotationSpeed: 50

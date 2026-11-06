@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.Networking;
 using EpicTransport;
-using Mirror;
+using TMPro;
 
 [Serializable]
 public class CreateMMRoomRequest
@@ -89,6 +89,9 @@ public class MatchmakerScr : MonoBehaviour
     [SerializeField] private float expandInterval = 5f;
     [SerializeField] private float checkRoomInterval = 2f;
     [SerializeField] private int maxEloRange = 500;
+
+    [Header("UI")]
+    [SerializeField] private TextMeshProUGUI waitForOtherPlayerText;
 
     private int currentElo;
     private int currentRange;
@@ -178,6 +181,7 @@ public class MatchmakerScr : MonoBehaviour
         GameObject.Find("Player4EloTextTMP").SetActive(false);
         GameObject.Find("Player3NickTextTMP").SetActive(false);
         GameObject.Find("Player4NickTextTMP").SetActive(false);
+        waitForOtherPlayerText.SetText("Ожидание второго игрока...");
         StartMatchmakingInternal(2);
     }
 
@@ -187,6 +191,7 @@ public class MatchmakerScr : MonoBehaviour
         GameObject.Find("Player4EloTextTMP").SetActive(true);
         GameObject.Find("Player3NickTextTMP").SetActive(true);
         GameObject.Find("Player4NickTextTMP").SetActive(true);
+        waitForOtherPlayerText.SetText("Ожидание других игроков...");
         StartMatchmakingInternal(4);
     }
 
