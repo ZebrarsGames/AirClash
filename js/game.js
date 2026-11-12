@@ -42,6 +42,77 @@
     const scoreBot = document.getElementById("score-bot");
     const matchStatus = document.getElementById("match-status");
     const difficultyButtons = document.querySelectorAll(".diff-btn");
+    const soundToggle = document.getElementById("sound-toggle");
+    const winsOutput = document.getElementById("wins-count");
+    const lossesOutput = document.getElementById("losses-count");
+    const streakOutput = document.getElementById("win-streak");
+    const STATS_KEY = "airclash-mini-match-stats";
+    const SOUND_KEY = "airclash-mini-match-muted";
+    const pressedKeys = new Set();
+    let isMuted = false;
+
+    function readStoredValue(key, fallback) {
+        try {
+            const value = window.localStorage.getItem(key);
+            return value === null ? fallback : value;
+        } catch (error) {
+            console.error(`AirClash could not read local setting "${key}".`, error);
+            return fallback;
+        }
+    }
+
+    function writeStoredValue(key, value) {
+        try {
+            window.localStorage.setItem(key, value);
+        } catch (error) {
+            console.error(`AirClash could not save local setting "${key}".`, error);
+        }
+    }
+
+    function readStats() {
+        try {
+            const storedStats = window.localStorage.getItem(STATS_KEY);
+            const stats = storedStats ? JSON.parse(storedStats) : {};
+            return {
+                wins: Number.isSafeInteger(stats.wins) && stats.wins >= 0 ? stats.wins : 0,
+                losses: Number.isSafeInteger(stats.losses) && stats.losses >= 0 ? stats.losses : 0,
+                streak: Number.isSafeInteger(stats.streak) && stats.streak >= 0 ? stats.streak : 0,
+            };
+        } catch (error) {
+            console.error("AirClash could not read mini-match statistics.", error);
+            return { wins: 0, losses: 0, streak: 0 };
+        }
+    }
+
+    const stats = readStats();
+
+    function updateStatsDisplay() {
+        if (winsOutput) winsOutput.textContent = String(stats.wins);
+        if (lossesOutput) lossesOutput.textContent = String(stats.losses);
+        if (streakOutput) streakOutput.textContent = String(stats.streak);
+    }
+
+    function recordMatchResult(won) {
+        if (won) {
+            stats.wins += 1;
+            stats.streak += 1;
+        } else {
+            stats.losses += 1;
+            stats.streak = 0;
+        }
+        writeStoredValue(STATS_KEY, JSON.stringify(stats));
+        updateStatsDisplay();
+    }
+
+    function updateSoundToggle() {
+        if (!soundToggle) return;
+        soundToggle.textContent = isMuted ? "Звук: выключен" : "Звук: включён";
+        soundToggle.setAttribute("aria-pressed", String(isMuted));
+    }
+
+    isMuted = readStoredValue(SOUND_KEY, "false") === "true";
+    updateStatsDisplay();
+    updateSoundToggle();
 
     const state = {
         player: { x: W * 0.18, y: H * 0.5, vx: 0, vy: 0 },
@@ -88,20 +159,29 @@
     function playBeep(freq, duration, type, volume) {
         try {
             const AudioCtx = window.AudioContext || window.webkitAudioContext;
-            if (!AudioCtx) return;
+            if (isMuted || !AudioCtx) return;
             if (!window.__airclashAudioCtx) window.__airclashAudioCtx = new AudioCtx();
             const audioCtx = window.__airclashAudioCtx;
-            const osc = audioCtx.createOscillator();
-            const gain = audioCtx.createGain();
-            osc.type = type;
-            osc.frequency.value = freq;
-            gain.gain.value = volume;
-            osc.connect(gain).connect(audioCtx.destination);
-            osc.start();
-            gain.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + duration);
-            osc.stop(audioCtx.currentTime + duration);
-        } catch (e) {
-            // Web Audio недоступен — просто без звука
+            const play = () => {
+                const osc = audioCtx.createOscillator();
+                const gain = audioCtx.createGain();
+                osc.type = type;
+                osc.frequency.value = freq;
+                gain.gain.value = volume;
+                osc.connect(gain).connect(audioCtx.destination);
+                osc.start();
+                gain.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + duration);
+                osc.stop(audioCtx.currentTime + duration);
+            };
+            if (audioCtx.state === "suspended") {
+                audioCtx.resume().then(play).catch((error) => {
+                    console.warn("AirClash audio could not be resumed.", error);
+                });
+                return;
+            }
+            play();
+        } catch (error) {
+            console.warn("AirClash audio is unavailable.", error);
         }
     }
 
@@ -249,10 +329,52 @@
         state.playerMoved = state.player.vx !== 0 || state.player.vy !== 0;
     }
 
-    canvas.addEventListener("pointermove", (event) => {
+    canvas.addEventListener("pointerdown", (event) => {
+        if (!event.isPrimary) return;
+        canvas.focus({ preventScroll: true });
+        canvas.setPointerCapture(event.pointerId);
+        state.pointerActive = true;
         const point = pointerToCanvas(event.clientX, event.clientY);
         movePlayerTo(point.x, point.y);
     });
+
+    canvas.addEventListener("pointermove", (event) => {
+        if (event.pointerType !== "mouse" && !state.pointerActive) return;
+        const point = pointerToCanvas(event.clientX, event.clientY);
+        movePlayerTo(point.x, point.y);
+    });
+
+    function releasePointer(event) {
+        if (!state.pointerActive || !canvas.hasPointerCapture(event.pointerId)) return;
+        state.pointerActive = false;
+        canvas.releasePointerCapture(event.pointerId);
+    }
+
+    canvas.addEventListener("pointerup", releasePointer);
+    canvas.addEventListener("pointercancel", releasePointer);
+    canvas.addEventListener("lostpointercapture", () => {
+        state.pointerActive = false;
+    });
+
+    const movementKeys = new Set(["w", "a", "s", "d", "arrowup", "arrowleft", "arrowdown", "arrowright"]);
+    canvas.addEventListener("keydown", (event) => {
+        const key = event.key.toLowerCase();
+        if (!movementKeys.has(key)) return;
+        event.preventDefault();
+        pressedKeys.add(key);
+    });
+    canvas.addEventListener("keyup", (event) => {
+        pressedKeys.delete(event.key.toLowerCase());
+    });
+    canvas.addEventListener("blur", () => pressedKeys.clear());
+
+    if (soundToggle) {
+        soundToggle.addEventListener("click", () => {
+            isMuted = !isMuted;
+            writeStoredValue(SOUND_KEY, String(isMuted));
+            updateSoundToggle();
+        });
+    }
 
     // --- ИИ бота (порт логики BotsAI.cs) ---
     // Масштаб: оригинальная арена Unity ~16 юнитов в ширину / ~9 в высоту,
@@ -390,7 +512,18 @@
             return;
         }
 
-        if (!state.playerMoved) {
+        const horizontal = Number(pressedKeys.has("d") || pressedKeys.has("arrowright"))
+            - Number(pressedKeys.has("a") || pressedKeys.has("arrowleft"));
+        const vertical = Number(pressedKeys.has("s") || pressedKeys.has("arrowdown"))
+            - Number(pressedKeys.has("w") || pressedKeys.has("arrowup"));
+        if (horizontal || vertical) {
+            const length = Math.hypot(horizontal, vertical);
+            const speed = 7 * frameScale;
+            movePlayerTo(
+                state.player.x + (horizontal / length) * speed,
+                state.player.y + (vertical / length) * speed
+            );
+        } else if (!state.playerMoved) {
             state.player.vx = 0;
             state.player.vy = 0;
         }
@@ -450,6 +583,7 @@
         if (state.scoreYou >= WIN_SCORE || state.scoreBot >= WIN_SCORE) {
             state.gameOver = true;
             const youWin = state.scoreYou > state.scoreBot;
+            recordMatchResult(youWin);
             setStatus(
                 youWin
                     ? `🏆 Победа! Ты обыграл бота уровня <strong>${DIFFICULTIES[currentDifficulty].label}</strong> ${state.scoreYou}:${state.scoreBot}.`

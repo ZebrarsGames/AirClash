@@ -27,23 +27,23 @@
     </header>
 
     <main class="content-container">
-        <h2 class="section-title neon-text-gold">БРАУЗЕРНЫЙ МИНИ-МАТЧ</h2>
-        <p class="section-sub">Браузерная демоверсия: управляй битой мышью или касанием, отбивай шайбу и забей семь голов. Полная версия с онлайн-матчами, прогрессией и событиями доступна на Android.</p>
+        <h1 class="section-title neon-text-gold">БРАУЗЕРНЫЙ МИНИ-МАТЧ</h1>
+        <p class="section-sub">Браузерная демоверсия: управляй битой мышью, касанием или клавишами WASD/стрелками, отбивай шайбу и забей семь голов. Полная версия с онлайн-матчами, прогрессией и событиями доступна на Android.</p>
 
         <div class="game-page-layout">
             <div class="game-board-wrap">
-                <div class="scoreboard">
-                    <span class="score-you" id="score-you">0</span>
+                <div class="scoreboard" role="group" aria-label="Счёт матча" aria-live="polite" aria-atomic="true">
+                    <span class="score-you" id="score-you" aria-label="Ваш счёт">0</span>
                     <span class="score-divider">:</span>
-                    <span class="score-bot" id="score-bot">0</span>
+                    <span class="score-bot" id="score-bot" aria-label="Счёт бота">0</span>
                 </div>
                 <div class="canvas-wrap">
-                    <canvas id="game-canvas" aria-label="Игровое поле аэрохоккея"></canvas>
+                    <canvas id="game-canvas" tabindex="0" role="img" aria-label="Игровое поле аэрохоккея. Нажмите, чтобы включить управление клавиатурой." aria-describedby="game-controls-hint"></canvas>
                     <div class="timer-overlay" id="timer-overlay" aria-live="polite">
                         <span class="timer-overlay-text" id="timer-overlay-text">4</span>
                     </div>
                 </div>
-                <p class="game-controls-hint">🖱️ Двигай мышью или пальцем по левой половине поля. Первый до 7 очков побеждает.</p>
+                <p class="game-controls-hint" id="game-controls-hint">🖱️ Двигай мышью или пальцем по левой половине поля; кликни по полю и используй WASD или стрелки. Первый до 7 очков побеждает.</p>
             </div>
 
             <aside class="game-sidebar">
@@ -59,8 +59,18 @@
 
                 <div class="sidebar-card">
                     <h4 class="neon-text-pink">Статус матча</h4>
-                    <p class="match-status" id="match-status">Загрузка…</p>
+                    <p class="match-status" id="match-status" aria-live="polite">Загрузка…</p>
                     <button type="button" class="btn btn-neon-pink" id="restart-match" style="width: 100%; margin-top: 1.2rem;">Начать заново</button>
+                </div>
+
+                <div class="sidebar-card">
+                    <h4 class="neon-text-green">Моя статистика</h4>
+                    <dl class="match-stats" aria-live="polite" aria-atomic="true">
+                        <div><dt>Победы</dt><dd id="wins-count">0</dd></div>
+                        <div><dt>Поражения</dt><dd id="losses-count">0</dd></div>
+                        <div><dt>Серия побед</dt><dd id="win-streak">0</dd></div>
+                    </dl>
+                    <button type="button" class="btn btn-neon-blue" id="sound-toggle" aria-pressed="false" style="width: 100%; margin-top: 1.2rem;">Выключить звук</button>
                 </div>
 
                 <div class="sidebar-card">

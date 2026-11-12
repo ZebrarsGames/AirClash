@@ -4,6 +4,8 @@ function ensureToastStack() {
     if (!stack) {
         stack = document.createElement("div");
         stack.className = "toast-stack";
+        stack.setAttribute("aria-live", "polite");
+        stack.setAttribute("aria-relevant", "additions");
         document.body.appendChild(stack);
     }
     return stack;
@@ -13,6 +15,7 @@ function showToast(message, type = "blue", duration = 4200) {
     const stack = ensureToastStack();
     const toast = document.createElement("div");
     toast.className = `toast toast-${type}`;
+    toast.setAttribute("role", "status");
     toast.textContent = message;
     stack.appendChild(toast);
     setTimeout(() => {
@@ -25,6 +28,21 @@ window.showToast = showToast;
 
 // --- Игровой интерактив на главной странице (превью в hero) ---
 document.addEventListener("DOMContentLoaded", () => {
+    let ambientFrame = 0;
+    window.addEventListener("pointermove", (event) => {
+        if (ambientFrame) return;
+        ambientFrame = requestAnimationFrame(() => {
+            ambientFrame = 0;
+            document.body.style.setProperty("--ambient-x", `${event.clientX}px`);
+            document.body.style.setProperty("--ambient-y", `${event.clientY}px`);
+            document.body.classList.add("has-ambient-pointer");
+        });
+    }, { passive: true });
+
+    window.addEventListener("pointerleave", () => {
+        document.body.classList.remove("has-ambient-pointer");
+    }, { passive: true });
+
     const mallet = document.getElementById("interactive-mallet");
     const puck = document.getElementById("interactive-puck");
     const arena = document.querySelector(".neon-arena-preview");

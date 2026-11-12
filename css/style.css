@@ -36,13 +36,49 @@ body {
     margin: 0;
     display: flex;
     flex-direction: column;
+    isolation: isolate;
     overflow-x: hidden;
-    background:
-        radial-gradient(ellipse at 12% 0%, rgba(20, 86, 230, .28), transparent 42rem),
-        radial-gradient(ellipse at 92% 78%, rgba(10, 142, 224, .16), transparent 38rem),
-        linear-gradient(170deg, var(--bg), var(--bg-raised)) fixed;
+    background: linear-gradient(170deg, var(--bg), var(--bg-raised)) fixed;
     color: var(--fg);
     font: 400 15px/1.6 var(--font-body);
+}
+
+body::before, body::after {
+    position: fixed;
+    z-index: -1;
+    display: block;
+    pointer-events: none;
+    content: "";
+}
+
+body::before {
+    inset: -12%;
+    background:
+        radial-gradient(ellipse at 12% 12%, rgba(20, 86, 230, .3), transparent 42rem),
+        radial-gradient(ellipse at 88% 76%, rgba(10, 142, 224, .2), transparent 38rem),
+        radial-gradient(ellipse at 54% 46%, rgba(111, 38, 158, .12), transparent 34rem);
+    animation: ambient-drift 32s ease-in-out infinite alternate;
+    will-change: transform;
+}
+
+body::after {
+    top: 0;
+    left: 0;
+    width: 52vmax;
+    height: 52vmax;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(38, 116, 255, .16), rgba(90, 38, 180, .06) 38%, transparent 70%);
+    opacity: 0;
+    transform: translate3d(var(--ambient-x, -1000px), var(--ambient-y, -1000px), 0) translate(-50%, -50%);
+    transition: opacity .4s ease;
+    will-change: transform;
+}
+
+body.has-ambient-pointer::after { opacity: 1; }
+
+@keyframes ambient-drift {
+    from { transform: translate3d(-1.5%, -1%, 0) scale(1); }
+    to { transform: translate3d(1.5%, 1%, 0) scale(1.04); }
 }
 
 button, input, textarea { font: inherit; }
@@ -444,6 +480,9 @@ nav .nav-link:hover, nav .nav-link.active {
 .scoreboard .score-you { color: var(--accent-2); }
 .scoreboard .score-bot { color: var(--pink); }
 .scoreboard .score-divider { color: var(--fg-soft); font-size: 1rem; }
+.match-stats { display: grid; gap: 8px; margin: 0; }
+.match-stats > div { display: flex; justify-content: space-between; gap: 12px; color: var(--fg-soft); font-size: .88rem; }
+.match-stats dd { margin: 0; color: var(--fg); font-weight: 700; font-variant-numeric: tabular-nums; }
 .canvas-wrap { position: relative; width: 100%; max-width: 760px; }
 #game-canvas {
     display: block;
@@ -456,6 +495,7 @@ nav .nav-link:hover, nav .nav-link.active {
     cursor: crosshair;
     touch-action: none;
 }
+#game-canvas:focus-visible { outline-offset: 5px; }
 .game-controls-hint { margin: 0; color: var(--fg-soft); font-size: .82rem; text-align: center; }
 .timer-overlay {
     position: absolute;
@@ -555,4 +595,10 @@ footer a { color: var(--fg); }
     #game-canvas, .timer-overlay { border-radius: 16px; }
     .toast-stack { right: 12px; bottom: max(12px, env(safe-area-inset-bottom)); width: calc(100vw - 24px); }
     .days-app { width: min(100% - 24px, 720px); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    body::before { animation: none; }
+    body::after { transition: none; }
+    body.has-ambient-pointer::after { opacity: 0; }
 }
