@@ -4,20 +4,22 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Об игре — AirClash</title>
-    <meta name="description" content="Всё об AirClash: режимы, уровни сложности бота, прогрессия, дорожная карта разработки и технологии.">
+    <meta name="description" content="Возможности AirClash: сетевые матчи, рейтинги, друзья, события, прогрессия и четыре уровня ИИ.">
+    <meta name="theme-color" content="#041029">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;800&family=Russo+One&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Onest:wght@400;500;600;700;800&family=Unbounded:wght@500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
     <header>
         <a href="index.html" class="logo">Air<span>Clash</span></a>
-        <nav>
+        <nav aria-label="Основная навигация">
             <ul>
                 <li><a href="index.html" class="nav-link ">Главная</a></li>
-                <li><a href="about.html" class="nav-link active">Об игре</a></li>
+                <li><a href="about.html" class="nav-link active" aria-current="page">Об игре</a></li>
                 <li><a href="play.html" class="nav-link ">Играть</a></li>
+                <li><a href="days.html" class="nav-link">Дни разработки</a></li>
                 <li><a href="download.html" class="nav-link ">Скачать</a></li>
                 <li><a href="team.html" class="nav-link ">О нас</a></li>
             </ul>
@@ -26,47 +28,68 @@
 
     <main class="content-container">
         <h2 class="section-title neon-text-blue">ФИЧИ И ИГРОВЫЕ РЕЖИМЫ</h2>
-        <p class="section-sub">AirClash — динамичная 2D-игра в стиле аэрохоккея на Unity, с целью стать простой в освоении, но сложной в мастерстве — вплоть до киберспортивного уровня.</p>
+        <p class="section-sub">AirClash — динамичная 2D-игра на Unity: быстрые дуэли, онлайн-соревнования и развитие профиля. Актуальная версия — 1.5.0.</p>
 
         <div class="features-grid">
             <div class="neon-card">
                 <div class="card-glow-blue"></div>
                 <div class="card-icon">⚔️</div>
                 <h3>Режимы матча</h3>
-                <p>Играй вдвоём на одном экране в режиме <strong>2 Игрока</strong>, оттачивай навыки против умного <strong>Бота</strong> с четырьмя уровнями сложности или сражайся в <strong>Онлайне</strong> с матчмейкингом.</p>
-                <span class="status-pill is-live">Всё готово</span>
+                <p>Выбирай офлайн-игру против бота, онлайн-матч 1v1 или дружескую сетевую игру 2v2.</p>
+                <span class="status-pill is-live">Доступно</span>
             </div>
 
             <div class="neon-card">
                 <div class="card-glow-pink"></div>
                 <div class="card-icon">🏆</div>
                 <h3>Система прогрессии</h3>
-                <p>Получай опыт за каждый гол и победу! Накапливай XP, чтобы разблокировать уникальные уровни профиля и похвастаться перед друзьями.</p>
-                <span class="status-pill is-live">Уже в игре</span>
+                <p>Развивай профиль, зарабатывай опыт и награды за матчи, задания и достижения.</p>
+                <span class="status-pill is-live">Доступно</span>
             </div>
 
             <div class="neon-card">
                 <div class="card-glow-gold"></div>
                 <div class="card-icon">🎫</div>
                 <h3>Ежедневные квесты</h3>
-                <p>Заходи каждый день и выполняй интересные задания: забивай голы, побеждай ботов и зарабатывай монеты для кастомизации игрового процесса.</p>
-                <span class="status-pill is-live">Уже в игре</span>
+                <p>Ежедневные и постоянные задания обновляются, а задания можно менять и повторно выбирать.</p>
+                <span class="status-pill is-live">Доступно</span>
             </div>
 
             <div class="neon-card">
                 <div class="card-glow-green"></div>
                 <div class="card-icon">🏅</div>
                 <h3>Достижения</h3>
-                <p>Играй и получай достижения, в награду за которые ты получишь больше XP.</p>
-                <span class="status-pill is-live">Уже в игре</span>
+                <p>Отслеживай игровые цели и получай дополнительные награды за достижения.</p>
+                <span class="status-pill is-live">Доступно</span>
             </div>
 
             <div class="neon-card">
                 <div class="card-glow-blue"></div>
                 <div class="card-icon">🧪</div>
                 <h3>Модификаторы игры</h3>
-                <p>Специальные модификаторы меняют течение матча и добавляют разнообразия каждому раунду.</p>
-                <span class="status-pill is-live">Уже в игре</span>
+                <p>Ветер, туман, дополнительные стены и изменение размера шайбы и бит меняют тактику и награды.</p>
+                <span class="status-pill is-live">Доступно</span>
+            </div>
+            <div class="neon-card">
+                <div class="card-glow-blue"></div>
+                <div class="card-icon">📰</div>
+                <h3>Новости и кликер</h3>
+                <p>Встроенный кликер сохраняет клики, а лента новостей сообщает об обновлениях в главном меню.</p>
+                <span class="status-pill is-live">Доступно</span>
+            </div>
+            <div class="neon-card">
+                <div class="card-glow-pink"></div>
+                <div class="card-icon">🎨</div>
+                <h3>Кастомизация</h3>
+                <p>Открывай облики бит, следы шайбы и эффекты частиц, чтобы настроить внешний вид игры.</p>
+                <span class="status-pill is-live">Доступно</span>
+            </div>
+            <div class="neon-card">
+                <div class="card-glow-gold"></div>
+                <div class="card-icon">☁️</div>
+                <h3>Профиль и облачные сохранения</h3>
+                <p>Данные профиля, статистика, монеты и инвентарь синхронизируются между устройствами.</p>
+                <span class="status-pill is-live">Доступно</span>
             </div>
         </div>
 
@@ -96,30 +119,25 @@
 
         <section>
             <h2 class="section-title neon-text-green">РЕЖИМЫ И РЕЙТИНГ</h2>
-            <p class="section-sub">1 на 1 доступен и локально, и онлайн с матчмейкингом. Командные форматы — в активной разработке.</p>
+            <p class="section-sub">Соревнуйся в рейтинговых матчах 1v1 или приглашай друзей в сетевой формат 2v2.</p>
 
             <div class="modes-grid">
                 <div class="mode-card neon-border-blue" style="padding: 1.8rem;">
                     <span class="mode-tag neon-text-blue">1v1</span>
-                    <p>Классический дуэльный формат — основа AirClash. Локально или онлайн через матчмейкинг.</p>
+                    <p>Соревновательный режим с онлайн-матчмейкингом и рейтингом Эло.</p>
                     <span class="status-pill is-live">Готово</span>
                 </div>
-                <div class="mode-card" style="border: 1px solid var(--border-color);">
+                <div class="mode-card">
                     <span class="mode-tag neon-text-pink">2v2</span>
-                    <p>Формат напарников для совместной игры.</p>
-                    <span class="status-pill is-wip">В разработке</span>
-                </div>
-                <div class="mode-card" style="border: 1px solid var(--border-color);">
-                    <span class="mode-tag neon-text-gold">3v3</span>
-                    <p>Ежемесячные ивенты для командных схваток.</p>
-                    <span class="status-pill is-wip">В разработке</span>
+                    <p>Сетевая командная игра с друзьями в приватных комнатах.</p>
+                    <span class="status-pill is-live">Дружеские матчи</span>
                 </div>
             </div>
 
             <div class="gameplay-showcase neon-border-blue" style="text-align: left; margin-bottom: 2rem;">
                 <div class="showcase-text" style="text-align: left;">
                     <h3 class="neon-text-blue">Продвинутая Эло-система</h3>
-                    <p style="text-align: left;">Для онлайн-матчей уже работает честная, продвинутая Эло-система — рейтинг каждого игрока пересчитывается по результатам матчей.</p>
+                    <p style="text-align: left;">Сервер рассчитывает рейтинг Эло по результатам матчей. Глобальные и региональные таблицы лидеров доступны в игре.</p>
                     <span class="status-pill is-live">Готово</span>
                 </div>
             </div>
@@ -127,69 +145,72 @@
             <div class="gameplay-showcase neon-border-pink">
                 <div class="showcase-text">
                     <h3 class="neon-text-pink">Глобальный и региональный рейтинг</h3>
-                    <p>Таблицы лидеров пока не готовы — ждём их в одном из ближайших обновлений, чтобы было видно, кто действительно лучший на аэрохоккейном столе.</p>
-                    <span class="status-pill is-wip">Ожидается в следующем обновлении</span>
+                    <p>Сравнивай результаты с игроками и следи за своим местом в мировом и региональном рейтинге.</p>
+                    <span class="status-pill is-live">Доступно</span>
                 </div>
             </div>
         </section>
 
         <section>
             <h2 class="section-title neon-text-violet">ОНЛАЙН И СООБЩЕСТВО</h2>
-            <p class="section-sub">Сетевая часть игры уже работает — вот что доступно сейчас и что ещё в пути.</p>
+            <p class="section-sub">Подключайся к матчмейкингу, создавай приватные комнаты и играй с друзьями.</p>
 
             <div class="features-grid">
                 <div class="neon-card">
                     <div class="card-glow-blue"></div>
                     <div class="card-icon">🌐</div>
                     <h3>Онлайн-мультиплеер</h3>
-                    <p>Сетевые матчи с другими игроками через матчмейкинг — уже полностью готово.</p>
+                    <p>Соревновательные матчи 1v1 и дружеские командные игры 2v2 на базе Mirror и Epic Online Services.</p>
                     <span class="status-pill is-live">Готово</span>
                 </div>
                 <div class="neon-card">
                     <div class="card-glow-pink"></div>
                     <div class="card-icon">🔑</div>
                     <h3>Дружеские матчи по коду комнаты</h3>
-                    <p>Создай комнату, поделись кодом с другом и сыграйте вне рейтинга — без турнирного давления.</p>
+                    <p>Создавай приватные комнаты, приглашай друзей и играй вне рейтинга.</p>
                     <span class="status-pill is-live">Готово</span>
                 </div>
                 <div class="neon-card">
                     <div class="card-glow-gold"></div>
                     <div class="card-icon">👫</div>
                     <h3>Система друзей</h3>
-                    <p>Список друзей и статус «в сети» — отдельная функция, которая создаётся прямо сейчас.</p>
-                    <span class="status-pill is-wip">В разработке</span>
+                    <p>Добавляй игроков, смотри их статус и приглашай в совместные матчи.</p>
+                    <span class="status-pill is-live">Доступно</span>
+                </div>
+                <div class="neon-card">
+                    <div class="card-glow-gold"></div>
+                    <div class="card-icon">🎉</div>
+                    <h3>События</h3>
+                    <p>Специальные события и тематические активности с заданиями и наградами — текущий фокус обновлений.</p>
+                    <span class="status-pill is-live">Система в игре</span>
                 </div>
             </div>
         </section>
 
         <section>
             <h2 class="section-title neon-text-gold">ДОРОЖНАЯ КАРТА</h2>
-            <p class="section-sub">Проект открытый и живой — статус разработки виден прямо в <a href="https://github.com/ZebrarsGames/AirClash" target="_blank" rel="noopener" class="neon-text-blue">репозитории на GitHub</a>.</p>
+            <p class="section-sub">Версия 1.5.0 стабильна; команда работает над праздничными событиями и готовит следующий этап развития 1.6.0.</p>
 
             <ul class="roadmap">
                 <li class="done">
-                    <h4>Онлайн-мультиплеер</h4>
-                    <p>Матчмейкинг и дружеские матчи по коду комнаты полностью готовы и доступны.</p>
+                    <h4>Онлайн, друзья и рейтинги</h4>
+                    <p>Матчмейкинг 1v1, дружеские комнаты 2v2, друзья, таблицы лидеров и серверный рейтинг Эло.</p>
                 </li>
                 <li class="now">
-                    <h4>Создание системы друзей <span class="tag-now">Сейчас</span></h4>
-                    <p>Возможность добавлять друзей и видеть, кто сейчас в сети.</p>
+                    <h4>Праздничные события <span class="tag-now">Сейчас</span></h4>
+                    <p>Развитие тематических событий и специальных наград (актуальный фокус версии 1.5.0).</p>
                 </li>
                 <li class="next">
-                    <h4>Глобальный и региональный рейтинг <span class="tag-next">Скоро</span></h4>
-                    <p>Таблицы лидеров ожидаются в одном из ближайших обновлений.</p>
+                    <h4>Версия 1.6.0 <span class="tag-next">Далее</span></h4>
+                    <p>Подготовка следующего крупного этапа и интеграция новых возможностей.</p>
                 </li>
                 <li>
-                    <h4>Режим 2v2</h4>
-                    <p>Формат напарников для совместной онлайн-игры.</p>
+                    <h4>Сезоны и соревновательный прогресс</h4>
+                    <p>В планах — рейтинговые сезоны и сезонные пропуски.</p>
                 </li>
                 <li>
-                    <h4>Ежемесячные ивенты 3v3</h4>
-                    <p>Командные схватки с более сложной тактикой в отдельных ивентах.</p>
-                </li>
-                <li>
-                    <h4>Праздничные ивенты</h4>
-                    <p>Тематические события и награды к праздникам.</p>
+                    <h4>Кланы и турниры</h4>
+                    <p>Долгосрочный план по развитию командного сообщества и соревновательных событий.</p>
                 </li>
             </ul>
         </section>
@@ -199,8 +220,8 @@
             <div class="tech-strip">
                 <span class="tech-chip neon-text-blue">🎮 Unity (2D)</span>
                 <span class="tech-chip neon-text-pink">💠 C#</span>
-                <span class="tech-chip neon-text-violet">🧩 DOTween</span>
-                <span class="tech-chip neon-text-gold">📱 Android</span>
+                <span class="tech-chip neon-text-violet">🌐 Mirror + EOS</span>
+                <span class="tech-chip neon-text-gold">☁️ Firebase + Node.js</span>
             </div>
         </section>
 
@@ -213,15 +234,15 @@
                 </details>
                 <details class="faq-item">
                     <summary>На каких платформах можно играть?</summary>
-                    <p class="faq-answer">Сейчас доступен Android — APK можно скачать на GitHub или на itch.io (это просто страница для загрузки того же файла, не браузерная версия). А ещё прямо на этом сайте, на странице «Играть», есть отдельная браузерная мини-версия с реальной физикой и ботами. Клиент для Windows пока не выпущен.</p>
+                    <p class="faq-answer">Полная версия доступна для Android в виде APK на GitHub Releases и itch.io. На этом сайте также можно сыграть в мини-матч с ботом прямо в браузере.</p>
                 </details>
                 <details class="faq-item">
                     <summary>Есть ли онлайн-игра с друзьями?</summary>
-                    <p class="faq-answer">Да. Онлайн-мультиплеер с матчмейкингом уже полностью готов, а сыграть с другом можно прямо сейчас — через дружеский матч по коду комнаты. Отдельная система друзей (список и статус «в сети») пока в разработке.</p>
+                    <p class="faq-answer">Да. В игре есть онлайн-матчмейкинг 1v1, дружеские комнаты, список друзей и сетевые матчи 2v2.</p>
                 </details>
                 <details class="faq-item">
                     <summary>Что с Эло и рейтингами?</summary>
-                    <p class="faq-answer">Продвинутая Эло-система для онлайн-матчей уже работает и считает рейтинг по результатам игр. А вот таблицы глобального и регионального рейтинга ещё не готовы — их ждут в одном из следующих обновлений.</p>
+                    <p class="faq-answer">Рейтинг Эло рассчитывается на сервере; глобальные и региональные таблицы лидеров входят в возможности игры.</p>
                 </details>
                 <details class="faq-item">
                     <summary>Как устроен ИИ бота?</summary>

@@ -30,41 +30,45 @@ document.addEventListener("DOMContentLoaded", () => {
     const arena = document.querySelector(".neon-arena-preview");
 
     if (mallet && puck && arena) {
-        arena.addEventListener("mousemove", (e) => {
-            const rect = arena.getBoundingClientRect();
-            const x = e.clientX - rect.left;
-            const y = e.clientY - rect.top;
+        let framePending = false;
+        let previewFrame = 0;
+        let pointerX = 0;
+        let pointerY = 0;
 
-            const limitX = Math.max(20, Math.min(x, rect.width / 2 - 20));
-            const limitY = Math.max(20, Math.min(y, rect.height - 20));
+        arena.addEventListener("pointermove", (event) => {
+            pointerX = event.clientX;
+            pointerY = event.clientY;
+            if (framePending) return;
 
-            mallet.style.left = `${limitX - 16}px`;
-            mallet.style.top = `${limitY - 16}px`;
+            framePending = true;
+            previewFrame = requestAnimationFrame(() => {
+                previewFrame = 0;
+                framePending = false;
+                const rect = arena.getBoundingClientRect();
+                const malletCenterX = Math.max(20, Math.min(pointerX - rect.left, rect.width / 2 - 20));
+                const malletCenterY = Math.max(20, Math.min(pointerY - rect.top, rect.height - 20));
+                mallet.style.left = `${malletCenterX - 16}px`;
+                mallet.style.top = `${malletCenterY - 16}px`;
 
-            const malletCenterX = limitX;
-            const malletCenterY = limitY;
-            const puckCenterX = puck.offsetLeft + 10;
-            const puckCenterY = puck.offsetTop + 10;
+                const dx = puck.offsetLeft + 10 - malletCenterX;
+                const dy = puck.offsetTop + 10 - malletCenterY;
+                const distanceSquared = dx * dx + dy * dy;
 
-            const dx = puckCenterX - malletCenterX;
-            const dy = puckCenterY - malletCenterY;
-            const distance = Math.sqrt(dx * dx + dy * dy);
-
-            if (distance < 26) {
-                const angle = Math.atan2(dy, dx);
-                const pushForce = 40;
-                let newPuckX = malletCenterX + Math.cos(angle) * (26 + pushForce) - 10;
-                let newPuckY = malletCenterY + Math.sin(angle) * (26 + pushForce) - 10;
-
-                newPuckX = Math.max(10, Math.min(newPuckX, rect.width - 30));
-                newPuckY = Math.max(10, Math.min(newPuckY, rect.height - 30));
-
-                puck.style.left = `${newPuckX}px`;
-                puck.style.top = `${newPuckY}px`;
-            }
+                if (distanceSquared < 26 * 26 && distanceSquared > 0) {
+                    const distance = Math.sqrt(distanceSquared);
+                    const pushDistance = 66;
+                    const newPuckX = malletCenterX + (dx / distance) * pushDistance - 10;
+                    const newPuckY = malletCenterY + (dy / distance) * pushDistance - 10;
+                    puck.style.left = `${Math.max(10, Math.min(newPuckX, rect.width - 30))}px`;
+                    puck.style.top = `${Math.max(10, Math.min(newPuckY, rect.height - 30))}px`;
+                }
+            });
         });
 
-        arena.addEventListener("mouseleave", () => {
+        arena.addEventListener("pointerleave", () => {
+            if (previewFrame) cancelAnimationFrame(previewFrame);
+            previewFrame = 0;
+            framePending = false;
             puck.style.left = "48%";
             puck.style.top = "45%";
             mallet.style.left = "20%";
@@ -79,17 +83,26 @@ document.addEventListener("DOMContentLoaded", () => {
             xpFill.style.width = xpFill.dataset.progress || "0%";
         });
     }
-});
 
-// --- Симуляция скачивания ---
-function triggerDownload(platformName) {
-    if (platformName === "PC Client") {
-        showToast("Клиент для ПК пока в разработке. Играть на компьютере уже можно через веб-версию на itch.io.", "gold");
-    } else if (platformName === "Android APK") {
-        showToast("Открываю страницу релизов на GitHub…", "blue");
-        window.open("https://github.com/ZebrarsGames/AirClash/releases", "_blank");
+    const daysCount = document.getElementById("days-count");
+    const daysLabel = document.getElementById("days-label");
+    if (daysCount && daysLabel) {
+        const today = new Date();
+        const todayUtc = Date.UTC(today.getFullYear(), today.getMonth(), today.getDate());
+        const startUtc = Date.UTC(2026, 2, 21);
+        const days = Math.max(0, Math.floor((todayUtc - startUtc) / 86400000));
+        const lastDigit = days % 10;
+        const lastTwoDigits = days % 100;
+
+        daysCount.value = String(days);
+        daysCount.textContent = String(days);
+        daysLabel.textContent = lastDigit === 1 && lastTwoDigits !== 11
+            ? "день"
+            : [2, 3, 4].includes(lastDigit) && ![12, 13, 14].includes(lastTwoDigits)
+                ? "дня"
+                : "дней";
     }
-}
+});
 
 // --- Отправка формы обратной связи AirClash ---
 async function handleContactSubmit(event) {

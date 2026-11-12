@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#041029">
+    <meta name="description" content="Сколько дней создаётся AirClash — независимая игра Zebrar's Games.">
+    <title>Дни разработки — AirClash</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Onest:wght@400;500;600;700;800&family=Unbounded:wght@500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <header>
+        <a href="index.html" class="logo">Air<span>Clash</span></a>
+        <nav aria-label="Основная навигация">
+            <ul>
+                <li><a href="index.html" class="nav-link">Главная</a></li>
+                <li><a href="about.html" class="nav-link">Об игре</a></li>
+                <li><a href="play.html" class="nav-link">Играть</a></li>
+                <li><a href="days.html" class="nav-link active" aria-current="page">Дни разработки</a></li>
+                <li><a href="download.html" class="nav-link">Скачать</a></li>
+                <li><a href="team.html" class="nav-link">О нас</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main class="days-app">
+        <section class="days-card" aria-labelledby="days-title">
+            <a class="days-brand" href="https://github.com/ZebrarsGames/AirClash" target="_blank" rel="noopener noreferrer">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true">
+                    <path d="m12 2 10 5-10 5L2 7l10-5Zm-10 10 10 5 10-5M2 17l10 5 10-5"/>
+                </svg>
+                AirClash
+            </a>
+            <h1 class="days-title" id="days-title">Дней в разработке</h1>
+            <div class="days-counter" aria-live="polite">
+                <output class="days-number" id="days-count">—</output>
+                <span class="days-label" id="days-label">дней</span>
+                <p class="days-date">Проект создаётся с 21 марта 2026 года</p>
+            </div>
+            <a class="btn" href="https://github.com/ZebrarsGames/AirClash" target="_blank" rel="noopener noreferrer">Открыть репозиторий</a>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2026 Zebrar's Games. AirClash — независимая игра в разработке.</p>
+    </footer>
+    <script src="js/main.js"></script>
+</body>
+</html>

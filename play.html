@@ -4,20 +4,22 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Играть — AirClash</title>
-    <meta name="description" content="Сыграй в мини-версию AirClash прямо в браузере — настоящая физика шайбы и четыре уровня сложности бота.">
+    <meta name="description" content="Сыграй в браузерный мини-матч AirClash: физика шайбы, управление мышью или касанием и четыре уровня сложности бота.">
+    <meta name="theme-color" content="#041029">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;800&family=Russo+One&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Onest:wght@400;500;600;700;800&family=Unbounded:wght@500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
     <header>
         <a href="index.html" class="logo">Air<span>Clash</span></a>
-        <nav>
+        <nav aria-label="Основная навигация">
             <ul>
                 <li><a href="index.html" class="nav-link ">Главная</a></li>
                 <li><a href="about.html" class="nav-link ">Об игре</a></li>
-                <li><a href="play.html" class="nav-link active">Играть</a></li>
+                <li><a href="play.html" class="nav-link active" aria-current="page">Играть</a></li>
+                <li><a href="days.html" class="nav-link">Дни разработки</a></li>
                 <li><a href="download.html" class="nav-link ">Скачать</a></li>
                 <li><a href="team.html" class="nav-link ">О нас</a></li>
             </ul>
@@ -26,7 +28,7 @@
 
     <main class="content-container">
         <h2 class="section-title neon-text-gold">БРАУЗЕРНЫЙ МИНИ-МАТЧ</h2>
-        <p class="section-sub">Упрощённая веб-версия AirClash: та же идея — реальная физика отскоков и бот с четырьмя уровнями сложности. Полная игра с квестами, XP, достижениями и онлайн-мультиплеером — на Android (APK, в том числе на itch.io).</p>
+        <p class="section-sub">Браузерная демоверсия: управляй битой мышью или касанием, отбивай шайбу и забей семь голов. Полная версия с онлайн-матчами, прогрессией и событиями доступна на Android.</p>
 
         <div class="game-page-layout">
             <div class="game-board-wrap">
@@ -48,10 +50,10 @@
                 <div class="sidebar-card">
                     <h4 class="neon-text-blue">Сложность бота</h4>
                     <div class="diff-btn-group">
-                        <button type="button" class="diff-btn" data-difficulty="easy">Лёгкий</button>
-                        <button type="button" class="diff-btn active" data-difficulty="medium">Средний</button>
-                        <button type="button" class="diff-btn" data-difficulty="hard">Сложный</button>
-                        <button type="button" class="diff-btn" data-difficulty="extreme">Экстрим</button>
+                        <button type="button" class="diff-btn" data-difficulty="easy" aria-pressed="false">Лёгкий</button>
+                        <button type="button" class="diff-btn active" data-difficulty="medium" aria-pressed="true">Средний</button>
+                        <button type="button" class="diff-btn" data-difficulty="hard" aria-pressed="false">Сложный</button>
+                        <button type="button" class="diff-btn" data-difficulty="extreme" aria-pressed="false">Экстрим</button>
                     </div>
                 </div>
 
@@ -63,7 +65,7 @@
 
                 <div class="sidebar-card">
                     <h4 class="neon-text-gold">Хочешь больше?</h4>
-                    <p class="match-status">В полной версии на Android (APK, в том числе на itch.io) ждут квесты, достижения, уровни профиля, онлайн-мультиплеер и командные режимы.</p>
+                    <p class="match-status">В Android-версии доступны онлайн 1v1 и дружеские матчи 2v2, рейтинг Эло, друзья, события, задания и кастомизация.</p>
                     <a href="download.html" class="btn btn-neon-gold" style="width: 100%; margin-top: 1.2rem;">Скачать полную игру</a>
                 </div>
             </aside>

@@ -4,21 +4,23 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Скачать — AirClash</title>
-    <meta name="description" content="Скачай AirClash для Android (APK) или попробуй браузерную мини-игру на этом сайте. Системные требования и ссылки на релизы.">
+    <meta name="description" content="Скачай AirClash 1.5.0 для Android через GitHub Releases или itch.io. Попробуй браузерный мини-матч.">
+    <meta name="theme-color" content="#041029">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;800&family=Russo+One&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Onest:wght@400;500;600;700;800&family=Unbounded:wght@500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
     <header>
         <a href="index.html" class="logo">Air<span>Clash</span></a>
-        <nav>
+        <nav aria-label="Основная навигация">
             <ul>
                 <li><a href="index.html" class="nav-link ">Главная</a></li>
                 <li><a href="about.html" class="nav-link ">Об игре</a></li>
                 <li><a href="play.html" class="nav-link ">Играть</a></li>
-                <li><a href="download.html" class="nav-link active">Скачать</a></li>
+                <li><a href="days.html" class="nav-link">Дни разработки</a></li>
+                <li><a href="download.html" class="nav-link active" aria-current="page">Скачать</a></li>
                 <li><a href="team.html" class="nav-link ">О нас</a></li>
             </ul>
         </nav>
@@ -26,23 +28,23 @@
 
     <main class="content-container">
         <h2 class="section-title neon-text-pink">ВЫБЕРИ СВОЮ ПЛАТФОРМУ</h2>
-        <p class="section-sub">AirClash в активной разработке (WIP), поэтому список платформ постоянно растёт. Актуальные сборки всегда доступны в релизах на GitHub.</p>
+        <p class="section-sub">Актуальный стабильный релиз — 1.5.0. Полная версия игры доступна на Android; новые сборки публикуются на GitHub.</p>
 
         <div class="download-grid">
             <div class="neon-card download-card">
                 <div class="card-glow-blue"></div>
                 <div class="platform-icon">🤖</div>
                 <h3>Android APK</h3>
-                <p>Оптимизировано для смартфонов: точное сенсорное управление и мгновенный отклик.</p>
+                <p>Полная версия AirClash с онлайн-матчами, профилем, событиями и настройкой управления.</p>
                 <span class="status-pill is-live">Доступно</span>
-                <button class="btn btn-neon-blue" onclick="triggerDownload('Android APK')">Скачать .APK</button>
+                <a class="btn btn-neon-blue" href="https://github.com/ZebrarsGames/AirClash/releases" target="_blank" rel="noopener noreferrer">Скачать APK</a>
             </div>
 
             <div class="neon-card download-card">
                 <div class="card-glow-green"></div>
                 <div class="platform-icon">📦</div>
                 <h3>itch.io (зеркало APK)</h3>
-                <p>Тот же APK-файл для Android, но с itch.io — удобно, если GitHub недоступен. Это страница загрузки, а не браузерная версия.</p>
+                <p>Страница релиза AirClash для Android. Браузерный мини-матч доступен отдельно на этом сайте.</p>
                 <span class="status-pill is-live">Доступно</span>
                 <a href="https://zebraaar.itch.io/airclash" target="_blank" rel="noopener" class="btn btn-neon-blue" style="width: 100%;">Открыть на itch.io</a>
             </div>
@@ -50,28 +52,28 @@
             <div class="neon-card download-card">
                 <div class="card-glow-pink"></div>
                 <div class="platform-icon">💻</div>
-                <h3>Windows PC клиент</h3>
-                <p>Отдельный установочный клиент с поддержкой клавиатуры и мыши.</p>
-                <span class="status-pill is-wip">В разработке</span>
-                <button class="btn btn-neon-pink" onclick="triggerDownload('PC Client')">Скачать для Win</button>
+                <h3>Игра в браузере</h3>
+                <p>Не нужно устанавливать клиент: сыграй с ботом в браузере на компьютере, мышью или на сенсорном экране.</p>
+                <span class="status-pill is-live">Играть онлайн</span>
+                <a class="btn btn-neon-pink" href="play.html">Открыть мини-матч</a>
             </div>
         </div>
 
         <div class="specs-box neon-border-blue">
-            <h3 class="neon-text-blue" style="margin-bottom: 1rem;">Системные требования</h3>
+            <h3 class="neon-text-blue" style="margin-bottom: 1rem;">Где играть</h3>
             <div class="specs-grid">
                 <div>
-                    <strong>Минимальные:</strong>
-                    <p>ОС: Android 7.0<br>ОЗУ: 1 ГБ<br>Место на диске: 300 МБ</p>
+                    <strong>Полная игра</strong>
+                    <p>Android-смартфоны и планшеты. APK доступен в релизах GitHub и на itch.io.</p>
                 </div>
                 <div>
-                    <strong>Рекомендуемые:</strong>
-                    <p>ОС: Android 11+<br>ОЗУ: 2 ГБ<br>Экран: 90/120+ Гц</p>
+                    <strong>Браузерный мини-матч</strong>
+                    <p>Компьютеры и мобильные устройства с современным браузером. Установка не требуется.</p>
                 </div>
             </div>
         </div>
 
-        <p class="download-note">Не хочешь ничего скачивать прямо сейчас? Попробуй <a href="play.html" class="neon-text-gold">мини-версию в браузере</a> — та же физика и боты, без установки.</p>
+        <p class="download-note">Браузерная мини-игра — отдельная демонстрация с ботом; она не заменяет полную Android-версию с онлайн-режимами.</p>
     </main>
 
     <footer>

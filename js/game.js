@@ -5,12 +5,16 @@
     if (!canvas) return;
 
     const ctx = canvas.getContext("2d");
+    if (!ctx) {
+        console.error("AirClash mini-match requires a 2D canvas context.");
+        return;
+    }
 
     // Логические размеры поля (не зависят от CSS-масштаба канваса)
     const W = 700;
     const H = 400;
-    canvas.width = W;
-    canvas.height = H;
+    let pixelRatio = 0;
+    let arenaCanvas;
 
     const GOAL_HALF = 60;
     const MALLET_R = 22;
@@ -34,6 +38,10 @@
     const restartBtn = document.getElementById("restart-match");
     const timerOverlay = document.getElementById("timer-overlay");
     const timerText = document.getElementById("timer-overlay-text");
+    const scoreYou = document.getElementById("score-you");
+    const scoreBot = document.getElementById("score-bot");
+    const matchStatus = document.getElementById("match-status");
+    const difficultyButtons = document.querySelectorAll(".diff-btn");
 
     const state = {
         player: { x: W * 0.18, y: H * 0.5, vx: 0, vy: 0 },
@@ -43,12 +51,36 @@
         scoreBot: 0,
         running: true,
         pointerActive: false,
+        playerMoved: false,
         gameOver: false,
         botSpeedFactor: 1, // аналог UpdateBotSpeed() — камбэк-механика по разнице счёта
         timerOn: false, // аналог TimerScr.TimerOn — блокирует ИИ и физику на время таймера
     };
 
     let countdownHandle = null;
+    let animationFrameId = null;
+    let lastFrameTime = 0;
+
+    function resizeCanvas() {
+        const nextPixelRatio = Math.min(window.devicePixelRatio || 1, 2);
+        if (nextPixelRatio === pixelRatio) return;
+
+        pixelRatio = nextPixelRatio;
+        canvas.width = W * pixelRatio;
+        canvas.height = H * pixelRatio;
+        ctx.setTransform(pixelRatio, 0, 0, pixelRatio, 0, 0);
+
+        arenaCanvas = document.createElement("canvas");
+        arenaCanvas.width = canvas.width;
+        arenaCanvas.height = canvas.height;
+        const arenaContext = arenaCanvas.getContext("2d");
+        if (!arenaContext) {
+            console.error("AirClash mini-match could not create its arena canvas.");
+            return;
+        }
+        arenaContext.setTransform(pixelRatio, 0, 0, pixelRatio, 0, 0);
+        drawArena(arenaContext);
+    }
 
     // --- Таймер гола / старта (порт TimerScr.cs) ---
     // Простые синтезированные звуки через Web Audio — заменяют
@@ -188,15 +220,12 @@
     }
 
     function updateScoreboard() {
-        const you = document.getElementById("score-you");
-        const bot = document.getElementById("score-bot");
-        if (you) you.textContent = state.scoreYou;
-        if (bot) bot.textContent = state.scoreBot;
+        if (scoreYou) scoreYou.textContent = state.scoreYou;
+        if (scoreBot) scoreBot.textContent = state.scoreBot;
     }
 
     function setStatus(html) {
-        const el = document.getElementById("match-status");
-        if (el) el.innerHTML = html;
+        if (matchStatus) matchStatus.innerHTML = html;
     }
 
     // --- Управление игроком (мышь / тач) ---
@@ -217,23 +246,13 @@
         state.player.vy = clampedY - state.player.y;
         state.player.x = clampedX;
         state.player.y = clampedY;
+        state.playerMoved = state.player.vx !== 0 || state.player.vy !== 0;
     }
 
-    canvas.addEventListener("mousemove", (e) => {
-        const p = pointerToCanvas(e.clientX, e.clientY);
-        movePlayerTo(p.x, p.y);
+    canvas.addEventListener("pointermove", (event) => {
+        const point = pointerToCanvas(event.clientX, event.clientY);
+        movePlayerTo(point.x, point.y);
     });
-
-    canvas.addEventListener(
-        "touchmove",
-        (e) => {
-            e.preventDefault();
-            const touch = e.touches[0];
-            const p = pointerToCanvas(touch.clientX, touch.clientY);
-            movePlayerTo(p.x, p.y);
-        },
-        { passive: false }
-    );
 
     // --- ИИ бота (порт логики BotsAI.cs) ---
     // Масштаб: оригинальная арена Unity ~16 юнитов в ширину / ~9 в высоту,
@@ -249,19 +268,20 @@
     function moveTowards(obj, targetX, targetY, maxDelta) {
         const dx = targetX - obj.x;
         const dy = targetY - obj.y;
-        const dist = Math.sqrt(dx * dx + dy * dy);
-        if (dist <= maxDelta || dist === 0) {
+        const distanceSquared = dx * dx + dy * dy;
+        if (distanceSquared <= maxDelta * maxDelta || distanceSquared === 0) {
             obj.x = targetX;
             obj.y = targetY;
         } else {
+            const dist = Math.sqrt(distanceSquared);
             obj.x += (dx / dist) * maxDelta;
             obj.y += (dy / dist) * maxDelta;
         }
     }
 
-    function updateBot() {
+    function updateBot(frameScale) {
         const cfg = DIFFICULTIES[currentDifficulty];
-        const moveSpeed = cfg.moveSpeed * state.botSpeedFactor;
+        const moveSpeed = cfg.moveSpeed * state.botSpeedFactor * frameScale;
 
         // relX > 0 — шайба на нашей половине (у ворот бота), relX < 0 — у игрока.
         // Это зеркало условий оригинала, где x < 0 означало "своя половина".
@@ -331,12 +351,13 @@
     function resolveCollision(mallet) {
         const dx = state.puck.x - mallet.x;
         const dy = state.puck.y - mallet.y;
-        const dist = Math.sqrt(dx * dx + dy * dy);
+        const distanceSquared = dx * dx + dy * dy;
         const minDist = MALLET_R + PUCK_R;
 
-        if (dist < minDist && dist > 0) {
-            const nx = dx / dist;
-            const ny = dy / dist;
+        if (distanceSquared < minDist * minDist) {
+            const dist = Math.sqrt(distanceSquared);
+            const nx = dist > 0 ? dx / dist : 1;
+            const ny = dist > 0 ? dy / dist : 0;
 
             state.puck.x = mallet.x + nx * minDist;
             state.puck.y = mallet.y + ny * minDist;
@@ -353,24 +374,33 @@
             state.puck.vx += mallet.vx * 0.5;
             state.puck.vy += mallet.vy * 0.5;
 
-            const speed = Math.sqrt(state.puck.vx ** 2 + state.puck.vy ** 2);
+            const speedSquared = state.puck.vx ** 2 + state.puck.vy ** 2;
             const maxSpeed = 14;
-            if (speed > maxSpeed) {
+            if (speedSquared > maxSpeed * maxSpeed) {
+                const speed = Math.sqrt(speedSquared);
                 state.puck.vx = (state.puck.vx / speed) * maxSpeed;
                 state.puck.vy = (state.puck.vy / speed) * maxSpeed;
             }
         }
     }
 
-    function step() {
-        if (!state.running || state.gameOver || state.timerOn) return;
+    function step(frameScale) {
+        if (!state.running || state.gameOver || state.timerOn) {
+            state.playerMoved = false;
+            return;
+        }
 
-        updateBot();
+        if (!state.playerMoved) {
+            state.player.vx = 0;
+            state.player.vy = 0;
+        }
+        updateBot(frameScale);
 
-        state.puck.x += state.puck.vx;
-        state.puck.y += state.puck.vy;
-        state.puck.vx *= 0.995;
-        state.puck.vy *= 0.995;
+        state.puck.x += state.puck.vx * frameScale;
+        state.puck.y += state.puck.vy * frameScale;
+        const friction = Math.pow(0.995, frameScale);
+        state.puck.vx *= friction;
+        state.puck.vy *= friction;
 
         // Верх / низ
         if (state.puck.y - PUCK_R < 0) {
@@ -411,6 +441,7 @@
 
         resolveCollision(state.player);
         resolveCollision(state.bot);
+        state.playerMoved = false;
     }
 
     function afterGoal(direction) {
@@ -435,40 +466,40 @@
         goalOverlay(direction || -1);
     }
 
-    function draw() {
-        ctx.clearRect(0, 0, W, H);
-
-        // Поле
-        ctx.fillStyle = "rgba(10, 15, 35, 0.001)";
-        ctx.fillRect(0, 0, W, H);
-
+    function drawArena(context) {
+        context.fillStyle = "#0a1c44";
+        context.fillRect(0, 0, W, H);
         // Центральная линия
-        ctx.strokeStyle = "rgba(255, 0, 85, 0.5)";
-        ctx.lineWidth = 2;
-        ctx.setLineDash([10, 10]);
-        ctx.beginPath();
-        ctx.moveTo(W / 2, 0);
-        ctx.lineTo(W / 2, H);
-        ctx.stroke();
-        ctx.setLineDash([]);
+        context.strokeStyle = "rgba(165, 210, 255, 0.28)";
+        context.lineWidth = 2;
+        context.setLineDash([10, 10]);
+        context.beginPath();
+        context.moveTo(W / 2, 0);
+        context.lineTo(W / 2, H);
+        context.stroke();
+        context.setLineDash([]);
 
         // Центральный круг
-        ctx.strokeStyle = "rgba(0, 240, 255, 0.35)";
-        ctx.beginPath();
-        ctx.arc(W / 2, H / 2, 45, 0, Math.PI * 2);
-        ctx.stroke();
+        context.strokeStyle = "rgba(92, 200, 255, 0.3)";
+        context.beginPath();
+        context.arc(W / 2, H / 2, 45, 0, Math.PI * 2);
+        context.stroke();
 
         // Ворота
-        ctx.fillStyle = "#ff0055";
-        ctx.shadowColor = "#ff0055";
-        ctx.shadowBlur = 12;
-        ctx.fillRect(0, H / 2 - GOAL_HALF, 6, GOAL_HALF * 2);
-        ctx.fillRect(W - 6, H / 2 - GOAL_HALF, 6, GOAL_HALF * 2);
-        ctx.shadowBlur = 0;
+        context.fillStyle = "#ff5c9a";
+        context.shadowColor = "#ff5c9a";
+        context.shadowBlur = 12;
+        context.fillRect(0, H / 2 - GOAL_HALF, 6, GOAL_HALF * 2);
+        context.fillRect(W - 6, H / 2 - GOAL_HALF, 6, GOAL_HALF * 2);
+        context.shadowBlur = 0;
+    }
+
+    function draw() {
+        ctx.drawImage(arenaCanvas, 0, 0, W, H);
 
         // Биты
-        drawCircle(state.player.x, state.player.y, MALLET_R, "#00f0ff");
-        drawCircle(state.bot.x, state.bot.y, MALLET_R, "#ff0055");
+        drawCircle(state.player.x, state.player.y, MALLET_R, "#5cc8ff");
+        drawCircle(state.bot.x, state.bot.y, MALLET_R, "#ff5c9a");
 
         // Шайба
         drawCircle(state.puck.x, state.puck.y, PUCK_R, "#ffffff");
@@ -487,18 +518,37 @@
         ctx.shadowBlur = 0;
     }
 
-    function loop() {
-        step();
+    function loop(timestamp) {
+        if (document.hidden) {
+            animationFrameId = null;
+            return;
+        }
+        const frameScale = lastFrameTime
+            ? Math.min((timestamp - lastFrameTime) / (1000 / 60), 2)
+            : 1;
+        lastFrameTime = timestamp;
+        step(frameScale);
         draw();
-        requestAnimationFrame(loop);
+        animationFrameId = requestAnimationFrame(loop);
+    }
+
+    function startLoop() {
+        if (animationFrameId !== null) return;
+        lastFrameTime = 0;
+        animationFrameId = requestAnimationFrame(loop);
     }
 
     // --- UI: выбор сложности ---
-    document.querySelectorAll(".diff-btn").forEach((btn) => {
+    difficultyButtons.forEach((btn) => {
         btn.addEventListener("click", () => {
-            document.querySelectorAll(".diff-btn").forEach((b) => b.classList.remove("active"));
-            btn.classList.add("active");
-            currentDifficulty = btn.dataset.difficulty;
+            const nextDifficulty = btn.dataset.difficulty;
+            if (!DIFFICULTIES[nextDifficulty] || nextDifficulty === currentDifficulty) return;
+            difficultyButtons.forEach((button) => {
+                const isActive = button === btn;
+                button.classList.toggle("active", isActive);
+                button.setAttribute("aria-pressed", String(isActive));
+            });
+            currentDifficulty = nextDifficulty;
             resetMatch();
         });
     });
@@ -507,6 +557,16 @@
         restartBtn.addEventListener("click", resetMatch);
     }
 
+    resizeCanvas();
+    window.addEventListener("resize", resizeCanvas, { passive: true });
+    document.addEventListener("visibilitychange", () => {
+        if (document.hidden) {
+            if (animationFrameId !== null) cancelAnimationFrame(animationFrameId);
+            animationFrameId = null;
+            return;
+        }
+        startLoop();
+    });
     resetMatch();
-    loop();
+    startLoop();
 })();

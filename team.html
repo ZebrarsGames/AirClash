@@ -4,22 +4,24 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>О нас — AirClash</title>
-    <meta name="description" content="Кто делает AirClash, зачем, и как связаться с командой Zebrar's Games.">
+    <meta name="description" content="AirClash — независимая игра Zebrar's Games. Свяжитесь с разработчиком и следите за обновлениями проекта.">
+    <meta name="theme-color" content="#041029">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;800&family=Russo+One&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Onest:wght@400;500;600;700;800&family=Unbounded:wght@500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
     <header>
         <a href="index.html" class="logo">Air<span>Clash</span></a>
-        <nav>
+        <nav aria-label="Основная навигация">
             <ul>
                 <li><a href="index.html" class="nav-link ">Главная</a></li>
                 <li><a href="about.html" class="nav-link ">Об игре</a></li>
                 <li><a href="play.html" class="nav-link ">Играть</a></li>
+                <li><a href="days.html" class="nav-link">Дни разработки</a></li>
                 <li><a href="download.html" class="nav-link ">Скачать</a></li>
-                <li><a href="team.html" class="nav-link active">О нас</a></li>
+                <li><a href="team.html" class="nav-link active" aria-current="page">О нас</a></li>
             </ul>
         </nav>
     </header>
@@ -28,28 +30,28 @@
         <h2 class="section-title neon-text-blue">О РАЗРАБОТЧИКАХ AIRCLASH</h2>
 
         <div class="about-us-box neon-border-pink">
-            <p><strong>AirClash</strong> — это независимый проект, рожденный из любви к старым аркадным автоматам и современным состязательным играм. Наша цель — создать самый отзывчивый, стильный и честный аэрохоккей без навязчивой рекламы и механик Pay-to-Win.</p>
-            <p>Мы верим в силу комьюнити и постоянно развиваем игру на основе ваших отзывов и предложений.</p>
+            <p><strong>AirClash</strong> — независимая 2D-игра об аэрохоккее от Zebrar's Games. Проект сочетает быстрые матчи, сетевую игру, развитие профиля и регулярные игровые события.</p>
+            <p>Игра развивается вместе с сообществом. Сейчас стабильная версия 1.5.0 доступна для Android; команда работает над праздничными событиями и следующим обновлением.</p>
         </div>
 
         <div class="team-stats-grid">
             <div class="stat-card">
-                <span class="stat-number neon-text-blue">100%</span>
-                <span class="stat-label">Физика скилла</span>
+                <span class="stat-number neon-text-blue">1.5.0</span>
+                <span class="stat-label">Стабильная версия</span>
             </div>
             <div class="stat-card">
-                <span class="stat-number neon-text-pink">0%</span>
-                <span class="stat-label">Донат влияние</span>
+                <span class="stat-number neon-text-pink">1v1</span>
+                <span class="stat-label">Рейтинговые онлайн-матчи</span>
             </div>
             <div class="stat-card">
-                <span class="stat-number neon-text-blue">24/7</span>
-                <span class="stat-label">Адреналин</span>
+                <span class="stat-number neon-text-blue">2v2</span>
+                <span class="stat-label">Дружеские командные матчи</span>
             </div>
         </div>
 
         <div class="contact-section" id="contact">
             <h3 class="neon-text-blue" style="text-align: center; margin-bottom: 0.8rem;">Свяжись с нами</h3>
-            <p style="text-align: center; color: var(--text-muted); margin-bottom: 1.5rem;">Можно через форму ниже или напрямую на <a href="mailto:zebrarsgames@gmail.com" class="neon-text-pink">zebrarsgames@gmail.com</a>.</p>
+            <p>Можно через форму ниже или напрямую на <a href="mailto:zebrarsgames@gmail.com" class="neon-text-pink">zebrarsgames@gmail.com</a>.</p>
             <form class="contact-form neon-border-blue" onsubmit="handleContactSubmit(event)">
                 <input type="text" name="username" placeholder="Твой ник" required>
                 <input type="email" name="email" placeholder="Твой Email" required>
