@@ -43,6 +43,12 @@ body {
     font: 400 15px/1.6 var(--font-body);
 }
 
+main { animation: page-enter .55s var(--ease) both; }
+@keyframes page-enter {
+    from { opacity: 0; transform: translateY(8px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
 body::before, body::after {
     position: fixed;
     z-index: -1;
@@ -192,6 +198,8 @@ nav .nav-link:hover, nav .nav-link.active {
 
 .btn:active { transform: translateY(0) scale(.98); }
 .btn:disabled { cursor: not-allowed; opacity: .5; transform: none; }
+.btn-block { width: 100%; }
+.btn-spaced { margin-top: 1.2rem; }
 .btn-neon-blue { background: linear-gradient(180deg, #3a79f5, #1d4ed8); }
 .btn-neon-pink { background: linear-gradient(180deg, #e65d9c, #a92c71); }
 .btn-neon-gold { background: linear-gradient(180deg, #e9af48, #bd7624); }
@@ -319,7 +327,7 @@ nav .nav-link:hover, nav .nav-link.active {
 .mallet { width: 34px; aspect-ratio: 1; }
 .mallet-blue { top: 40%; left: 20%; background: var(--accent); box-shadow: 0 0 24px rgba(91,149,255,.8); }
 .mallet-red { top: 50%; right: 20%; background: var(--pink); box-shadow: 0 0 24px rgba(255,92,154,.7); }
-.puck { top: 45%; left: 48%; width: 18px; aspect-ratio: 1; background: #fff; box-shadow: 0 0 20px rgba(255,255,255,.75); }
+.puck { top: 50%; left: 50%; width: 18px; aspect-ratio: 1; transform: translate(-50%, -50%); background: #fff; box-shadow: 0 0 20px rgba(255,255,255,.75); }
 
 .content-container {
     width: min(100% - 48px, var(--content-width));
@@ -349,6 +357,9 @@ nav .nav-link:hover, nav .nav-link.active {
 .neon-card, .mode-card, .difficulty-card, .sidebar-card, .stat-card { padding: 24px; }
 .neon-card { isolation: isolate; transition: transform .3s var(--ease), border-color .3s ease, box-shadow .3s ease; }
 .neon-card:hover { transform: translateY(-4px); border-color: rgba(200,228,255,.32); box-shadow: inset 0 1px 1px var(--edge), 0 22px 48px -26px rgba(23,82,188,.55); }
+.mode-card, .difficulty-card, .sidebar-card, .stat-card { transition: transform .3s var(--ease), border-color .3s ease, box-shadow .3s ease; }
+.mode-card:hover, .difficulty-card:hover, .sidebar-card:hover, .stat-card:hover { transform: translateY(-2px); border-color: rgba(200,228,255,.3); }
+.mode-card.mode-card-padded { padding: 1.8rem; }
 
 [class^="card-glow-"] {
     position: absolute;
@@ -396,7 +407,10 @@ nav .nav-link:hover, nav .nav-link.active {
 }
 .neon-border-pink, .neon-border-blue, .neon-border-gold { padding: clamp(20px, 4vw, 36px); }
 .gameplay-showcase { margin: 32px 0 56px; }
+.elo-showcase { margin-bottom: 2rem; text-align: left; }
+.elo-showcase .showcase-text, .elo-showcase p { text-align: left; }
 .home-match-card { display: flex; align-items: center; justify-content: space-between; gap: 24px; text-align: left; }
+.home-intro-section { padding-top: 0; }
 .home-match-card > div { flex: 1; min-width: 0; }
 .home-match-card h3 { margin: 0 0 10px; font: 600 1rem/1.5 var(--font-title); }
 .home-match-card p { margin: 0; color: var(--fg-soft); line-height: 1.7; }
@@ -439,6 +453,7 @@ nav .nav-link:hover, nav .nav-link.active {
 .download-card .btn { width: 100%; margin-top: auto; }
 .specs-box { margin: 32px 0; }
 .specs-box h3 { margin: 0 0 18px; font: 600 1rem/1.5 var(--font-title); }
+.specs-box h3.specs-heading { margin-bottom: 1rem; }
 .specs-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 22px; }
 .specs-grid strong { display: block; margin-bottom: 6px; }
 .specs-grid p { margin: 0; color: var(--fg-soft); line-height: 1.7; }
@@ -555,10 +570,18 @@ footer a { color: var(--fg); }
 .days-brand svg { width: 24px; height: 24px; color: var(--accent-2); }
 .days-title { margin: 28px 0 0; color: var(--fg-soft); font: 600 clamp(1rem, 3vw, 1.4rem)/1.4 var(--font-title); }
 .days-counter { display: grid; justify-items: center; gap: 8px; margin: 26px 0; padding: clamp(22px, 5vw, 36px) 16px; border: 1px solid var(--well-line); border-radius: 22px; background: var(--well); }
-.days-number { color: var(--accent-2); font: 600 clamp(3.5rem, 17vw, 7rem)/1 var(--font-title); letter-spacing: -.06em; font-variant-numeric: tabular-nums; text-shadow: 0 0 38px rgba(92,200,255,.2); }
+.days-number { padding: 0; border: 0; background: transparent; color: var(--accent-2); cursor: pointer; font: 600 clamp(3.5rem, 17vw, 7rem)/1 var(--font-title); letter-spacing: -.06em; font-variant-numeric: tabular-nums; text-shadow: 0 0 38px rgba(92,200,255,.2); transition: transform .15s var(--ease), filter .2s ease; }
+.days-number:hover { filter: brightness(1.2); }
+.days-number:active { transform: scale(.94); }
 .days-label { color: var(--fg); font-size: .88rem; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; }
-.days-date { margin: 4px 0 0; color: var(--fg-soft); font-size: .88rem; }
-.days-card .btn { margin-top: 6px; }
+.days-date { margin: 4px 0 0; color: var(--fg-soft); font-size: .88rem; transition: opacity .25s var(--ease), transform .25s var(--ease); }
+.live-timer { display: inline-flex; align-items: center; justify-content: center; margin-top: 2px; color: var(--accent-2); font: 400 13px/1.2 "JetBrains Mono", monospace; font-variant-numeric: tabular-nums; opacity: .85; white-space: nowrap; }
+.timer-container { display: inline-flex; align-items: center; justify-content: center; color: inherit; font: inherit; line-height: 1.2; white-space: nowrap; }
+.timer-digit-column { position: relative; display: inline-flex; width: .62em; height: 1.2em; justify-content: center; overflow: hidden; vertical-align: middle; line-height: 1.2; }
+.timer-digit-track { position: absolute; top: 0; left: 0; display: flex; width: 100%; flex-direction: column; transition: transform .45s cubic-bezier(.16, 1, .3, 1); }
+.timer-digit { display: grid; height: 1.2em; place-items: center; color: inherit; font: inherit; filter: blur(6px); opacity: .3; transition: filter .45s cubic-bezier(.16, 1, .3, 1), opacity .45s cubic-bezier(.16, 1, .3, 1); }
+.timer-digit.is-active { filter: blur(0); opacity: 1; }
+.timer-separator { display: inline-flex; width: .3em; justify-content: center; color: inherit; font: inherit; line-height: 1.2; }
 
 @media (max-width: 960px) {
     header { flex-direction: column; gap: 12px; padding: 14px 20px; }

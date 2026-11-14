@@ -202,7 +202,7 @@
 
     // Аналог TimerScr.Goal(): показываем "GOAL", блокируем рестарт и игру,
     // проигрываем гол-звук, через 1 секунду запускаем обратный отсчёт.
-    function goalOverlay(direction) {
+    function goalOverlay() {
         clearTimeout(countdownHandle);
         clearInterval(countdownHandle);
         state.timerOn = true;
@@ -213,14 +213,20 @@
         state.puck.y = H / 2;
         state.puck.vx = 0;
         state.puck.vy = 0;
-        countdownHandle = setTimeout(() => timerStart(direction), 1000);
+        countdownHandle = setTimeout(timerStart, 1000);
     }
 
     // Аналог TimerScr.TimerStart() + Timer(): показываем "4","3","2","1" с интервалом
     // в секунду, затем скрываем таймер, разблокируем рестарт и возобновляем игру.
-    function timerStart(direction) {
+    function timerStart() {
         let timeLeft = 4;
         state.timerOn = true;
+        state.player.vx = 0;
+        state.player.vy = 0;
+        state.playerMoved = false;
+        state.bot.vx = 0;
+        state.bot.vy = 0;
+        pressedKeys.clear();
         setRestartInteractable(false);
         showTimerOverlay(String(timeLeft));
         playBeep(440, 0.12, "square", 0.05);
@@ -232,23 +238,25 @@
                 clearInterval(countdownHandle);
                 countdownHandle = null;
                 hideTimerOverlay();
+                state.player.vx = 0;
+                state.player.vy = 0;
+                state.playerMoved = false;
+                state.bot.x = BOT_START.x;
+                state.bot.y = BOT_START.y;
+                state.bot.vx = 0;
+                state.bot.vy = 0;
+                state.puck.x = W / 2;
+                state.puck.y = H / 2;
+                state.puck.vx = 0;
+                state.puck.vy = 0;
+                pressedKeys.clear();
                 state.timerOn = false;
                 setRestartInteractable(true);
-                resetPuck(direction || (Math.random() > 0.5 ? 1 : -1));
             } else {
                 showTimerOverlay(String(timeLeft));
                 playBeep(440, 0.12, "square", 0.05);
             }
         }, 1000);
-    }
-
-    function resetPuck(direction) {
-        state.puck.x = W / 2;
-        state.puck.y = H / 2;
-        const angle = (Math.random() - 0.5) * 0.6;
-        const speed = 3.2;
-        state.puck.vx = Math.cos(angle) * speed * direction;
-        state.puck.vy = Math.sin(angle) * speed;
     }
 
     function resetMatch() {
@@ -269,7 +277,7 @@
         state.puck.vy = 0;
         updateScoreboard();
         setStatus(`Матч начат. Уровень бота: <strong>${DIFFICULTIES[currentDifficulty].label}</strong>. Первый до ${WIN_SCORE}. Если начнёшь сильно вести — бот прибавит скорость.`);
-        timerStart(Math.random() > 0.5 ? 1 : -1);
+        timerStart();
     }
 
     // Аналог UpdateBotSpeed(score1, score2) из оригинала: бот "злится" и ускоряется,
@@ -320,6 +328,7 @@
     }
 
     function movePlayerTo(x, y) {
+        if (state.timerOn || state.gameOver) return;
         const clampedX = Math.max(MALLET_R, Math.min(x, W / 2 - MALLET_R));
         const clampedY = Math.max(MALLET_R, Math.min(y, H - MALLET_R));
         state.player.vx = clampedX - state.player.x;
@@ -330,7 +339,7 @@
     }
 
     canvas.addEventListener("pointerdown", (event) => {
-        if (!event.isPrimary) return;
+        if (!event.isPrimary || state.timerOn || state.gameOver) return;
         canvas.focus({ preventScroll: true });
         canvas.setPointerCapture(event.pointerId);
         state.pointerActive = true;
@@ -361,6 +370,7 @@
         const key = event.key.toLowerCase();
         if (!movementKeys.has(key)) return;
         event.preventDefault();
+        if (state.timerOn || state.gameOver) return;
         pressedKeys.add(key);
     });
     canvas.addEventListener("keyup", (event) => {
@@ -564,7 +574,7 @@
         if (state.puck.x + PUCK_R > W) {
             if (inGoalMouth) {
                 state.scoreYou += 1;
-                afterGoal(1);
+                afterGoal();
                 return;
             } else {
                 state.puck.x = W - PUCK_R;
@@ -577,7 +587,7 @@
         state.playerMoved = false;
     }
 
-    function afterGoal(direction) {
+    function afterGoal() {
         updateScoreboard();
         updateBotSpeedFactor();
         if (state.scoreYou >= WIN_SCORE || state.scoreBot >= WIN_SCORE) {
@@ -597,7 +607,7 @@
             }
             return;
         }
-        goalOverlay(direction || -1);
+        goalOverlay();
     }
 
     function drawArena(context) {
