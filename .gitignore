@@ -106,3 +106,5 @@ InitTestScene*.unity*
 /Assets/Scripts/GameConfig.cs
 /Assets/Scripts/GameConfig.cs.meta
 /Assets/StreamingAssets
+/Assets/google-services.json
+/Assets/google-services.json.meta
